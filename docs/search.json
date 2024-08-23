@@ -1,16 +1,121 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "book/preface.html",
+    "href": "book/preface.html",
+    "title": "Book preface",
     "section": "",
-    "text": "About this site"
+    "text": "Book preface"
+  },
+  {
+    "objectID": "assignments/assignments-home.html",
+    "href": "assignments/assignments-home.html",
+    "title": "General info about assignments",
+    "section": "",
+    "text": "General info about assignments"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html",
+    "href": "sections/ds1-prelim-data-exploration.html",
+    "title": "Preliminary data exploration",
+    "section": "",
+    "text": "This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. Our goals are to:"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#archive-exploration",
+    "href": "sections/ds1-prelim-data-exploration.html#archive-exploration",
+    "title": "Preliminary data exploration",
+    "section": "Archive exploration",
+    "text": "Archive exploration\nFor many datasets, data exploration begins at the data repository. Take some time to look through the dataset’s description in KNB. Discuss the following questions with your team:\n\nWhat is this data about?\nIs this data collected in-situ by the authors or is it a synthesis of multiple datasets?\nDuring what time frame were the observations in the dataset collected?\nDoes this dataset come with an associated metadata file?\nDoes the dataset contain sensitive data?\n\nIn your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#xml-metadata-exploration",
+    "href": "sections/ds1-prelim-data-exploration.html#xml-metadata-exploration",
+    "title": "Preliminary data exploration",
+    "section": ".xml metadata exploration",
+    "text": ".xml metadata exploration\nYou may have noticed there are two metadata files: Compiled_occurrence_records_for_prey_items_of.xml and metadata_arth_occurrences.csv.\n\nIn the archive’s dataset description, notice the .xml document file type is EML which stands for EML: Ecological Metadata Language.\nOpen the .xml file: there’s a lot going on. This is a machine-readable file that has metadata about the whole dataset. You can proably identify some items like title and creators.\nClose the file and delete it - we won’t use it today.\nYou don’t need to write anything in your notebook about this section."
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#csv-metadata-exploration",
+    "href": "sections/ds1-prelim-data-exploration.html#csv-metadata-exploration",
+    "title": "Preliminary data exploration",
+    "section": ".csv metadata exploration",
+    "text": ".csv metadata exploration\nBack in your notebook, import the pandas package using standard abbreviation in a code cell. Then follow these steps to read in the metadata csv using the pandas.read_csv() function:\n\nNavigate to the data package site and copy the URL to access the metadata_arth_occurrences csv file. To copy the URL:\n\n\nhover over the Download button –&gt; right click –&gt; “Copy Link”.\n\n\nRead in the data from the URL using the pd.read_csv() function like this:\n# look at metadata\npd.read_csv('the URL goes here')\nTake a minute to look at the descriptions for the columns.\n\nNote: Not all datasets have column descriptions in a csv file. Often they come with a doc or txt file with information."
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#data-loading",
+    "href": "sections/ds1-prelim-data-exploration.html#data-loading",
+    "title": "Preliminary data exploration",
+    "section": "Data loading",
+    "text": "Data loading\n\nFollow steps (a) and (b) from the previous exercise to read in the drylands prey data file arth_occurrences_with_env.csv using pd.read_csv(). Store the dataframe to a variable called prey like this:\n\n# read in data\nprey = pd.read_csv('the URL goes here')\n\nUse a Python function to see what is the type of the prey variable.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#look-at-your-data",
+    "href": "sections/ds1-prelim-data-exploration.html#look-at-your-data",
+    "title": "Preliminary data exploration",
+    "section": "Look at your data",
+    "text": "Look at your data\n\nRun prey in a cell. What do you notice in the columns section?\nTo see all the column names in the same display we need to set a pandas option. Run the following command and then look at the prey data again:\n\npd.set_option(\"display.max.columns\", None)\n\nAdd a comment explaining what pd.set_option(\"display.max.columns\", None) does.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "href": "sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "title": "Preliminary data exploration",
+    "section": "pd.DataFrame preliminary exploration",
+    "text": "pd.DataFrame preliminary exploration\nRun each of the following methods for prey in a different cell and write a brief description of what they do as a comment:\n\nhead()\ntail()\ninfo()\nnunique()\n\nFor example:\n# head()\n# returns the first five rows of the data frame\nprey.head()\nIf you’re not sure about what the method does, try looking it up in the pandas.DataFrame documentation.\n\nCheck the documentation for head(). If this function has any optional parameters, change the default value to get a different output.\n\nPrint each of the following attributes of prey in a different cell and write a brief explanation of what they are as a comment:\n\nshape\ncolumns\ndtypes\n\nIf you’re not sure about what info is the attribute showing, try looking it up in the pandas.DataFrame documentation.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes"
+  },
+  {
+    "objectID": "sections/ds1-prelim-data-exploration.html#update-some-column-names",
+    "href": "sections/ds1-prelim-data-exploration.html#update-some-column-names",
+    "title": "Preliminary data exploration",
+    "section": "Update some column names",
+    "text": "Update some column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: yesterday’s class.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Trial",
+    "title": "Welcome!",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "Welcome to the course materials for EDS 220 - Working with Environmental Datasets! This course is part of the UCSB Masters in Environmental Data Science.\nIn this website you will find the materials covered during lectures and discussion sections for the Fall 2024 term.\nTHIS SITE IS UNDER CONSTRUCTION.\n\n\nThis hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses.\n\n\n\n\n\nCarmen Galaz García (she/her/hers)\nE-mail: galaz-garcia@nceas.ucsb.edu\nOffice hour: Wednesday 3:30-4:30 pm, NCEAS classroom\nBest way to contact me: e-mail\n\n\n\n\n\n\n\nClick here to access the syllabus.\n\n\n\nThe following is our ideal calendar, the course content and calendar may be subject to change as the course progresses.\n\n\n\n\nThis website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository.\n\n\n\nIf you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
+  },
+  {
+    "objectID": "index.html#course-description",
+    "href": "index.html#course-description",
+    "title": "Welcome!",
+    "section": "",
+    "text": "This hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses."
+  },
+  {
+    "objectID": "index.html#instruction-team",
+    "href": "index.html#instruction-team",
+    "title": "Welcome!",
+    "section": "",
+    "text": "Carmen Galaz García (she/her/hers)\nE-mail: galaz-garcia@nceas.ucsb.edu\nOffice hour: Wednesday 3:30-4:30 pm, NCEAS classroom\nBest way to contact me: e-mail"
+  },
+  {
+    "objectID": "index.html#syllabus",
+    "href": "index.html#syllabus",
+    "title": "Welcome!",
+    "section": "",
+    "text": "Click here to access the syllabus."
+  },
+  {
+    "objectID": "index.html#calendar",
+    "href": "index.html#calendar",
+    "title": "Welcome!",
+    "section": "",
+    "text": "The following is our ideal calendar, the course content and calendar may be subject to change as the course progresses."
+  },
+  {
+    "objectID": "index.html#about-this-website",
+    "href": "index.html#about-this-website",
+    "title": "Welcome!",
+    "section": "",
+    "text": "This website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository."
+  },
+  {
+    "objectID": "index.html#contribute",
+    "href": "index.html#contribute",
+    "title": "Welcome!",
+    "section": "",
+    "text": "If you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
   }
 ]
