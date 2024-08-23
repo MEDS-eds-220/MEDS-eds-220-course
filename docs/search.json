@@ -7,11 +7,109 @@
     "text": "Book preface"
   },
   {
-    "objectID": "assignments/assignments-home.html",
-    "href": "assignments/assignments-home.html",
-    "title": "General info about assignments",
+    "objectID": "book/chapters/lesson-1-python-review.html",
+    "href": "book/chapters/lesson-1-python-review.html",
+    "title": "Python review",
     "section": "",
-    "text": "General info about assignments"
+    "text": "This is a short review about some core concepts in Python exemplified by objects in the NumPy library. The goal is to recall basic Python vocabulary that will be used throughout the course, rather than to serve as an introduction to Python programming."
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#learning-objectives",
+    "href": "book/chapters/lesson-1-python-review.html#learning-objectives",
+    "title": "Python review",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nBy the end of this unit, students will be able to\n\nDefine basic terms in Python programming like variable, object, function, class, attribute, and method.\nRecognize optional and non-optional arguments in a function.\nUnderstand some of the basic differences in R and Python syntax."
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#libraries-and-packages",
+    "href": "book/chapters/lesson-1-python-review.html#libraries-and-packages",
+    "title": "Python review",
+    "section": "Libraries and packages",
+    "text": "Libraries and packages\nA library is a collection of code that we can use to perform specific tasks in our programs. It can be a single file or multiple ones. NumPy [@harris2020array] is one of the core libraries for numerical computing in Python. Many of the libraries we will use in this course use NumPy’s arrays as their building blocks. Additionally, NumPy objects have been optimized for processing, so computations on them are really fast and use less memory than doing the equivalent using the core Python data structures.\nIn this lesson we will use NumPy to review some fundamental concepts in Python you should be already familiar with.\n\n\n\n\n\n\nLibrary or package?\n\n\n\nA package in Python refers to a specific way of organizing multiple files of code into a directory hierarcy, often within a large code library. The words “library” and “package” are often used interchangeably. NumPy, for example, is both a library and a package.\n\n\nLet’s start by importing the NumPy library by using the standard to abbreviation, np:\n\nimport numpy as np\n\nBy importing numpy, all the objects and functions in this library will be available for us to use in our notebook."
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#variables",
+    "href": "book/chapters/lesson-1-python-review.html#variables",
+    "title": "Python review",
+    "section": "Variables",
+    "text": "Variables\nWe can think of a variable as a name we assign to a particular object in Python. For example:\n\n# assign a small array to variable a\na = np.array([[1,1,2],[3,5,8]])\n\nWhen we run the cell, we store the variables and their value. We can view a variable’s value in two ways from within our Jupyter notebook:\n\nrunning a cell with the variable name\nusing the print function to print the value\n\n\n# show the value\na\n\narray([[1, 1, 2],\n       [3, 5, 8]])\n\n\n\n# print the value \nprint(a)\n\n[[1 1 2]\n [3 5 8]]\n\n\n\n\n\n\n\n\nR and Python: assigning values\n\n\n\nRemember that in Python we use the equal sign = to assign values to variables in the same way the left-arrow &lt;- is used in R:\n# R: assign value 10 to variable a\na &lt;- 10\n# python: assign value 10 to variable a\na = 10\n\n\n\n\n\n\n\n\nConvention: Use snake_case for naming variables\n\n\n\nThere are many ways of constructing multi-word variable names. In this course we will name variables using snake_case, where words are all in small caps and separated by underscores (ex: raw_data, fires_2023). This is the naming convention suggested by the PEP 8 - Style Guide for Python Code [@pep8]. Remember variable names should be both descriptive and concise!"
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#objects",
+    "href": "book/chapters/lesson-1-python-review.html#objects",
+    "title": "Python review",
+    "section": "Objects",
+    "text": "Objects\nYou will often encounter the word object in Python documentation and tutorials. Informally speaking, an object is a bundle of properties and actions about something specific. For example, an object could represent a data frame with properties such as number of rows, names of columns, and date created, and actions suchs as selecting a specific row or adding a new column.\nA variable is the name we give a specific object, and the same object can be referenced by different variables. An analogy for this is the following: the Sun (object) is called “sol” in Spanish and “soleil” in French, so two different names (variables) represent the same object. You can read more technical details about the difference between objects and variables in Python here [@sturtz_variables_nodate].\nIn practice, we can often use the word variable and object interchangeably (for example, in the next subsection!). I want to bring up what objects are so you are not caught off-guard with vocabulary you will often encounter in the documentation, StackExchange, etc."
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#types",
+    "href": "book/chapters/lesson-1-python-review.html#types",
+    "title": "Python review",
+    "section": "Types",
+    "text": "Types\nEvery object in Python has a type, the type tells us what kind of object it is. We can also call the type of an object, the class of an object, so class and type both mean what kind of object we have.\nWe can see the type/class of a variable/object by using the type function:\n\nprint(a)\ntype(a)\n\n[[1 1 2]\n [3 5 8]]\n\n\nnumpy.ndarray\n\n\nThe numpy.ndarray is the core object/data type in the NumPy package. We can check the type of an entry in the array by indexing:\n\nprint(a[0,0])\ntype(a[0,0])\n\n1\n\n\nnumpy.int64\n\n\nNotice the type of the value 1 in the array is numpy.int64 and not just the standard Python integer type int. The NumPy type numpy.int64 is telling us 1 is an integer stored as a 64-bit number. NumPy has its own data types to deal with numbers depending on memory storage and floating point precision, click here to know see all the types.\n\n\n\n\n\n\nR and Python: indexing\n\n\n\nRemember that in Python the indexing starts from 0, while in R it starts from 1. If you learned R first, this might seem odd but it’s easy to get used to it with some practice. A way to understand this 0-indexing is that, in Python, the index indicates the displacement from the start of the collection. So ‘0 index in an array’ means ‘zero displacement from the start of the array’, in other words, the first element of the array.\n\n\n\n\n\n\n\n\nCheck-in\n\n\n\nHow would you access the value 5 in the array a?\n\n\nSince “everything in Python is an object” and every object belongs to a class, we will interact with SO MANY classes in this course. Often, knowing the type of an object is the first step to finding information to code what you want!"
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#functions",
+    "href": "book/chapters/lesson-1-python-review.html#functions",
+    "title": "Python review",
+    "section": "Functions",
+    "text": "Functions\nprint was our first example of a Python function. Functions take in a set of arguments, separated by commas, and use those arguments to create an output. There are several built-in funcions in Python, most of them are for interacting with the Python basic data types such as int (integers), float (decimal numbers), str (strings), and bool (boolean values).\n\n\n\n\n\n\nArgument or Parameter?\n\n\n\nWe can interchangeably say arguments or parameters. You will see argument more often in the documentation.\n\n\nWe can ask for information about what a function does function by executing ? followed by the function name:\n\n?print\n\n\nWhat we obtain is a docstring, a special type of comment that is used to document how a function (or class, or module) works. The first line in the docstring is telling us the function name followed by all of its arguments in parentheses. Then there is a short description of what the function does. And finally a list of the arguments and a brief explanation about each of them.\nYou can see there are different types of arguments inside the parenthesis. Roughly speaking, a function has two types of arguments:\n\nnon-optional arguments: arguments you need to specify for the function to do something, and\noptional arguments: arguments that are pre-filled with a default value by the function, but you can override them. Optional arguments appear inside the parenthesis () in the form optional_argument = default_value.\n\n\nExample\nend is an argument in print with the default value a new line. We can change this argument so that finishes the line with ^_^ instead:\n\nprint('changing the default end argument of the print function', end=' ^_^')\n\nchanging the default end argument of the print function ^_^\n\n\nNotice that before we had always used print without specifying any value for the end argument."
+  },
+  {
+    "objectID": "book/chapters/lesson-1-python-review.html#attributes-methods",
+    "href": "book/chapters/lesson-1-python-review.html#attributes-methods",
+    "title": "Python review",
+    "section": "Attributes & methods",
+    "text": "Attributes & methods\nAn object in Python has attributes and methods. An attribute is a property of the object, some piece of information about it. A method is a procedure associated with an object, so it is an action where the main ingredient is the object.\nFor example, these could be some attributes and methods for class cat:\n\n\n\n.\n\n\nMore formally, a method is a function that acts on the object it is part of.\nWe can access a variable’s attributes and methods by adding a period . at the end of the variable’s name. So we would write variable.variable_method() or variable.variable_attribute.\n\n\n\n\n\n\nCheck-in\n\n\n\nSuppose we have a class fish, make a diagram similar to the cat class diagram showing 3 attributes for the class and 3 methods.\n\n\n\nExample\nNumPy arrays have many methods and attributes. Let’s see some concrete examples.\n\n# a 3x3 array\nvar = np.array([[1,2,3],[4,5,6],[7,8,9]])\nvar\n\narray([[1, 2, 3],\n       [4, 5, 6],\n       [7, 8, 9]])\n\n\nT is an example of attribute, it returns the transpose of var:\n\nprint(var.T)\nprint(type(var.T))\n\n[[1 4 7]\n [2 5 8]\n [3 6 9]]\n&lt;class 'numpy.ndarray'&gt;\n\n\nshape, another attribute, tells us the shape of the array:\n\nprint(var.shape)\nprint(type(var.shape))\n\n(3, 3)\n&lt;class 'tuple'&gt;\n\n\nndim is an attribute holding the number of array dimensions\n\nprint(var.ndim)\nprint(type(var.ndim))\n\n2\n&lt;class 'int'&gt;\n\n\nNotice these attributes can have many different data types. Here we saw a tuple and an int (two of the basic Python classes) and also a NumPy array as attributes of var.\nNow some examples of methods.\nThe tolist method returns the array as a nested list of scalars:\n\nvar.tolist()\n\n[[1, 2, 3], [4, 5, 6], [7, 8, 9]]\n\n\nThe min method returns the minimum value in the array along a specified axis:\n\nvar.min(axis=0)\n\narray([1, 2, 3])\n\n\n\n\n\n\n\n\nCheck-in\n\n\n\nWe can also call the min method without any parameters:\n\nvar.min()\n\n1\n\n\nWhat kind of parameter is axis in our previous call of the var method?\n\n\nRemember, methods are functions associated to an object. We can confirm this!\n\ntype(var.tolist)\n\nbuiltin_function_or_method\n\n\n\ntype(var.min)\n\nbuiltin_function_or_method\n\n\nYou can see a complete list of NumPy array’s methods and attributes in the documentation.\n\n\n\n\n\n\nR and Python: are there methods in R?\n\n\n\nIt is uncommon to use methods within an object in R. Rather, functions are extrinsic to the objects they are acting on. In R, for example, there would usually be two separate items: the variable var and a separate function min that gets var as a parameter:\n# this is R code\nvar &lt;- array(c(1,4,7,2,5,8,3,6,9), dim =c(3,3))\nmin(var)\nUsing the pipe operator %&gt;% in R’s tidyverse is closer to the dot . in Python:\n# this is R code\nvar &lt;- array(c(1,4,7,2,5,8,3,6,9), dim =c(3,3))\nvar %&gt;% min()\nWhat happens here is that the pipe %&gt;% is passing var to the min() function as its first argument. This is similar to what happens in Python when a function is a method of a class:\n# this is Python code\nvar = np.array([[1,2,3],[4,5,6],[7,8,9]])\nvar.min()\nWhen working in Python, remember that methods are functions that are part of an object and a method uses the object it is part of to produce some information."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "Welcome to the course materials for EDS 220 - Working with Environmental Datasets! This course is part of the UCSB Masters in Environmental Data Science.\nIn this website you will find the materials covered during lectures and discussion sections for the Fall 2024 term.\n\n\nThis hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses.\n\n\n\n\n\nCarmen Galaz García (she/her/hers)\nE-mail:\nOffice hour:\nBest way to contact me: e-mail\n\n\n\n\n\n\n\nClick here to access the syllabus.\n\n\n\nThe following is our ideal calendar, the course content and calendar may be subject to change as the course progresses.\n\n\n\n\nThis website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository.\n\n\n\nIf you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
+  },
+  {
+    "objectID": "index.html#course-description",
+    "href": "index.html#course-description",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "This hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses."
+  },
+  {
+    "objectID": "index.html#instruction-team",
+    "href": "index.html#instruction-team",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "Carmen Galaz García (she/her/hers)\nE-mail:\nOffice hour:\nBest way to contact me: e-mail"
+  },
+  {
+    "objectID": "index.html#syllabus",
+    "href": "index.html#syllabus",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "Click here to access the syllabus."
+  },
+  {
+    "objectID": "index.html#calendar",
+    "href": "index.html#calendar",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "The following is our ideal calendar, the course content and calendar may be subject to change as the course progresses."
+  },
+  {
+    "objectID": "index.html#about-this-website",
+    "href": "index.html#about-this-website",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "This website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository."
+  },
+  {
+    "objectID": "index.html#contribute",
+    "href": "index.html#contribute",
+    "title": "Welcome! THIS SITE IS UNDER CONSTRUCTION.",
+    "section": "",
+    "text": "If you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
   },
   {
     "objectID": "sections/ds1-prelim-data-exploration.html",
@@ -70,52 +168,45 @@
     "text": "Update some column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: yesterday’s class.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome!",
+    "objectID": "assignments/assignments-home.html",
+    "href": "assignments/assignments-home.html",
+    "title": "General info about assignments",
     "section": "",
-    "text": "Welcome to the course materials for EDS 220 - Working with Environmental Datasets! This course is part of the UCSB Masters in Environmental Data Science.\nIn this website you will find the materials covered during lectures and discussion sections for the Fall 2024 term.\nTHIS SITE IS UNDER CONSTRUCTION.\n\n\nThis hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses.\n\n\n\n\n\nCarmen Galaz García (she/her/hers)\nE-mail: galaz-garcia@nceas.ucsb.edu\nOffice hour: Wednesday 3:30-4:30 pm, NCEAS classroom\nBest way to contact me: e-mail\n\n\n\n\n\n\n\nClick here to access the syllabus.\n\n\n\nThe following is our ideal calendar, the course content and calendar may be subject to change as the course progresses.\n\n\n\n\nThis website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository.\n\n\n\nIf you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
+    "text": "General info about assignments"
   },
   {
-    "objectID": "index.html#course-description",
-    "href": "index.html#course-description",
-    "title": "Welcome!",
+    "objectID": "book/chapters/lesson-2-series-dataframes.html",
+    "href": "book/chapters/lesson-2-series-dataframes.html",
+    "title": "pandas",
     "section": "",
-    "text": "This hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses."
+    "text": "In this lesson we introduce the two core objects in the pandas library, the pandas.Series and the pandas.DataFrame."
   },
   {
-    "objectID": "index.html#instruction-team",
-    "href": "index.html#instruction-team",
-    "title": "Welcome!",
-    "section": "",
-    "text": "Carmen Galaz García (she/her/hers)\nE-mail: galaz-garcia@nceas.ucsb.edu\nOffice hour: Wednesday 3:30-4:30 pm, NCEAS classroom\nBest way to contact me: e-mail"
+    "objectID": "book/chapters/lesson-2-series-dataframes.html#pandas",
+    "href": "book/chapters/lesson-2-series-dataframes.html#pandas",
+    "title": "pandas",
+    "section": "pandas",
+    "text": "pandas\npandas is a Python package to wrangle and analyze tabular data. It is built on top of NumPy and has become the core tool for doing data analysis in Python.\nThe convention to import it is:\n\nimport pandas as pd\n\n# we will also import numpy \nimport numpy as np\n\nThere is so much to learn about pandas. While we won’t be able to cover every single functionality of this package in the next three lecutres, the goal is to get you started with the basic tools for data wrangling and give you a solid basis on which you can explore further."
   },
   {
-    "objectID": "index.html#syllabus",
-    "href": "index.html#syllabus",
-    "title": "Welcome!",
-    "section": "",
-    "text": "Click here to access the syllabus."
+    "objectID": "book/chapters/lesson-2-series-dataframes.html#series",
+    "href": "book/chapters/lesson-2-series-dataframes.html#series",
+    "title": "pandas",
+    "section": "Series",
+    "text": "Series\nThe first core data structure of pandas is the series. A series is a one-dimensional array of indexed data. A pandas.Series having an index is the main difference between a pandas.Series and a numpy array. See the difference:\n\n# a numpy array\n# np.random.randn returns values from the std normal distribution\narr = np.random.randn(4) \nprint(type(arr))\nprint(arr, \"\\n\")\n\n# a pandas series made from the previous array\ns = pd.Series(arr)\nprint(type(s))\nprint(s)\n\n&lt;class 'numpy.ndarray'&gt;\n[ 0.30864603 -1.72997032 -0.3012243  -1.55954102] \n\n&lt;class 'pandas.core.series.Series'&gt;\n0    0.308646\n1   -1.729970\n2   -0.301224\n3   -1.559541\ndtype: float64\n\n\n\nCreating a pandas.Series\nThe basic method to create a pandas.Series is to call\ns = pd.Series(data, index=index)\nThe data parameter can be:\n\na numpy array or a list\na Python dictionary\na number\n\nThe index parameter is a list of index labels.\nFor now, we will create a pandas.Series from a numpy array or list. To use this method we need to pass a numpy array (or a list of objects that can be converted to NumPy types) as data and a list of indices of the same length as data.\n\n# a Series from a numpy array \npd.Series(np.arange(3), index=['a','b','c'])\n\na    0\nb    1\nc    2\ndtype: int64\n\n\nThe index parameter is optional. If we don’t include it, the default is to make the index equal to [0,...,len(data)-1]. For example:\n\n# a Series from a list of strings with default index\npd.Series(['EDS 220', 'EDS 222', 'EDS 223', 'EDS 242'])\n\n0    EDS 220\n1    EDS 222\n2    EDS 223\n3    EDS 242\ndtype: object\n\n\n\nFrom a dictionary\nRemember a dictionary is a set of key-value pairs. If we create a pandas.Series via a dictionary the keys will become the index and the values the corresponding data.\n\n# construct dictionary\nd = {'a':0, 'b':1, 'c':2}\n\n# initialize a sries using a dictionary\npd.Series(d)\n\na    0\nb    1\nc    2\ndtype: int64\n\n\n\n\nFrom a number\nIf we only provide a number as the data for the series, we need to provide an index. The number will be repeated to match the length of the index.\n\npd.Series(3.0, index = ['A', 'B', 'C'])\n\nA    3.0\nB    3.0\nC    3.0\ndtype: float64\n\n\n\n\n\nSimple operations\nArithmetic operations work on series and also most NumPy functions. For example:\n\n# define a series\ns = pd.Series([98,73,65],index=['Andrea', 'Beth', 'Carolina'])\n\n# divide each element in series by 10\nprint(s /10, '\\n')\n\n# take the exponential of each element in series\nprint(np.exp(s), '\\n')\n\n# notice this doesn't change the values of our series\nprint(s)\n\nAndrea      9.8\nBeth        7.3\nCarolina    6.5\ndtype: float64 \n\nAndrea      3.637971e+42\nBeth        5.052394e+31\nCarolina    1.694889e+28\ndtype: float64 \n\nAndrea      98\nBeth        73\nCarolina    65\ndtype: int64\n\n\nWe can also produce new pandas.Series with True/False values indicating whether the elements in a series satisfy a condition or not:\n\ns &gt; 10\n\nAndrea      True\nBeth        True\nCarolina    True\ndtype: bool\n\n\nThis kind of simple conditions on pandas.Series will be key when we are selecting data from data frames.\n\n\n\nAttributes & Methods\npandas.Series have many attributes and methods, you can see a full list in the pandas documentation. For now we will cover two examples that have to do with identifying missing values.\npandas represents a missing or NA value with NaN, which stands for not a number. Let’s construct a small series with some NA values:\n\n# series with NAs in it\ns = pd.Series([1, 2, np.NaN, 4, np.NaN])\n\nA pandas.Series has an attribute called hasnans that returns True if there are any NaNs:\n\n# check if series has NAs\ns.hasnans\n\nTrue\n\n\nThen we might be intersted in knowing which elements in the series are NAs. We can do this using the isna method:\n\ns.isna()\n\n0    False\n1    False\n2     True\n3    False\n4     True\ndtype: bool\n\n\nWe can see the ouput is a pd.Series of boolean values indicating if an element in the row at the given index is NA (True = is NA) or not (False = not NA).\n\n\n\n\n\n\nmoving on\n\n\n\nThere’s much more to say about pandas.Series, but this is enought to get us going. At this point, we mainly want to know about pandas.Series because pandas.Series are the columns of pandas.DataFrames.\n\n\n\n\n\n\n\n\nslicing with loc\n\n\n\nNotice that when use slicing with loc we get both the start and the end of the indices we indicated. This is different to slicing in numpy arrays or lists where we do not get the element at the end of the slice. Compare the following:\n\nx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nprint(x)\n\n# slicing will return elements at indices 2 trhough 4 (inclusive)\nx[2:5]\n\n[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n\n[2, 3, 4]\n\n\n\n# define a np array with integers from 0 to 9\ny = np.arange(10)\nprint(y)\n\n# slicing will return elements at indices 2 trhough 4 (inclusive)\ny[2:5]\n\n[0 1 2 3 4 5 6 7 8 9]\n\n\narray([2, 3, 4])\n\n\n\n z = pd.Series(y)\n print(z)\n\n# slicing will return elements with index labels 2 through 5 (inclusive)\n z.loc[2:5]\n\n0    0\n1    1\n2    2\n3    3\n4    4\n5    5\n6    6\n7    7\n8    8\n9    9\ndtype: int64\n\n\n2    2\n3    3\n4    4\n5    5\ndtype: int64"
   },
   {
-    "objectID": "index.html#calendar",
-    "href": "index.html#calendar",
-    "title": "Welcome!",
-    "section": "",
-    "text": "The following is our ideal calendar, the course content and calendar may be subject to change as the course progresses."
+    "objectID": "book/chapters/lesson-2-series-dataframes.html#data-frames",
+    "href": "book/chapters/lesson-2-series-dataframes.html#data-frames",
+    "title": "pandas",
+    "section": "Data Frames",
+    "text": "Data Frames\nThe Data Frame is the most used pandas object. It represents tabular data and we can think of it as a spreadhseet. Each column of a pandas.DataFrame is a pandas.Series.\n\nCreating a pandas.DataFrame\nThere are many ways of creating a pandas.DataFrame.\nWe already mentioned each column of a pandas.DataFrame is a pandas.Series. In fact, the pandas.DataFrame is a dictionary of pandas.Series, with each column name being the key and the column values being the key’s value. Thus, we can create a pandas.DataFrame in this way:\n\n# initialize dictionary with columns' data \nd = {'col_name_1' : pd.Series(np.arange(3)),\n     'col_name_2' : pd.Series([3.1, 3.2, 3.3]),\n     }\n\n# create data frame\ndf = pd.DataFrame(d)\ndf\n\n\n\n\n\n\n\n\ncol_name_1\ncol_name_2\n\n\n\n\n0\n0\n3.1\n\n\n1\n1\n3.2\n\n\n2\n2\n3.3\n\n\n\n\n\n\n\nWe can change the index and column names by changing the index and columns attributes in the data frame.\n\n# print original index\nprint(df.index)\n\n# change the index\ndf.index = ['a','b','c']\ndf\n\nRangeIndex(start=0, stop=3, step=1)\n\n\n\n\n\n\n\n\n\ncol_name_1\ncol_name_2\n\n\n\n\na\n0\n3.1\n\n\nb\n1\n3.2\n\n\nc\n2\n3.3\n\n\n\n\n\n\n\n\n# print original column names\nprint(df.columns)\n\n# change column names \ndf.columns = ['C1','C2']\ndf\n\nIndex(['col_name_1', 'col_name_2'], dtype='object')\n\n\n\n\n\n\n\n\n\nC1\nC2\n\n\n\n\na\n0\n3.1\n\n\nb\n1\n3.2\n\n\nc\n2\n3.3"
   },
   {
-    "objectID": "index.html#about-this-website",
-    "href": "index.html#about-this-website",
-    "title": "Welcome!",
+    "objectID": "book/chapters/lesson-0-create-conda-env.html",
+    "href": "book/chapters/lesson-0-create-conda-env.html",
+    "title": "Environment setup",
     "section": "",
-    "text": "This website is created with Quarto and is published through GitHub pages. Click here to go to the website’s GitHub repository."
-  },
-  {
-    "objectID": "index.html#contribute",
-    "href": "index.html#contribute",
-    "title": "Welcome!",
-    "section": "",
-    "text": "If you have suggestions on how to correct, improve, or expand these notes, please feel free to email galaz-garcia@nceas.ucsb.edu or file a GitHub issue."
+    "text": "Environment setup\nTo install the libraries needed to execute the code in these notes you can create a conda environment using the environment.yml file in the notes repository.\nIf you do not have Anaconda installed yet (which includes conda), you can download it here: https://www.anaconda.com/download.\nTo build the environment:\n\nDownload the environment.yml file in the notes repository. Place it in the directory where you will store the notebooks associated with these notes.\nUsing the terminal, navigate to the directory where the environment.yml file is.\nRun the following command to build the environment:\n\nconda env create -f environment.yml\n\nOnce the building finishes, run the following command to check the new environment was created:\n\nconda env list\n\nIf you are using VSCode (recommended), you should be able open a Python notebok and select the new environment by accessing a drop-down list by clicking on the top right corner."
   }
 ]
