@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2024-10-03">
 
-<title>EDS 220 - Working with Environmental Datasets - Preliminary data exploration</title>
+<title>Preliminary data exploration – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -80,7 +100,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -89,6 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -103,58 +130,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">EDS 220 - Working with Environmental Datasets</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../book/preface.html" rel="" target="">
- <span class="menu-text">book</span></a>
+    <a class="nav-link" href="../book/preface.html"> 
+<span class="menu-text">book</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../sections/discussion-sections-listing.html" rel="" target="">
- <span class="menu-text">discussion sections</span></a>
+    <a class="nav-link" href="../sections/discussion-sections-listing.html"> 
+<span class="menu-text">discussion sections</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../assignments/assignments-home.html" rel="" target="">
- <span class="menu-text">assignments</span></a>
+    <a class="nav-link" href="../assignments/assignments-home.html"> 
+<span class="menu-text">assignments</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-github" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-github">    
         <li>
-    <a class="dropdown-item" href="https://github.com/carmengg/MEDS-eds-220-course" rel="" target="">
+    <a class="dropdown-item" href="https://github.com/carmengg/MEDS-eds-220-course">
  <span class="dropdown-text">Source code</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://github.com/carmengg/MEDS-eds-220-course/issues" rel="" target="">
+    <a class="dropdown-item" href="https://github.com/carmengg/MEDS-eds-220-course/issues">
  <span class="dropdown-text">Report a bug</span></a>
   </li>  
     </ul>
   </li>
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <div id="quarto-announcement" data-announcement-id="c7b7782e967bb59a093245536bfed491" class="alert alert-primary hidden"><i class="bi bi-hammer quarto-announcement-icon"></i><div class="quarto-announcement-content">
+<p>This wesbite is under construction.</p>
+</div><i class="bi bi-x-lg quarto-announcement-action"></i></div>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
@@ -165,14 +195,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link active" data-scroll-target="#archive-exploration">Archive exploration</a></li>
-  <li><a href="#xml-metadata-exploration" id="toc-xml-metadata-exploration" class="nav-link" data-scroll-target="#xml-metadata-exploration"><code>.xml</code> metadata exploration</a></li>
-  <li><a href="#csv-metadata-exploration" id="toc-csv-metadata-exploration" class="nav-link" data-scroll-target="#csv-metadata-exploration"><code>.csv</code> metadata exploration</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">Archive exploration</a></li>
+  <li><a href="#metadata-exploration" id="toc-metadata-exploration" class="nav-link" data-scroll-target="#metadata-exploration">Metadata exploration</a></li>
   <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">Data loading</a></li>
   <li><a href="#look-at-your-data" id="toc-look-at-your-data" class="nav-link" data-scroll-target="#look-at-your-data">Look at your data</a></li>
   <li><a href="#pd.dataframe-preliminary-exploration" id="toc-pd.dataframe-preliminary-exploration" class="nav-link" data-scroll-target="#pd.dataframe-preliminary-exploration"><code>pd.DataFrame</code> preliminary exploration</a></li>
-  <li><a href="#update-some-column-names" id="toc-update-some-column-names" class="nav-link" data-scroll-target="#update-some-column-names">Update some column names</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#update-column-names" id="toc-update-column-names" class="nav-link" data-scroll-target="#update-column-names">Update column names</a></li>
   </ul>
 </nav>
     </div>
@@ -201,46 +232,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
 
-<p>This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. Our goals are to:</p>
+
+<p>This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:</p>
 <ul>
-<li>Keep practicing setting up a GitHub repository and using <code>git commit</code> <code>git push</code></li>
 <li>Collaborate with your new team!</li>
-<li>Practice getting preliminary information from a dataset from its archive</li>
-<li>Introduce <code>pd.read_csv()</code> for loading files directly from an URL</li>
-<li>Introduce preliminary data exploration strategies in <code>pandas</code></li>
+<li>Practice version control using git via the terminal</li>
+<li>Obtain information about a dataset from an online data repository</li>
+<li>Use the <code>pd.read_csv()</code> function for loading files directly from a URL</li>
+<li>Use methods and functions of a <code>pandas.DataFrame</code> to do preliminary analysis</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-Notebook Setup
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <ol type="1">
-<li><p>Create a new repository on GitHub. Use the following settings:</p>
-<ol type="a">
-<li><p>Call the repository <code>eds-220-section-1</code>.</p></li>
-<li><p>Add a brief description for your new repository. For example: EDS 220 section - practice session for data selection in pandas.</p></li>
-<li><p>Keep the repository public.</p></li>
-<li><p>Initialize the repository with a <code>README</code> file and a Python .gitignore template.</p></li>
-</ol></li>
 <li><p>In the Taylor server, start a new JupyterLab session or access an active one.</p></li>
-<li><p>Using the terminal, clone the repository to a new directory under your <code>eds-220</code> directory.</p></li>
-<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-section-1</code> directory. Use <code>pwd</code> to verify <code>eds-220-section-1</code> is your current working directory.</p></li>
-<li><p>Create a new Python Notebook in <code>eds-220-section-1</code>.</p></li>
+<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
+<li><p>Create a new Python Notebook in <code>section-1</code>.</p></li>
 <li><p>Update the notebook’s name to something useful like ‘exercise-data-selection.ipynb’.</p></li>
 <li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
-<ul>
-<li>stage: <code>git add FILE_NAME</code></li>
-<li>commit with message: <code>git commit -m "COMMIT_MESSAGE"</code></li>
+<ol type="1">
+<li>check git status: <code>git status</code></li>
+<li>stage: <code>git add file-name.ipynb</code></li>
+<li>commit with message: <code>git commit -m "commit message"</code></li>
 <li>push: <code>git push</code></li>
-</ul></li>
-<li><p>If you are prompted for your credentials and need to set up a new Personal Access Token (PAT) follow <a href="https://docs.google.com/document/d/1Pk6_rUDdFjdGg-YVo9Cl8ET3iDsYahyaP0VMRD4UHUk/edit?usp=sharing/">steps 13-18 in this guide</a> to set it up.</p></li>
+</ol></li>
 </ol>
 <p style="text-align: center;">
 <strong>CHECK IN WITH YOUR TEAM</strong>
@@ -250,42 +273,44 @@ Notebook Setup
 </p>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+</div>
+</section>
+<section id="general-directions" class="level2">
+<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-General directions
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="callout-body-container">
 <ul>
-<li>Add comments in each one of your code cells</li>
-<li>Include markdown cells in between your code cells to add titles/information to each exercise</li>
-<li>Indications about when to commit and push changes are included, but you are welcome to commit and push more often.</li>
-<li>You won’t need to upload any data</li>
+<li>Add comments in each one of your code cells.</li>
+<li>Include markdown cells in between your code cells to add titles and information to each exercise.</li>
+<li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
+<li>You won’t need to upload any data.</li>
 </ul>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+</div>
+</section>
+<section id="about-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-About the data
+<div class="callout-body-container">
+<p>For these exercises we will use data about <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">prey items for endangered terrestrial vertebrate species within central California drylands</a><span class="citation" data-cites="king_compiled_2023"><a href="#ref-king_compiled_2023" role="doc-biblioref">[1]</a></span> <span class="citation" data-cites="lortie_importance_2023"><a href="#ref-lortie_importance_2023" role="doc-biblioref">[2]</a></span>.</p>
+<p>This dataset is stored in the <a href="https://knb.ecoinformatics.org">Knowledge Network for Biocomplexity (KNB)</a> data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the <a href="http://NCEAS.ucsb.edu">National Center for Ecological Analysis and Synthesis (NCEAS)</a>.</p>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>For this exercise we will use data about <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">prey items for endangered terrestrial vertebrate species within central California drylands (King et. al, 2023)</a>.</p>
-<p>This dataset is stored in the <a href="https://knb.ecoinformatics.org">Knowledge Network for Biocomplexity (KNB)</a> data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by NCEAS!</p>
 </div>
 </div>
 <!-- Data exploration -->
+</section>
 <section id="archive-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="archive-exploration">Archive exploration</h2>
-<p>For many datasets, data exploration begins at the data repository. Take some time to look through the dataset’s description in KNB. Discuss the following questions with your team:</p>
+<p>For many datasets, data exploration begins at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:</p>
 <ol type="a">
 <li>What is this data about?</li>
 <li>Is this data collected in-situ by the authors or is it a synthesis of multiple datasets?</li>
@@ -298,18 +323,9 @@ About the data
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes</strong>
 </p>
 </section>
-<section id="xml-metadata-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="xml-metadata-exploration"><code>.xml</code> metadata exploration</h2>
-<p>You may have noticed there are two metadata files: <code>Compiled_occurrence_records_for_prey_items_of.xml</code> and <code>metadata_arth_occurrences.csv</code>.</p>
-<ol type="a">
-<li>In the archive’s dataset description, notice the <code>.xml</code> document file type is <code>EML</code> which stands for <a href="https://eml.ecoinformatics.org">EML: Ecological Metadata Language</a>.</li>
-<li>Open the <code>.xml</code> file: there’s a lot going on. This is a machine-readable file that has metadata about <em>the whole dataset</em>. You can proably identify some items like title and creators.</li>
-<li>Close the file and delete it - we won’t use it today.</li>
-<li>You don’t need to write anything in your notebook about this section.</li>
-</ol>
-</section>
-<section id="csv-metadata-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="csv-metadata-exploration"><code>.csv</code> metadata exploration</h2>
+<section id="metadata-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="metadata-exploration">Metadata exploration</h2>
+<p>You may have noticed there are two metadata files: <code>Compiled_occurrence_records_for_prey_items_of.xml</code> and <code>metadata_arth_occurrences.csv</code>. The <code>.xml</code> document file type is <code>EML</code> which stands for <a href="https://eml.ecoinformatics.org">EML: Ecological Metadata Language</a>. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the csv file.</p>
 <p>Back in your notebook, import the <code>pandas</code> package using standard abbreviation in a code cell. Then follow these steps to read in the metadata csv using the <code>pandas.read_csv()</code> function:</p>
 <ol type="a">
 <li>Navigate to the <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">data package site</a> and copy the URL to access the <code>metadata_arth_occurrences</code> csv file. To copy the URL:</li>
@@ -334,7 +350,7 @@ About the data
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prey <span class="op">=</span> pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="2" type="a">
-<li>Use a Python function to see what is the type of the <code>prey</code> variable.</li>
+<li>What is the type of the <code>prey</code> variable? Use a Python function get this information.</li>
 </ol>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes</strong>
@@ -383,27 +399,30 @@ prey.head()</code></pre>
 <li><code>columns</code></li>
 <li><code>dtypes</code></li>
 </ol>
-<p>If you’re not sure about what info is the attribute showing, try looking it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>.</p>
+<p>If you’re not sure about what information is the attribute showing, look it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>.</p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes</strong>
 </p>
 </section>
-<section id="update-some-column-names" class="level2">
-<h2 class="anchored" data-anchor-id="update-some-column-names">Update some column names</h2>
+<section id="update-column-names" class="level2">
+<h2 class="anchored" data-anchor-id="update-column-names">Update column names</h2>
 <p>Change the column names of <code>institutionCode</code> and <code>datasetKey</code> to <code>institution_code</code> and <code>dataset_key</code>, respectively. Make sure you’re actually updating the dataframe. HINT: yesterday’s class.</p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; push changes</strong>
 </p>
-</section>
-<section id="references" class="level1">
-<h1>References</h1>
-<p>Rachel King, Jenna Braun, Michael Westphal, &amp; CJ Lortie. (2023). Compiled occurrence records for prey items of listed species found in California drylands with associated environmental data. Knowledge Network for Biocomplexity. doi:10.5063/F1VM49RH.</p>
-<p>Lortie, C. J., Braun, J., King, R., &amp; Westphal, M. (2023). The importance of open data describing prey item species lists for endangered species. Ecological Solutions and Evidence, 4(2), e12251. https://doi.org/10.1002/2688-8319.12251</p>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-king_compiled_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">R. King, J. Braun, M. Westphal, and C. Lortie, <span>“Compiled occurrence records for prey items of listed species found in <span>California</span> drylands with associated environmental data.”</span> KNB Data Repository, 2023. doi: <a href="https://doi.org/10.5063/F1VM49RH">10.5063/F1VM49RH</a>. Available: <a href="https://knb.ecoinformatics.org/view/doi:10.5063/F1VM49RH">https://knb.ecoinformatics.org/view/doi:10.5063/F1VM49RH</a>. [Accessed: Aug. 26, 2024]</div>
+</div>
+<div id="ref-lortie_importance_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">C. J. Lortie, J. Braun, R. King, and M. Westphal, <span>“The importance of open data describing prey item species lists for endangered species,”</span> <em>Ecological Solutions and Evidence</em>, vol. 4, no. 2, p. e12251, Apr. 2023, doi: <a href="https://doi.org/10.1002/2688-8319.12251">10.1002/2688-8319.12251</a>. Available: <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1002/2688-8319.12251">https://besjournals.onlinelibrary.wiley.com/doi/10.1002/2688-8319.12251</a>. [Accessed: Aug. 26, 2024]</div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -439,18 +458,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -482,11 +490,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -496,8 +543,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -509,7 +565,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -553,6 +732,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -578,6 +758,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -640,7 +846,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License</a></div>   
+    <div class="nav-footer-left">
+<p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License</a></p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -649,6 +857,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 
