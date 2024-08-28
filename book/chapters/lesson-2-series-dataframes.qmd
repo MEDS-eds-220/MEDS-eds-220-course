@@ -1,32 +1,42 @@
-# `pandas`
+# `pandas` series and data frames
 
 In this lesson we introduce the two core objects in the `pandas` library, the `pandas.Series` and the `pandas.DataFrame`. 
+The overall goal is to gain familiarity with these two objects, understand their relation to each other, and review Python data structures such as dictionaries and lists.
+
+## Learning objectives 
+By the end of this unit, students will be able to:
+
+- Explain the relation between `pandas.Series` and `pandas.DataFrame`
+- Construct simple `pandas.Series` and `pandas.DataFrame` from scratch using different initalization methods 
+- Identify and modify the index in a `pandas.Series` or `pandas.DataFrame`
+- Navigate the `pandas` documentation to look for attributes and methods of `pandas.series` and `pandas.DataFrame`
 
 ## `pandas`
 
-`pandas` is a Python package to wrangle and analyze tabular data. It is built on top of NumPy and has become the core tool for doing data analysis in Python. 
+`pandas` @reback2020pandas @mckinney-proc-scipy-2010 is a Python package to wrangle and analyze tabular data. It is built on top of NumPy and has become the core tool for doing data analysis in Python. 
 
-The convention to import it is:
+The standard abbreviation for `pandas` is `pd`. Here we will import it together with NumPy:
 
 ```{python}
 import pandas as pd
-
-# we will also import numpy 
 import numpy as np
 ```
 
-
+::: {.callout-caution}
+## Convention: importing packages
+Always import all your packages in a single cell at the top of you notebook! Following the [PEP 8 - Style Guide for Python Code](https://peps.python.org/pep-0008/#imports) @pep8, each package or library import should be in a separate line. 
+:::
+<!--
 There is so much to learn about `pandas`. While we won't be able to cover every single functionality of this package in the next three lecutres, the goal is to get you started with the basic tools for data wrangling and give you a solid basis on which you can explore further. 
-
+-->
 ## Series
 
-The first core data structure of pandas is the **series**. 
-A series is a *one-dimensional* array of *indexed* data. A `pandas.Series` having an **index** is the main difference between a `pandas.Series` and a numpy array. See the difference:
+The first core object of pandas is the **series**. 
+A series is a *one-dimensional* array of *indexed* data. A `pandas.Series` having an **index** is the main difference between a `pandas.Series` and a NumPy array. Let's see the difference:
 
 ```{python}
 # a numpy array
-# np.random.randn returns values from the std normal distribution
-arr = np.random.randn(4) 
+arr = np.random.randn(4) # values from std normal distribution
 print(type(arr))
 print(arr, "\n")
 
@@ -36,6 +46,9 @@ print(type(s))
 print(s)
 ```
 
+Notice the index is printed as part of the `pandas.Series` while, although the `np.array` is indexable, the index is not part of this data structure.
+
+![](/book/images/lesson-2/series-parts.png)
 
 ### Creating a `pandas.Series`
 

@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -169,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html">Tabular Data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html"><code>pandas</code></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html">Tabular Data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html"><code>pandas</code> series and data frames</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -214,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-2-series-dataframes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><code>pandas</code></span></a>
+ <span class="menu-text"><code>pandas</code> series and data frames</span></a>
   </div>
 </li>
       </ul>
@@ -229,7 +249,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#pandas" id="toc-pandas" class="nav-link active" data-scroll-target="#pandas"><code>pandas</code></a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#pandas" id="toc-pandas" class="nav-link" data-scroll-target="#pandas"><code>pandas</code></a></li>
   <li><a href="#series" id="toc-series" class="nav-link" data-scroll-target="#series">Series</a>
   <ul class="collapse">
   <li><a href="#creating-a-pandas.series" id="toc-creating-a-pandas.series" class="nav-link" data-scroll-target="#creating-a-pandas.series">Creating a <code>pandas.Series</code></a></li>
@@ -246,9 +267,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html">Tabular Data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html"><code>pandas</code></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html">Tabular Data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-2-series-dataframes.html"><code>pandas</code> series and data frames</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><code>pandas</code></h1>
+<h1 class="title"><code>pandas</code> series and data frames</h1>
 </div>
 
 
@@ -265,45 +286,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this lesson we introduce the two core objects in the <code>pandas</code> library, the <code>pandas.Series</code> and the <code>pandas.DataFrame</code>.</p>
+<p>In this lesson we introduce the two core objects in the <code>pandas</code> library, the <code>pandas.Series</code> and the <code>pandas.DataFrame</code>. The overall goal is to gain familiarity with these two objects, understand their relation to each other, and review Python data structures such as dictionaries and lists.</p>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this unit, students will be able to:</p>
+<ul>
+<li>Explain the relation between <code>pandas.Series</code> and <code>pandas.DataFrame</code></li>
+<li>Construct simple <code>pandas.Series</code> and <code>pandas.DataFrame</code> from scratch using different initalization methods</li>
+<li>Identify and modify the index in a <code>pandas.Series</code> or <code>pandas.DataFrame</code></li>
+<li>Navigate the <code>pandas</code> documentation to look for attributes and methods of <code>pandas.series</code> and <code>pandas.DataFrame</code></li>
+</ul>
+</section>
 <section id="pandas" class="level2">
 <h2 class="anchored" data-anchor-id="pandas"><code>pandas</code></h2>
-<p><code>pandas</code> is a Python package to wrangle and analyze tabular data. It is built on top of NumPy and has become the core tool for doing data analysis in Python.</p>
-<p>The convention to import it is:</p>
-<div id="3ad220f7" class="cell" data-execution_count="1">
+<p><code>pandas</code> <span class="citation" data-cites="reback2020pandas"><a href="#ref-reback2020pandas" role="doc-biblioref">[1]</a></span> <span class="citation" data-cites="mckinney-proc-scipy-2010"><a href="#ref-mckinney-proc-scipy-2010" role="doc-biblioref">[2]</a></span> is a Python package to wrangle and analyze tabular data. It is built on top of NumPy and has become the core tool for doing data analysis in Python.</p>
+<p>The standard abbreviation for <code>pandas</code> is <code>pd</code>. Here we will import it together with NumPy:</p>
+<div id="0b296079" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we will also import numpy </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>There is so much to learn about <code>pandas</code>. While we won’t be able to cover every single functionality of this package in the next three lecutres, the goal is to get you started with the basic tools for data wrangling and give you a solid basis on which you can explore further.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Convention: importing packages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Always import all your packages in a single cell at the top of you notebook! Following the <a href="https://peps.python.org/pep-0008/#imports">PEP 8 - Style Guide for Python Code</a> <span class="citation" data-cites="pep8"><a href="#ref-pep8" role="doc-biblioref">[3]</a></span>, each package or library import should be in a separate line.</p>
+</div>
+</div>
+<!--
+There is so much to learn about `pandas`. While we won't be able to cover every single functionality of this package in the next three lecutres, the goal is to get you started with the basic tools for data wrangling and give you a solid basis on which you can explore further. 
+-->
 </section>
 <section id="series" class="level2">
 <h2 class="anchored" data-anchor-id="series">Series</h2>
-<p>The first core data structure of pandas is the <strong>series</strong>. A series is a <em>one-dimensional</em> array of <em>indexed</em> data. A <code>pandas.Series</code> having an <strong>index</strong> is the main difference between a <code>pandas.Series</code> and a numpy array. See the difference:</p>
-<div id="54167537" class="cell" data-execution_count="2">
+<p>The first core object of pandas is the <strong>series</strong>. A series is a <em>one-dimensional</em> array of <em>indexed</em> data. A <code>pandas.Series</code> having an <strong>index</strong> is the main difference between a <code>pandas.Series</code> and a NumPy array. Let’s see the difference:</p>
+<div id="42c748b8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a numpy array</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># np.random.randn returns values from the std normal distribution</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.random.randn(<span class="dv">4</span>) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(arr))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># a pandas series made from the previous array</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series(arr)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(s))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.random.randn(<span class="dv">4</span>) <span class="co"># values from std normal distribution</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(arr))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arr, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># a pandas series made from the previous array</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series(arr)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(s))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'numpy.ndarray'&gt;
-[ 1.42195814 -1.40638258 -0.89506297  0.27892629] 
+[ 0.48541259 -1.20397863 -0.84786553  0.67405222] 
 
 &lt;class 'pandas.core.series.Series'&gt;
-0    1.421958
-1   -1.406383
-2   -0.895063
-3    0.278926
+0    0.485413
+1   -1.203979
+2   -0.847866
+3    0.674052
 dtype: float64</code></pre>
 </div>
 </div>
+<p>Notice the index is printed as part of the <code>pandas.Series</code> while, although the <code>np.array</code> is indexable, the index is not part of this data structure.</p>
+<p><img src="../../book/images/lesson-2/series-parts.png" class="img-fluid"></p>
 <section id="creating-a-pandas.series" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-pandas.series">Creating a <code>pandas.Series</code></h3>
 <p>The basic method to create a <code>pandas.Series</code> is to call</p>
@@ -316,10 +361,10 @@ dtype: float64</code></pre>
 </ul>
 <p>The <code>index</code> parameter is a list of index labels.</p>
 <p>For now, we will create a <code>pandas.Series</code> from a numpy array or list. To use this method we need to pass a numpy array (or a list of objects that can be converted to NumPy types) as <code>data</code> and a list of indices of the same length as data.</p>
-<div id="d1cdb694" class="cell" data-execution_count="3">
+<div id="7753eac5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a Series from a numpy array </span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pd.Series(np.arange(<span class="dv">3</span>), index<span class="op">=</span>[<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>a    0
 b    1
 c    2
@@ -327,10 +372,10 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>The <code>index</code> parameter is optional. If we don’t include it, the default is to make the index equal to <code>[0,...,len(data)-1]</code>. For example:</p>
-<div id="8716797f" class="cell" data-execution_count="4">
+<div id="6b2b1cff" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a Series from a list of strings with default index</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pd.Series([<span class="st">'EDS 220'</span>, <span class="st">'EDS 222'</span>, <span class="st">'EDS 223'</span>, <span class="st">'EDS 242'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>0    EDS 220
 1    EDS 222
 2    EDS 223
@@ -341,13 +386,13 @@ dtype: object</code></pre>
 <section id="from-a-dictionary" class="level4">
 <h4 class="anchored" data-anchor-id="from-a-dictionary">From a dictionary</h4>
 <p>Remember a dictionary is a set of key-value pairs. If we create a <code>pandas.Series</code> via a dictionary the keys will become the index and the values the corresponding data.</p>
-<div id="92d81f2a" class="cell" data-execution_count="5">
+<div id="db09a82b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># construct dictionary</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'a'</span>:<span class="dv">0</span>, <span class="st">'b'</span>:<span class="dv">1</span>, <span class="st">'c'</span>:<span class="dv">2</span>}</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize a sries using a dictionary</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>pd.Series(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>a    0
 b    1
 c    2
@@ -358,9 +403,9 @@ dtype: int64</code></pre>
 <section id="from-a-number" class="level4">
 <h4 class="anchored" data-anchor-id="from-a-number">From a number</h4>
 <p>If we only provide a number as the data for the series, we need to provide an index. The number will be repeated to match the length of the index.</p>
-<div id="091b9038" class="cell" data-execution_count="6">
+<div id="7ee55abe" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pd.Series(<span class="fl">3.0</span>, index <span class="op">=</span> [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>A    3.0
 B    3.0
 C    3.0
@@ -372,7 +417,7 @@ dtype: float64</code></pre>
 <section id="simple-operations" class="level3">
 <h3 class="anchored" data-anchor-id="simple-operations">Simple operations</h3>
 <p>Arithmetic operations work on series and also most NumPy functions. For example:</p>
-<div id="349b3126" class="cell" data-execution_count="7">
+<div id="60ec50f3" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a series</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="dv">98</span>,<span class="dv">73</span>,<span class="dv">65</span>],index<span class="op">=</span>[<span class="st">'Andrea'</span>, <span class="st">'Beth'</span>, <span class="st">'Carolina'</span>])</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -402,9 +447,9 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>We can also produce new <code>pandas.Series</code> with <code>True</code>/<code>False</code> values indicating whether the elements in a series satisfy a condition or not:</p>
-<div id="9d98fb22" class="cell" data-execution_count="8">
+<div id="49ad1b90" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">&gt;</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>Andrea      True
 Beth        True
 Carolina    True
@@ -418,22 +463,22 @@ dtype: bool</code></pre>
 <h3 class="anchored" data-anchor-id="attributes-methods">Attributes &amp; Methods</h3>
 <p><code>pandas.Series</code> have <em>many</em> attributes and methods, you can see a <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html">full list in the <code>pandas</code> documentation</a>. For now we will cover two examples that have to do with identifying missing values.</p>
 <p><code>pandas</code> represents a missing or NA value with <code>NaN</code>, which stands for not a number. Let’s construct a small series with some NA values:</p>
-<div id="afe1a47e" class="cell" data-execution_count="9">
+<div id="ad5e03a2" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># series with NAs in it</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, np.NaN, <span class="dv">4</span>, np.NaN])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A <code>pandas.Series</code> has an <em>attribute</em> called <code>hasnans</code> that returns <code>True</code> if there are any NaNs:</p>
-<div id="f853c47e" class="cell" data-execution_count="10">
+<div id="aab6ceeb" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if series has NAs</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>s.hasnans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>Then we might be intersted in knowing which elements in the series are NAs. We can do this using the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.isna.html"><code>isna</code> method</a>:</p>
-<div id="958a2333" class="cell" data-execution_count="11">
+<div id="0770d107" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>s.isna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>0    False
 1    False
 2     True
@@ -467,7 +512,7 @@ slicing with <code>loc</code>
 </div>
 <div class="callout-body-container callout-body">
 <p>Notice that when use slicing with <code>loc</code> we get both the start <em>and the end</em> of the indices we indicated. This is different to slicing in numpy arrays or lists where we do not get the element at the end of the slice. Compare the following:</p>
-<div id="cbfe320d" class="cell" data-execution_count="12">
+<div id="925be654" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -476,11 +521,11 @@ slicing with <code>loc</code>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>[2, 3, 4]</code></pre>
 </div>
 </div>
-<div id="eb94ef40" class="cell" data-execution_count="13">
+<div id="203ad38d" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a np array with integers from 0 to 9</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="dv">10</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y)</span>
@@ -490,11 +535,11 @@ slicing with <code>loc</code>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0 1 2 3 4 5 6 7 8 9]</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>array([2, 3, 4])</code></pre>
 </div>
 </div>
-<div id="a490d824" class="cell" data-execution_count="14">
+<div id="fd253056" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a> z <span class="op">=</span> pd.Series(y)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a> <span class="bu">print</span>(z)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -513,7 +558,7 @@ slicing with <code>loc</code>
 9    9
 dtype: int64</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>2    2
 3    3
 4    4
@@ -532,7 +577,7 @@ dtype: int64</code></pre>
 <h3 class="anchored" data-anchor-id="creating-a-pandas.dataframe">Creating a <code>pandas.DataFrame</code></h3>
 <p>There are <a href="https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe">many ways of creating a <code>pandas.DataFrame</code></a>.</p>
 <p>We already mentioned each column of a <code>pandas.DataFrame</code> is a <code>pandas.Series</code>. In fact, the <code>pandas.DataFrame</code> is a dictionary of <code>pandas.Series</code>, with each column name being the key and the column values being the key’s value. Thus, we can create a <code>pandas.DataFrame</code> in this way:</p>
-<div id="1132e238" class="cell" data-execution_count="15">
+<div id="95dff278" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize dictionary with columns' data </span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'col_name_1'</span> : pd.Series(np.arange(<span class="dv">3</span>)),</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>     <span class="st">'col_name_2'</span> : pd.Series([<span class="fl">3.1</span>, <span class="fl">3.2</span>, <span class="fl">3.3</span>]),</span>
@@ -541,7 +586,7 @@ dtype: int64</code></pre>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create data frame</span></span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(d)</span>
 <span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="32">
 <div>
 
 
@@ -576,7 +621,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>We can change the index and column names by changing the <code>index</code> and <code>columns</code> attributes in the data frame.</p>
-<div id="542b2ec7" class="cell" data-execution_count="16">
+<div id="598868a4" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print original index</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.index)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -586,7 +631,7 @@ dtype: int64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>RangeIndex(start=0, stop=3, step=1)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="33">
 <div>
 
 
@@ -620,7 +665,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="82a3d26a" class="cell" data-execution_count="17">
+<div id="8f0a81d2" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print original column names</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -630,7 +675,7 @@ dtype: int64</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Index(['col_name_1', 'col_name_2'], dtype='object')</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <div>
 
 
@@ -666,10 +711,21 @@ dtype: int64</code></pre>
 </div>
 
 
+
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-reback2020pandas" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">T. pandas development team, <span>“Pandas-dev/pandas: pandas.”</span> Zenodo, Feb. 2020. doi: <a href="https://doi.org/10.5281/zenodo.3509134">10.5281/zenodo.3509134</a>. Available: <a href="https://doi.org/10.5281/zenodo.3509134">https://doi.org/10.5281/zenodo.3509134</a></div>
+</div>
+<div id="ref-mckinney-proc-scipy-2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Wes McKinney, <span>“<span>D</span>ata <span>S</span>tructures for <span>S</span>tatistical <span>C</span>omputing in <span>P</span>ython,”</span> in <em><span>P</span>roceedings of the 9th <span>P</span>ython in <span>S</span>cience <span>C</span>onference</em>, Stéfan van der Walt and Jarrod Millman, Eds., 2010, pp. 56–61. doi:<a href="https://doi.org/ 10.25080/Majora-92bf1922-00a "> 10.25080/Majora-92bf1922-00a </a></div>
+</div>
+<div id="ref-pep8" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">G. van Rossum, B. Warsaw, and N. Coghlan, <span>“Style guide for <span>Python</span> code,”</span> PEP 8, 2001. Available: <a href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a></div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
