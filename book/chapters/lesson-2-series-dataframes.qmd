@@ -36,7 +36,7 @@ A series is a *one-dimensional* array of *indexed* data. A `pandas.Series` havin
 
 ```{python}
 # a numpy array
-arr = np.random.randn(4) # values from std normal distribution
+arr = np.random.randn(4) # random values from std normal distribution
 print(type(arr))
 print(arr, "\n")
 
@@ -48,7 +48,7 @@ print(s)
 
 Notice the index is printed as part of the `pandas.Series` while, although the `np.array` is indexable, the index is not part of this data structure.
 
-![](/book/images/lesson-2/series-parts.png)
+![Printing the `pands.Series` shows the index, values, and data type of the values.](/book/images/lesson-2/series-parts.png){width=80%}
 
 ### Creating a `pandas.Series`
 
@@ -60,49 +60,56 @@ s = pd.Series(data, index=index)
 
 The `data` parameter can be:
 
-- a [numpy array](https://numpy.org/doc/stable/reference/arrays.ndarray.html) or [a list](https://realpython.com/python-list/)
-- a [Python dictionary](https://realpython.com/lessons/dictionary-python/)
-- [a number](https://commons.wikimedia.org/wiki/File:Number-three.JPG)
+- a list or NumPy array,
+- a Python dictionary, or 
+- a single number, boolean (`True`/`False`), or string.
 
-The `index` parameter is a list of index labels.
+The `index` parameter is optional, if we wish to include it, it must be a list of list of indices of the same length as data. 
 
-For now, we will create a `pandas.Series` from a numpy array or list. To use this method we need to pass a numpy array (or a list of objects that can be converted to NumPy types) as `data` and a list of indices of the same length as data. 
+#### Example: Creating a `pandas.Series` from a NumPy array
+Let's create a `pandas.Series` from a NumPy array. To use this method we need to pass a NumPy array (or a list of objects that can be converted to NumPy types) as `data`. Here, we will also include the list `[2023, 2024, 2025]` to be used as an index:
 
 ```{python}
-# a Series from a numpy array 
-pd.Series(np.arange(3), index=['a','b','c'])
+# a series from a numpy array 
+pd.Series(np.arange(3), index=[2023, 2024, 2025])
 ```
 
- The `index` parameter is optional. If we don't include it, the default is to make the index equal to `[0,...,len(data)-1]`. For example:
+#### Example: Creating a `pandas.Series` from a list
+ Here we create a `pandas.Series` from a list of strings. Remember that the `index` parameter is optional. If we don't include it, the default is to make the index equal to `[0,...,len(data)-1]`. For example:
 
 ```{python}
-# a Series from a list of strings with default index
+# a series from a list of strings with default index
 pd.Series(['EDS 220', 'EDS 222', 'EDS 223', 'EDS 242'])
 ```
 
-#### From a dictionary
-
-Remember a dictionary is a set of key-value pairs. If we create a `pandas.Series` via a dictionary the keys will become the index and the values the corresponding data.
+#### Example: Creating a `pandas.Series` from a dictionary
+Recall that a dictionary is a set of key-value pairs. If we create a `pandas.Series` via a dictionary the keys will become the index and the values the corresponding data.
 
 ```{python}
 # construct dictionary
-d = {'a':0, 'b':1, 'c':2}
+d = {'key_0':2, 'key_1':'3', 'key_2':5}
 
-# initialize a sries using a dictionary
+# initialize a series using a dictionary
 pd.Series(d)
 ```
 
-#### From a number
-If we only provide a number as the data for the series, we need to provide an index. The number will be repeated to match the length of the index.
+:::{.callout-note}
+## `dtype: object`
+Notice that in this and the previous example the data type of the values in the series is `object`. This data type in `pandas` *usually* indicates that the series is made up of strings. However, we can see in this example that the `object` data type can also indicate a mix of strings *and* numbers. 
+:::
+
+#### Example: Creating a `pandas.Series` from a single value
+If we only provide a single number, boolean, or string as the data for the series, we need to provide an index. The value will be repeated to match the length of the index. Here, we create a series from a single float number with an index given by a list of strings:
 
 ```{python}
 pd.Series(3.0, index = ['A', 'B', 'C'])
 ```
 
 
+
 ### Simple operations
 
-Arithmetic operations work on series and also most NumPy functions. For example:
+Arithmetic operations work on series and so most NumPy functions. For example:
 
 ```{python}
 # define a series
@@ -114,7 +121,7 @@ print(s /10, '\n')
 # take the exponential of each element in series
 print(np.exp(s), '\n')
 
-# notice this doesn't change the values of our series
+# original series is unchanged
 print(s)
 
 ```
@@ -122,43 +129,48 @@ print(s)
 We can also produce new `pandas.Series` with `True`/`False` values indicating whether the elements in a series satisfy a condition or not:
 
 ```{python}
-s > 10
+s > 70
 ```
 
 This kind of simple conditions on `pandas.Series` will be key when we are selecting data from data frames.
 
 <!-- TO DO: ADD COMPARING VALUES OF A SERIES -->
 
-### Attributes & Methods
-`pandas.Series` have *many* attributes and methods, you can see a [full list in the `pandas` documentation](https://pandas.pydata.org/docs/reference/api/pandas.Series.html). For now we will cover two examples that have to do with identifying missing values.
-
-`pandas` represents a missing or NA value with `NaN`, which stands for not a number. Let's construct a small series with some NA values:
+### Identifying missing values
+In `pandas` we can represent a missing or NA value with the float value `numpy.nan`, which stands for "not a number". Let's construct a small series with some NA values represented this way:
 
 ```{python}
 # series with NAs in it
-s = pd.Series([1, 2, np.NaN, 4, np.NaN])
+s = pd.Series([1, 2, np.nan, 4, np.nan])
+s
 ```
+Notice the data type of the values it he series is still `float64`. 
 
-A `pandas.Series` has an *attribute* called `hasnans` that returns `True` if there are any NaNs:
+The [`hasnans` attribute](https://pandas.pydata.org/docs/reference/api/pandas.Series.hasnans.html) for a `pandas.Series` returns `True` if there are any `np.nan` values in it and false otherwise:
 
 ```{python}
 # check if series has NAs
 s.hasnans
 ```
 
-Then we might be intersted in knowing which elements in the series are NAs. We can do this using the [`isna` method](https://pandas.pydata.org/docs/reference/api/pandas.Series.isna.html):
+After detecting there are `np.nan` values, we might be intersted in knowing which elements in the series are NAs. We can do this using the [`isna` method](https://pandas.pydata.org/docs/reference/api/pandas.Series.isna.html):
 
 ```{python}
 s.isna()
 ```
 
-We can see the ouput is a `pd.Series` of boolean values indicating if an element in the row at the given index is NA (`True` = is NA) or not (`False` = not NA).
+The ouput is a `pandas.Series` of boolean values indicating if an element in the row at the given index is `np.nan` (`True` = is `np.nan`) or not (`False` = not `np.nan`).
 
-:::{.callout-note}
-## moving on
-There's much more to say about `pandas.Series`, but this is enought to get us going. At this point, we mainly want to know about `pandas.Series` because `pandas.Series` are the columns of `pandas.DataFrame`s.
+:::{.callout-tip}
+## Check-In
+Create a small series then use duplicated.
+
+[`pandas` documentation](https://pandas.pydata.org/docs/reference/api/pandas.Series.html)
 :::
 
+There's much more to say about `pandas.Series`, but this is enought to get us going. At this point, we mainly want to know about `pandas.Series` because `pandas.Series` are the columns of `pandas.DataFrame`s.
+
+<!--
 ::: {.callout-caution}
 ## slicing with `loc`
 Notice that when use slicing with `loc` we get both the start *and the end* of the indices we indicated. This is different to slicing in numpy arrays or lists where we do not get the element at the end of the slice. Compare the following:
@@ -188,10 +200,11 @@ y[2:5]
  z.loc[2:5]
 ```
 ::: 
+-->
 
-## Data Frames
+## Data frames
 
-The Data Frame is the most used `pandas` object. It represents tabular data and we can think of it as a spreadhseet. Each column of a `pandas.DataFrame` is a `pandas.Series`. 
+The `pandas.DataFrame` is the most used `pandas` object. It represents tabular data and we can think of it as a spreadhseet. Each column of a `pandas.DataFrame` is a `pandas.Series`. 
 
 ### Creating a `pandas.DataFrame`
 There are [many ways of creating a `pandas.DataFrame`](https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe). 
