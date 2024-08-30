@@ -132,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">A Python environments</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Virtual environments</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -155,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/chapters/lesson-0-create-conda-env.html" class="sidebar-item-text sidebar-link">
+  <a href="../../book/setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Setup</span></a>
   </div>
 </li>
@@ -194,7 +194,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/appendices/A-python-environments.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">A Python environments</span></a>
+ <span class="menu-text">Virtual environments</span></a>
   </div>
 </li>
       </ul>
@@ -206,10 +206,17 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">In this lesson</h2>
    
   <ul>
-  <li><a href="#a-python-environments" id="toc-a-python-environments" class="nav-link active" data-scroll-target="#a-python-environments">A Python environments</a></li>
+  <li><a href="#virtual-environments" id="toc-virtual-environments" class="nav-link active" data-scroll-target="#virtual-environments">Virtual environments</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#environments-what-and-why" id="toc-environments-what-and-why" class="nav-link" data-scroll-target="#environments-what-and-why">Environments: what and why</a></li>
+  <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link" data-scroll-target="#conda-environments">Conda environments</a></li>
+  <li><a href="#conda-channels" id="toc-conda-channels" class="nav-link" data-scroll-target="#conda-channels">Conda channels</a></li>
+  <li><a href="#pip" id="toc-pip" class="nav-link" data-scroll-target="#pip"><code>pip</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -219,11 +226,66 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="a-python-environments" class="level1">
-<h1>A Python environments</h1>
-<p>https://docs.google.com/presentation/d/1sNrtPFILwtN4xzkAEyjAcCwGKs4wbhQZAifk-phuXDo/edit#slide=id.p</p>
+<section id="virtual-environments" class="level1">
+<h1>Virtual environments</h1>
+<p>This hands-on lesson gives a brief introduction to Python virtual environments.</p>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson, students will be able to:</p>
+</section>
+<section id="environments-what-and-why" class="level2">
+<h2 class="anchored" data-anchor-id="environments-what-and-why">Environments: what and why</h2>
+<p>Environments are a way to keep the packages and Python versions you use for different projects organized.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../book/appendices/images/appendix-A/project-cats.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Some environments can have lots of packages and dependencies, while others can keep it simple.</figcaption>
+</figure>
+</div>
+<p>The main reasons to create an environment for each of your projects are:</p>
+<ul>
+<li>To not interfere with your computer’s pre-installed Python</li>
+<li>Manage dependency conflicts for different projects</li>
+<li>Reproducibility! Being able to share your code and what it needs to run it with others</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dependencies
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What these are.</p>
+</div>
+</div>
+</section>
+<section id="conda-environments" class="level2">
+<h2 class="anchored" data-anchor-id="conda-environments">Conda environments</h2>
+<p><a href="https://conda.org">Conda</a> is an environment <em>and</em> package management system: it can both create and administer the environments <em>and</em> install compatible versions of software and their dependencies. Environments created with conda are usually called <strong>conda environments</strong>. A conda environment doesn’t need to be a Python environment, conda can manage packages for any programming language.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../book/appendices/images/appendix-A/conda-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
+</section>
+<section id="conda-channels" class="level2">
+<h2 class="anchored" data-anchor-id="conda-channels">Conda channels</h2>
+<p><strong>Conda channels</strong> are the remote locations where packages are stored. Think of them as shops for getting packages. By default, packages are downloaded to your computer and updated from the <a href="https://repo.anaconda.com/pkgs/">conda default channel</a>. But there are others! <a href="https://conda-forge.org">Conda-forge</a> and <a href="https://bioconda.github.io">bioconda</a> are two popular ones. We can choose which conda channel to install a package from.</p>
+</section>
+<section id="pip" class="level2">
+<h2 class="anchored" data-anchor-id="pip"><code>pip</code></h2>
+<p><code>pip</code> is a <em>package</em> management system <em>only</em> for Python. We can use it to install packages from the <a href="https://pypi.org">Python Package Index (PyPI)</a>. We can use <code>pip</code> inside a conda environment when a package is not available from a conda channel.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../book/appendices/images/appendix-A/pip-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
