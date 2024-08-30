@@ -1,5 +1,7 @@
 ---
 toc-title: In this lesson
+notes: https://docs.google.com/document/d/1emJIWWFXeXqKbX-oWd3uL-jBsGmT7tEuJLtm_A2F3rQ/edit
+slides: https://docs.google.com/presentation/d/1sNrtPFILwtN4xzkAEyjAcCwGKs4wbhQZAifk-phuXDo/edit?usp=sharing
 ---
 
 # Virtual environments
@@ -46,3 +48,89 @@ We can choose which conda channel to install a package from.
 `pip` is a *package* management system *only* for Python. We can use it to install packages from the [Python Package Index (PyPI)](https://pypi.org). We can use `pip` inside a conda environment when a package is not available from a conda channel.
 
 ![](/book/appendices/images/appendix-A/pip-logo.png){width=45% fig-align="center"}
+
+## Conda commands
+
+| Command | What it does |
+|:---------|:-----| 
+| `conda env list`     | list available conda environments |
+| `conda create --name my-env python` | create new Python environment called `my-env` |
+| `conda remove --name my-env  --all` | deletes `my-env` |
+| `coda activate my-env` | activate environment |
+| `coda deactivate` | deactivates current environment and returns to base environment |
+| `python -V` | check which Python version is installed in current environment | 
+| `conda list` | check which packages are installed in current environment | 
+| `conda list numpy` | check if `numpy` is installed in current environment | 
+
+
+: conda commands in this lesson
+
+
+### 1. List environments
+
+To list all the conda environments available in your computer and their location we use:
+
+```default
+conda env list
+```
+The output should look something like this:
+```default
+# conda environments:
+#
+base                  *  /Users/galaz-garcia/opt/anaconda3
+eds220-env               /Users/galaz-garcia/opt/anaconda3/envs/eds220-env
+```
+
+*Info about env being a directory/files with that file path*.
+
+::: {.callout-caution}
+## What is my current active environment?
+When you run `conda env list`, the **asterisk next to the environment path indicates which environment is active**. In this example, I am using the base Python environment. The currently **active environment also appears in the terminal in parenthesis at the beginning of each line**, something like this:
+
+```default
+(base) my-computer:MEDS-eds-220-course galaz-garcia$
+```
+:::
+
+### 2. Create new Python environment
+
+To create a new environment called `test-env` and, within it, install the most recent version of python we simply run: 
+
+```default
+conda create --name test-env python
+```
+When you run it it will give you information about the packages that will be installed and ask you whether to proceed or not. Type `y` and press enter to create the environment and install the packages.
+
+::: {.callout-tip}
+## Check-in
+Check whether the new `test-env` environment is listed by conda. Is it activated or not?
+:::
+
+### 3. Activate environment
+
+To activate the `test-env` environment we use the command
+```default
+conda activate test-env
+```
+
+::: {.callout-tip}
+## Check-in
+Verify that `test-env` is now your current environment.
+:::
+
+### 4. Environment information
+To see which packages are installed within the currently active environment we run:
+```default
+conda list
+```
+The output will be a long list that looks something like this:
+```default
+# packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:
+#
+# Name                    Version                   Build  Channel
+bzip2                     1.0.8                h6c40b1e_6  
+pip                       24.2            py312hecd8cb5_0  
+sqlite                    3.45.3               h6c40b1e_0  
+...
+```
+

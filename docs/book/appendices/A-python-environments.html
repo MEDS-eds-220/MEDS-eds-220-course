@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -216,6 +250,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link" data-scroll-target="#conda-environments">Conda environments</a></li>
   <li><a href="#conda-channels" id="toc-conda-channels" class="nav-link" data-scroll-target="#conda-channels">Conda channels</a></li>
   <li><a href="#pip" id="toc-pip" class="nav-link" data-scroll-target="#pip"><code>pip</code></a></li>
+  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a>
+  <ul class="collapse">
+  <li><a href="#list-environments" id="toc-list-environments" class="nav-link" data-scroll-target="#list-environments">1. List environments</a></li>
+  <li><a href="#create-new-python-environment" id="toc-create-new-python-environment" class="nav-link" data-scroll-target="#create-new-python-environment">2. Create new Python environment</a></li>
+  <li><a href="#activate-environment" id="toc-activate-environment" class="nav-link" data-scroll-target="#activate-environment">3. Activate environment</a></li>
+  <li><a href="#environment-information" id="toc-environment-information" class="nav-link" data-scroll-target="#environment-information">4. Environment information</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -283,8 +324,133 @@ Dependencies
 <p><img src="../../book/appendices/images/appendix-A/pip-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
 </figure>
 </div>
+</section>
+<section id="conda-commands" class="level2">
+<h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
+<table class="caption-top table">
+<caption>conda commands in this lesson</caption>
+<colgroup>
+<col style="width: 62%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>conda env list</code></td>
+<td style="text-align: left;">list available conda environments</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda create --name my-env python</code></td>
+<td style="text-align: left;">create new Python environment called <code>my-env</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda remove --name my-env  --all</code></td>
+<td style="text-align: left;">deletes <code>my-env</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>coda activate my-env</code></td>
+<td style="text-align: left;">activate environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>coda deactivate</code></td>
+<td style="text-align: left;">deactivates current environment and returns to base environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>python -V</code></td>
+<td style="text-align: left;">check which Python version is installed in current environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda list</code></td>
+<td style="text-align: left;">check which packages are installed in current environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda list numpy</code></td>
+<td style="text-align: left;">check if <code>numpy</code> is installed in current environment</td>
+</tr>
+</tbody>
+</table>
+<section id="list-environments" class="level3">
+<h3 class="anchored" data-anchor-id="list-environments">1. List environments</h3>
+<p>To list all the conda environments available in your computer and their location we use:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>conda env list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The output should look something like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a># conda environments:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>#</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>base                  *  /Users/galaz-garcia/opt/anaconda3</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>eds220-env               /Users/galaz-garcia/opt/anaconda3/envs/eds220-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>Info about env being a directory/files with that file path</em>.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What is my current active environment?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you run <code>conda env list</code>, the <strong>asterisk next to the environment path indicates which environment is active</strong>. In this example, I am using the base Python environment. The currently <strong>active environment also appears in the terminal in parenthesis at the beginning of each line</strong>, something like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(base) my-computer:MEDS-eds-220-course galaz-garcia$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="create-new-python-environment" class="level3">
+<h3 class="anchored" data-anchor-id="create-new-python-environment">2. Create new Python environment</h3>
+<p>To create a new environment called <code>test-env</code> and, within it, install the most recent version of python we simply run:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>conda create --name test-env python</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When you run it it will give you information about the packages that will be installed and ask you whether to proceed or not. Type <code>y</code> and press enter to create the environment and install the packages.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Check whether the new <code>test-env</code> environment is listed by conda. Is it activated or not?</p>
+</div>
+</div>
+</section>
+<section id="activate-environment" class="level3">
+<h3 class="anchored" data-anchor-id="activate-environment">3. Activate environment</h3>
+<p>To activate the <code>test-env</code> environment we use the command</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>conda activate test-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify that <code>test-env</code> is now your current environment.</p>
+</div>
+</div>
+</section>
+<section id="environment-information" class="level3">
+<h3 class="anchored" data-anchor-id="environment-information">4. Environment information</h3>
+<p>To see which packages are installed within the currently active environment we run:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>conda list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The output will be a long list that looks something like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a># packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>#</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bzip2                     1.0.8                h6c40b1e_6  </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py312hecd8cb5_0  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sqlite                    3.45.3               h6c40b1e_0  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 </section>
 
