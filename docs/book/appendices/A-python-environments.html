@@ -250,12 +250,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link" data-scroll-target="#conda-environments">Conda environments</a></li>
   <li><a href="#conda-channels" id="toc-conda-channels" class="nav-link" data-scroll-target="#conda-channels">Conda channels</a></li>
   <li><a href="#pip" id="toc-pip" class="nav-link" data-scroll-target="#pip"><code>pip</code></a></li>
-  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a>
+  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a></li>
+  <li><a href="#hands-on-environments" id="toc-hands-on-environments" class="nav-link" data-scroll-target="#hands-on-environments">Hands-on environments</a>
   <ul class="collapse">
   <li><a href="#list-environments" id="toc-list-environments" class="nav-link" data-scroll-target="#list-environments">1. List environments</a></li>
   <li><a href="#create-new-python-environment" id="toc-create-new-python-environment" class="nav-link" data-scroll-target="#create-new-python-environment">2. Create new Python environment</a></li>
   <li><a href="#activate-environment" id="toc-activate-environment" class="nav-link" data-scroll-target="#activate-environment">3. Activate environment</a></li>
-  <li><a href="#environment-information" id="toc-environment-information" class="nav-link" data-scroll-target="#environment-information">4. Environment information</a></li>
+  <li><a href="#packages-information" id="toc-packages-information" class="nav-link" data-scroll-target="#packages-information">4. Packages information</a></li>
+  <li><a href="#searching-for-and-installing-packages" id="toc-searching-for-and-installing-packages" class="nav-link" data-scroll-target="#searching-for-and-installing-packages">5. Searching for and installing packages</a></li>
+  <li><a href="#deactivate-environment" id="toc-deactivate-environment" class="nav-link" data-scroll-target="#deactivate-environment">6. Deactivate environment</a></li>
+  <li><a href="#delete-environment" id="toc-delete-environment" class="nav-link" data-scroll-target="#delete-environment">7. Delete environment</a></li>
+  <li><a href="#create-environment-from-specified-versions-and-channels" id="toc-create-environment-from-specified-versions-and-channels" class="nav-link" data-scroll-target="#create-environment-from-specified-versions-and-channels">8. Create environment from specified versions and channels</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -305,7 +310,7 @@ Dependencies
 </section>
 <section id="conda-environments" class="level2">
 <h2 class="anchored" data-anchor-id="conda-environments">Conda environments</h2>
-<p><a href="https://conda.org">Conda</a> is an environment <em>and</em> package management system: it can both create and administer the environments <em>and</em> install compatible versions of software and their dependencies. Environments created with conda are usually called <strong>conda environments</strong>. A conda environment doesn’t need to be a Python environment, conda can manage packages for any programming language.</p>
+<p><a href="https://conda.org">Conda</a> is an environment <em>and</em> package management system: it can both create and administer the environments <em>and</em> install compatible versions of software and their dependencies. Environments created with Conda are usually called <strong>Conda environments</strong>. A Conda environment doesn’t need to be a Python environment, Conda can manage packages for any programming language.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/appendices/images/appendix-A/conda-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
@@ -314,11 +319,11 @@ Dependencies
 </section>
 <section id="conda-channels" class="level2">
 <h2 class="anchored" data-anchor-id="conda-channels">Conda channels</h2>
-<p><strong>Conda channels</strong> are the remote locations where packages are stored. Think of them as shops for getting packages. By default, packages are downloaded to your computer and updated from the <a href="https://repo.anaconda.com/pkgs/">conda default channel</a>. But there are others! <a href="https://conda-forge.org">Conda-forge</a> and <a href="https://bioconda.github.io">bioconda</a> are two popular ones. We can choose which conda channel to install a package from.</p>
+<p><strong>Conda channels</strong> are the remote locations where packages are stored. Think of them as shops for getting packages. By default, packages are downloaded to your computer and updated from the <a href="https://repo.anaconda.com/pkgs/">conda default channel</a>. But there are others! <a href="https://conda-forge.org">Conda-forge</a> and <a href="https://bioconda.github.io">bioconda</a> are two popular ones. We can choose which Conda channel to install a package from.</p>
 </section>
 <section id="pip" class="level2">
 <h2 class="anchored" data-anchor-id="pip"><code>pip</code></h2>
-<p><code>pip</code> is a <em>package</em> management system <em>only</em> for Python. We can use it to install packages from the <a href="https://pypi.org">Python Package Index (PyPI)</a>. We can use <code>pip</code> inside a conda environment when a package is not available from a conda channel.</p>
+<p><code>pip</code> is a <em>package</em> management system <em>only</em> for Python. We can use it to install packages from the <a href="https://pypi.org">Python Package Index (PyPI)</a>. We can use <code>pip</code> inside a Conda environment when a package is not available from a Conda channel.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/appendices/images/appendix-A/pip-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
@@ -328,7 +333,6 @@ Dependencies
 <section id="conda-commands" class="level2">
 <h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
 <table class="caption-top table">
-<caption>conda commands in this lesson</caption>
 <colgroup>
 <col style="width: 62%">
 <col style="width: 37%">
@@ -342,7 +346,7 @@ Dependencies
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><code>conda env list</code></td>
-<td style="text-align: left;">list available conda environments</td>
+<td style="text-align: left;">list available Conda environments</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>conda create --name my-env python</code></td>
@@ -350,7 +354,7 @@ Dependencies
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>conda remove --name my-env  --all</code></td>
-<td style="text-align: left;">deletes <code>my-env</code></td>
+<td style="text-align: left;">delete <code>my-env</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>coda activate my-env</code></td>
@@ -358,25 +362,36 @@ Dependencies
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>coda deactivate</code></td>
-<td style="text-align: left;">deactivates current environment and returns to base environment</td>
+<td style="text-align: left;">deactivate active environment</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>python -V</code></td>
-<td style="text-align: left;">check which Python version is installed in current environment</td>
+<td style="text-align: left;">check which Python version is installed in active environment</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>conda list</code></td>
-<td style="text-align: left;">check which packages are installed in current environment</td>
+<td style="text-align: left;">check which packages are installed in active environment</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>conda list numpy</code></td>
-<td style="text-align: left;">check if <code>numpy</code> is installed in current environment</td>
+<td style="text-align: left;">check if <code>numpy</code> is installed in active environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda install numpy</code></td>
+<td style="text-align: left;">install <code>numpy</code> package in environment using environment channel priorities (generally just from defaults channel)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda install --channel conda-forge rioxarray</code></td>
+<td style="text-align: left;">install <code>rioxarray</code> package in environment from from conda-forge channel (after going through other environment channel prioirities)</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="hands-on-environments" class="level2">
+<h2 class="anchored" data-anchor-id="hands-on-environments">Hands-on environments</h2>
 <section id="list-environments" class="level3">
 <h3 class="anchored" data-anchor-id="list-environments">1. List environments</h3>
-<p>To list all the conda environments available in your computer and their location we use:</p>
+<p>To list all the Conda environments available in your computer and their location we use:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>conda env list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The output should look something like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a># conda environments:</span>
@@ -414,7 +429,7 @@ Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Check whether the new <code>test-env</code> environment is listed by conda. Is it activated or not?</p>
+<p>Check whether the new <code>test-env</code> environment is listed by Conda. Is it activated or not?</p>
 </div>
 </div>
 </section>
@@ -436,8 +451,8 @@ Check-in
 </div>
 </div>
 </section>
-<section id="environment-information" class="level3">
-<h3 class="anchored" data-anchor-id="environment-information">4. Environment information</h3>
+<section id="packages-information" class="level3">
+<h3 class="anchored" data-anchor-id="packages-information">4. Packages information</h3>
 <p>To see which packages are installed within the currently active environment we run:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>conda list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The output will be a long list that looks something like this:</p>
@@ -447,7 +462,141 @@ Check-in
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bzip2                     1.0.8                h6c40b1e_6  </span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py312hecd8cb5_0  </span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sqlite                    3.45.3               h6c40b1e_0  </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>[...]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The name and version of each installed package in the environment appear in their respective columns. The ‘Build’ column shows a <strong>build string</strong> for each package. This string encodes important information about how the package was compiled, including any updates or changes made without altering the package version. It also reflects any compatibility or performance optimizations that were integrated during the build process.</p>
+<p>For example, the same package with the same version might have different builds (and therefore different build strings) depending on whether it was installed on macOS, Windows, or Linux. This difference arises because the package may need to be compiled differently to optimize performance and ensure compatibility with each operating system.</p>
+<p>The ‘Channel’ column shows the source from which the package was downloaded and installed. In this example the entries on this column are blank, signaling these packages were downloaded from the defeault Conda channel. We’ll see other channels appear in the next examples.</p>
+<p>We can also request information about a specific package. For example, if we run</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>conda list pip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>we obtain only the information about the <code>pip</code> package:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a># packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>#</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py312hecd8cb5_0  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can also use this to verify whether a package is installed. For example, if we run</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>conda list numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>we will get empty columns:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a># packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>#</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>because the <code>numpy</code> package is not intalled in this environment.</p>
+</section>
+<section id="searching-for-and-installing-packages" class="level3">
+<h3 class="anchored" data-anchor-id="searching-for-and-installing-packages">5. Searching for and installing packages</h3>
+<p>Let’s say we want to install <code>numpy</code> in our currently active environment <code>test-env</code>. To do this we can simply use the command:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>conda install numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Since we have not specified another channel, this command will install <code>numpy</code> from the default channel.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify that <code>numpy</code> is now installed.</p>
+</div>
+</div>
+<p>Now, suppose we want to install <code>rioxarray</code>, this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. A sensible measure would be to first look if <code>rioxarray</code> is available in the defaults channels, which we can do by running:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>conda search rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The output will look similar to</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>No match found for: rioxarray. Search: *rioxarray*</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>PackagesNotFoundError: The following packages are not available from current channels:</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  - rioxarray</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>Current channels:</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/osx-64</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/noarch</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/osx-64</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/noarch</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>To search for alternate channels that may provide the Conda package you're</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>looking for, navigate to</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    https://anaconda.org</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>and use the search bar at the top of the page.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As stated, <code>rioxarray</code> is not available on the default channels for my conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my corrent operating system), and the last two are actually channels for R packages.</p>
+<p>If we had tried to install <code>rioxarray</code> using <code>conda install rioxarray</code> we would have obtained an error message with similar information.</p>
+<p>We may have better luck searching for <code>rioxarray</code> in the conda-forge channel, which we can do like this:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>conda search --channel conda-forge rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>from which we obtain a list of available versions and builds of this package in the conda-forge channel:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a># Name                       Version           Build  Channel             </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.3            py_0  conda-forge         </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.4            py_0  conda-forge         </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.5            py_0  conda-forge     </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>[...]</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>rioxarray                     0.16.0    pyhd8ed1ab_0  conda-forge         </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>rioxarray                     0.17.0    pyhd8ed1ab_0  conda-forge   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do you see any versions of <code>rioxarray</code> with multiple builds?</p>
+</div>
+</div>
+<p>Since we now know that we can find <code>rioxarray</code> in the conda-forge channel, we can go ahead and install it from this channel using the command</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>conda install --channel conda-forge rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll see a moving bar that says Conda is <strong>solving (the) environment</strong> - this is Conda doing what the package management! It means Conda is working on finding the dependencies for the packages you are trying to install, finding versions of these dependencies that are compatible with each other, making sure these new packages are compatible with the packages already present in the environment or see it needs to upgrade, downgrade or remove anything in the environment. Overall, Conda tries to install what we need with the least disruption. Solving an environment can often take time but it is crucial so that the environment remains stable and functional.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Check whether <code>pandas</code> is installed in the environment.</li>
+<li>Which channels were used to install dependencies for <code>rioxarray</code>?</li>
+</ol>
+</div>
+</div>
+<!--
+TO DO: should add something with pip here
+-->
+</section>
+<section id="deactivate-environment" class="level3">
+<h3 class="anchored" data-anchor-id="deactivate-environment">6. Deactivate environment</h3>
+<p>To deactivate our current environment and return to our base environment we simply run</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conda deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify we are no longer in the <code>test-env</code>.</p>
+</div>
+</div>
+</section>
+<section id="delete-environment" class="level3">
+<h3 class="anchored" data-anchor-id="delete-environment">7. Delete environment</h3>
+<p>Since this was a test environment, we can go ahead and delete all of it using the command:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>conda remove --name test-env  --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can run <code>conda env list</code> to verify the <code>test-env</code> does not exist anymore.</p>
+</section>
+<section id="create-environment-from-specified-versions-and-channels" class="level3">
+<h3 class="anchored" data-anchor-id="create-environment-from-specified-versions-and-channels">8. Create environment from specified versions and channels</h3>
 
 
 </section>

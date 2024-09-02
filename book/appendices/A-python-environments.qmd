@@ -33,7 +33,7 @@ What these are.
 
 [Conda](https://conda.org) is an environment *and* package management system: 
 it can both create and administer the environments *and* install compatible versions of software and their dependencies.
-Environments created with conda are usually called **conda environments**. A conda environment doesn't need to be a Python environment, conda can manage packages for any programming language. 
+Environments created with Conda are usually called **Conda environments**. A Conda environment doesn't need to be a Python environment, Conda can manage packages for any programming language. 
 
 ![](/book/appendices/images/appendix-A/conda-logo.png){width=45% fig-align="center"}
 
@@ -41,11 +41,11 @@ Environments created with conda are usually called **conda environments**. A con
 
 **Conda channels** are the remote locations where packages are stored. Think of them as shops for getting packages.
 By default, packages are downloaded to your computer and updated from the [conda default channel](https://repo.anaconda.com/pkgs/). But there are others! [Conda-forge](https://conda-forge.org) and [bioconda](https://bioconda.github.io) are two popular ones.
-We can choose which conda channel to install a package from. 
+We can choose which Conda channel to install a package from. 
 
 ## `pip`
 
-`pip` is a *package* management system *only* for Python. We can use it to install packages from the [Python Package Index (PyPI)](https://pypi.org). We can use `pip` inside a conda environment when a package is not available from a conda channel.
+`pip` is a *package* management system *only* for Python. We can use it to install packages from the [Python Package Index (PyPI)](https://pypi.org). We can use `pip` inside a Conda environment when a package is not available from a Conda channel.
 
 ![](/book/appendices/images/appendix-A/pip-logo.png){width=45% fig-align="center"}
 
@@ -53,22 +53,22 @@ We can choose which conda channel to install a package from.
 
 | Command | What it does |
 |:---------|:-----| 
-| `conda env list`     | list available conda environments |
+| `conda env list`     | list available Conda environments |
 | `conda create --name my-env python` | create new Python environment called `my-env` |
-| `conda remove --name my-env  --all` | deletes `my-env` |
+| `conda remove --name my-env  --all` | delete `my-env` |
 | `coda activate my-env` | activate environment |
-| `coda deactivate` | deactivates current environment and returns to base environment |
-| `python -V` | check which Python version is installed in current environment | 
-| `conda list` | check which packages are installed in current environment | 
-| `conda list numpy` | check if `numpy` is installed in current environment | 
+| `coda deactivate` | deactivate active environment|
+| `python -V` | check which Python version is installed in active environment | 
+| `conda list` | check which packages are installed in active environment | 
+| `conda list numpy` | check if `numpy` is installed in active environment | 
+| `conda install numpy` | install `numpy` package in environment using environment channel priorities (generally just from defaults channel)| 
+| `conda install --channel conda-forge rioxarray` | install `rioxarray ` package in environment from from conda-forge channel (after going through other environment channel prioirities) |
 
-
-: conda commands in this lesson
-
+## Hands-on environments
 
 ### 1. List environments
 
-To list all the conda environments available in your computer and their location we use:
+To list all the Conda environments available in your computer and their location we use:
 
 ```default
 conda env list
@@ -103,7 +103,7 @@ When you run it it will give you information about the packages that will be ins
 
 ::: {.callout-tip}
 ## Check-in
-Check whether the new `test-env` environment is listed by conda. Is it activated or not?
+Check whether the new `test-env` environment is listed by Conda. Is it activated or not?
 :::
 
 ### 3. Activate environment
@@ -118,7 +118,7 @@ conda activate test-env
 Verify that `test-env` is now your current environment.
 :::
 
-### 4. Environment information
+### 4. Packages information
 To see which packages are installed within the currently active environment we run:
 ```default
 conda list
@@ -131,6 +131,139 @@ The output will be a long list that looks something like this:
 bzip2                     1.0.8                h6c40b1e_6  
 pip                       24.2            py312hecd8cb5_0  
 sqlite                    3.45.3               h6c40b1e_0  
-...
+[...]
 ```
 
+The name and version of each installed package in the environment appear in their respective columns. The 'Build' column shows a **build string** for each package. This string encodes important information about how the package was compiled, including any updates or changes made without altering the package version. It also reflects any compatibility or performance optimizations that were integrated during the build process.
+
+For example, the same package with the same version might have different builds (and therefore different build strings) depending on whether it was installed on macOS, Windows, or Linux. This difference arises because the package may need to be compiled differently to optimize performance and ensure compatibility with each operating system.
+
+The 'Channel' column shows the source from which the package was downloaded and installed. 
+In this example the entries on this column are blank, signaling these packages were downloaded from the defeault Conda channel. We'll see other channels appear in the next examples.
+
+We can also request information about a specific package. For example, if we run
+```default
+conda list pip
+```
+we obtain only the information about the `pip` package:
+```default
+# packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:
+#
+# Name                    Version                   Build  Channel
+pip                       24.2            py312hecd8cb5_0  
+```
+
+We can also use this to verify whether a package is installed. For example, if we run
+```default
+conda list numpy
+```
+we will get empty columns:
+```default
+# packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:
+#
+# Name                    Version                   Build  Channel
+```
+because the `numpy` package is not intalled in this environment.
+
+### 5. Searching for and installing packages
+Let's say we want to install `numpy` in our currently active environment `test-env`. To do this we can simply use the command:
+```default
+conda install numpy
+```
+Since we have not specified another channel, this command will install `numpy` from the default channel.
+
+::: {.callout-tip}
+## Check-in
+Verify that `numpy` is now installed.
+:::
+
+Now, suppose we want to install `rioxarray`, this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. 
+A sensible measure would be to first look if `rioxarray` is available in the defaults channels, which we can do by running:
+
+```default
+conda search rioxarray
+```
+The output will look similar to
+```default
+Loading channels: done
+No match found for: rioxarray. Search: *rioxarray*
+
+PackagesNotFoundError: The following packages are not available from current channels:
+
+  - rioxarray
+
+Current channels:
+
+  - https://repo.anaconda.com/pkgs/main/osx-64
+  - https://repo.anaconda.com/pkgs/main/noarch
+  - https://repo.anaconda.com/pkgs/r/osx-64
+  - https://repo.anaconda.com/pkgs/r/noarch
+
+To search for alternate channels that may provide the Conda package you're
+looking for, navigate to
+
+    https://anaconda.org
+
+and use the search bar at the top of the page.
+```
+As stated, `rioxarray` is not available on the default channels for my conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my corrent operating system), and the last two are actually channels for R packages. 
+
+If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information.
+
+We may have better luck searching for `rioxarray` in the conda-forge channel, which we can do like this:
+```default
+conda search --channel conda-forge rioxarray
+```
+from which we obtain a list of available versions and builds of this package in the conda-forge channel:
+```default
+Loading channels: done
+# Name                       Version           Build  Channel             
+rioxarray                      0.0.3            py_0  conda-forge         
+rioxarray                      0.0.4            py_0  conda-forge         
+rioxarray                      0.0.5            py_0  conda-forge     
+[...]
+rioxarray                     0.16.0    pyhd8ed1ab_0  conda-forge         
+rioxarray                     0.17.0    pyhd8ed1ab_0  conda-forge   
+```
+::: {.callout-tip}
+## Check-in
+Do you see any versions of `rioxarray` with multiple builds?
+:::
+
+Since we now know that we can find `rioxarray` in the conda-forge channel, we can go ahead and install it from this channel using the command
+```default
+conda install --channel conda-forge rioxarray
+```
+You'll see a moving bar that says Conda is **solving (the) environment** - this is Conda doing what the package management! It means Conda is working on finding the dependencies for the packages you are trying to install, finding versions of these dependencies that are compatible with each other, making sure these new packages are compatible with the packages already present in the environment or see it needs to upgrade, downgrade or remove anything in the environment. Overall, Conda tries to install what we need with the least disruption. Solving an environment can often take time but it is crucial so that the environment remains stable and functional. 
+
+::: {.callout-tip}
+## Check-in
+1. Check whether `pandas` is installed in the environment.
+2. Which channels were used to install dependencies for `rioxarray`?
+:::
+
+<!--
+TO DO: should add something with pip here
+-->
+
+### 6. Deactivate environment
+
+To deactivate our current environment and return to our base environment we simply run 
+```default
+conda deactivate
+```
+
+::: {.callout-tip}
+## Check-in
+Verify we are no longer in the `test-env`.
+:::
+
+### 7. Delete environment
+
+Since this was a test environment, we can go ahead and delete all of it using the command:
+```default
+conda remove --name test-env  --all
+```
+We can run `conda env list` to verify the `test-env` does not exist anymore. 
+
+### 8. Create environment from specified versions and channels
