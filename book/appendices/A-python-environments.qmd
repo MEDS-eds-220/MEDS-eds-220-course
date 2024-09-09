@@ -11,6 +11,10 @@ This hands-on lesson gives a brief introduction to Python virtual environments.
 ## Learning objectives
 By the end of this lesson, students will be able to:
 
+- Describe what Conda environments are and how they are used to install Python packages
+- Use standard Conda commands to list, activate, deactivate, create, and delete environments 
+- Build Conda environments and install packages using the command line
+- Generate a .yml file with environment specifications
 
 ## Environments: what and why
 
@@ -21,18 +25,14 @@ Environments are a way to keep the packages and Python versions you use for diff
 The main reasons to create an environment for each of your projects are:
 
 - To not interfere with your computer’s pre-installed Python
-- Manage dependency conflicts for different projects
+- Packages usually depend on other packages to work properly, this is called a **package dependency**. Dependencies across different packages need to be carefully managed and may potentially be different across projects.
 - Reproducibility! Being able to share your code and what it needs to run it with others
-
-::: {.callout-note}
-## Dependencies
-What these are.
-:::
 
 ## Conda environments
 
 [Conda](https://conda.org) is an environment *and* package management system: 
-it can both create and administer the environments *and* install compatible versions of software and their dependencies.
+it can both create and administer the environments *and* install compatible versions of software and their dependencies within an environment. 
+
 Environments created with Conda are usually called **Conda environments**. A Conda environment doesn't need to be a Python environment, Conda can manage packages for any programming language. 
 
 ![](/book/appendices/images/appendix-A/conda-logo.png){width=45% fig-align="center"}
@@ -81,25 +81,25 @@ base                  *  /Users/galaz-garcia/opt/anaconda3
 eds220-env               /Users/galaz-garcia/opt/anaconda3/envs/eds220-env
 ```
 
-*Info about env being a directory/files with that file path*.
+ Notice the file path next to the environment name. This is the absolute path to the environment's installation directory on my local machine. This is where Conda has created the environment and stored the packages!
 
-::: {.callout-caution}
-## What is my current active environment?
-When you run `conda env list`, the **asterisk next to the environment path indicates which environment is active**. In this example, I am using the base Python environment. The currently **active environment also appears in the terminal in parenthesis at the beginning of each line**, something like this:
+**What is my currently active environment?**
+
+- When you run `conda env list`, the **asterisk next to the environment path indicates which environment is active**. In the previous example, I am using the base Python environment. 
+- The currently active environment also appears in the terminal in parenthesis at the beginning of each line, something like this:
 
 ```default
 (base) my-computer:MEDS-eds-220-course galaz-garcia$
 ```
-:::
 
 ### 2. Create new Python environment
 
-To create a new environment called `test-env` and, within it, install the most recent version of python we simply run: 
+To create a new environment called `test-env` and, within it, install the most recent version of Python we simply run: 
 
 ```default
 conda create --name test-env python
 ```
-When you run it it will give you information about the packages that will be installed and ask you whether to proceed or not. Type `y` and press enter to create the environment and install the packages.
+When you run this command, it will print out information about the packages that will be installed and ask you whether to proceed or not. Type `y` and press enter to create the environment and install the packages.
 
 ::: {.callout-tip}
 ## Check-in
@@ -134,11 +134,11 @@ sqlite                    3.45.3               h6c40b1e_0
 [...]
 ```
 
-The name and version of each installed package in the environment appear in their respective columns. The 'Build' column shows a **build string** for each package. This string encodes important information about how the package was compiled, including any updates or changes made without altering the package version. It also reflects any compatibility or performance optimizations that were integrated during the build process.
+The **name and version** of each installed package in the environment appear in their respective columns. The 'Build' column shows a **build string** for each package. This string encodes important information about how the package was compiled, including any updates or changes made without altering the package version. It also reflects any compatibility or performance optimizations that were integrated during the build process.
 
 For example, the same package with the same version might have different builds (and therefore different build strings) depending on whether it was installed on macOS, Windows, or Linux. This difference arises because the package may need to be compiled differently to optimize performance and ensure compatibility with each operating system.
 
-The 'Channel' column shows the source from which the package was downloaded and installed. 
+The **channel** column shows the source from which the package was downloaded and installed. 
 In this example the entries on this column are blank, signaling these packages were downloaded from the defeault Conda channel. We'll see other channels appear in the next examples.
 
 We can also request information about a specific package. For example, if we run
@@ -153,7 +153,7 @@ we obtain only the information about the `pip` package:
 pip                       24.2            py312hecd8cb5_0  
 ```
 
-We can also use this to verify whether a package is installed. For example, if we run
+We can use the same command to verify whether a package is installed. For example, if we run
 ```default
 conda list numpy
 ```
@@ -166,7 +166,8 @@ we will get empty columns:
 because the `numpy` package is not intalled in this environment.
 
 ### 5. Searching for and installing packages
-Let's say we want to install `numpy` in our currently active environment `test-env`. To do this we can simply use the command:
+
+Suppose we want to install `numpy` in our currently active environment `test-env`. To do this we can simply use the command:
 ```default
 conda install numpy
 ```
@@ -206,15 +207,13 @@ looking for, navigate to
 
 and use the search bar at the top of the page.
 ```
-As stated, `rioxarray` is not available on the default channels for my conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my corrent operating system), and the last two are actually channels for R packages. 
-
-If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information.
+As stated, `rioxarray` is not available on the default channels for my Conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information (you can try it if you want!).
 
 We may have better luck searching for `rioxarray` in the conda-forge channel, which we can do like this:
 ```default
 conda search --channel conda-forge rioxarray
 ```
-from which we obtain a list of available versions and builds of this package in the conda-forge channel:
+The result will be a list of available versions and builds of this package in the conda-forge channel:
 ```default
 Loading channels: done
 # Name                       Version           Build  Channel             
@@ -234,7 +233,14 @@ Since we now know that we can find `rioxarray` in the conda-forge channel, we ca
 ```default
 conda install --channel conda-forge rioxarray
 ```
-You'll see a moving bar that says Conda is **solving (the) environment** - this is Conda doing what the package management! It means Conda is working on finding the dependencies for the packages you are trying to install, finding versions of these dependencies that are compatible with each other, making sure these new packages are compatible with the packages already present in the environment or see it needs to upgrade, downgrade or remove anything in the environment. Overall, Conda tries to install what we need with the least disruption. Solving an environment can often take time but it is crucial so that the environment remains stable and functional. 
+You'll see a moving bar that says Conda is **solving (the) environment** - this is Conda doing its package management job! It means Conda is working on:
+
+- finding the dependencies for the packages you are trying to install, 
+- finding versions of these dependencies that are compatible with each other,
+- making sure these new packages are compatible with the packages already present in the environment, 
+- downgrade, upgrade, or remove packages as needed in the environment. 
+
+Overall, Conda tries to install what we need with the least disruption. **Solving an environment can often take time** but it is crucial so that the environment remains stable and functional. 
 
 ::: {.callout-tip}
 ## Check-in
@@ -255,7 +261,7 @@ conda deactivate
 
 ::: {.callout-tip}
 ## Check-in
-Verify we are no longer in the `test-env`.
+Verify we are no longer in the `test-env`. What environment are we on?
 :::
 
 ### 7. Delete environment
@@ -264,6 +270,9 @@ Since this was a test environment, we can go ahead and delete all of it using th
 ```default
 conda remove --name test-env  --all
 ```
+
+It will ask you whether you want to proceed. Type `y` and press enter to go ahead and delete the environment. 
+
 We can run `conda env list` to verify the `test-env` does not exist anymore. 
 
 ### 8. Create environment from specified versions and channels
