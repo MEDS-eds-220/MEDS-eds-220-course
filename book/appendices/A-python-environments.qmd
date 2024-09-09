@@ -51,13 +51,15 @@ We can choose which Conda channel to install a package from.
 
 ## Conda commands
 
+https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html
+
 | Command | What it does |
 |:---------|:-----| 
 | `conda env list`     | list available Conda environments |
 | `conda create --name my-env python` | create new Python environment called `my-env` |
 | `conda remove --name my-env  --all` | delete `my-env` |
-| `coda activate my-env` | activate environment |
-| `coda deactivate` | deactivate active environment|
+| `conda activate my-env` | activate environment |
+| `conda deactivate` | deactivate active environment|
 | `python -V` | check which Python version is installed in active environment | 
 | `conda list` | check which packages are installed in active environment | 
 | `conda list numpy` | check if `numpy` is installed in active environment | 
@@ -275,4 +277,49 @@ It will ask you whether you want to proceed. Type `y` and press enter to go ahea
 
 We can run `conda env list` to verify the `test-env` does not exist anymore. 
 
-### 8. Create environment from specified versions and channels
+### 8. Create environment (one liner)
+
+We can also create a new environment by specifying the package versions and channel priorities. For example, to install the `numpy` and `rioxarray` versions we previously had in a new environment called `my-env` we run:
+
+```default
+conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
+```
+
+Notice we are explicitely requiring certain versions of our packages, and the `--channel conda-forge` command is asking Conda to prioritize getting the packages from conda-forge. 
+
+::: {.callout-tip}
+## Check-in
+Take a look at the dependencies that were installed with these two packages.
+:::
+
+### 9. Exporting an environment
+
+One of the main goals of using an environment to manage the packages used in your project is being able to share the environment so that other people can rerun your code and reproduce your results. 
+
+Rather than "sharing the environment", it might be better to think about sharing instructions that Conda can use to recreate the environment you have. These instructions are basically a list of the packages installed in the environment, their versions, which channels were used to install them, and, optionally, build specifications. There are several ways of doing getting these instructions depending on the level of cross-platform compatibility we are looking for.
+
+#### Platform and package specific
+
+The first method to export the environment specifications is
+```default
+conda env export > environment.yml
+```
+
+The `environment.yml` is the name 
+
+Open the `environment.yml` file that was generated, it will look similar to this excerpt:
+```default
+name: my-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - affine=2.4.0=pyhd8ed1ab_0
+  - attrs=24.2.0=pyh71513ae_0
+  [...]
+  - zlib=1.3.1=h87427d6_1
+  - zstd=1.5.6=h915ae27_0
+prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env
+```
+
+The first method we can use to export the environment specifications is the most detailed, listing the channels (in order of priority), and the package names, each with a version and build string.
