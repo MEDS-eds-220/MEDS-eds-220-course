@@ -4,21 +4,22 @@ notes: https://docs.google.com/document/d/1emJIWWFXeXqKbX-oWd3uL-jBsGmT7tEuJLtm_
 slides: https://docs.google.com/presentation/d/1sNrtPFILwtN4xzkAEyjAcCwGKs4wbhQZAifk-phuXDo/edit?usp=sharing
 ---
 
-# Virtual environments
+# Conda environments
 
-This hands-on lesson gives a brief introduction to Python virtual environments.
+This hands-on lesson gives a brief introduction to Conda environments, focusing on practical usage. 
+You can use this lesson as a standalone introduction to environments, ideally preceding the installation of the course-specific environment (see Setup section).
 
 ## Learning objectives
 By the end of this lesson, students will be able to:
 
-- Describe what Conda environments are and how they are used to install Python packages
+- Describe what Conda environments are and their role in managing Python packages and dependencies
 - Use standard Conda commands to list, activate, deactivate, create, and delete environments 
 - Build Conda environments and install packages using the command line
-- Generate and edit a `.yml` file with environment specifications
+- Generate and edit a `.yml` file with environment specifications to enhance project reproducibility
 
 ## Environments: what and why
 
-Environments are a way to keep the packages and Python versions you use for different projects organized. 
+**Environments** are a way to keep the packages and Python versions you use for different projects organized. 
 
 ![Some environments can have lots of packages and dependencies, while others can keep it simple. ](/book/appendices/images/appendix-A/project-cats.png){width=60% fig-align="center"}
 
@@ -270,7 +271,7 @@ We can also create a new environment by specifying the package versions and chan
 conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
 ```
 
-Notice we are explicitely requiring certain versions of our packages, and the `--channel conda-forge` command is asking Conda to prioritize getting the packages from conda-forge. 
+Notice we are explicitely requiring certain versions of our packages, and the `--channel conda-forge` option is asking Conda to prioritize getting the packages from conda-forge. 
 
 ::: {.callout-tip}
 ## Check-in
@@ -345,11 +346,11 @@ dependencies:
 prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env
 ```
 
-Adding the `--from-history` command tells Conda to only include packages that we explicitely installed (in this case `numpy=1.26.4` and `rioxarray=0.17.0`), *omitting any dependencies that were automatically installed and channel information*. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. 
+Adding the `--from-history` option tells Conda to only include packages that we explicitely installed (in this case `numpy=1.26.4` and `rioxarray=0.17.0`), *omitting any dependencies that were automatically installed and channel information*. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. 
 
 ::: {.callout-caution}
 ## Adding channels to `environment.yml` file
-In section 5 we saw that the `rioxarray` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export --from-history` only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Rememember to also delete the prefix line before sharing. The modified version of the `--from-history` that will allow us to recreate the environment will be:
+In section 5 we saw that the `rioxarray` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export` with the `--from-history` option only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Rememember to also delete the prefix line before sharing. The modified version of the `--from-history` output that will allow us to recreate the environment will be:
 
 ```default
 name: my-env
@@ -362,15 +363,33 @@ dependencies:
 ```
 :::
 
+Before moving to the last exercise, delete the `environment.yml` and `environment_hist.yml` files.
+
 ### 9. Importing an environment
 
+<!-- TO DO: update this with course environment -->
+For this last exercise, [click here](https://github.com/carmengg/eds220-mpc/blob/main/environment.yml) and download the `environment.yml` file in this repository. Move to a directory for a mock project and navigate to that directory in the terminal.
+
+<!-- TO DO: Add brief discussion of what is in the environment file -->
+
+To create an environment from specifications in a `.yml` file we run
 ```default
-conda env create --name test-env --file environment_hist.yml
+conda env create --name test-env --file environment.yml
 ```
+
+Then `--name` option states how we want to name our environment (test-env in this case). If no `--name` option is given, Conda will name of the environment using the `name` field in the `environment.yml` file. 
+
+::: {.callout-tip}
+## Check-in
+Verify that the new environment was created, activate it, and take a look at the installed packages.
+:::
+
+## Next
+
 
 ## Conda commands
 
-The following table includes the commands covered in this lesson's exercises. Check out [conda's cheatsheet](https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html) for more commands and tips.
+The following table includes the commands covered in this lesson's exercises. Check out [Conda's cheatsheet](https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html) for more commands and tips.
 
 | Command | What it does |
 |:---------|:-----| 

@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Virtual environments</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../book/appendices/A-python-environments.html">Conda environments</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -239,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/appendices/A-python-environments.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Virtual environments</span></a>
+ <span class="menu-text">Conda environments</span></a>
   </div>
 </li>
       </ul>
@@ -254,14 +254,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">In this lesson</h2>
    
   <ul>
-  <li><a href="#virtual-environments" id="toc-virtual-environments" class="nav-link active" data-scroll-target="#virtual-environments">Virtual environments</a>
+  <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link active" data-scroll-target="#conda-environments">Conda environments</a>
   <ul class="collapse">
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
   <li><a href="#environments-what-and-why" id="toc-environments-what-and-why" class="nav-link" data-scroll-target="#environments-what-and-why">Environments: what and why</a></li>
-  <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link" data-scroll-target="#conda-environments">Conda environments</a></li>
+  <li><a href="#conda-environments-1" id="toc-conda-environments-1" class="nav-link" data-scroll-target="#conda-environments-1">Conda environments</a></li>
   <li><a href="#conda-channels" id="toc-conda-channels" class="nav-link" data-scroll-target="#conda-channels">Conda channels</a></li>
   <li><a href="#pip" id="toc-pip" class="nav-link" data-scroll-target="#pip"><code>pip</code></a></li>
-  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a></li>
   <li><a href="#hands-on-environments" id="toc-hands-on-environments" class="nav-link" data-scroll-target="#hands-on-environments">Hands-on environments</a>
   <ul class="collapse">
   <li><a href="#list-environments" id="toc-list-environments" class="nav-link" data-scroll-target="#list-environments">1. List environments</a></li>
@@ -271,8 +270,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#searching-for-and-installing-packages" id="toc-searching-for-and-installing-packages" class="nav-link" data-scroll-target="#searching-for-and-installing-packages">5. Searching for and installing packages</a></li>
   <li><a href="#deactivate-environment" id="toc-deactivate-environment" class="nav-link" data-scroll-target="#deactivate-environment">6. Deactivate environment</a></li>
   <li><a href="#delete-environment" id="toc-delete-environment" class="nav-link" data-scroll-target="#delete-environment">7. Delete environment</a></li>
-  <li><a href="#create-environment-from-specified-versions-and-channels" id="toc-create-environment-from-specified-versions-and-channels" class="nav-link" data-scroll-target="#create-environment-from-specified-versions-and-channels">8. Create environment from specified versions and channels</a></li>
+  <li><a href="#create-environment-one-liner" id="toc-create-environment-one-liner" class="nav-link" data-scroll-target="#create-environment-one-liner">8. Create environment (one liner)</a></li>
+  <li><a href="#exporting-an-environment" id="toc-exporting-an-environment" class="nav-link" data-scroll-target="#exporting-an-environment">9. Exporting an environment</a></li>
+  <li><a href="#importing-an-environment" id="toc-importing-an-environment" class="nav-link" data-scroll-target="#importing-an-environment">9. Importing an environment</a></li>
   </ul></li>
+  <li><a href="#next" id="toc-next" class="nav-link" data-scroll-target="#next">Next</a></li>
+  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -283,22 +286,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="virtual-environments" class="level1">
-<h1>Virtual environments</h1>
-<p>This hands-on lesson gives a brief introduction to Python virtual environments.</p>
+<section id="conda-environments" class="level1">
+<h1>Conda environments</h1>
+<p>This hands-on lesson gives a brief introduction to Conda environments, focusing on practical usage. You can use this lesson as a standalone introduction to environments, ideally preceding the installation of the course-specific environment (see Setup section).</p>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By the end of this lesson, students will be able to:</p>
 <ul>
-<li>Describe what Conda environments are and how they are used to install Python packages</li>
+<li>Describe what Conda environments are and their role in managing Python packages and dependencies</li>
 <li>Use standard Conda commands to list, activate, deactivate, create, and delete environments</li>
 <li>Build Conda environments and install packages using the command line</li>
-<li>Generate a .yml file with environment specifications</li>
+<li>Generate and edit a <code>.yml</code> file with environment specifications to enhance project reproducibility</li>
 </ul>
 </section>
 <section id="environments-what-and-why" class="level2">
 <h2 class="anchored" data-anchor-id="environments-what-and-why">Environments: what and why</h2>
-<p>Environments are a way to keep the packages and Python versions you use for different projects organized.</p>
+<p><strong>Environments</strong> are a way to keep the packages and Python versions you use for different projects organized.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/appendices/images/appendix-A/project-cats.png" class="img-fluid figure-img" style="width:60.0%"></p>
@@ -312,8 +315,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Reproducibility! Being able to share your code and what it needs to run it with others</li>
 </ul>
 </section>
-<section id="conda-environments" class="level2">
-<h2 class="anchored" data-anchor-id="conda-environments">Conda environments</h2>
+<section id="conda-environments-1" class="level2">
+<h2 class="anchored" data-anchor-id="conda-environments-1">Conda environments</h2>
 <p><a href="https://conda.org">Conda</a> is an environment <em>and</em> package management system: it can both create and administer the environments <em>and</em> install compatible versions of software and their dependencies within an environment.</p>
 <p>Environments created with Conda are usually called <strong>Conda environments</strong>. A Conda environment doesn’t need to be a Python environment, Conda can manage packages for any programming language.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -335,65 +338,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </section>
-<section id="conda-commands" class="level2">
-<h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 62%">
-<col style="width: 37%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Command</th>
-<th style="text-align: left;">What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>conda env list</code></td>
-<td style="text-align: left;">list available Conda environments</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda create --name my-env python</code></td>
-<td style="text-align: left;">create new Python environment called <code>my-env</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda remove --name my-env  --all</code></td>
-<td style="text-align: left;">delete <code>my-env</code></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>coda activate my-env</code></td>
-<td style="text-align: left;">activate environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>coda deactivate</code></td>
-<td style="text-align: left;">deactivate active environment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>python -V</code></td>
-<td style="text-align: left;">check which Python version is installed in active environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda list</code></td>
-<td style="text-align: left;">check which packages are installed in active environment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda list numpy</code></td>
-<td style="text-align: left;">check if <code>numpy</code> is installed in active environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda install numpy</code></td>
-<td style="text-align: left;">install <code>numpy</code> package in environment using environment channel priorities (generally just from defaults channel)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda install --channel conda-forge rioxarray</code></td>
-<td style="text-align: left;">install <code>rioxarray</code> package in environment from from conda-forge channel (after going through other environment channel prioirities)</td>
-</tr>
-</tbody>
-</table>
-</section>
 <section id="hands-on-environments" class="level2">
 <h2 class="anchored" data-anchor-id="hands-on-environments">Hands-on environments</h2>
+<p>The following exercises will guide you through the basic commands to work with Conda environments. Unless otherwise specified, all the commands should be run in the command line.</p>
 <section id="list-environments" class="level3">
 <h3 class="anchored" data-anchor-id="list-environments">1. List environments</h3>
 <p>To list all the Conda environments available in your computer and their location we use:</p>
@@ -599,11 +546,218 @@ Check-in
 <p>It will ask you whether you want to proceed. Type <code>y</code> and press enter to go ahead and delete the environment.</p>
 <p>We can run <code>conda env list</code> to verify the <code>test-env</code> does not exist anymore.</p>
 </section>
-<section id="create-environment-from-specified-versions-and-channels" class="level3">
-<h3 class="anchored" data-anchor-id="create-environment-from-specified-versions-and-channels">8. Create environment from specified versions and channels</h3>
-
-
+<section id="create-environment-one-liner" class="level3">
+<h3 class="anchored" data-anchor-id="create-environment-one-liner">8. Create environment (one liner)</h3>
+<p>We can also create a new environment by specifying the package versions and channel priorities. For example, to install the <code>numpy</code> and <code>rioxarray</code> versions we previously had in a new environment called <code>my-env</code> we run:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice we are explicitely requiring certain versions of our packages, and the <code>--channel conda-forge</code> option is asking Conda to prioritize getting the packages from conda-forge.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Take a look at the dependencies that were installed with these two packages.</p>
+</div>
+</div>
 </section>
+<section id="exporting-an-environment" class="level3">
+<h3 class="anchored" data-anchor-id="exporting-an-environment">9. Exporting an environment</h3>
+<p>One of the main goals of using an environment to manage the packages used in your project is being able to share the environment so that other people can rerun your code and reproduce your results.</p>
+<p>“Sharing the environment” means sharing instructions that Conda can use to recreate the environment you have. These instructions are, basically, a list of the packages installed in the environment, their versions, which channels were used to install them, and, optionally, build specifications.</p>
+<p>There are several ways of creating these instructions to reconstruct an environment depending on the level of cross-platform compatibility we are looking for. However, each of the following methods to export the environment specifications will generate a new <strong>YAML file</strong>. This file type with <code>.yml</code> extension is human-readable markup language that is commonly used for configuration in software applications.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Navigate to project directory
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Each of the commands for exporting the environment specifications will create a <code>.yml</code> file in our terminal’s current working directory. Remember you can use <code>pwd</code> (Mac &amp; Linux) or <code>echo %cd%</code> (Windows CMD) on the command line to check which is your current working directory. If you need to change directories you can use <code>cd</code> navigation in the terminal.</p>
+<p>The <strong>best practice is to have the <code>environment.yml</code> file in the directory that holds your project</strong>. This way, you can use version control on it and push it to your remote repository.</p>
+</div>
+</div>
+<section id="platform-and-package-specific" class="level4">
+<h4 class="anchored" data-anchor-id="platform-and-package-specific">Platform and package specific</h4>
+<p>The first method to export the environment specifications is running</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>conda env export &gt; environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>environment.yml</code> is the name of the YAML file that will have the environment specifications.</p>
+<p>Open the <code>environment.yml</code> file that was generated, it will look similar to this excerpt:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  - affine=2.4.0=pyhd8ed1ab_0</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  - attrs=24.2.0=pyh71513ae_0</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  [...]</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  - zlib=1.3.1=h87427d6_1</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  - zstd=1.5.6=h915ae27_0</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here we can see the name of the environment, the channels used to install packages (in order of priority), and the package names, each with a version and build string. This ensures that the environment can be recreated exactly as it is on another system. This first method to export the environment specifications is the most detailed and it is both platform and package specific.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Delete <code>prefix</code> line before sharing environment
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Notice the last line in the <code>environment.yml</code> file, this <code>prefix</code> indicates the absolute path to the environment’s installation on your local machine.</p>
+<p>You should <strong>delete the <code>prefix</code> line when sharing the environment file</strong>. Leaving it there is unnecessary and could cause confusion since it points to specific directroy in <em>your</em> local machine.</p>
+</div>
+</div>
+</section>
+<section id="cross-platform-compatible" class="level4">
+<h4 class="anchored" data-anchor-id="cross-platform-compatible">Cross-platform compatible</h4>
+<p>Our second method to export the environment specifications is to run</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>conda env export --from-history &gt; environment_hist.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here I named the file <code>environment_hist.yml</code> to not overwrite the previous <code>environmnet.yml</code>, that way you can compare both of them. Open the <code>environment_hist.yml</code> file, it will look similar to this (much shorter than the previous one):</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  - numpy=1.26.4</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  - rioxarray=0.17.0</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Adding the <code>--from-history</code> option tells Conda to only include packages that we explicitely installed (in this case <code>numpy=1.26.4</code> and <code>rioxarray=0.17.0</code>), <em>omitting any dependencies that were automatically installed and channel information</em>. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Adding channels to <code>environment.yml</code> file
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In section 5 we saw that the <code>rioxarray</code> package is available on the conda-forge channel, but not the defaults channel. The output of <code>conda env export</code> with the <code>--from-history</code> option only includes the defaults channel, so we wouldn’t be able to recreate the environment with that file as is. Remember <strong>the <code>.yml</code> file can be manually modified</strong> and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Rememember to also delete the prefix line before sharing. The modified version of the <code>--from-history</code> output that will allow us to recreate the environment will be:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  - numpy=1.26.4</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  - rioxarray=0.17.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>Before moving to the last exercise, delete the <code>environment.yml</code> and <code>environment_hist.yml</code> files.</p>
+</section>
+</section>
+<section id="importing-an-environment" class="level3">
+<h3 class="anchored" data-anchor-id="importing-an-environment">9. Importing an environment</h3>
+<!-- TO DO: update this with course environment -->
+<p>For this last exercise, <a href="https://github.com/carmengg/eds220-mpc/blob/main/environment.yml">click here</a> and download the <code>environment.yml</code> file in this repository. Move to a directory for a mock project and navigate to that directory in the terminal.</p>
+<!-- TO DO: Add brief discussion of what is in the environment file -->
+<p>To create an environment from specifications in a <code>.yml</code> file we run</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conda env create --name test-env --file environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then <code>--name</code> option states how we want to name our environment (test-env in this case). If no <code>--name</code> option is given, Conda will name of the environment using the <code>name</code> field in the <code>environment.yml</code> file.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Check-in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify that the new environment was created, activate it, and take a look at the installed packages.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="next" class="level2">
+<h2 class="anchored" data-anchor-id="next">Next</h2>
+</section>
+<section id="conda-commands" class="level2">
+<h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
+<p>The following table includes the commands covered in this lesson’s exercises. Check out <a href="https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html">Conda’s cheatsheet</a> for more commands and tips.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 62%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>conda env list</code></td>
+<td style="text-align: left;">list available Conda environments</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda create --name ENVNAME python</code></td>
+<td style="text-align: left;">create a new Python environment named <code>ENVNAME</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda remove --name ENVNAME  --all</code></td>
+<td style="text-align: left;">delete <code>ENVNAME</code> environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda activate ENVNAME</code></td>
+<td style="text-align: left;">activate environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda deactivate</code></td>
+<td style="text-align: left;">deactivate active environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>python -V</code></td>
+<td style="text-align: left;">print Python version installed in active environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda list</code></td>
+<td style="text-align: left;">list installed packages in active environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda list PKGNAME</code></td>
+<td style="text-align: left;">check if <code>PKGNAME</code> package is installed in active environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda install PKGNAME</code></td>
+<td style="text-align: left;">install <code>PKGNAME</code> package in environment using environment channel priorities (generally just from defaults channel)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda install --channel CHANNELNAME PKGNAME</code></td>
+<td style="text-align: left;">install <code>PKGNAME</code> package in environment from from <code>CHANNELNAME</code> channel</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda search PKGNAME</code></td>
+<td style="text-align: left;">search for <code>PKGNAME</code> package in environment’s channels</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda search --channel CHANNELNAME PKGNAME</code></td>
+<td style="text-align: left;">search for <code>PKGNAME</code> package in <code>CHANNELNAME</code> channel</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda env export &gt; ENV.yml</code></td>
+<td style="text-align: left;">export environment specifications of currently active environmemt into <code>ENV.yml</code> file (includes all dependencies, buildstrings, and channels)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda env export --from-history &gt; ENV.yml</code></td>
+<td style="text-align: left;">export environment specifications of currently active environmemt into <code>ENV.yml</code> file (only packages explicitely installed, no dependencies, buildstrings, or channels)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda env create --name ENVNAME --file ENV.yml</code></td>
+<td style="text-align: left;">create an environment named <code>ENVNAME</code> from specifications in <code>ENV.yml</code> file</td>
+</tr>
+</tbody>
+</table>
+
+
 </section>
 </section>
 
