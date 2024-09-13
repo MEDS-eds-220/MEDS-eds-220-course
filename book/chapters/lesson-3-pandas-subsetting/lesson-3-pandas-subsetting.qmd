@@ -21,6 +21,7 @@ In this lesson we will use annual estimates of bird species abundance in four co
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
 <!-- TO DO: add image -->
+![](/book/images/lesson-3/SONGS__aerial.png)
 
 The annual bird species abundance estimates is a CSV file with 17 columns. You can see the first three rows below.
 
@@ -35,7 +36,9 @@ df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
 df.head(3)
 ```
 
-The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. 
+The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
+
+![](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.png)
 
 <!--
 There are two ways to subset data in a Data Frame: by position and by label. 
@@ -63,6 +66,11 @@ Next, we obtain some high-level information about this dataframe:
 ```{python}
 # Print dataframe's first five rows 
 df.head()
+```
+
+```{python}
+# Print dataframe's last five rows 
+df.tail()
 ```
 
 ```{python}
@@ -120,7 +128,7 @@ df.MUL_spring.head()
 ```
 
 :::{.callout-caution}
-## `df['column_name']` or `df.column_name`?
+## Favor `df['column_name']` instead of `df.column_name`
 In general, it is better to use the `df['column_name']` syntax. A couple reasons why are:
 
 - `df['column_name']` can take in any column name, while `df.column_name` only works if the column name has no spaces or special characters
@@ -182,7 +190,7 @@ where `column_start` and `column_end` are, respectively, the starting point and 
 Notice two things:
 
 - the first value passed to `loc` is used for selecting rows, using a colon `:` as the row-selection parameter means "select all the rows"
-- the slice of the dataframe we'll obtain includes both endpoints of the slice `'column_start':'column_end'`. In other words we'll get the `column_start` column *and* the `column_end` column. This is different from how slicing works in base Python and NumPy, where the endpoint is not included.
+- the slice of the dataframe we'll obtain includes both endpoints of the slice `'column_start':'column_end'`. In other words, we'll get the `column_start` column *and* the `column_end` column. This is different from how slicing works in base Python and NumPy, where the endpoint is not included.
 
 #### Example
 
@@ -197,3 +205,108 @@ csm_mul.head()
 ### ... using a condition
 
 <!-- TO DO -->
+
+## Selecting rows...
+Now that we are familiar with some methods for selecting columns, let's move on to selecting rows. 
+
+### ... using a condition
+Selecting rows that satisfy a particular condition is one of the most usual kinds of row subsetting. The general syntax for this type of selection is 
+```python
+df[condition_on_rows]
+```
+That `condition_of_rows` can be a myriad things, let's see some usual scenarios.
+
+#### Example
+
+Suppose we are intersted in all data after 2020. We can select these rows in this way:
+
+```{python}
+# Select all rows with year > 2020
+post_2020 = df[df['year']>2020]
+post_2020
+```
+
+Let's break down what is happening here. The condition for our rows is `df['year']>2020`, this is a `pandas.Series` with boolean values (`True` or `False`) indicating which rows satisfy the condition year>2020:
+
+```{python}
+# Check the type of df['year']>1996
+print(type(df['year']>2020))
+
+# Print the boolean series
+df['year']>2020
+```
+
+ When we pass such a series of boolean values to the selection brackets `[]` we keep only the rows that correspond to a `True` value. 
+
+<!-- TO DO: would be nice to add a diagram about selecting rows -->
+
+:::{.callout-tip}
+## Check-in
+ Get the subset of our dataframe on which the San Dieguito Wetland has at least 75 species recorded during spring.
+:::
+
+#### Example
+
+Suppose we want to look at data from years 2012 to 2015 (including both years). One way of doing this is to use the `between` operator in our condition:
+
+```{python}
+subset = df[df['year'].between(2012, 2015)]
+subset
+```
+
+Let's break down this code: 
+
+1. `df['year']` is the column with the year values, a `pandas.Series`
+
+2. in `df['year'].between()`, we have that [`between` is a method for the `pandas.Series`](https://pandas.pydata.org/docs/reference/api/pandas.Series.between.html) and we are calling it using the dot `.`
+
+3. `(2012, 2015)` are the parameters for the `between()` method, from the `pandas` documentation we can see this method will subset including both endpoints
+
+4. `df['year'].between(2012, 2015)` is then a `pandas.Series` of boolean values indicating which rows have year equal to 2012, 2013, 2014, or 2015. 
+
+5. when we put `df['year'].between(2012, 2015)` inside the selection brackets `[]` we obtain the rows of the data frame with year equal to 2012, ..., 2015.
+
+:::{.callout-warning}
+## Avoid using `loc` for selecting only rows
+It is equivalent to write
+
+```python
+# Select rows with year<2015
+df[df['year'] < 2015]
+```
+and
+```python
+# Select rows with year<2015 using loc
+df.loc[ df['year'] <2015 , :]
+```
+In the second one:
+
+- we are using the `df.loc[ row-selection , column-selection]` syntax
+
+- the `row-selection` parameter is the condition `df['year']<2015`
+
+- the `column-selection` parameter is a colon `:`, which indicates we want all columns for the rows we are selecting.
+
+We prefer the first syntax when we are selecting rows and not columns since it is simpler.
+:::
+
+### ... using multiple conditions
+We can combine multipe conditions to select rows by surrounding each one in parenthesis `()` and using the or operator `|` and the and operator `&`.
+
+#### Example: or 
+
+Let's select rows in which the Carpinteria Salt Marsh has more than 50 registered in winter *or* fall:
+
+```{python}
+df[ (df['CSM_winter']>50) | (df['CSM_fall']>50)]
+```
+
+#### Example: and
+
+Let's select rows with in which both the Carpinteria Salt Marsh and the San Dieguito Wetland have more than 60 reported bird species during spring:
+
+```{python}
+df[ (df['CSM_spring']>60) & (df['SDW_spring']>60)]
+```
+
+An empty dataframe! That's ok, it just means there are no rows that satisfy the given condition.
