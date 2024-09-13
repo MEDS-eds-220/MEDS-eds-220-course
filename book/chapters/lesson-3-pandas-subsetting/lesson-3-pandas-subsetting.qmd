@@ -83,14 +83,14 @@ df.shape
 ## Selecting a single column
 
 Selecting a single column by column name is the simplest case for selecting data in a dataframe. The genereal syntax to do this is:
-```{python}
-#| eval: false
+```python
 df['column_name']
 ```
 Notice the column name is given as string inside the square brackets. 
-This is an example of **label-based subsetting**, which means we want to select data from our dataframe using the *names* of the columns, *not their position*.
+This is an example of **label-based subsetting**, which means we want to select data from our dataframe using the *names* of the columns, *not their position*. When we select rows or column using their position, we are doing **position-based subsetting**. We'll see some methods to do this when we move into selecting rows.
 
-For example, suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:
+#### Example 
+ Suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:
 ```{python}
 # Select a single column by using square brackets []
 mul_spring = df['MUL_spring']
@@ -110,8 +110,7 @@ Remember we can think of a `pandas.DataFrame` as a dictionary of its columns? Th
 :::
 
 We can also do label-based subsetting of a single column  using attribute syntax:
-```{python}
-#| eval: false
+```python
 df.column_name
 ```
 
@@ -127,3 +126,74 @@ In general, it is better to use the `df['column_name']` syntax. A couple reasons
 - `df['column_name']` can take in any column name, while `df.column_name` only works if the column name has no spaces or special characters
 - `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whehter `pd.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
 :::
+
+## Selecting multiple columns...
+
+### ... using a list of column names
+
+We can select multiple columns in a single call by passing a list with the column names to the square brackets `[]`:
+
+```python
+df[['column_1', 'column_10', 'column_245']]
+```
+
+Notice there are double square brackets. This is because we are passing the list of names `['column_1', 'column_10', 'column_245']` to the selection brakcets `[]`. 
+
+
+:::{.callout-tip}
+## Check-in
+Is this an example of label-based selection or location-based selection?
+:::
+
+#### Example
+If we want to look at the species in the Tijuana Estuary during winter and fall, then we can select these columns like this:
+
+```{python}
+# select columns with names "europe" and "asia"
+tje_wf = df[['TJE_winter','TJE_fall']]
+```
+
+Notice there are double square brackets. This is because we are passing the list of names `['europe','asia']` to the selection brakcets `[]`. 
+
+:::{.callout-tip}
+## Check-in
+What is the type and shape of the `tje_wf` output? Verify your answer.
+
+```{python}
+#| eval: false 
+#| echo: false
+# check the type of the resulting selection
+print(type(tje_wf))
+
+# check the shape of the selection
+print((tje_wf.shape))
+```
+:::
+
+### ... using a slice
+
+To select a slice of the columns we will use a special case of **`loc` selection** (we'll cover the general one by the end of the lesson). The syntax will be
+
+```python
+df.loc[ : , 'column_start':'column_end']
+```
+where `column_start` and `column_end` are, respectively, the starting point and endpoint of the column slice we want to subset from the dataframe. 
+
+Notice two things:
+
+- the first value passed to `loc` is used for selecting rows, using a colon `:` as the row-selection parameter means "select all the rows"
+- the slice of the dataframe we'll obtain includes both endpoints of the slice `'column_start':'column_end'`. In other words we'll get the `column_start` column *and* the `column_end` column. This is different from how slicing works in base Python and NumPy, where the endpoint is not included.
+
+#### Example
+
+Let's select the slice of columns that covers all data from Carpinteria Salt Marsh and Mugu Lagoon. This corresponds to all columns between `CSM_winter` and `MUL_fall`.
+
+```{python}
+# Select columns between 'CSM_winter' and 'MUL_fall'
+csm_mul = df.loc[:,'CSM_winter':'MUL_fall']
+csm_mul.head()
+```
+
+### ... using a condition
+
+<!-- TO DO -->
