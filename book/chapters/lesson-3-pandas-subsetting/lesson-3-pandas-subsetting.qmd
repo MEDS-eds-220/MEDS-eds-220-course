@@ -2,11 +2,11 @@
 toc-title: In this lesson
 ---
 
-# Subsetting
+# 2 Subsetting
 
 In this lesson we will learn different methods to select data from a `pandas.DataFrame`. Like it's often the case when working with the `pandas` package, there are *many* ways in which we can subset a data frame. Here we will review the core methods to do this. 
 
-### Learning objectives
+## Learning objectives
 By the end of this lesson, students will be able to:
 
 - Choose appropriate methods for selecting rows and columns from a `pandas.DataFrame`
@@ -17,7 +17,6 @@ By the end of this lesson, students will be able to:
 
 ## About the data
 
-:::{.callout-note appearance="minimal"}
 In this lesson we will use annual estimates of bird species abundance in four coastal wetlands along the California coast. This dataset was derived for education purposes from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6)@schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
@@ -36,8 +35,7 @@ df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
 df.head(3)
 ```
 
-The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. All values across columns are integers.
-:::
+The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. 
 
 <!--
 There are two ways to subset data in a Data Frame: by position and by label. 
@@ -50,3 +48,82 @@ There are two ways to subset data in a Data Frame: by position and by label.
 ## CSV files
 
 A **CSV (Comma-Separated Values) file** is an open, simple text format for storing tabular data, with rows separated by line breaks and columns by commas. It's widely used in environmental science for sharing datasets like species counts and environmental monitoring data because it’s easy to create, read, and process in different platforms, without the need of proprietary software.
+
+To read in a CSV file into our Python workspace as `pandas.DataFrame` we use the `pandas.read_csv` function:
+
+```{python}
+#| eval: false
+import pandas as pd
+
+# Read in file, argument is the file path
+df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
+```
+
+Next, we obtain some high-level information about this dataframe: 
+```{python}
+# Print dataframe's first five rows 
+df.head()
+```
+
+```{python}
+# Print dataframe's column names
+df.columns
+```
+
+```{python}
+# List the data types of each column
+df.dtypes
+```
+
+```{python}
+# Print dataframe's shape: output is a tuple (# rows, # columns)
+df.shape
+```
+
+## Selecting a single column
+
+Selecting a single column by column name is the simplest case for selecting data in a dataframe. The genereal syntax to do this is:
+```{python}
+#| eval: false
+df['column_name']
+```
+Notice the column name is given as string inside the square brackets. 
+This is an example of **label-based subsetting**, which means we want to select data from our dataframe using the *names* of the columns, *not their position*.
+
+For example, suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:
+```{python}
+# Select a single column by using square brackets []
+mul_spring = df['MUL_spring']
+
+# Print first five elements in this column
+mul_spring.head()
+```
+
+Since we only selected a single column, `mul_spring` is a `pandas.Series`:
+```{python}
+# Check the type of the ouput
+print(type(mul_spring))
+```
+:::{.callout-note}
+## `pd.DataFrame` = dictionary of columns
+Remember we can think of a `pandas.DataFrame` as a dictionary of its columns? Then we can access a single column using the column name as the key, just like we would do in a dictionary. That is the  we just used: `df['column_name']`.
+:::
+
+We can also do label-based subsetting of a single column  using attribute syntax:
+```{python}
+#| eval: false
+df.column_name
+```
+
+For example, to see the head of the `MUL_spring` column we would do:
+```{python}
+df.MUL_spring.head()
+```
+
+:::{.callout-caution}
+## `df['column_name']` or `df.column_name`?
+In general, it is better to use the `df['column_name']` syntax. A couple reasons why are:
+
+- `df['column_name']` can take in any column name, while `df.column_name` only works if the column name has no spaces or special characters
+- `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whehter `pd.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
+:::
