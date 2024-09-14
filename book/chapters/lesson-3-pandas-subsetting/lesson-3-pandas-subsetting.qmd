@@ -360,3 +360,108 @@ Let's break down this code:
 - the `row-selection` parameter is the condition `df['year']>2020`, which is a boolean array saying which years are greater than 2020
 
 - the `column-selection` parameter is `['MUL_winter','TJE_winter']` which is a list with the names of the two columns we are interested in. 
+
+
+### ... by position
+
+When we want to select rows and columns simultaneously by position we use `iloc` selection with the syntax:
+```python
+df.iloc[ row-indices , column-indices]
+```
+
+#### Example
+
+Suppose we want to select rows 3-7 (including 7) and columns 3 and 4:
+
+```{python}
+df.iloc[ 3:8, [3,4] ]
+```
+
+Let's break it down:
+
+- we are using the `df.iloc[ row-indices , column-indices]` syntax to select by position
+
+- the `row-indices` parameter is the slice *of integer indices* 3:8. Remember the right endpoint (8) won't be included.
+
+- the `column-indices` parameter is the list of integer indices 3 and 4. This means we are selecting the fourth and fifth column.
+
+## Notes about `loc` and `iloc`
+
+::: {.callout-caution}
+## `iloc` vs. `loc`: which one does what?
+At the beginning, the difference between `iloc` and `loc` can be confusing. Remember the `i` in `iloc` stands for *integer location*, this reminds us `iloc` only uses integer indexing to retrieve information from the data frames in the same way as indexing for Python lists.
+
+If you want to dive deeper, this is a great discussion about the difference between `iloc` and `loc`: [Stackoverflow - How are iloc and loc different?](https://stackoverflow.com/questions/31593201/how-are-iloc-and-loc-different/31593712#31593712)
+
+And, as always, the documentation will provide you with more information:
+[`pandas.DataFrame.loc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html) and [`pandas.DataFrame.iloc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html).
+:::
+
+
+:::{.callout-warning}
+## `iloc` for column selection? Avoid it!
+We can also access columns by position using `iloc` - but it is best not to if possible.
+
+Suppose we want to access the 10th column in the data frame - then we want to select a column *by position*. In this case the 10th column is the annual sea level rise data and the 10th position corresponds to the index 9. We can select this column by position using the `iloc` selection:
+
+```{python}
+# select column by position using iloc
+# the syntax is iloc[row-indices, column-indices]
+# [:,9] means "select all rows from the 10th column"
+annual_rise_3 = df.iloc[:,9]
+annual_rise_3.head()
+```
+
+Unless you are *really* looking for information about *the 10th column*, **do not access a column by position**. This is bound to break in many ways:
+
+- it relies on a person correctly counting the position of a column. Even with a small dataset this can be prone to error.
+
+- it is not explicit: if we want information about sea level rise `df.annual_sea_level_rise` or `df['annual_sea_level_rise']` are explicitely telling us we are accessing that information. `df.iloc[:,9]` is obscure and uninformative.
+
+- datastets can get updated. Maybe a new column was added before `annual_sea_level_rise`, this would change the position of the column, which would make any code depending on `df.iloc[:,9]` invalid. 
+
+**Accessing columns by labels helps reproducibility!**
+:::
+
+## Summary
+
+```{mermaid}
+flowchart LR
+    A(I want to select)
+    A --> C(only columns)
+    A --> K(only rows)
+    A --> P(rows & columns)
+    C --> D(a single column)
+    D --> E{{"df.col_name <div></div> df['col_name']"}}
+    C --> F(multiple columns)
+    F --> G(with a slice)
+    G --> I{{"df['col0':'col8']"}}
+    F --> H(with a list of column names)
+    H --> J{{"df[['col1','col3']]"}}
+    K --> L(with a condition)
+    L --> M{{"df[df['col']>10]"}}
+    K --> N(by position)
+    N --> O{{"df.iloc[10:16]"}}
+    P --> Q(by position)
+    Q --> R{{"df.iloc[row-indices, column-indices]"}}
+    P --> S(by labels or conditions)
+    S --> T{{"df.loc[row-selection, column-selection]"}}
+
+
+    %% Add styling for {{}} nodes
+    classDef codeStyle fill:#FFFACD,stroke:#333,color:#d6336c,font-family:monospace,white-space:nowrap;
+    
+    %% Apply class to nodes with {{}} code
+    class E,I,J,M,O,R,T codeStyle;
+```    
+
+## Resources
+
+What is presented in this section is a comprehensive, but not  exhaustive list of methods to select data in `pandas.DataFrames`. There are *so many* ways to subset data to get the same result. Some of the content from this lesson is adapted from the following resources and I encourage you to read them to learn more! 
+
+📖 [Pandas getting started tutorials - How to I select a subset of a
+DataFrame](https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html) 
+
+📖 [Pandas documentation - User Guide - Indexing and Selecting Data](https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-slicing-with-labels)
+
+📖 [Python for Data Analysis, 3E - Getting started with pandas](https://wesmckinney.com/book/pandas-basics)
