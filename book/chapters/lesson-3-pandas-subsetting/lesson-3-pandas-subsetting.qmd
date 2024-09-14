@@ -310,3 +310,53 @@ df[ (df['CSM_spring']>60) & (df['SDW_spring']>60)]
 ```
 
 An empty dataframe! That's ok, it just means there are no rows that satisfy the given condition.
+
+### ... by position
+
+All the selections we have done so far have been using labels. Sometimes we may want to select certain rows depending on their *actual position* in the data frame in other words, using **position-based subsetting**.  To do this, we use **`iloc` selection** with the syntax
+```python
+ df.iloc[row-indices]
+ ```
+ `iloc` stands for integer-location based indexing.
+
+#### Example
+
+```{python}
+# Select the fifth row (index=4)
+df.iloc[4]
+```
+
+```{python}
+# Select rows 9 through 13, inclduing 13
+df.iloc[9:14]
+```
+
+Notice that, since we are back to indexing by position, the right endpoint of the slice is not included in the ouput. 
+
+## Selecting rows and columns simultaneously...
+
+Selecting rows and columns simultaneously can be done using `loc` (labels) or `iloc` (positions).
+
+### ...by labels or conditions
+When we want to select rows and columns simultaneously by labels (including using conditions) we can use `loc` selection with the syntax 
+
+```python
+df.loc[ row-selection , column-selection]
+```
+
+specifying both paratmers: `row-selection` and `column-selection`. These parameters can be a condition or a subset of labels from the index or the column names. 
+
+#### Example
+
+Let's select the winter surveys for Mugu Lagoon and the Tijuana Estuary after 2020:
+
+```{python}
+df.loc[df['year']>2020, ['MUL_winter','TJE_winter']]
+```
+Let's break down this code:
+
+- we are using the `df.loc[ row-selection , column-selection]` syntax
+
+- the `row-selection` parameter is the condition `df['year']>2020`, which is a boolean array saying which years are greater than 2020
+
+- the `column-selection` parameter is `['MUL_winter','TJE_winter']` which is a list with the names of the two columns we are interested in. 
