@@ -6,6 +6,8 @@ toc-title: In this lesson
 
 In this lesson we will learn different methods to select data from a `pandas.DataFrame`. Like it's often the case when working with the `pandas` package, there are *many* ways in which we can subset a data frame. Here we will review the core methods to do this. 
 
+<!-- TO DO: add link to summary -->
+
 ## Learning objectives
 By the end of this lesson, students will be able to:
 
@@ -20,8 +22,7 @@ By the end of this lesson, students will be able to:
 In this lesson we will use annual estimates of bird species abundance in four coastal wetlands along the California coast. This dataset was derived for education purposes from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6)@schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
-<!-- TO DO: add image -->
-![](/book/images/lesson-3/SONGS__aerial.png)
+![San Onofre Nuclear Generating Station. Source: Southern California Edison](/book/images/lesson-3/SONGS_aerial.jpg)
 
 The annual bird species abundance estimates is a CSV file with 17 columns. You can see the first three rows below.
 
@@ -38,15 +39,7 @@ df.head(3)
 
 The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
 
-![](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.png)
-
-<!--
-There are two ways to subset data in a Data Frame: by position and by label. 
-
-* **Subsetting by label** means we want to select data from our data frame using the *names* of the columns or the index.
-
-* **Subsetting by position** means we want to select data from our data frame based on the data's *order* in the data frame.
--->
+![Mugu Lagoon from the Mugu Peak Trail. Source: USA National Park Service](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.jpg)
 
 ## CSV files
 
@@ -424,36 +417,9 @@ Unless you are *really* looking for information about *the 10th column*, **do no
 :::
 
 ## Summary
-
-```{mermaid}
-flowchart LR
-    A(I want to select)
-    A --> C(only columns)
-    A --> K(only rows)
-    A --> P(rows & columns)
-    C --> D(a single column)
-    D --> E{{"df.col_name <div></div> df['col_name']"}}
-    C --> F(multiple columns)
-    F --> G(with a slice)
-    G --> I{{"df['col0':'col8']"}}
-    F --> H(with a list of column names)
-    H --> J{{"df[['col1','col3']]"}}
-    K --> L(with a condition)
-    L --> M{{"df[df['col']>10]"}}
-    K --> N(by position)
-    N --> O{{"df.iloc[10:16]"}}
-    P --> Q(by position)
-    Q --> R{{"df.iloc[row-indices, column-indices]"}}
-    P --> S(by labels or conditions)
-    S --> T{{"df.loc[row-selection, column-selection]"}}
-
-
-    %% Add styling for {{}} nodes
-    classDef codeStyle fill:#FFFACD,stroke:#333,color:#d6336c,font-family:monospace,white-space:nowrap;
-    
-    %% Apply class to nodes with {{}} code
-    class E,I,J,M,O,R,T codeStyle;
-```    
+:::{.column-page}
+![](/book/images/lesson-3/pandas-selection-diagram.png)
+:::
 
 ## Resources
 
