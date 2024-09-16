@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>assignments-home – EDS 220 - Working with Environmental Datasets</title>
+<title>assignment1 – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -111,10 +131,17 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../discussion-sections/discussion-sections-listing.html"> 
 <span class="menu-text">discussion sections</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="../assignments/assignments-home.html" aria-current="page"> 
-<span class="menu-text">assignments</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-assignments" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">assignments</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-assignments">    
+        <li>
+    <a class="dropdown-item" href="../assignments/assignment1.html">
+ <span class="dropdown-text">assignment 1</span></a>
   </li>  
+    </ul>
+  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-github" role="img">
@@ -151,7 +178,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-info-about-assignments" id="toc-general-info-about-assignments" class="nav-link active" data-scroll-target="#general-info-about-assignments">General info about assignments</a></li>
+  <li><a href="#assignment-1" id="toc-assignment-1" class="nav-link active" data-scroll-target="#assignment-1">Assignment 1</a>
+  <ul class="collapse">
+  <li><a href="#submission-instructions" id="toc-submission-instructions" class="nav-link" data-scroll-target="#submission-instructions">Submission instructions</a></li>
+  <li><a href="#task-1-datasheets-for-datasets-reading" id="toc-task-1-datasheets-for-datasets-reading" class="nav-link" data-scroll-target="#task-1-datasheets-for-datasets-reading">Task 1: Datasheets for Datasets reading</a></li>
+  <li><a href="#setup-for-tasks-2-and-3" id="toc-setup-for-tasks-2-and-3" class="nav-link" data-scroll-target="#setup-for-tasks-2-and-3">Setup for tasks 2 and 3</a></li>
+  <li><a href="#task-2-exploring-coral-diversity-data" id="toc-task-2-exploring-coral-diversity-data" class="nav-link" data-scroll-target="#task-2-exploring-coral-diversity-data">Task 2: Exploring coral diversity data</a></li>
+  <li><a href="#task-3-pandas-fundamentals-with-earthquake-data" id="toc-task-3-pandas-fundamentals-with-earthquake-data" class="nav-link" data-scroll-target="#task-3-pandas-fundamentals-with-earthquake-data">Task 3: <code>pandas</code> fundamentals with earthquake data</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -161,13 +195,126 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="general-info-about-assignments" class="level1">
-<h1>General info about assignments</h1>
+<section id="assignment-1" class="level1">
+<h1>Assignment 1</h1>
+<section id="submission-instructions" class="level2">
+<h2 class="anchored" data-anchor-id="submission-instructions">Submission instructions</h2>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This assignment is due by <strong>11:59 pm on Saturday, September 12</strong>. All tasks for this assignment should be submitted via Gradescope. Make sure you double check your submission and it satisfies all the items in this checklist:</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Answer for task 1 must be a PDF file.</label></li>
+<li><label><input type="checkbox">Answers for tasks 2 and 3 must be submitted as .ipynb files (Jupyter Notebooks).</label></li>
+<li><label><input type="checkbox">The notebooks you submit must have a link to your assignment GitHub repository in the specified place.</label></li>
+<li><label><input type="checkbox">The notebooks you submit must have your solutions to the exercieses, they <em>should NOT be the blank template notebooks</em>.</label></li>
+</ul>
+<p><strong>Resubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).</strong></p>
+<p>If you have any questions, please reach out to the TA or instructor by 5 pm Friday, September 11. <!-- https://docs.google.com/presentation/d/1Q3DOdj_WszOLbnNhSp7KCeFlxvJX06t4c08RNMw3fHc/edit#slide=id.g290e62f4f2b_0_105 --></p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-1-datasheets-for-datasets-reading" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-datasheets-for-datasets-reading">Task 1: Datasheets for Datasets reading</h2>
+<p>So much goes into creating a dataset, and data is more than numbers and words in a file. Without a proper understanding of the whole context where data was created, biases, omissions, and inacuracies can go undetected. The <a href="https://doi.org/10.1145/3458723">Datasheets for Datasets</a> <span class="citation" data-cites="datasheets-for-datasets"><a href="#ref-datasheets-for-datasets" role="doc-biblioref">[1]</a></span> advocates for transparency about the purpose and contents of datasets.</p>
+<p>Check out this short interview with lead author Dr.&nbsp;Timnit Gebru, the executive director of the Distributed Artificial Intelligence Research Institute (DAIR), on the motivation to write this article:</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/R7s7_T4yXak?si=08iVzefNwRlXVa95" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<p><strong>Read the paper and write a one-paragraph (between 100 and 150 words) open reflection about it. Submit your answer as a PDF via Gradscope.</strong> You may use the following questions as prompts for your reflection, but feel free to discuss any topic in the article that caught your interest.</p>
+<ul>
+<li><p>How does a framework like the propsed “datasheets for datasets” can help transparency and accountability in data science? Is it feasable to implement it?</p></li>
+<li><p>Do you think there is a particular kind of data that may benefit the most from increased transparency about collection methods and processing methods? Why?</p></li>
+</ul>
+</section>
+<section id="setup-for-tasks-2-and-3" class="level2">
+<h2 class="anchored" data-anchor-id="setup-for-tasks-2-and-3">Setup for tasks 2 and 3</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<ol type="1">
+<li><p>Fork this repository: https://github.com/carmengg/eds220-hwk-1</p></li>
+<li><p>In the Taylor server, start a new JupyterLab session or access an active one.</p></li>
+<li><p>Using the terminal, clone your <code>eds220-hwk-1</code> repository to a new directory under your <code>eds-220</code> directory.</p></li>
+<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-hwk-1</code> directory. Use <code>pwd</code> to verify <code>eds-220-hwk-1</code> is your current working directory.</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="task-2-exploring-coral-diversity-data" class="level2">
+<h2 class="anchored" data-anchor-id="task-2-exploring-coral-diversity-data">Task 2: Exploring coral diversity data</h2>
+<p>For this task we are going to use data about Western Indian Ocean Coral Diversity <span class="citation" data-cites="mcclanahan_western_2023"><a href="#ref-mcclanahan_western_2023" role="doc-biblioref">[2]</a></span> stored in the the Knowledge Network for Biocomplexity (KNB) data repository. This data was archived by Dr.&nbsp;Tim McClanahan, senior conservation zoologist at Wildlife Conservation Society.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assignments/images/Tim-McClanahan.png" class="img-fluid figure-img"></p>
+<figcaption>Dr.&nbsp;Tim McClanahan underwater surveying coral reefs in coastal Tanzania. Photo credit: ©Michael Markovina. From the online article <a href="https://medium.com/wcs-marine-conservation-program/how-mount-kilimanjaro-and-we-can-save-corals-a4e76771a63e">How Mount Kilimanjaro and We Can Save Corals</a></figcaption>
+</figure>
+</div>
+<p><strong>Follow the instructions in the notebook <code>hwk1-task-2.ipynb</code> to complete this task.</strong> In this task you will practice:</p>
+<ul>
+<li>preliminary data exploration</li>
+<li>accessing data using a URL from a data archive</li>
+<li>selecting data from a data frame</li>
+<li>basic git workflow</li>
+<li>commenting your code</li>
+</ul>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Ready to submit your answers? Make sure your submission follows the checklist at the top of the assginment!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-3-pandas-fundamentals-with-earthquake-data" class="level2">
+<h2 class="anchored" data-anchor-id="task-3-pandas-fundamentals-with-earthquake-data">Task 3: <code>pandas</code> fundamentals with earthquake data</h2>
+<p>This task is adapted from the <em>Pandas Fundamentals with Earthquake Data</em> assignment from the e-book Earth and Environmental Data Science <span class="citation" data-cites="abernathey_introduction"><a href="#ref-abernathey_introduction" role="doc-biblioref">[3]</a></span>.</p>
+<p>You will use simplified data from the <a href="https://earthquake.usgs.gov/earthquakes/search/">USGS Earthquakes Database</a>.</p>
+<p><img src="../assignments/images/earthquake.png" class="img-fluid"></p>
+<p><strong>Follow the instructions in the notebook <code>hwk1-task-3.ipynb</code> to complete this task.</strong> Here you will practice:</p>
+<ul>
+<li>accessing data from your directory</li>
+<li>selecting data from a data frame</li>
+<li>creating exploratory graphs</li>
+<li>basic git workflow</li>
+<li>commenting your code</li>
+</ul>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Ready to submit your answers? Make sure your submission follows the checklist at the top of the assginment!</p>
+</div>
+</div>
+</div>
+
 
 
 </section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-datasheets-for-datasets" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">T. Gebru <em>et al.</em>, <span>“Datasheets for datasets,”</span> <em>Commun. ACM</em>, vol. 64, no. 12, pp. 86–92, Nov. 2021, doi: <a href="https://doi.org/10.1145/3458723">10.1145/3458723</a>. Available: <a href="https://doi.org/10.1145/3458723">https://doi.org/10.1145/3458723</a></div>
+</div>
+<div id="ref-mcclanahan_western_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">T. McClanahan, <span>“Western <span>Indian</span> <span>Ocean</span> <span>Coral</span> <span>Diversity</span>.”</span> KNB Data Repository, 2023. doi: <a href="https://doi.org/10.5063/F1K35S3H">10.5063/F1K35S3H</a>. Available: <a href="https://knb.ecoinformatics.org/view/doi:10.5063/F1K35S3H">https://knb.ecoinformatics.org/view/doi:10.5063/F1K35S3H</a>. [Accessed: Sep. 16, 2024]</div>
+</div>
+<div id="ref-abernathey_introduction" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">R. Abernathey, K. Key, T. Crone, and J. Busecke, <em>An <span>Introduction</span> to <span>Earth</span> and <span>Environmental</span> <span>Data</span> <span>Science</span>#</em>. Available: <a href="https://earth-env-data-science.github.io/intro.html">https://earth-env-data-science.github.io/intro.html</a>. [Accessed: Sep. 16, 2024]</div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
