@@ -1,0 +1,29 @@
+```mermaid
+flowchart LR
+    A(I want to select)
+    A --> C(only columns)
+    A --> K(only rows)
+    A --> P(rows & columns)
+    C --> D(a single column)
+    D --> E{{"df.col_name <div></div> df['col_name']"}}
+    C --> F(multiple columns)
+    F --> G(with a slice)
+    G --> I{{"df['col0':'col8']"}}
+    F --> H(with a list of column names)
+    H --> J{{"df[['col1','col3']]"}}
+    K --> L(with a condition)
+    L --> M{{"df[df['col']>10]"}}
+    K --> N(by position)
+    N --> O{{"df.iloc[10:16]"}}
+    P --> Q(by position)
+    Q --> R{{"df.iloc[row-indices, column-indices]"}}
+    P --> S(by labels or conditions)
+    S --> T{{"df.loc[row-selection, column-selection]"}}
+
+
+    %% Add styling for {{}} nodes
+    classDef codeStyle fill:#FFFACD,stroke:#333,color:#d6336c,font-family:monospace,white-space:nowrap;
+    
+    %% Apply class to nodes with {{}} code
+    class E,I,J,M,O,R,T codeStyle;
+```    

@@ -5,8 +5,7 @@ toc-title: In this lesson
 # 2 Subsetting
 
 In this lesson we will learn different methods to select data from a `pandas.DataFrame`. Like it's often the case when working with the `pandas` package, there are *many* ways in which we can subset a data frame. Here we will review the core methods to do this. 
-
-<!-- TO DO: add link to summary -->
+A summary of the methods covered in this lesson can be found in @fig-summary.
 
 ## Learning objectives
 By the end of this lesson, students will be able to:
@@ -19,10 +18,10 @@ By the end of this lesson, students will be able to:
 
 ## About the data
 
-In this lesson we will use annual estimates of bird species abundance in four coastal wetlands along the California coast. This dataset was derived for education purposes from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6)@schroeter_ucsb_2024. 
+In this lesson we will use annual estimates of bird species abundance in four coastal wetlands along the California coast. This dataset was derived for education purposes from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
-![San Onofre Nuclear Generating Station. Source: Southern California Edison](/book/images/lesson-3/SONGS_aerial.jpg)
+![San Onofre Nuclear Generating Station in San Diego County, California. Source: Southern California Edison](/book/images/lesson-3/SONGS_aerial.jpg)
 
 The annual bird species abundance estimates is a CSV file with 17 columns. You can see the first three rows below.
 
@@ -39,7 +38,7 @@ df.head(3)
 
 The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
 
-![Mugu Lagoon from the Mugu Peak Trail. Source: USA National Park Service](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.jpg)
+![Mugu Lagoon in Ventura County, California, seen from the Mugu Peak Trail. Source: USA National Park Service](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.jpg)
 
 ## CSV files
 
@@ -55,19 +54,19 @@ import pandas as pd
 df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
 ```
 
-Next, we obtain some high-level information about this dataframe: 
+Next, we obtain some high-level information about this data frame: 
 ```{python}
-# Print dataframe's first five rows 
+# Print data frame's first five rows 
 df.head()
 ```
 
 ```{python}
-# Print dataframe's last five rows 
+# Print data frame's last five rows 
 df.tail()
 ```
 
 ```{python}
-# Print dataframe's column names
+# Print data frame's column names
 df.columns
 ```
 
@@ -77,18 +76,18 @@ df.dtypes
 ```
 
 ```{python}
-# Print dataframe's shape: output is a tuple (# rows, # columns)
+# Print data frame's shape: output is a tuple (# rows, # columns)
 df.shape
 ```
 
 ## Selecting a single column
 
-Selecting a single column by column name is the simplest case for selecting data in a dataframe. The genereal syntax to do this is:
+Selecting a single column by column name is the simplest case for selecting data in a data frame. The genereal syntax to do this is:
 ```python
 df['column_name']
 ```
 Notice the column name is given as string inside the square brackets. 
-This is an example of **label-based subsetting**, which means we want to select data from our dataframe using the *names* of the columns, *not their position*. When we select rows or column using their position, we are doing **position-based subsetting**. We'll see some methods to do this when we move into selecting rows.
+This is an example of **label-based subsetting**, which means we want to select data from our data frame using the *names* of the columns, *not their position*. When we select rows or column using their position, we are doing **position-based subsetting**. We'll see some methods to do this when we move into selecting rows.
 
 #### Example 
  Suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:
@@ -178,12 +177,12 @@ To select a slice of the columns we will use a special case of **`loc` selection
 ```python
 df.loc[ : , 'column_start':'column_end']
 ```
-where `column_start` and `column_end` are, respectively, the starting point and endpoint of the column slice we want to subset from the dataframe. 
+where `column_start` and `column_end` are, respectively, the starting point and endpoint of the column slice we want to subset from the data frame. 
 
 Notice two things:
 
 - the first value passed to `loc` is used for selecting rows, using a colon `:` as the row-selection parameter means "select all the rows"
-- the slice of the dataframe we'll obtain includes both endpoints of the slice `'column_start':'column_end'`. In other words, we'll get the `column_start` column *and* the `column_end` column. This is different from how slicing works in base Python and NumPy, where the endpoint is not included.
+- the slice of the data frame we'll obtain includes both endpoints of the slice `'column_start':'column_end'`. In other words, we'll get the `column_start` column *and* the `column_end` column. This is different from how slicing works in base Python and NumPy, where the endpoint is not included.
 
 #### Example
 
@@ -198,6 +197,9 @@ csm_mul.head()
 ### ... using a condition
 
 <!-- TO DO -->
+
+fall_columns = df.filter(like='fall')
+
 
 ## Selecting rows...
 Now that we are familiar with some methods for selecting columns, let's move on to selecting rows. 
@@ -235,7 +237,7 @@ df['year']>2020
 
 :::{.callout-tip}
 ## Check-in
- Get the subset of our dataframe on which the San Dieguito Wetland has at least 75 species recorded during spring.
+ Get the subset of our data frame on which the San Dieguito Wetland has at least 75 species recorded during spring.
 :::
 
 #### Example
@@ -302,7 +304,7 @@ Let's select rows with in which both the Carpinteria Salt Marsh and the San Dieg
 df[ (df['CSM_spring']>60) & (df['SDW_spring']>60)]
 ```
 
-An empty dataframe! That's ok, it just means there are no rows that satisfy the given condition.
+An empty data frame! That's ok, it just means there are no rows that satisfy the given condition.
 
 ### ... by position
 
@@ -418,7 +420,7 @@ Unless you are *really* looking for information about *the 10th column*, **do no
 
 ## Summary
 :::{.column-page}
-![](/book/images/lesson-3/pandas-selection-diagram.png)
+![Flow diagram for selecting core methods to subset a `pandas.DataFrame`.](/book/images/lesson-3/pandas-selection-diagram.png){#fig-summary}
 :::
 
 ## Resources
