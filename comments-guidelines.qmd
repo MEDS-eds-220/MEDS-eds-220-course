@@ -1,0 +1,115 @@
+
+# Course Comments Standards
+
+## The basics
+
+1. Leave a space between the `#` and the start of the comment.
+2. The first word in the comment should be capitalized @pep8.
+3. Always use proper spelling.
+4. Use proper punctuation if the comment is a sentence.
+
+<!-- TODO: example -->
+
+**Example:**
+```python
+# Calculate the average temperature from the dataset.
+average_temp = sum(temperatures) / len(temperatures)
+
+# Apply the temperature correction
+corrected_temp = average_temp + correction_factor
+```
+
+## Content
+
+
+5. Keep comments short and clear
+
+Make comments concise and easy to understand. Avoid long-winded explanations.
+
+6. Use comments to explain why, not what
+
+Write comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Avoid comments that explain what the code is doing in obvious ways.
+
+**Example:**
+```python
+# Good: Explains the rationale behind the code
+x = find_max_value(array)  # Find the largest value to normalize the data.
+
+# Bad: Redundant and obvious comment
+x = find_max_value(array)  # Assign the maximum value of the array to x.
+```
+
+7. Keep it professional
+Comments should be professional and avoid jokes, personal remarks, or irrelevant information.
+
+## Block comments
+
+For more complex explanations, use block comments spanning multiple lines. Each line should start with a `#` and be aligned with the code it describes.
+
+**Example:**
+```python
+# This function normalizes the data by subtracting the mean
+# and dividing by the standard deviation. We do this to ensure
+# the data is on a comparable scale.
+def normalize(data):
+    mean = sum(data) / len(data)
+    std_dev = (sum((x - mean)**2 for x in data) / len(data)) ** 0.5
+    return [(x - mean) / std_dev for x in data]
+```
+
+8. Don't get creative with indentations. 
+
+```python
+# e - I want to view the 'ecoregion' and 'habitat' columns to see how they differ
+    # do this using df[['col1', 'col2']]
+coral_div[['Ecoregion', 'Habitat']].head()
+```
+
+## Inline Comments
+9. Use inline comments sparingly
+Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.
+
+**Example:**
+```python
+value = compute_value(x, y)  # This handles edge cases for x and y.
+```
+
+## Avoid Over-commenting
+Do not over-comment obvious code, as this can clutter your code and reduce readability.
+
+**Example:**
+```python
+# Bad: Over-commenting
+i = 0  # Set i to 0
+while i < 10:  # Loop while i is less than 10
+    print(i)  # Print the value of i
+    i += 1  # Increment i
+```
+
+## Docstrings
+7. Use Docstrings for Functions and Classes
+For functions, classes, and modules, use docstrings (triple quotes) to describe the purpose, parameters, and return values. The first line should be a summary, followed by a blank line, and then a more detailed description if needed.
+
+**Example:**
+```python
+def add_numbers(a, b):
+    """
+    Adds two numbers and returns the result.
+
+    Parameters:
+    a (int): The first number.
+    b (int): The second number.
+
+    Returns:
+    int: The sum of the two numbers.
+    """
+    return a + b
+```
+
+## 8. Use TODO Comments
+For reminders about future code improvements or unresolved issues, use `TODO:` followed by a brief explanation.
+
+**Example:**
+```python
+# TODO: Add error handling for invalid input
+```
