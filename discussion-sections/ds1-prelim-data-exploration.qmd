@@ -26,10 +26,12 @@ This discussion section will guide you through preliminary data exploration for 
 4. Update the notebook's name to something useful like 'exercise-data-selection.ipynb'.
 
 5. Use the terminal to stage, commit, and push this file to the remote repository. Remember:
-    1. check git status: `git status`
-    2. stage: `git add file-name.ipynb`
-    3. commit with message: `git commit -m "commit message"`
-    4. push: `git push`
+    1. `git status` : check git status
+    2. `git add file-name.ipynb` : stage updated file
+    3. `git status` : check git status again to confirm
+    4. `git commit -m "Commit message"` : commit with message
+    5. `git pull` : check local repo is up to date (best practice)
+    5. `git push` : push changes to upstream repository
 
 <p style="text-align: center;">
 **CHECK IN WITH YOUR TEAM** 
@@ -55,7 +57,7 @@ This dataset is stored in the [Knowledge Network for Biocomplexity (KNB)](https:
 ![Data collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King.](/discussion-sections/images/Tecopa_site2.JPG)
 
 <!-- Data exploration -->
-## Archive exploration
+## 1. Archive exploration
 For many datasets, data exploration begins at the data repository. Take some time to look through the dataset's description in the KNB data repository. Discuss the following questions with your team:
 
 a. What is this data about?
@@ -67,10 +69,10 @@ e. Does the dataset contain sensitive data?
 In your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive. 
 
 <p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> push  changes**
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
-## Metadata exploration
+## 2. Metadata exploration
 
 You may have noticed there are two metadata files: `Compiled_occurrence_records_for_prey_items_of.xml` and `metadata_arth_occurrences.csv`. 
 The `.xml` document file type is `EML` which stands for [EML: Ecological Metadata Language](https://eml.ecoinformatics.org). This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the csv file.
@@ -84,7 +86,7 @@ a. Navigate to the [data package site](https://knb.ecoinformatics.org/view/doi%3
 b. Read in the data from the URL using the `pd.read_csv()` function like this:
 
     ```python
-    # look at metadata
+    # Access metadata from repository
     pd.read_csv('the URL goes here')
     ```
 
@@ -93,18 +95,18 @@ c. Take a minute to look at the descriptions for the columns.
 **Note:** Not all datasets have column descriptions in a `csv` file. Often they come with a `doc` or `txt` file with information. 
 
 <!-- Data loading -->
-## Data loading
+## 3. Data loading
 a. Follow steps (a) and (b) from the previous exercise to read in the drylands prey data file `arth_occurrences_with_env.csv` using `pd.read_csv()`. Store the dataframe to a variable called `prey` like this:
 
 ```python
-# read in data
+# Load data
 prey = pd.read_csv('the URL goes here')
 ```
 
 b. What is the type of the `prey` variable? Use a Python function get this information.
 
 <p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> push  changes**
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
 <p style="text-align: center;">
@@ -114,7 +116,7 @@ b. What is the type of the `prey` variable? Use a Python function get this infor
 **MAKE SURE YOU'VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING**
 </p>
 
-## Look at your data
+## 4. Look at your data
 
 a. Run `prey` in a cell. What do you notice in the columns section?
 
@@ -126,10 +128,10 @@ pd.set_option("display.max.columns", None)
 c. Add a comment explaining what `pd.set_option("display.max.columns", None)` does. 
 
 <p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> push  changes**
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
-## `pd.DataFrame` preliminary exploration
+## 5. `pd.DataFrame` preliminary exploration
 
 Run each of the following methods for `prey` in a different cell and write a brief description of what they do as a comment: 
 
@@ -159,12 +161,12 @@ h. `dtypes`
 If you're not sure about what information is the attribute showing, look it up in the [`pandas.DataFrame` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html).
 
 <p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> push  changes**
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
-## Update column names
+## 6. Update column names
 Change the column names of `institutionCode` and `datasetKey` to `institution_code` and  `dataset_key`, respectively. Make sure you're actually updating the dataframe. HINT: look for the documentation on the `pandas` `rename` method.
 
 <p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> push  changes**
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
