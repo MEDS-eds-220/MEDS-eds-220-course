@@ -30,10 +30,10 @@ The annual bird species abundance estimates is a CSV file with 17 columns. You c
 #| echo: false
 import pandas as pd
 
-# read in file
+# Read in file
 df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
 
-# see the first five rows
+# See the first five rows
 df.head(3)
 ```
 
@@ -150,7 +150,7 @@ Is this an example of label-based selection or location-based selection?
 If we want to look at the species in the Tijuana Estuary during winter and fall, then we can select these columns like this:
 
 ```{python}
-# select columns with names "europe" and "asia"
+# Select columns with names "europe" and "asia"
 tje_wf = df[['TJE_winter','TJE_fall']]
 ```
 
@@ -163,10 +163,10 @@ What is the type and shape of the `tje_wf` output? Verify your answer.
 ```{python}
 #| eval: false 
 #| echo: false
-# check the type of the resulting selection
+# Check the type of the resulting selection
 print(type(tje_wf))
 
-# check the shape of the selection
+# Check the shape of the selection
 print((tje_wf.shape))
 ```
 :::
@@ -195,12 +195,12 @@ csm_mul = df.loc[:,'CSM_winter':'MUL_fall']
 csm_mul.head()
 ```
 
+
+
+<!-- TODO 
 ### ... using a condition
-
-<!-- TO DO -->
-
 fall_columns = df.filter(like='fall')
-
+-->
 
 ## Selecting rows...
 Now that we are familiar with some methods for selecting columns, let's move on to selecting rows. 
@@ -401,8 +401,8 @@ We can also access columns by position using `iloc` - but it is best not to if p
 Suppose we want to access the 10th column in the data frame - then we want to select a column *by position*. In this case the 10th column is the annual sea level rise data and the 10th position corresponds to the index 9. We can select this column by position using the `iloc` selection:
 
 ```{python}
-# select column by position using iloc
-# the syntax is iloc[row-indices, column-indices]
+# Select column by position using iloc
+# The syntax is iloc[row-indices, column-indices]
 # [:,9] means "select all rows from the 10th column"
 annual_rise_3 = df.iloc[:,9]
 annual_rise_3.head()

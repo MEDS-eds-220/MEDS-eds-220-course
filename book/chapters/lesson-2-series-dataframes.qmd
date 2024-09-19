@@ -44,12 +44,12 @@ A series is a *one-dimensional* array of *indexed* data.
 A `pandas.Series` having an **index** is the main difference between a `pandas.Series` and a NumPy array. Let's see the difference:
 
 ```{python}
-# a numpy array
+# A numpy array
 arr = np.random.randn(4) # random values from std normal distribution
 print(type(arr))
 print(arr, "\n")
 
-# a pandas series made from the previous array
+# A pandas series made from the previous array
 s = pd.Series(arr)
 print(type(s))
 print(s)
@@ -79,7 +79,7 @@ The `index` parameter is optional, if we wish to include it, it must be a list o
 Let's create a `pandas.Series` from a NumPy array. To use this method we need to pass a NumPy array (or a list of objects that can be converted to NumPy types) as `data`. Here, we will also include the list `[2023, 2024, 2025]` to be used as an index:
 
 ```{python}
-# a series from a numpy array 
+# A series from a numpy array 
 pd.Series(np.arange(3), index=[2023, 2024, 2025])
 ```
 
@@ -87,7 +87,7 @@ pd.Series(np.arange(3), index=[2023, 2024, 2025])
  Here we create a `pandas.Series` from a list of strings. Remember that the `index` parameter is optional. If we don't include it, the default is to make the index equal to `[0,...,len(data)-1]`. For example:
 
 ```{python}
-# a series from a list of strings with default index
+# A series from a list of strings with default index
 pd.Series(['EDS 220', 'EDS 222', 'EDS 223', 'EDS 242'])
 ```
 
@@ -95,10 +95,10 @@ pd.Series(['EDS 220', 'EDS 222', 'EDS 223', 'EDS 242'])
 Recall that a dictionary is a set of key-value pairs. If we create a `pandas.Series` via a dictionary the keys will become the index and the values the corresponding data.
 
 ```{python}
-# construct dictionary
+# Construct dictionary
 d = {'key_0':2, 'key_1':'3', 'key_2':5}
 
-# initialize series using a dictionary
+# Initialize series using a dictionary
 pd.Series(d)
 ```
 
@@ -119,16 +119,16 @@ pd.Series(3.0, index = ['A', 'B', 'C'])
 Arithmetic operations work on series and so most NumPy functions. For example:
 
 ```{python}
-# define a series
+# Define a series
 s = pd.Series([98,73,65],index=['Andrea', 'Beth', 'Carolina'])
 
-# divide each element in series by 10
+# Divide each element in series by 10
 print(s /10, '\n')
 
-# take the exponential of each element in series
+# Take the exponential of each element in series
 print(np.exp(s), '\n')
 
-# original series is unchanged
+# Original series is unchanged
 print(s)
 
 ```
@@ -145,7 +145,7 @@ This kind of simple conditions on `pandas.Series` will be key when we are select
 In `pandas` we can represent a missing, NULL, or NA value with the float value `numpy.nan`, which stands for "not a number". Let's construct a small series with some NA values represented this way:
 
 ```{python}
-# series with NAs in it
+# Series with NAs in it
 s = pd.Series([1, 2, np.nan, 4, np.nan])
 s
 ```
@@ -154,7 +154,7 @@ Notice the data type of the values it he series is still `float64`.
 The [`hasnans` attribute](https://pandas.pydata.org/docs/reference/api/pandas.Series.hasnans.html) for a `pandas.Series` returns `True` if there are any NA values in it and false otherwise:
 
 ```{python}
-# check if series has NAs
+# Check if series has NAs
 s.hasnans
 ```
 
@@ -234,12 +234,12 @@ There are [many ways of creating a `pandas.DataFrame`](https://pandas.pydata.org
 We already mentioned each column of a `pandas.DataFrame` is a `pandas.Series`. In fact, the `pandas.DataFrame` is a dictionary of `pandas.Series`, with each column name being the key and the column values being the key's value. Thus, we can create a `pandas.DataFrame` in this way:
 
 ```{python}
-# initialize dictionary with columns' data 
+# Initialize dictionary with columns' data 
 d = {'col_name_1' : pd.Series(np.arange(3)),
      'col_name_2' : pd.Series([3.1, 3.2, 3.3]),
      }
 
-# create data frame
+# Create data frame
 df = pd.DataFrame(d)
 df
 ``` 
@@ -247,7 +247,7 @@ df
 We can change the index by changing the `index` attribute in the data frame:
 
 ```{python}
-# change index
+# Change index
 df.index = ['a','b','c']
 df
 ```
