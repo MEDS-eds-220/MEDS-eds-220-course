@@ -1,0 +1,161 @@
+---
+toc-title: In this lesson
+---
+
+# 3 Basic plotting
+In this lesson we will learn to use the `plot()` method of a `pandas.DataFrame` to create simple exploratory graphs from tabular data. 
+
+## Learning objectives
+By the end of this lesson students will be able to: 
+
+- objective 1
+- objective 2
+- objective 3
+
+## About the data
+
+In this lesson we will reuse the annual estimates of bird species abundance in four coastal wetlands along the California coast that we used in the previous lesson on subsetting a `pandas.DataFrame`. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
+The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
+
+The annual bird species abundance estimates is a CSV file with 17 columns. You can see the first three rows below.
+<!-- TODO: add link to other lesson. Add pictures of birds -->
+
+```{python}
+#| echo: false
+import pandas as pd
+
+# Read in file
+df = pd.read_csv('lesson-3-pandas-subsetting/data/wetlands_seasonal_bird_diversity.csv')
+
+# See the first five rows
+df.head(3)
+```
+
+The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
+
+
+## `plot()` method
+
+Let us start by loading the data:
+
+```python
+import pandas as pd
+
+# Read in file
+df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
+
+# Check the first five rows
+df.head()
+```
+```{python}
+#| echo: false
+df.head()
+```
+
+
+A `pandas.DataFrame` has a [built-in method `plot()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html) for plotting. 
+When we call it without specifying any other parameters `plot()` creates one line plot for each of the columns with numeric data. 
+
+```{python}
+# Default plot(): one line plot per column with numeric data
+df.plot()
+```
+
+As we can see, this doesn't make much sense! In particular, look at the x-axis. The default for `plot` is to use the values of the index as the x-axis values. Let's see some examples about how to improve this situation.
+
+## Line plots
+
+We can make a line plot of one column against another by using the following the general syntax:
+
+```python
+df.plot(x='x_values_column', y='y_values_column')
+```
+#### Example
+
+If we want to plot the bird surveys at Carpinteria Salt Marsh across years we can do:
+
+```{python}
+# Birds species registered during winter at CSM yearly
+df.plot(x='year', y='CSM_winter')
+```
+
+We can do some basic customization specifying other parameters of the `plot()` method. Some basic ones are:
+
+- `title`: title to use for the plot.
+- `xlabel`: name to use for the x-label on x-axis
+- `ylabel`: bame to use for the y-label on y-axis
+- `color`: change the color of our plot
+- `legend`: boolean value `True` or `False`. `True` (default) includes the legend, `False` removes the legend
+
+In action:
+
+```{python}
+df.plot(x='year', 
+        y='CSM_winter',
+        title='Bird species registered during winter at Carpinteria Salt Marsh',
+        xlabel='Year',
+        ylabel='Number of bird species',
+        color='green',
+        legend=False
+        )
+```
+
+You can see all the [optional parameters for the `plot()` function in the documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html).
+
+## Multiple line plots
+
+We can plot multiple line plots by updating these parameters in the `plot()` method:
+
+- `y` : a list of column names that will be plotted against the x-axis
+- `color`: a dictionary `{'column_1' : 'color_1', 'column_2':'color_2}` specifying the color of each column's line plot
+
+#### Example
+
+Let's say we want to compare the bird surveys at the Tijuana Estuary during spring and fall across years. 
+
+```{python}
+df.plot(x='year', 
+        y=['TJE_spring', 'TJE_fall'],
+        title = 'Seasonal bird surveys at Tijuana Estuary',
+        xlabel='Year',
+        ylabel='Number of bird species',        
+        color = {'TJE_spring':'#F48FB1',
+                 'TJE_fall': '#AB47BC'
+                 }
+        )
+```
+
+<!--It is not possible to rename the labels in the legend only using the plot() method and without updating the column names.-->
+
+Notice that for specifying the colors we used a **HEX code**, this gives us more control over how our graph looks.
+
+
+We can also create separate plots for each column by setting the `subset` to `True`.
+
+```{python}
+df.plot(x='year', 
+        y=['TJE_spring', 'TJE_fall'],
+        title = 'Seasonal bird surveys at Tijuana Estuary',
+        xlabel='Year',
+        ylabel='Number of bird species',        
+        color = {'TJE_spring':'#F48FB1',
+                 'TJE_fall': '#AB47BC'
+                 },
+        subplots=True
+        )
+```
+
+:::{.callout-tip}
+## Check-in
+(1)
+Plot a graph of the annual sea level rise with respect to the years.
+
+(2)
+What information is the `columns` variable retrieving from the data frame? Describe in a sentence what is being plotted.
+```python
+columns = df.loc[:,'europe':'antarctica'].columns
+df.plot(x='year', 
+        y=columns, 
+        subplots=True)
+```
+:::
