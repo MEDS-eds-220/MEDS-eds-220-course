@@ -8,16 +8,16 @@ In this lesson we will learn to use the `plot()` method of a `pandas.DataFrame` 
 ## Learning objectives
 By the end of this lesson students will be able to: 
 
-- objective 1
 - objective 2
 - objective 3
+- Understand what it means to perform an operation on a `pandas.DataFrame` in-place 
 
 ## About the data
 
 In this lesson we will reuse the annual estimates of bird species abundance in four coastal wetlands along the California coast that we used in the previous lesson on subsetting a `pandas.DataFrame`. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
-The annual bird species abundance estimates is a CSV file with 17 columns. You can see the first three rows below.
+The annual bird species abundance estimates is a CSV file with 13 columns and 14 rows. You can see the first three rows below.
 <!-- TODO: add link to other lesson. Add pictures of birds -->
 
 ```{python}
@@ -102,6 +102,11 @@ df.plot(x='year',
 
 You can see all the [optional parameters for the `plot()` function in the documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html).
 
+:::{.callout-tip}
+## Check-in
+Plot a graph of the bird surveys at Mugu Lagoon with respect to the years. Include some basic customization.
+:::
+
 ## Multiple line plots
 
 We can plot multiple line plots by updating these parameters in the `plot()` method:
@@ -145,17 +150,72 @@ df.plot(x='year',
         )
 ```
 
+## Updating the index
+
+**Updating the index** of our data frame's to be something other than the default integers numbering the rows can be a useful operation for plotting. 
+To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. 
+The general syntax for setting a column as the new index is:
+
+```python
+df.set_index('column_name')
+```
+where `column_name` is the name of the column in the data frame `df` we want to use as new index.
+
+This operation does not happen in-place. 
+
+- A funciton **acting in-place** means that our original data frame is modified. 
+- If the function **does not act in-place**, a new data frame is created and the original is not modified. 
+
+If we wanted to update our `df` data frame we could do an **explicit assignment** to reassign the output of `set_index()` to `df`:
+
+```python
+df = df.set_index('column_name')
+```
+
+or use the optional `inplace` parameter:
+
+```python
+df.set_index('column_name', inplace=True)
+```
+
+:::{.callout-caution}
+## Avoid using the `inplace=True` argument, favor explicit variable assignments
+You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for better readability and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
+:::
+
+#### Example
+
+In all our previous examples we used the year column as the x-axis. Since all our bird survey variables are dependent on the year, it makes sense to use the year column as the index of the data frame:
+
+```{python}
+# Update index to be the year column
+df = df.set_index('year')
+df.head()
+```
+
+
+
+```{python}
+# Simple plot of Carpinteria Salt Marsh winter surveys
+df.plot(y='CSM_winter')
+```
+
+Ifn needed, we can reset the index to be the numbering of the rows:
+```{python}
+df = df.reset_index()
+df.head()
+```
+
+
 :::{.callout-tip}
 ## Check-in
-(1)
-Plot a graph of the annual sea level rise with respect to the years.
-
-(2)
-What information is the `columns` variable retrieving from the data frame? Describe in a sentence what is being plotted.
+1. Without running the code, give a step-by-step breakdown of what this code is doing:
 ```python
-columns = df.loc[:,'europe':'antarctica'].columns
-df.plot(x='year', 
-        y=columns, 
-        subplots=True)
+df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 ```
+
+2. Is this code modifying the data frame `df`? Why or why not?
+
+3. Run the code and examine the graph. Do we have all the necessary information to make sure it make sense to directly compare the surveys at these different sites? 
+<!--The different sites have very different sizes and the surveys show the total number of birds identified, not the number of birds relative to the extent. -->
 :::
