@@ -11,6 +11,7 @@ By the end of this lesson students will be able to:
 - objective 2
 - objective 3
 - Understand what it means to perform an operation on a `pandas.DataFrame` in-place 
+- Use the `info()`, `describe()`, `nunique()`, `unique()` and `value_counts()` methods to obtain preliminary information about a `pd.DataFrame`.
 
 ## About the data
 
@@ -27,7 +28,7 @@ import pandas as pd
 # Read in file
 df = pd.read_csv('lesson-3-pandas-subsetting/data/wetlands_seasonal_bird_diversity.csv')
 
-# See the first five rows
+# See the first 3 rows
 df.head(3)
 ```
 
@@ -180,7 +181,7 @@ df.set_index('column_name', inplace=True)
 
 :::{.callout-caution}
 ## Avoid using the `inplace=True` argument, favor explicit variable assignments
-You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for better readability and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
+Check the information about the `inplace` parameter in the [`set_index()` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html). You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for better readability and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
 :::
 
 #### Example
@@ -218,4 +219,167 @@ df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 
 3. Run the code and examine the graph. Do we have all the necessary information to make sure it make sense to directly compare the surveys at these different sites? 
 <!--The different sites have very different sizes and the surveys show the total number of birds identified, not the number of birds relative to the extent. -->
+:::
+
+We will move on to another dataset for the rest of this lesson.
+
+## About the data
+
+For the next plots we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica. 
+
+![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-4/lter_penguins.png)
+
+The dataset has 344 rows and 8 columns. We can see it's first three rows below:
+
+```{python}
+#| echo: false
+URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'
+penguins = pd.read_csv(URL)
+
+penguins.head(3)
+```
+
+## Data exploration
+
+The data is usually accessed through the `palmerpenguins` R data package @palmerpenguins. Today we will access the CSV directly into Python using the URL: [https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv]()
+
+
+Let's start by reading in the data:
+
+```{python}
+# Read in data
+URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'
+penguins = pd.read_csv(URL)
+
+penguins.head()
+```
+
+And getting some preliminary information:
+```{python}
+# Check column data types and NA values
+penguins.info()
+```
+
+```{python}
+# Simple statistics about numeric columns
+penguins.describe()
+```
+
+We can also subset the dataframe to get information about a particular column or groups of columns:
+
+```{python}
+# Count unique values in categorical columns and year
+penguins[['species', 'island', 'sex', 'year']].nunique()
+```
+
+```{python}
+# Get unique values in species column
+penguins.species.unique()
+```
+
+```{python}
+# Number of values per unique value in species column
+penguins.species.value_counts()
+```
+
+## `kind` argument in `plot()`
+
+At the beginning of the lesson we talked about how the `plot()` method creates a line plot by default. The parameter that controls this behaviour is the `kind` parameter. By changing the value of `kind` we can create different kinds of plots. Let's look at the documentation to see what these values are:
+
+![Extract from the `pandas.DataFrame.plot` documentation. Accessed on Sept 25,2024](/book/images/lesson-4/df-plot-doc.png)
+
+Notice the default value of `kind` is `'line'`. 
+
+Let's change the `kind` parameter to create some different plots. 
+
+## Scatter plots
+Suppose we want to visualy compare the flipper length against the body mass, we can do this with a scatterplot: 
+
+```{python}
+penguins.plot(kind='scatter',
+              x='flipper_length_mm', 
+              y='body_mass_g')
+```
+
+We can update some other arguments to customize the graph:
+
+```{python}
+penguins.plot(kind='scatter',
+        x='flipper_length_mm', 
+        y='body_mass_g',
+        title='Flipper length and body mass for Palmer penguins',
+        xlabel='Flipper length (mm)',
+        ylabel='Body mass (g)',
+        color='#ff3b01',
+        alpha=0.4  # controls transparency
+        )
+```
+
+## Bar plots
+
+We can create bar plots of our data setting `kind='bar'` in the `plot()` method.
+
+For example, let's say we want to get data about the 10 penguins with lowest body mass. We can first select this data using the `nsmallest()` method for series:
+
+```{python}
+smallest = penguins.body_mass_g.nsmallest(10).sort_values()
+smallest
+```
+
+We can then plot this data as a bar plot
+
+```{python}
+smallest.plot(kind='bar')
+```
+
+If we wanted to look at other data for these smallest penguins we can use the index of the `smallest` `pandas.Series` to select those rows in the original `penguins` data frame using `loc`:
+
+```{python}
+penguins.loc[smallest.index]
+```
+
+## Histograms
+
+We can create a histogram of our data setting `kind='hist'` in `plot()`. 
+
+```{python}
+# Using plot without subsetting data - a mess again
+penguins.plot(kind='hist')
+```
+
+To gain actual information, let's subset the data before plotting it. For example, suppose we want to do a preliminary graph for the distribution of flipper length. We could do it in this way:
+
+```{python}
+# distribution of flipper length measurements
+# first select data, then plot
+penguins.flipper_length_mm.plot(kind='hist',
+                                title='Penguin flipper lengths',
+                                xlabel='Flipper length (mm)',
+                                grid=True)
+```
+
+
+:::{.callout-tip}
+## Check-in
+1. Select the `bill_length_mm` and `bill_depth_mm` columns in the `penguins` dataframe and then update the kind parameter to `box` to make boxplots of the bill length and bill depth.
+<!--
+```{python}
+penguins[['bill_length_mm','bill_depth_mm']].plot(kind='box')
+```
+-->
+<!--
+2. Select both rows and columns to create a histogram of the flipper length of gentoo penguins. 
+
+
+```{python}
+penguins.loc[penguins.species == 'Gentoo', 'flipper_length_mm'].plot(kind='hist')
+```
+-->
+
+2. Create a histogram of the flipper length of female gentoo penguins.
+<!--
+```{python}
+penguins.loc[(penguins.species == 'gentoo') & (penguins.sex == 'female'), 'flipper_length_mm'].plot(kind='hist')
+```
+-->
 :::
