@@ -8,10 +8,10 @@ In this lesson we will learn to use the `plot()` method of a `pandas.DataFrame` 
 ## Learning objectives
 By the end of this lesson students will be able to: 
 
-- objective 2
-- objective 3
-- Understand what it means to perform an operation on a `pandas.DataFrame` in-place 
-- Use the `info()`, `describe()`, `nunique()`, `unique()` and `value_counts()` methods to obtain preliminary information about a `pd.DataFrame`.
+- Obtain and interpret preliminary information about a `pandas.DataFrame` using key methods such as `info()` (structure), `describe()` (summary statistics), `nunique()` (unique value counts), `unique()` (distinct values), `and value_counts()` (frequency counts)
+- Create simple exploratory plots using the `plot()` method for `pandas.DataFrames` 
+- Understand the concept of performing operations on a `pandas.DataFrame` in-place
+- Apply method chaining to combine data selection and plotting, enabling concise and readable code
 
 ## About the data
 
@@ -221,7 +221,27 @@ df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 <!--The different sites have very different sizes and the surveys show the total number of birds identified, not the number of birds relative to the extent. -->
 :::
 
+## Method chaining
+The code used in the check-in
+
+```python
+df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
+```
+
+is an example of **method chaining**. Each method in the chain returns an object (typically the same object), allowing the next method to be called directly on the result.  This is a powerful technique that makes code concise and readable. 
+
+An alternative to the previous code chaining could have been:
+```python
+year_index_df = df.set_index('year')
+subset_df = year_index_df.loc[:,'SDW_winter':'TJE_fall']
+subset_df.plot()
+```
+
+While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.  Method chaining is particularly useful in `pandas` for streamlining multiple data manipulations. However, it should be used with care to avoid overly complex and difficult-to-debug code!
+
 We will move on to another dataset for the rest of this lesson.
+
+
 
 ## About the data
 
@@ -350,9 +370,9 @@ penguins.plot(kind='hist')
 To gain actual information, let's subset the data before plotting it. For example, suppose we want to do a preliminary graph for the distribution of flipper length. We could do it in this way:
 
 ```{python}
-# distribution of flipper length measurements
-# first select data, then plot
-penguins.flipper_length_mm.plot(kind='hist',
+# Distribution of flipper length measurements
+# First select data, then plot
+penguins['flipper_length_mm'].plot(kind='hist',
                                 title='Penguin flipper lengths',
                                 xlabel='Flipper length (mm)',
                                 grid=True)
