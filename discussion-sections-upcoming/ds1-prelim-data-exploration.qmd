@@ -12,7 +12,7 @@ This discussion section will guide you through preliminary data exploration for 
 - Practice version control using git via the terminal
 - Obtain information about a dataset from an online data repository
 - Use the `pandas.read_csv()` function for loading files directly from a URL
-- Use methods and functions of a `pandas.DataFrame` to do preliminary analysis
+- Use `pandas.DataFrame` methods to do preliminary analysis
 
 ## Setup
 
@@ -21,13 +21,11 @@ This discussion section will guide you through preliminary data exploration for 
 
 2. In the terminal, use `cd` to navigate into the `eds-220-sections` directory. Use `pwd` to verify `eds-220-sections` is your current working directory.
 
-3. Create a new Python Notebook in `section-1`. 
+3. Create a new Python Notebook inside your `eds-220-sections` directory and rename it to `section-1-data-selection-drylands.ipynb`. 
 
-4. Update the notebook's name to something useful like 'exercise-data-selection.ipynb'.
-
-5. Use the terminal to stage, commit, and push this file to the remote repository. Remember:
+4. Use the terminal to stage, commit, and push this file to the remote repository. Remember:
     1. `git status` : check git status
-    2. `git add file-name.ipynb` : stage updated file
+    2. `git add FILE-NAME` : stage updated file
     3. `git status` : check git status again to confirm
     4. `git commit -m "Commit message"` : commit with message
     5. `git pull` : check local repo is up to date (best practice)
@@ -44,7 +42,7 @@ This discussion section will guide you through preliminary data exploration for 
 ## General directions
 :::{.callout-tip appearance="minimal"}
 - Add comments in each one of your code cells. 
-- Include markdown cells in between your code cells to add titles and information to each exercise.
+- On each exercise, include markdown cells in between your code cells to add titles and information.
 - Indications about when to commit and push changes are included, but you are encouraged to commit and push more often. 
 - You won't need to upload any data.
 :::
@@ -56,7 +54,6 @@ This dataset is stored in the [Knowledge Network for Biocomplexity (KNB)](https:
 
 ![Data collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King.](/discussion-sections/images/Tecopa_site2.JPG)
 
-<!-- Data exploration -->
 ## 1. Archive exploration
 For many datasets, data exploration begins at the data repository. Take some time to look through the dataset's description in the KNB data repository. Discuss the following questions with your team:
 
@@ -75,11 +72,11 @@ In your notebook: use a markdown cell to add a brief description of the dataset,
 ## 2. Metadata exploration
 
 You may have noticed there are two metadata files: `Compiled_occurrence_records_for_prey_items_of.xml` and `metadata_arth_occurrences.csv`. 
-The `.xml` document file type is `EML` which stands for [EML: Ecological Metadata Language](https://eml.ecoinformatics.org). This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the csv file.
+The `.xml` document file type is `EML` which stands for [EML: Ecological Metadata Language](https://eml.ecoinformatics.org). This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.
 
-Back in your notebook, import the `pandas` package using standard abbreviation in a code cell. Then follow these steps to read in the metadata csv using the `pandas.read_csv()` function:
+Back in your notebook, import the `pandas` package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the `pandas.read_csv()` function:
 
-a. Navigate to the [data package site](https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH) and copy the URL to access the `metadata_arth_occurrences` csv file. To copy the URL: 
+a. Navigate to the [data package site](https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH) and copy the URL to access the `metadata_arth_occurrences` CSV file. To copy the URL: 
 
 - hover over the Download button –> right click –> “Copy Link".
 
@@ -92,9 +89,9 @@ b. Read in the data from the URL using the `pd.read_csv()` function like this:
 
 c. Take a minute to look at the descriptions for the columns. 
 
-**Note:** Not all datasets have column descriptions in a `csv` file. Often they come with a `doc` or `txt` file with information. 
+**Note:** Not all datasets have column descriptions in a CSV file. Often they come with a `.doc` or `.txt` file with information. 
 
-<!-- Data loading -->
+
 ## 3. Data loading
 a. Follow steps (a) and (b) from the previous exercise to read in the drylands prey data file `arth_occurrences_with_env.csv` using `pd.read_csv()`. Store the dataframe to a variable called `prey` like this:
 
@@ -165,7 +162,7 @@ If you're not sure about what information is the attribute showing, look it up i
 </p>
 
 ## 6. Update column names
-Change the column names of `institutionCode` and `datasetKey` to `institution_code` and  `dataset_key`, respectively. Make sure you're actually updating the dataframe. HINT: look for the documentation on the `pandas` `rename` method.
+Change the column names of `institutionCode` and `datasetKey` to `institution_code` and  `dataset_key`, respectively. Make sure you're actually updating the dataframe. HINT: look for the documentation on the `rename` method for `pandas.DataFrames`.
 
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
