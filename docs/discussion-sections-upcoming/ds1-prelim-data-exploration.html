@@ -146,6 +146,17 @@ div.csl-indent {
     <a class="nav-link" href="../index.html"> 
 <span class="menu-text">home</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-week-by-week" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">week by week</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-week-by-week">    
+        <li>
+    <a class="dropdown-item" href="../week-by-week/week-by-week.html">
+ <span class="dropdown-text">week 0</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../book/preface.html"> 
 <span class="menu-text">notes</span></a>
@@ -236,7 +247,7 @@ div.csl-indent {
 <li>Practice version control using git via the terminal</li>
 <li>Obtain information about a dataset from an online data repository</li>
 <li>Use the <code>pandas.read_csv()</code> function for loading files directly from a URL</li>
-<li>Use methods and functions of a <code>pandas.DataFrame</code> to do preliminary analysis</li>
+<li>Use <code>pandas.DataFrame</code> methods to do preliminary analysis</li>
 </ul>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -249,12 +260,11 @@ div.csl-indent {
 <ol type="1">
 <li><p>In the Taylor server, start a new JupyterLab session or access an active one.</p></li>
 <li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
-<li><p>Create a new Python Notebook in <code>section-1</code>.</p></li>
-<li><p>Update the notebook’s name to something useful like ‘exercise-data-selection.ipynb’.</p></li>
+<li><p>Create a new Python Notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-1-data-selection-drylands.ipynb</code>.</p></li>
 <li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
 <ol type="1">
 <li><code>git status</code> : check git status</li>
-<li><code>git add file-name.ipynb</code> : stage updated file</li>
+<li><code>git add FILE-NAME</code> : stage updated file</li>
 <li><code>git status</code> : check git status again to confirm</li>
 <li><code>git commit -m "Commit message"</code> : commit with message</li>
 <li><code>git pull</code> : check local repo is up to date (best practice)</li>
@@ -281,7 +291,7 @@ div.csl-indent {
 <div class="callout-body-container">
 <ul>
 <li>Add comments in each one of your code cells.</li>
-<li>Include markdown cells in between your code cells to add titles and information to each exercise.</li>
+<li>On each exercise, include markdown cells in between your code cells to add titles and information.</li>
 <li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
 <li>You won’t need to upload any data.</li>
 </ul>
@@ -299,11 +309,10 @@ div.csl-indent {
 <figcaption>Data collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr.&nbsp;Rachel King.</figcaption>
 </figure>
 </div>
-<!-- Data exploration -->
 </section>
 <section id="archive-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
-<p>For many datasets, data exploration begins at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:</p>
+<p>When possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:</p>
 <ol type="a">
 <li>What is this data about?</li>
 <li>Is this data collected in-situ by the authors or is it a synthesis of multiple datasets?</li>
@@ -318,10 +327,10 @@ div.csl-indent {
 </section>
 <section id="metadata-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="metadata-exploration">2. Metadata exploration</h2>
-<p>You may have noticed there are two metadata files: <code>Compiled_occurrence_records_for_prey_items_of.xml</code> and <code>metadata_arth_occurrences.csv</code>. The <code>.xml</code> document file type is <code>EML</code> which stands for <a href="https://eml.ecoinformatics.org">EML: Ecological Metadata Language</a>. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the csv file.</p>
-<p>Back in your notebook, import the <code>pandas</code> package using standard abbreviation in a code cell. Then follow these steps to read in the metadata csv using the <code>pandas.read_csv()</code> function:</p>
+<p>You may have noticed there are two metadata files: <code>Compiled_occurrence_records_for_prey_items_of.xml</code> and <code>metadata_arth_occurrences.csv</code>. The <code>.xml</code> document file type is <code>EML</code> which stands for <a href="https://eml.ecoinformatics.org">EML: Ecological Metadata Language</a>. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.</p>
+<p>Back in your notebook, import the <code>pandas</code> package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the <code>pandas.read_csv()</code> function:</p>
 <ol type="a">
-<li>Navigate to the <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">data package site</a> and copy the URL to access the <code>metadata_arth_occurrences</code> csv file. To copy the URL:</li>
+<li>Navigate to the <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">data package site</a> and copy the URL to access the <code>metadata_arth_occurrences</code> CSV file. To copy the URL:</li>
 </ol>
 <ul>
 <li>hover over the Download button –&gt; right click –&gt; “Copy Link”.</li>
@@ -332,8 +341,7 @@ div.csl-indent {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Take a minute to look at the descriptions for the columns.</p></li>
 </ol>
-<p><strong>Note:</strong> Not all datasets have column descriptions in a <code>csv</code> file. Often they come with a <code>doc</code> or <code>txt</code> file with information.</p>
-<!-- Data loading -->
+<p><strong>Note:</strong> Not all datasets have column descriptions in a CSV file. Often they come with a <code>.doc</code> or <code>.txt</code> file with information.</p>
 </section>
 <section id="data-loading" class="level2">
 <h2 class="anchored" data-anchor-id="data-loading">3. Data loading</h2>
@@ -399,7 +407,7 @@ prey.head()</code></pre>
 </section>
 <section id="update-column-names" class="level2">
 <h2 class="anchored" data-anchor-id="update-column-names">6. Update column names</h2>
-<p>Change the column names of <code>institutionCode</code> and <code>datasetKey</code> to <code>institution_code</code> and <code>dataset_key</code>, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the <code>pandas</code> <code>rename</code> method.</p>
+<p>Change the column names of <code>institutionCode</code> and <code>datasetKey</code> to <code>institution_code</code> and <code>dataset_key</code>, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the <code>rename</code> method for <code>pandas.DataFrames</code>.</p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
