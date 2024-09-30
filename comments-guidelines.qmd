@@ -3,46 +3,119 @@
 
 ## The basics
 
-1. Leave a space between the `#` and the start of the comment.
-2. The first word in the comment should be capitalized @pep8.
-3. Always use proper spelling.
-4. Use proper punctuation if the comment is a sentence.
+- Comment should start with a pound sign `#` followed by a single space, then the text.
+- The first word in the comment should be capitalized @pep8.
+- Always use proper spelling.
+- Periods at the end of short comments are optional, but you should be consistent across your code.
 
-<!-- TODO: example -->
+#### Example
 
-**Example:**
+✅ Comments follow all the basic standards
 ```python
-# Calculate the average temperature from the dataset.
+# Calculate the average temperature from the dataset
 average_temp = sum(temperatures) / len(temperatures)
 
 # Apply the temperature correction
 corrected_temp = average_temp + correction_factor
 ```
 
-## Content
+🚫 Typos, incosistent capitalization, spacing, and punctuation
+```python
+#calculate teh average temp from dataset.
+average_temp = sum(temperatures) / len(temperatures)
 
+    ##      Apply the temperature correction
+corrected_temp = average_temp + correction_factor
+```
 
-5. Keep comments short and clear
+## Content 
+
+### Make sure comments are consistent with the code  {.unlisted}
+
+As stated in the Python PEP 8 @pep8 guide:
+
+> Comments that contradict the code are worse than no comments. Always make a priority of keeping the comments up-to-date when the code changes!
+
+✅ Comments must be consistent with the code
+```python
+# Convert temperature from Celsius to Fahrenheit.
+df['temp_f'] = df['temp_c'] * 9/5 + 32
+
+```
+
+🚫 Comment is outdated and contradicts the code
+```python
+# Convert temperature from Fahrenheit to Celsius
+df['temp_f'] = df['temp_c'] * 9/5 + 32
+
+```
+
+### Keep comments short and clear {.unlisted}
 
 Make comments concise and easy to understand. Avoid long-winded explanations.
 
-6. Use comments to explain why, not what
+#### Example
+✅ Comments follow all the basic standards
+```python
+# Filter rows where the region is a wetland
+wetland_data = df[df['region_type'] == 'wetland']
+```
+
+🚫 Typos, incosistent capitalization, spacing, and punctuation
+```python
+# In this part of the code, we are filtering the DataFrame 'df' to keep only 
+# the rows where the value in the 'region_type' column is equal to 'wetland'. 
+# This will give us data specifically for wetland regions.
+wetland_data = df[df['region_type'] == 'wetland']
+
+```
+
+### Use comments to explain why, not what {.unlisted}
 
 Write comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Avoid comments that explain what the code is doing in obvious ways.
 
-**Example:**
-```python
-# Good: Explains the rationale behind the code
-x = find_max_value(array)  # Find the largest value to normalize the data.
+#### Example
 
-# Bad: Redundant and obvious comment
-x = find_max_value(array)  # Assign the maximum value of the array to x.
+✅  Comment explains the rationale behind the code
+```python
+# Find the largest value to normalize the data.
+x = find_max_value(array)  
 ```
 
-7. Keep it professional
+🚫 Redundant and obvious comment
+```python
+# Assign the maximum value of the array to x.
+x = find_max_value(array)  
+```
+
+### Keep it professional {.unlisted}
+
 Comments should be professional and avoid jokes, personal remarks, or irrelevant information.
 
-## Block comments
+✅  Professional and relevant comment
+```python
+# Calculate the total carbon emissions for the region
+total_emissions = df['emissions'].sum()
+```
+
+🚫 Unprofessional comment with casual remarks
+```python
+# Time to crunch some numbers and save the planet! 🌍
+total_emissions = df['emissions'].sum()
+```
+
+## Special types of comments
+
+### Inline comments
+9. Use inline comments sparingly
+Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.
+
+**Example:**
+```python
+value = compute_value(x, y)  # This handles edge cases for x and y.
+```
+
+### Block comments
 
 For more complex explanations, use block comments spanning multiple lines. Each line should start with a `#` and be aligned with the code it describes.
 
@@ -57,7 +130,9 @@ def normalize(data):
     return [(x - mean) / std_dev for x in data]
 ```
 
-8. Don't get creative with indentations. 
+Don't get creative with indentations {.unlisted}
+
+Proper alignment and consistent indentation contribute to clean, readable comments and code.
 
 ```python
 # e - I want to view the 'ecoregion' and 'habitat' columns to see how they differ
@@ -65,28 +140,7 @@ def normalize(data):
 coral_div[['Ecoregion', 'Habitat']].head()
 ```
 
-## Inline Comments
-9. Use inline comments sparingly
-Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.
-
-**Example:**
-```python
-value = compute_value(x, y)  # This handles edge cases for x and y.
-```
-
-## Avoid Over-commenting
-Do not over-comment obvious code, as this can clutter your code and reduce readability.
-
-**Example:**
-```python
-# Bad: Over-commenting
-i = 0  # Set i to 0
-while i < 10:  # Loop while i is less than 10
-    print(i)  # Print the value of i
-    i += 1  # Increment i
-```
-
-## Docstrings
+### Docstrings
 7. Use Docstrings for Functions and Classes
 For functions, classes, and modules, use docstrings (triple quotes) to describe the purpose, parameters, and return values. The first line should be a summary, followed by a blank line, and then a more detailed description if needed.
 
@@ -106,7 +160,7 @@ def add_numbers(a, b):
     return a + b
 ```
 
-## 8. Use TODO Comments
+### TODO comments
 For reminders about future code improvements or unresolved issues, use `TODO:` followed by a brief explanation.
 
 **Example:**
@@ -114,4 +168,23 @@ For reminders about future code improvements or unresolved issues, use `TODO:` f
 # TODO: Add error handling for invalid input
 ```
 
-## Comments as deodorant
+## General advice
+
+### Avoid over-commenting
+Do not over-comment obvious code, as this can clutter your code and reduce readability.
+
+**Example:**
+```python
+# Bad: Over-commenting
+i = 0  # Set i to 0
+while i < 10:  # Loop while i is less than 10
+    print(i)  # Print the value of i
+    i += 1  # Increment i
+```
+
+### Avoid under-commenting
+
+
+### Avoid "comments as deodorant"
+The phrase "code smells" refers to symptoms in our code that may indicate deeper problems with its design or structure. In this case, using "comments as deodorant" means using comments to explain overly-complicated code, instead of making your code as self-explanatory as possible. Avoid comments as deodorant and, instead, work on making your code simple and understandable. @fowler_refactoring_1999
+
