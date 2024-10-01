@@ -1,143 +1,215 @@
 [
   {
-    "objectID": "comments-guidelines.html",
-    "href": "comments-guidelines.html",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html",
+    "href": "commits-guidelines.html",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Leave a space between the # and the start of the comment.\nThe first word in the comment should be capitalized [1].\nAlways use proper spelling.\nUse proper punctuation if the comment is a sentence.\n\n\nExample:\n# Calculate the average temperature from the dataset.\naverage_temp = sum(temperatures) / len(temperatures)\n\n# Apply the temperature correction\ncorrected_temp = average_temp + correction_factor\n\n\n\n\nKeep comments short and clear\n\nMake comments concise and easy to understand. Avoid long-winded explanations.\n\nUse comments to explain why, not what\n\nWrite comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Avoid comments that explain what the code is doing in obvious ways.\nExample:\n# Good: Explains the rationale behind the code\nx = find_max_value(array)  # Find the largest value to normalize the data.\n\n# Bad: Redundant and obvious comment\nx = find_max_value(array)  # Assign the maximum value of the array to x.\n\nKeep it professional Comments should be professional and avoid jokes, personal remarks, or irrelevant information.\n\n\n\n\nFor more complex explanations, use block comments spanning multiple lines. Each line should start with a # and be aligned with the code it describes.\nExample:\n# This function normalizes the data by subtracting the mean\n# and dividing by the standard deviation. We do this to ensure\n# the data is on a comparable scale.\ndef normalize(data):\n    mean = sum(data) / len(data)\n    std_dev = (sum((x - mean)**2 for x in data) / len(data)) ** 0.5\n    return [(x - mean) / std_dev for x in data]\n\nDon’t get creative with indentations.\n\n# e - I want to view the 'ecoregion' and 'habitat' columns to see how they differ\n    # do this using df[['col1', 'col2']]\ncoral_div[['Ecoregion', 'Habitat']].head()\n\n\n\n\nUse inline comments sparingly Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.\n\nExample:\nvalue = compute_value(x, y)  # This handles edge cases for x and y.\n\n\n\nDo not over-comment obvious code, as this can clutter your code and reduce readability.\nExample:\n# Bad: Over-commenting\ni = 0  # Set i to 0\nwhile i &lt; 10:  # Loop while i is less than 10\n    print(i)  # Print the value of i\n    i += 1  # Increment i\n\n\n\n\nUse Docstrings for Functions and Classes For functions, classes, and modules, use docstrings (triple quotes) to describe the purpose, parameters, and return values. The first line should be a summary, followed by a blank line, and then a more detailed description if needed.\n\nExample:\ndef add_numbers(a, b):\n    \"\"\"\n    Adds two numbers and returns the result.\n\n    Parameters:\n    a (int): The first number.\n    b (int): The second number.\n\n    Returns:\n    int: The sum of the two numbers.\n    \"\"\"\n    return a + b\n\n\n\nFor reminders about future code improvements or unresolved issues, use TODO: followed by a brief explanation.\nExample:\n# TODO: Add error handling for invalid input"
+    "text": "Write commit messages in the imperative mood (i.e., as if you’re giving a command). This is a widely accepted convention.\nExample: - Good: Add function to process user input - Bad: Added function to process user input or Adding function to process user input\n\n\n\nThe first line of the commit message should summarize the changes in around 50 characters or less. This makes it easy to scan in logs or on GitHub.\nExample:\nFix bug in data processing pipeline\n\n\n\nIf the commit requires further explanation, add a blank line after the summary and provide a more detailed description in the body. Focus on what and why, not necessarily how.\nExample:\nAdd user authentication check before data access\n\nPreviously, users could access the data without proper authentication.\nThis commit adds a check to ensure that only authenticated users can\naccess the sensitive data.\n\n\n\nMake sure the commit message explains the reason behind the change, not just what was changed. This helps future developers (or your future self) understand the motivation.\nExample:\nRefactor database query to improve performance\n\nThe previous query was causing significant lag for larger datasets.\nThis change optimizes the query and reduces execution time by 40%.\n\n\n\nUse a consistent format for commit messages throughout the project. If your team follows a particular convention (e.g., prefixing messages with issue numbers), stick to it.\nExample:\n# Consistent format with issue tracking\n[ISSUE-123] Fix broken link in user dashboard\n\n\n\nAlways start the commit message with a capital letter to keep it professional and uniform.\nExample: - Good: Update documentation for new feature - Bad: update documentation for new feature\n\n\n\nVague or uninformative commit messages are not helpful. Avoid commit messages like “Fixes,” “Updates,” “Miscellaneous changes,” or “WIP.”\nExample:\nBad: \"Fix stuff\"\nGood: \"Fix missing validation for email input\"\n\n\n\nA commit should represent a single logical change. Avoid lumping multiple unrelated changes into a single commit. Instead, break them up into separate, focused commits.\nExample: - Good: Commit the bug fix in one commit and the new feature in another. - Bad: Combine multiple changes in one commit with a message like “Fix bug and add new feature.”\n\n\n\nIf applicable, reference issue numbers, bug reports, or pull requests in the commit message to tie the commit to the broader project context.\nExample:\nFix typo in data validation logic (#456)\n\n\n\nEven for small changes, write clear and meaningful messages. Something like Fix typo or Update README is fine for minor commits as long as it’s clear what the change is about.\n\n\n\nEnsure the code works as expected before committing, and write a commit message that reflects the final, working state of the change.\n\n\n\nCommit messages should be professional. Avoid using emojis, abbreviations, or casual language.\nExample: - Bad: 🔥 Fix all the things! 🚀 - Good: Fix critical bugs in data parsing logic\n\n\n\nRefactor user input validation to reduce redundancy\n\nThe validation logic for user input was repeated in multiple places.\nThis commit refactors the validation into a separate function that\ncan be reused across different modules. This improves code maintainability\nand reduces potential errors.\n\nCloses #123"
   },
   {
-    "objectID": "comments-guidelines.html#the-basics",
-    "href": "comments-guidelines.html#the-basics",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#use-the-imperative-mood",
+    "href": "commits-guidelines.html#use-the-imperative-mood",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Leave a space between the # and the start of the comment.\nThe first word in the comment should be capitalized [1].\nAlways use proper spelling.\nUse proper punctuation if the comment is a sentence.\n\n\nExample:\n# Calculate the average temperature from the dataset.\naverage_temp = sum(temperatures) / len(temperatures)\n\n# Apply the temperature correction\ncorrected_temp = average_temp + correction_factor"
+    "text": "Write commit messages in the imperative mood (i.e., as if you’re giving a command). This is a widely accepted convention.\nExample: - Good: Add function to process user input - Bad: Added function to process user input or Adding function to process user input"
   },
   {
-    "objectID": "comments-guidelines.html#content",
-    "href": "comments-guidelines.html#content",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#keep-the-first-line-short-and-descriptive",
+    "href": "commits-guidelines.html#keep-the-first-line-short-and-descriptive",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Keep comments short and clear\n\nMake comments concise and easy to understand. Avoid long-winded explanations.\n\nUse comments to explain why, not what\n\nWrite comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Avoid comments that explain what the code is doing in obvious ways.\nExample:\n# Good: Explains the rationale behind the code\nx = find_max_value(array)  # Find the largest value to normalize the data.\n\n# Bad: Redundant and obvious comment\nx = find_max_value(array)  # Assign the maximum value of the array to x.\n\nKeep it professional Comments should be professional and avoid jokes, personal remarks, or irrelevant information."
+    "text": "The first line of the commit message should summarize the changes in around 50 characters or less. This makes it easy to scan in logs or on GitHub.\nExample:\nFix bug in data processing pipeline"
   },
   {
-    "objectID": "comments-guidelines.html#block-comments",
-    "href": "comments-guidelines.html#block-comments",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#provide-more-detail-in-the-body-if-necessary",
+    "href": "commits-guidelines.html#provide-more-detail-in-the-body-if-necessary",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "For more complex explanations, use block comments spanning multiple lines. Each line should start with a # and be aligned with the code it describes.\nExample:\n# This function normalizes the data by subtracting the mean\n# and dividing by the standard deviation. We do this to ensure\n# the data is on a comparable scale.\ndef normalize(data):\n    mean = sum(data) / len(data)\n    std_dev = (sum((x - mean)**2 for x in data) / len(data)) ** 0.5\n    return [(x - mean) / std_dev for x in data]\n\nDon’t get creative with indentations.\n\n# e - I want to view the 'ecoregion' and 'habitat' columns to see how they differ\n    # do this using df[['col1', 'col2']]\ncoral_div[['Ecoregion', 'Habitat']].head()"
+    "text": "If the commit requires further explanation, add a blank line after the summary and provide a more detailed description in the body. Focus on what and why, not necessarily how.\nExample:\nAdd user authentication check before data access\n\nPreviously, users could access the data without proper authentication.\nThis commit adds a check to ensure that only authenticated users can\naccess the sensitive data."
   },
   {
-    "objectID": "comments-guidelines.html#inline-comments",
-    "href": "comments-guidelines.html#inline-comments",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#explain-the-why-and-the-impact",
+    "href": "commits-guidelines.html#explain-the-why-and-the-impact",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Use inline comments sparingly Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.\n\nExample:\nvalue = compute_value(x, y)  # This handles edge cases for x and y."
+    "text": "Make sure the commit message explains the reason behind the change, not just what was changed. This helps future developers (or your future self) understand the motivation.\nExample:\nRefactor database query to improve performance\n\nThe previous query was causing significant lag for larger datasets.\nThis change optimizes the query and reduces execution time by 40%."
   },
   {
-    "objectID": "comments-guidelines.html#avoid-over-commenting",
-    "href": "comments-guidelines.html#avoid-over-commenting",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#be-consistent",
+    "href": "commits-guidelines.html#be-consistent",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Do not over-comment obvious code, as this can clutter your code and reduce readability.\nExample:\n# Bad: Over-commenting\ni = 0  # Set i to 0\nwhile i &lt; 10:  # Loop while i is less than 10\n    print(i)  # Print the value of i\n    i += 1  # Increment i"
+    "text": "Use a consistent format for commit messages throughout the project. If your team follows a particular convention (e.g., prefixing messages with issue numbers), stick to it.\nExample:\n# Consistent format with issue tracking\n[ISSUE-123] Fix broken link in user dashboard"
   },
   {
-    "objectID": "comments-guidelines.html#docstrings",
-    "href": "comments-guidelines.html#docstrings",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#capitalize-the-first-letter-of-the-summary",
+    "href": "commits-guidelines.html#capitalize-the-first-letter-of-the-summary",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "Use Docstrings for Functions and Classes For functions, classes, and modules, use docstrings (triple quotes) to describe the purpose, parameters, and return values. The first line should be a summary, followed by a blank line, and then a more detailed description if needed.\n\nExample:\ndef add_numbers(a, b):\n    \"\"\"\n    Adds two numbers and returns the result.\n\n    Parameters:\n    a (int): The first number.\n    b (int): The second number.\n\n    Returns:\n    int: The sum of the two numbers.\n    \"\"\"\n    return a + b"
+    "text": "Always start the commit message with a capital letter to keep it professional and uniform.\nExample: - Good: Update documentation for new feature - Bad: update documentation for new feature"
   },
   {
-    "objectID": "comments-guidelines.html#use-todo-comments",
-    "href": "comments-guidelines.html#use-todo-comments",
-    "title": "Course Comments Standards",
+    "objectID": "commits-guidelines.html#avoid-commit-messages-like-fixes-or-miscellaneous",
+    "href": "commits-guidelines.html#avoid-commit-messages-like-fixes-or-miscellaneous",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "For reminders about future code improvements or unresolved issues, use TODO: followed by a brief explanation.\nExample:\n# TODO: Add error handling for invalid input"
+    "text": "Vague or uninformative commit messages are not helpful. Avoid commit messages like “Fixes,” “Updates,” “Miscellaneous changes,” or “WIP.”\nExample:\nBad: \"Fix stuff\"\nGood: \"Fix missing validation for email input\""
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
-    "title": "Exploring water conflicts in the Colorado River Basin",
+    "objectID": "commits-guidelines.html#group-related-changes-together",
+    "href": "commits-guidelines.html#group-related-changes-together",
+    "title": "Guidelines for Writing Good Commit Messages",
     "section": "",
-    "text": "This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the U.S. Geological Survey (USGS). In this discussion section, you will:"
+    "text": "A commit should represent a single logical change. Avoid lumping multiple unrelated changes into a single commit. Instead, break them up into separate, focused commits.\nExample: - Good: Commit the bug fix in one commit and the new feature in another. - Bad: Combine multiple changes in one commit with a message like “Fix bug and add new feature.”"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
-    "title": "Exploring water conflicts in the Colorado River Basin",
+    "objectID": "commits-guidelines.html#reference-relevant-issues-or-pull-requests",
+    "href": "commits-guidelines.html#reference-relevant-issues-or-pull-requests",
+    "title": "Guidelines for Writing Good Commit Messages",
+    "section": "",
+    "text": "If applicable, reference issue numbers, bug reports, or pull requests in the commit message to tie the commit to the broader project context.\nExample:\nFix typo in data validation logic (#456)"
+  },
+  {
+    "objectID": "commits-guidelines.html#use-short-informative-messages-for-small-changes",
+    "href": "commits-guidelines.html#use-short-informative-messages-for-small-changes",
+    "title": "Guidelines for Writing Good Commit Messages",
+    "section": "",
+    "text": "Even for small changes, write clear and meaningful messages. Something like Fix typo or Update README is fine for minor commits as long as it’s clear what the change is about."
+  },
+  {
+    "objectID": "commits-guidelines.html#test-before-committing",
+    "href": "commits-guidelines.html#test-before-committing",
+    "title": "Guidelines for Writing Good Commit Messages",
+    "section": "",
+    "text": "Ensure the code works as expected before committing, and write a commit message that reflects the final, working state of the change."
+  },
+  {
+    "objectID": "commits-guidelines.html#avoid-emoticons-and-slang",
+    "href": "commits-guidelines.html#avoid-emoticons-and-slang",
+    "title": "Guidelines for Writing Good Commit Messages",
+    "section": "",
+    "text": "Commit messages should be professional. Avoid using emojis, abbreviations, or casual language.\nExample: - Bad: 🔥 Fix all the things! 🚀 - Good: Fix critical bugs in data parsing logic"
+  },
+  {
+    "objectID": "commits-guidelines.html#example-of-a-well-structured-commit-message",
+    "href": "commits-guidelines.html#example-of-a-well-structured-commit-message",
+    "title": "Guidelines for Writing Good Commit Messages",
+    "section": "",
+    "text": "Refactor user input validation to reduce redundancy\n\nThe validation logic for user input was repeated in multiple places.\nThis commit refactors the validation into a separate function that\ncan be reused across different modules. This improves code maintainability\nand reduces potential errors.\n\nCloses #123"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html",
+    "title": "Preliminary data exploration with pandas",
+    "section": "",
+    "text": "This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#setup",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#setup",
+    "title": "Preliminary data exploration with pandas",
     "section": "Setup",
-    "text": "Setup\n\n\n\n\n\n\n\nIn the Taylor server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python Notebook inside your eds-220-sections directory and rename it to section-2-co-basin-water-conflicts.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
+    "text": "Setup\n\n\n\n\n\n\n\nIn the Taylor server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python Notebook inside your eds-220-sections directory and rename it to section-1-data-selection-drylands.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
-    "title": "Exploring water conflicts in the Colorado River Basin",
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#general-directions",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#general-directions",
+    "title": "Preliminary data exploration with pandas",
     "section": "General directions",
-    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often."
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often.\nYou won’t need to upload any data."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
-    "title": "Exploring water conflicts in the Colorado River Basin",
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#about-the-data",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#about-the-data",
+    "title": "Preliminary data exploration with pandas",
     "section": "About the data",
-    "text": "About the data\nFor these exercises we will use data about Water Conflict and Crisis Events in the Colorado River Basin [1]. This dataset is stored at ScienceBase,a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.\nThe dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.\n\n\n\nColorado River Basin. U.S. Bureau of Reclamation."
+    "text": "About the data\nFor these exercises we will use data about prey items for endangered terrestrial vertebrate species within central California drylands[1] [2].\nThis dataset is stored in the Knowledge Network for Biocomplexity (KNB) data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the National Center for Ecological Analysis and Synthesis (NCEAS).\n\n\n\nData collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
-    "title": "Exploring water conflicts in the Colorado River Basin",
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#archive-exploration",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#archive-exploration",
+    "title": "Preliminary data exploration with pandas",
     "section": "1. Archive exploration",
-    "text": "1. Archive exploration\nTake some time to look through the dataset’s description in the ScienceBase epository. Discuss the following questions with your team:\n\nWhere was the data collected from? \nDuring what time frame were the observations in the dataset collected? \nWhta was the author’s perceived value of this dataset? \nBriefly discuss anything else that seems like relevant information.\n\nIn your notebook, use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "text": "1. Archive exploration\nWhen possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:\n\nWhat is this data about?\nIs this data collected in-situ by the authors or is it a synthesis of multiple datasets?\nDuring what time frame were the observations in the dataset collected?\nDoes this dataset come with an associated metadata file?\nDoes the dataset contain sensitive data?\n\nIn your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
-    "title": "Exploring water conflicts in the Colorado River Basin",
-    "section": "2. Data loading",
-    "text": "2. Data loading\n\nIn class we have (so far) loaded data into our workspace both by downloading the file and storing a copy of the dataset in our computer and by accessing directly through a URL. With your team, discuss what can be, in general, the advantages and disadvantages of these two methods of data access.\nImport the Colorado River Basin Water Conflict Table.csv file from the Science Base repository into your workspace using its URL and store it as a variable named df.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING"
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#metadata-exploration",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#metadata-exploration",
+    "title": "Preliminary data exploration with pandas",
+    "section": "2. Metadata exploration",
+    "text": "2. Metadata exploration\nYou may have noticed there are two metadata files: Compiled_occurrence_records_for_prey_items_of.xml and metadata_arth_occurrences.csv. The .xml document file type is EML which stands for EML: Ecological Metadata Language. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.\nBack in your notebook, import the pandas package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the pandas.read_csv() function:\n\nNavigate to the data package site and copy the URL to access the metadata_arth_occurrences CSV file. To copy the URL:\n\n\nhover over the Download button –&gt; right click –&gt; “Copy Link”.\n\n\nRead in the data from the URL using the pd.read_csv() function like this:\n# Access metadata from repository\npd.read_csv('the URL goes here')\nTake a minute to look at the descriptions for the columns.\n\nNote: Not all datasets have column descriptions in a CSV file. Often they come with a .doc or .txt file with information."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
-    "title": "Exploring water conflicts in the Colorado River Basin",
-    "section": "3. Preliminary data exploration",
-    "text": "3. Preliminary data exploration"
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#data-loading",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#data-loading",
+    "title": "Preliminary data exploration with pandas",
+    "section": "3. Data loading",
+    "text": "3. Data loading\n\nFollow steps (a) and (b) from the previous exercise to read in the drylands prey data file arth_occurrences_with_env.csv using pd.read_csv(). Store the dataframe to a variable called prey like this:\n\n# Load data\nprey = pd.read_csv('the URL goes here')\n\nWhat is the type of the prey variable? Use a Python function get this information.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#unique-stakeholders",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#unique-stakeholders",
-    "title": "Exploring water conflicts in the Colorado River Basin",
-    "section": "4. Unique stakeholders",
-    "text": "4. Unique stakeholders\nWhich were the unique stakeholders?"
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#look-at-your-data",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#look-at-your-data",
+    "title": "Preliminary data exploration with pandas",
+    "section": "4. Look at your data",
+    "text": "4. Look at your data\n\nRun prey in a cell. What do you notice in the columns section?\nTo see all the column names in the same display we need to set a pandas option. Run the following command and then look at the prey data again:\n\npd.set_option(\"display.max.columns\", None)\n\nAdd a comment explaining what pd.set_option(\"display.max.columns\", None) does.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
-    "objectID": "book/setup.html",
-    "href": "book/setup.html",
-    "title": "Setup",
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "title": "Preliminary data exploration with pandas",
+    "section": "5. pd.DataFrame preliminary exploration",
+    "text": "5. pd.DataFrame preliminary exploration\nRun each of the following methods for prey in a different cell and write a brief description of what they do as a comment:\n\nhead()\ntail()\ninfo()\nnunique()\n\nFor example:\n# head()\n# returns the first five rows of the data frame\nprey.head()\nIf you’re not sure about what the method does, try looking it up in the pandas.DataFrame documentation.\n\nCheck the documentation for head(). If this function has any optional parameters, change the default value to get a different output.\n\nPrint each of the following attributes of prey in a different cell and write a brief explanation of what they are as a comment:\n\nshape\ncolumns\ndtypes\n\nIf you’re not sure about what information is the attribute showing, look it up in the pandas.DataFrame documentation.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#update-column-names",
+    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#update-column-names",
+    "title": "Preliminary data exploration with pandas",
+    "section": "6. Update column names",
+    "text": "6. Update column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the rename method for pandas.DataFrames.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "book/preface.html",
+    "href": "book/preface.html",
+    "title": "About",
     "section": "",
-    "text": "All the course materials use the Python programming language and git for version control. To install or make sure you have these in your computer, follow the MEDS Software Installation Guide from 4. Check for git to 9. Install VS Code.\n\n\n\nTo install the libraries needed to execute the code in these notes you should create a conda environment using the environment.yml file in the notes repository.\nTo build the environment:\n\nDownload the environment.yml file in the notes repository. Place it in the directory where you will store the notebooks associated with these notes.\nUsing the terminal, navigate to the directory where the environment.yml file is.\nRun the following command to build the environment:\n\nconda env create -f environment.yml\n\nOnce the building finishes, run the following command to check the new environment was created:\n\nconda env list\nTo activate the environment:\n\nIn your terminal, … Finish\nIf you are using VSCode, you should be able open a Python notebok and select the new environment by accessing a drop-down list by clicking on the top right corner.\n\nAdd picture\n\n\n\nYou’re ready to start coding! The course starts with a Python review in the next section."
+    "text": "Welcome to the ‘EDS 220 - Working with Environmental Datasets’ course notes!\nDesigned for the UCSB Masters in Environmental Data Science (MEDS), this course will guide you through widely used environmental data formats and Python libraries for analyzing diverse environmental datasets.\nThe notes are organized following the increasing dimensions of different environmental datasets, from familiar tabular data to intricate multi-dimensional arrays. Through hands-on code and activities, you’ll analyze real-world environmental datasets sourced from leading open data repositories and cloud platforms.\nWho is this course for? EDS 220 is tailored for beginner Python programmers eager to deepen their skills. If you’re familiar with the basics of Python and have experience working in Jupyter notebooks, you’re in the right place. You are also encouraged to bring along your git skills and GitHub profile, ready to practice the essential git pull - git push workflow as you progress.\nOverall, these notes are just the beginning! They offer a solid foundation but are, inevitably, a partial exposition of the incredibly vast ecosystem of data formats, repositories, and Python tools available in environmental data science. By the end of this course, you’ll have a strong grasp of the fundamentals and also the confidence to dive deeper into using Python for environmental data science and continue your MEDS journey.\n\n\nA big thanks to the creators of the open-source Python libraries, datasets, and educational materials that have helped shape this course. Your contributions have made our learning journey richer and more impactful. Attribution is included in any materials where content is adapted from other resources.\n\n\n\n📝 If you have suggestions on how to correct, improve, or expand these notes, please feel free to email Carmen Galaz García at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these course materials have been useful to you, consider adding a star to the project’s repository.\n\n\n\nThis work, including the course notes, discussion sections, and assignments, is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. For attribution, please cite these materials as:\n\nC. Galaz García, EDS 220 - Working with Environmental Datasets, Course Notes. 2024. [Online]. Available: https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html\n\nor use the bib reference:\n@misc{galaz_garcia_eds_2024,\n    title = {EDS 220 - Working with Environmental Datasets, Course Notes},\n    url = {https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html},\n    author = {Galaz García, Carmen},\n    year = {2024},\n}",
+    "crumbs": [
+      "notes",
+      "About"
+    ]
   },
   {
-    "objectID": "book/setup.html#software-installation",
-    "href": "book/setup.html#software-installation",
-    "title": "Setup",
+    "objectID": "book/preface.html#acknowledgements",
+    "href": "book/preface.html#acknowledgements",
+    "title": "About",
     "section": "",
-    "text": "All the course materials use the Python programming language and git for version control. To install or make sure you have these in your computer, follow the MEDS Software Installation Guide from 4. Check for git to 9. Install VS Code."
+    "text": "A big thanks to the creators of the open-source Python libraries, datasets, and educational materials that have helped shape this course. Your contributions have made our learning journey richer and more impactful. Attribution is included in any materials where content is adapted from other resources.",
+    "crumbs": [
+      "notes",
+      "About"
+    ]
   },
   {
-    "objectID": "book/setup.html#python-environment",
-    "href": "book/setup.html#python-environment",
-    "title": "Setup",
+    "objectID": "book/preface.html#contribute",
+    "href": "book/preface.html#contribute",
+    "title": "About",
     "section": "",
-    "text": "To install the libraries needed to execute the code in these notes you should create a conda environment using the environment.yml file in the notes repository.\nTo build the environment:\n\nDownload the environment.yml file in the notes repository. Place it in the directory where you will store the notebooks associated with these notes.\nUsing the terminal, navigate to the directory where the environment.yml file is.\nRun the following command to build the environment:\n\nconda env create -f environment.yml\n\nOnce the building finishes, run the following command to check the new environment was created:\n\nconda env list\nTo activate the environment:\n\nIn your terminal, … Finish\nIf you are using VSCode, you should be able open a Python notebok and select the new environment by accessing a drop-down list by clicking on the top right corner.\n\nAdd picture"
+    "text": "📝 If you have suggestions on how to correct, improve, or expand these notes, please feel free to email Carmen Galaz García at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these course materials have been useful to you, consider adding a star to the project’s repository.",
+    "crumbs": [
+      "notes",
+      "About"
+    ]
   },
   {
-    "objectID": "book/setup.html#next",
-    "href": "book/setup.html#next",
-    "title": "Setup",
+    "objectID": "book/preface.html#attribution",
+    "href": "book/preface.html#attribution",
+    "title": "About",
     "section": "",
-    "text": "You’re ready to start coding! The course starts with a Python review in the next section."
+    "text": "This work, including the course notes, discussion sections, and assignments, is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. For attribution, please cite these materials as:\n\nC. Galaz García, EDS 220 - Working with Environmental Datasets, Course Notes. 2024. [Online]. Available: https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html\n\nor use the bib reference:\n@misc{galaz_garcia_eds_2024,\n    title = {EDS 220 - Working with Environmental Datasets, Course Notes},\n    url = {https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html},\n    author = {Galaz García, Carmen},\n    year = {2024},\n}",
+    "crumbs": [
+      "notes",
+      "About"
+    ]
   },
   {
     "objectID": "book/appendices/A-python-environments.html",
@@ -1004,215 +1076,159 @@
     ]
   },
   {
-    "objectID": "book/preface.html",
-    "href": "book/preface.html",
-    "title": "About",
+    "objectID": "book/appendices/comments-guidelines.html",
+    "href": "book/appendices/comments-guidelines.html",
+    "title": "Commenting code",
     "section": "",
-    "text": "Welcome to the ‘EDS 220 - Working with Environmental Datasets’ course notes!\nDesigned for the UCSB Masters in Environmental Data Science (MEDS), this course will guide you through widely used environmental data formats and Python libraries for analyzing diverse environmental datasets.\nThe notes are organized following the increasing dimensions of different environmental datasets, from familiar tabular data to intricate multi-dimensional arrays. Through hands-on code and activities, you’ll analyze real-world environmental datasets sourced from leading open data repositories and cloud platforms.\nWho is this course for? EDS 220 is tailored for beginner Python programmers eager to deepen their skills. If you’re familiar with the basics of Python and have experience working in Jupyter notebooks, you’re in the right place. You are also encouraged to bring along your git skills and GitHub profile, ready to practice the essential git pull - git push workflow as you progress.\nOverall, these notes are just the beginning! They offer a solid foundation but are, inevitably, a partial exposition of the incredibly vast ecosystem of data formats, repositories, and Python tools available in environmental data science. By the end of this course, you’ll have a strong grasp of the fundamentals and also the confidence to dive deeper into using Python for environmental data science and continue your MEDS journey.\n\n\nA big thanks to the creators of the open-source Python libraries, datasets, and educational materials that have helped shape this course. Your contributions have made our learning journey richer and more impactful. Attribution is included in any materials where content is adapted from other resources.\n\n\n\n📝 If you have suggestions on how to correct, improve, or expand these notes, please feel free to email Carmen Galaz García at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these course materials have been useful to you, consider adding a star to the project’s repository.\n\n\n\nThis work, including the course notes, discussion sections, and assignments, is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. For attribution, please cite these materials as:\n\nC. Galaz García, EDS 220 - Working with Environmental Datasets, Course Notes. 2024. [Online]. Available: https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html\n\nor use the bib reference:\n@misc{galaz_garcia_eds_2024,\n    title = {EDS 220 - Working with Environmental Datasets, Course Notes},\n    url = {https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html},\n    author = {Galaz García, Carmen},\n    year = {2024},\n}",
+    "text": "In this section, we’ll explore how to write clear and helpful comments in your code. Good comments make your code easier to understand and maintain, for both you and others. By following a few guidelines, you can write comments that are professional, consistent, and aligned with best practices.\nAs you read through this, remember: Your comments will evolve hand-in-hand with your programming. Don’t get caught up on “writing the perfect comments”! Start with correctly formatting your comments and thinking about their content and move on from there.\n\n\n\nComment should start with a pound sign # followed by a single space, then the text.\nThe first word in the comment should be capitalized [1].\nAlways use proper spelling.\nPeriods at the end of short comments are optional, but you should be consistent across your code.\n\n\n\n🚫 Typos, inconsistent capitalization, spacing, and punctuation\n#calculate teh average temp from dataset.\naverage_temp = sum(temperatures) / len(temperatures)\n\n    ##      Apply the TEMPERATURE correction\ncorrected_temp = average_temp + correction_factor\n✅ Comments follow all the basic standards\n# Calculate average temperature from dataset\naverage_temp = sum(temperatures) / len(temperatures)\n\n# Apply temperature correction\ncorrected_temp = average_temp + correction_factor\n\n\n\n\n\n\nAs stated in the Python PEP 8 [1] guide:\n\nComments that contradict the code are worse than no comments. Always make a priority of keeping the comments up-to-date when the code changes!\n\nOutdated comments and comments that contradict the code can cause confusion and lead to bugs.\n🚫 Comment is outdated and contradicts the code\n# Convert temperature from Fahrenheit to Celsius\ndf['temp_f'] = df['temp_c'] * 9/5 + 32\n✅ Comments must be consistent with the code\n# Convert temperature from Celsius to Fahrenheit\ndf['temp_f'] = df['temp_c'] * 9/5 + 32\n\n\n\nMake comments concise and easy to understand. Avoid long-winded explanations. If the code is self-explanatory (which may vary by audience) then minimal commenting is needed.\n\n\n🚫 Too long and redundant\n# In this part of the code, we are filtering the DataFrame 'df' to keep only \n# the rows where the value in the 'region_type' column is equal to 'wetland'. \n# This will give us data specifically for wetland regions.\nwetland_data = df[df['region_type'] == 'wetland']\n✅ Concise and clear comments\n# Filter rows where the region is a wetland\nwetland_data = df[df['region_type'] == 'wetland']\n\n\n\n\nComments should be professional and avoid jokes, personal remarks, or irrelevant information.\n🚫 Unprofessional comment with casual remarks\n# Time to crunch some numbers and save the planet! 🌍\ntotal_emissions = df['emissions'].sum()\n✅ Professional and relevant comment\n# Calculate the total carbon emissions for the region\ntotal_emissions = df['emissions'].sum()\n\n\n\nWhile long or redundant comments can clutter our code and decrease readability, under-commenting can make our code obscure and difficult to share with others (including our future selves!)\n🚫 No comments make it unclear what the code is doing\nyear = '2017'\nbbox = [-112.826843, 32.974108, -111.184387, 33.863574]\ncollection = 'io-biodiversity'\n\nsearch = catalog.search(collections=[collection], \n                        bbox=bbox,\n                        datetime=year)\n✅ Comments clarify code\n# Parameters for search in cloud catalog\nyear = '2017'\nbbox = [-112.826843, 32.974108, -111.184387, 33.863574]  # Phoenix bounding box\ncollection = 'io-biodiversity'  # Biodiversity Intactness data\n\nsearch = catalog.search(collections=[collection], \n                        bbox=bbox,\n                        datetime=year)\n\n\n\n\n\n\nInline comments are comments on the same line as the code. Best practices are:\n\nUse inline comments sparingly.\nKeep them short and place them two spaces after the code.\n\n🚫 In-line comments are overused and don’t follow regular spacing and capitalization\nyears = [2000, 2005, 2010, 2015, 2020]#list of years for x-axis\nco2_levels = [370, 380, 390, 400, 410]  #CO2 levels for y-axis\n\nplt.plot(years, co2_levels)        # Plot years against CO2 levels\nplt.title('CO2 Levels Over Time')  # Add a title\nplt.xlabel('Year')                 # x-axis = Year\nplt.ylabel('CO2 Levels (ppm)')     # y-axis = CO2 Levels (ppm)\nplt.grid(True) # Enable grid on the plot\nplt.axhline(y=400, color='r', linestyle='--', label='400 ppm Threshold')\nplt.show()         #display the plot\n✅ In-line comments are sparingly used and focused\nyears = [2000, 2005, 2010, 2015, 2020]\nco2_levels = [370, 380, 390, 400, 410]\n\n# Plot to see trend in atmospheric CO2 concentrations\nplt.plot(years, co2_levels)\n\nplt.title('CO2 Levels Over Time')\nplt.xlabel('Year')\nplt.ylabel('CO2 Levels (ppm)')\n\nplt.grid(True)  # Show grid for better readability\nplt.axhline(y=400,  # Add a threshold line for 400 ppm\n            color='r', \n            linestyle='--', \n            label='400 ppm Threshold')  \nplt.show()\n\n\n\nFor more complex explanations, use block comments spanning multiple lines. Each line should start with a # and be aligned with the code it describes.\n🚫 Wordy block comment with inconsistent spacing\n# In this code I: \n    # calculate the avg temp from a list of temperatures and then adjust the result.\n    # We first sum the temperatures, divide by the number of entries,\n    # and finally add the correction factor to the calculated average.\n\ntemperatures = [20.5, 21.0, 19.8, 22.3]\naverage_temp = sum(temperatures) / len(temperatures)\ncorrected_temp = average_temp + 1.2\n✅ Concise block comments focusing on the code purpose\n# Calculate the average temperature from a list of temperature readings.\n# Then, apply a correction factor to account for measurement adjustments.\n\ntemperatures = [20.5, 21.0, 19.8, 22.3]\naverage_temp = sum(temperatures) / len(temperatures)\ncorrected_temp = average_temp + 1.2\n\n\n\n\n\nAs you advance in your programming journey and code looks more familiar, you can take next steps to improve your code via comments.\n\n\nWhen we are learning to code, it can be super useful to comment on ‘what’ each line of code does. That’s ok! Over time, as you become more comfortable with the syntax, try to focus your comments on ‘why’ certain choices were made or when something might not be immediately obvious to others. Use comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Great comments add value to the code, going beyond describing what is clear from the function and variable names.\nYour comments will become more streamlined and naturally shift from technical to conceptual as your coding skills improve!\n\n\n⚠️ Comment restates in plain language what the code does\n# Assign the maximum value of the array to x\nx = find_max_value(array)  \n✅ Comment explains the rationale behind the code\n# Find the largest value to normalize the data\nx = find_max_value(array)  \n\n\n\n\nIt’s ok to err on over-commenting when you are beginning your coding journey. As you advance, focus on not over-commenting obvious code, as this can clutter your code and reduce readability.\n⚠️ Redundant comments clutter the code\ntemperatures = [20.5, 21.0, 19.8, 22.3, 24.1]  # List of temperatures\n\n# Initialize total to 0\ntotal = 0  \n\n# Loop through each temperature in the list\nfor temp in temperatures:\n    total += temp  # Add the current temperature to the total\n\n# Calculate the average by dividing the total by the number of temperatures\naverage_temp = total / len(temperatures)\n\nprint(average_temp)  # Print the average temperature\n✅ Comments focus on important information\ntemperatures = [20.5, 21.0, 19.8, 22.3, 24.1]\n\n# Calculate the total and average temperature\ntotal = 0\nfor temp in temperatures:\n    total += temp\n\naverage_temp = total / len(temperatures)\nprint(average_temp)\n\n\n\nThe phrase “code smells” refers to symptoms in our code that may indicate deeper problems with its design or structure. Sometimes comments are used to explain overly-complicated, instead of making the code as self-explanatory as possible. If that happens, then comments are being used as deodorant for smelly code [2]. Avoid comments as deodorant and, instead, work on making your code simple and understandable. Of course, you will learn better techniques to improve your code with time!\n⚠️ Comments compensate for obscure variable names and overly-complicated code\n# List of pollutant concentrations (in ppm)\na = [50, 120, 85, 30, 95, 110, 70]  # 'a' stands for air quality measurements\n\n# Filter out pollutant readings that are greater than 100 ppm (considered outliers)\nb = []  # 'b' stands for valid pollutant readings\nfor x in a:  # 'x' is the individual pollutant reading\n    if x &lt;= 100: \n        b.append(x)  # Add valid readings to 'b'\n\nprint(b)\n✅ Self-explanatory code needs less comments\n# List of pollutant concentrations (in ppm)\npollutant_readings = [50, 120, 85, 30, 95, 110, 70]\n\n# Filter out pollutant readings that are greater than 100 ppm (considered outliers)\nvalid_readings = [reading for reading in pollutant_readings if reading &lt;= 100]\n\nprint(valid_readings)\n\n\n\n\n\nKeep it clean and consistent: Consistently use proper capitalization, spacing, spelling, and indentation.\nKeep comments up-to-date: Make sure your comments always match what the code is doing.\nBe clear and concise: Write concise comments. Keep them focused, and avoid adding personal notes or jokes. When possible, write comments that explain why your code is doing something, not just how.\nWrite clean code first: Focus on making your code clear and easy to understand. Use comments to make things even clearer, not to explain complicated or messy code.\nCommenting is a learning process! Don’t stress about writing “perfect comments”. Focus on the basics, and let your commenting style evolve naturally as you improve your coding skills!\n\n\n\n\nHappy Commenting image created with Dall-E 4.",
     "crumbs": [
       "notes",
-      "About"
+      "Appendices",
+      "Commenting code"
     ]
   },
   {
-    "objectID": "book/preface.html#acknowledgements",
-    "href": "book/preface.html#acknowledgements",
-    "title": "About",
+    "objectID": "book/appendices/comments-guidelines.html#the-basics",
+    "href": "book/appendices/comments-guidelines.html#the-basics",
+    "title": "Commenting code",
     "section": "",
-    "text": "A big thanks to the creators of the open-source Python libraries, datasets, and educational materials that have helped shape this course. Your contributions have made our learning journey richer and more impactful. Attribution is included in any materials where content is adapted from other resources.",
+    "text": "Comment should start with a pound sign # followed by a single space, then the text.\nThe first word in the comment should be capitalized [1].\nAlways use proper spelling.\nPeriods at the end of short comments are optional, but you should be consistent across your code.\n\n\n\n🚫 Typos, inconsistent capitalization, spacing, and punctuation\n#calculate teh average temp from dataset.\naverage_temp = sum(temperatures) / len(temperatures)\n\n    ##      Apply the TEMPERATURE correction\ncorrected_temp = average_temp + correction_factor\n✅ Comments follow all the basic standards\n# Calculate average temperature from dataset\naverage_temp = sum(temperatures) / len(temperatures)\n\n# Apply temperature correction\ncorrected_temp = average_temp + correction_factor",
     "crumbs": [
       "notes",
-      "About"
+      "Appendices",
+      "Commenting code"
     ]
   },
   {
-    "objectID": "book/preface.html#contribute",
-    "href": "book/preface.html#contribute",
-    "title": "About",
+    "objectID": "book/appendices/comments-guidelines.html#content",
+    "href": "book/appendices/comments-guidelines.html#content",
+    "title": "Commenting code",
     "section": "",
-    "text": "📝 If you have suggestions on how to correct, improve, or expand these notes, please feel free to email Carmen Galaz García at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these course materials have been useful to you, consider adding a star to the project’s repository.",
+    "text": "As stated in the Python PEP 8 [1] guide:\n\nComments that contradict the code are worse than no comments. Always make a priority of keeping the comments up-to-date when the code changes!\n\nOutdated comments and comments that contradict the code can cause confusion and lead to bugs.\n🚫 Comment is outdated and contradicts the code\n# Convert temperature from Fahrenheit to Celsius\ndf['temp_f'] = df['temp_c'] * 9/5 + 32\n✅ Comments must be consistent with the code\n# Convert temperature from Celsius to Fahrenheit\ndf['temp_f'] = df['temp_c'] * 9/5 + 32\n\n\n\nMake comments concise and easy to understand. Avoid long-winded explanations. If the code is self-explanatory (which may vary by audience) then minimal commenting is needed.\n\n\n🚫 Too long and redundant\n# In this part of the code, we are filtering the DataFrame 'df' to keep only \n# the rows where the value in the 'region_type' column is equal to 'wetland'. \n# This will give us data specifically for wetland regions.\nwetland_data = df[df['region_type'] == 'wetland']\n✅ Concise and clear comments\n# Filter rows where the region is a wetland\nwetland_data = df[df['region_type'] == 'wetland']\n\n\n\n\nComments should be professional and avoid jokes, personal remarks, or irrelevant information.\n🚫 Unprofessional comment with casual remarks\n# Time to crunch some numbers and save the planet! 🌍\ntotal_emissions = df['emissions'].sum()\n✅ Professional and relevant comment\n# Calculate the total carbon emissions for the region\ntotal_emissions = df['emissions'].sum()\n\n\n\nWhile long or redundant comments can clutter our code and decrease readability, under-commenting can make our code obscure and difficult to share with others (including our future selves!)\n🚫 No comments make it unclear what the code is doing\nyear = '2017'\nbbox = [-112.826843, 32.974108, -111.184387, 33.863574]\ncollection = 'io-biodiversity'\n\nsearch = catalog.search(collections=[collection], \n                        bbox=bbox,\n                        datetime=year)\n✅ Comments clarify code\n# Parameters for search in cloud catalog\nyear = '2017'\nbbox = [-112.826843, 32.974108, -111.184387, 33.863574]  # Phoenix bounding box\ncollection = 'io-biodiversity'  # Biodiversity Intactness data\n\nsearch = catalog.search(collections=[collection], \n                        bbox=bbox,\n                        datetime=year)",
     "crumbs": [
       "notes",
-      "About"
+      "Appendices",
+      "Commenting code"
     ]
   },
   {
-    "objectID": "book/preface.html#attribution",
-    "href": "book/preface.html#attribution",
-    "title": "About",
+    "objectID": "book/appendices/comments-guidelines.html#special-types-of-comments",
+    "href": "book/appendices/comments-guidelines.html#special-types-of-comments",
+    "title": "Commenting code",
     "section": "",
-    "text": "This work, including the course notes, discussion sections, and assignments, is licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. For attribution, please cite these materials as:\n\nC. Galaz García, EDS 220 - Working with Environmental Datasets, Course Notes. 2024. [Online]. Available: https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html\n\nor use the bib reference:\n@misc{galaz_garcia_eds_2024,\n    title = {EDS 220 - Working with Environmental Datasets, Course Notes},\n    url = {https://meds-eds-220.github.io/MEDS-eds-220-course/book/preface.html},\n    author = {Galaz García, Carmen},\n    year = {2024},\n}",
+    "text": "Inline comments are comments on the same line as the code. Best practices are:\n\nUse inline comments sparingly.\nKeep them short and place them two spaces after the code.\n\n🚫 In-line comments are overused and don’t follow regular spacing and capitalization\nyears = [2000, 2005, 2010, 2015, 2020]#list of years for x-axis\nco2_levels = [370, 380, 390, 400, 410]  #CO2 levels for y-axis\n\nplt.plot(years, co2_levels)        # Plot years against CO2 levels\nplt.title('CO2 Levels Over Time')  # Add a title\nplt.xlabel('Year')                 # x-axis = Year\nplt.ylabel('CO2 Levels (ppm)')     # y-axis = CO2 Levels (ppm)\nplt.grid(True) # Enable grid on the plot\nplt.axhline(y=400, color='r', linestyle='--', label='400 ppm Threshold')\nplt.show()         #display the plot\n✅ In-line comments are sparingly used and focused\nyears = [2000, 2005, 2010, 2015, 2020]\nco2_levels = [370, 380, 390, 400, 410]\n\n# Plot to see trend in atmospheric CO2 concentrations\nplt.plot(years, co2_levels)\n\nplt.title('CO2 Levels Over Time')\nplt.xlabel('Year')\nplt.ylabel('CO2 Levels (ppm)')\n\nplt.grid(True)  # Show grid for better readability\nplt.axhline(y=400,  # Add a threshold line for 400 ppm\n            color='r', \n            linestyle='--', \n            label='400 ppm Threshold')  \nplt.show()\n\n\n\nFor more complex explanations, use block comments spanning multiple lines. Each line should start with a # and be aligned with the code it describes.\n🚫 Wordy block comment with inconsistent spacing\n# In this code I: \n    # calculate the avg temp from a list of temperatures and then adjust the result.\n    # We first sum the temperatures, divide by the number of entries,\n    # and finally add the correction factor to the calculated average.\n\ntemperatures = [20.5, 21.0, 19.8, 22.3]\naverage_temp = sum(temperatures) / len(temperatures)\ncorrected_temp = average_temp + 1.2\n✅ Concise block comments focusing on the code purpose\n# Calculate the average temperature from a list of temperature readings.\n# Then, apply a correction factor to account for measurement adjustments.\n\ntemperatures = [20.5, 21.0, 19.8, 22.3]\naverage_temp = sum(temperatures) / len(temperatures)\ncorrected_temp = average_temp + 1.2",
     "crumbs": [
       "notes",
-      "About"
+      "Appendices",
+      "Commenting code"
     ]
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "book/appendices/comments-guidelines.html#next-level",
+    "href": "book/appendices/comments-guidelines.html#next-level",
+    "title": "Commenting code",
     "section": "",
-    "text": "This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:"
+    "text": "As you advance in your programming journey and code looks more familiar, you can take next steps to improve your code via comments.\n\n\nWhen we are learning to code, it can be super useful to comment on ‘what’ each line of code does. That’s ok! Over time, as you become more comfortable with the syntax, try to focus your comments on ‘why’ certain choices were made or when something might not be immediately obvious to others. Use comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Great comments add value to the code, going beyond describing what is clear from the function and variable names.\nYour comments will become more streamlined and naturally shift from technical to conceptual as your coding skills improve!\n\n\n⚠️ Comment restates in plain language what the code does\n# Assign the maximum value of the array to x\nx = find_max_value(array)  \n✅ Comment explains the rationale behind the code\n# Find the largest value to normalize the data\nx = find_max_value(array)  \n\n\n\n\nIt’s ok to err on over-commenting when you are beginning your coding journey. As you advance, focus on not over-commenting obvious code, as this can clutter your code and reduce readability.\n⚠️ Redundant comments clutter the code\ntemperatures = [20.5, 21.0, 19.8, 22.3, 24.1]  # List of temperatures\n\n# Initialize total to 0\ntotal = 0  \n\n# Loop through each temperature in the list\nfor temp in temperatures:\n    total += temp  # Add the current temperature to the total\n\n# Calculate the average by dividing the total by the number of temperatures\naverage_temp = total / len(temperatures)\n\nprint(average_temp)  # Print the average temperature\n✅ Comments focus on important information\ntemperatures = [20.5, 21.0, 19.8, 22.3, 24.1]\n\n# Calculate the total and average temperature\ntotal = 0\nfor temp in temperatures:\n    total += temp\n\naverage_temp = total / len(temperatures)\nprint(average_temp)\n\n\n\nThe phrase “code smells” refers to symptoms in our code that may indicate deeper problems with its design or structure. Sometimes comments are used to explain overly-complicated, instead of making the code as self-explanatory as possible. If that happens, then comments are being used as deodorant for smelly code [2]. Avoid comments as deodorant and, instead, work on making your code simple and understandable. Of course, you will learn better techniques to improve your code with time!\n⚠️ Comments compensate for obscure variable names and overly-complicated code\n# List of pollutant concentrations (in ppm)\na = [50, 120, 85, 30, 95, 110, 70]  # 'a' stands for air quality measurements\n\n# Filter out pollutant readings that are greater than 100 ppm (considered outliers)\nb = []  # 'b' stands for valid pollutant readings\nfor x in a:  # 'x' is the individual pollutant reading\n    if x &lt;= 100: \n        b.append(x)  # Add valid readings to 'b'\n\nprint(b)\n✅ Self-explanatory code needs less comments\n# List of pollutant concentrations (in ppm)\npollutant_readings = [50, 120, 85, 30, 95, 110, 70]\n\n# Filter out pollutant readings that are greater than 100 ppm (considered outliers)\nvalid_readings = [reading for reading in pollutant_readings if reading &lt;= 100]\n\nprint(valid_readings)",
+    "crumbs": [
+      "notes",
+      "Appendices",
+      "Commenting code"
+    ]
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#setup",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#setup",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "book/appendices/comments-guidelines.html#takeaways",
+    "href": "book/appendices/comments-guidelines.html#takeaways",
+    "title": "Commenting code",
+    "section": "",
+    "text": "Keep it clean and consistent: Consistently use proper capitalization, spacing, spelling, and indentation.\nKeep comments up-to-date: Make sure your comments always match what the code is doing.\nBe clear and concise: Write concise comments. Keep them focused, and avoid adding personal notes or jokes. When possible, write comments that explain why your code is doing something, not just how.\nWrite clean code first: Focus on making your code clear and easy to understand. Use comments to make things even clearer, not to explain complicated or messy code.\nCommenting is a learning process! Don’t stress about writing “perfect comments”. Focus on the basics, and let your commenting style evolve naturally as you improve your coding skills!\n\n\n\n\nHappy Commenting image created with Dall-E 4.",
+    "crumbs": [
+      "notes",
+      "Appendices",
+      "Commenting code"
+    ]
+  },
+  {
+    "objectID": "book/setup.html",
+    "href": "book/setup.html",
+    "title": "Setup",
+    "section": "",
+    "text": "All the course materials use the Python programming language and git for version control. To install or make sure you have these in your computer, follow the MEDS Software Installation Guide from 4. Check for git to 9. Install VS Code.\n\n\n\nTo install the libraries needed to execute the code in these notes you should create a conda environment using the environment.yml file in the notes repository.\nTo build the environment:\n\nDownload the environment.yml file in the notes repository. Place it in the directory where you will store the notebooks associated with these notes.\nUsing the terminal, navigate to the directory where the environment.yml file is.\nRun the following command to build the environment:\n\nconda env create -f environment.yml\n\nOnce the building finishes, run the following command to check the new environment was created:\n\nconda env list\nTo activate the environment:\n\nIn your terminal, … Finish\nIf you are using VSCode, you should be able open a Python notebok and select the new environment by accessing a drop-down list by clicking on the top right corner.\n\nAdd picture\n\n\n\nYou’re ready to start coding! The course starts with a Python review in the next section."
+  },
+  {
+    "objectID": "book/setup.html#software-installation",
+    "href": "book/setup.html#software-installation",
+    "title": "Setup",
+    "section": "",
+    "text": "All the course materials use the Python programming language and git for version control. To install or make sure you have these in your computer, follow the MEDS Software Installation Guide from 4. Check for git to 9. Install VS Code."
+  },
+  {
+    "objectID": "book/setup.html#python-environment",
+    "href": "book/setup.html#python-environment",
+    "title": "Setup",
+    "section": "",
+    "text": "To install the libraries needed to execute the code in these notes you should create a conda environment using the environment.yml file in the notes repository.\nTo build the environment:\n\nDownload the environment.yml file in the notes repository. Place it in the directory where you will store the notebooks associated with these notes.\nUsing the terminal, navigate to the directory where the environment.yml file is.\nRun the following command to build the environment:\n\nconda env create -f environment.yml\n\nOnce the building finishes, run the following command to check the new environment was created:\n\nconda env list\nTo activate the environment:\n\nIn your terminal, … Finish\nIf you are using VSCode, you should be able open a Python notebok and select the new environment by accessing a drop-down list by clicking on the top right corner.\n\nAdd picture"
+  },
+  {
+    "objectID": "book/setup.html#next",
+    "href": "book/setup.html#next",
+    "title": "Setup",
+    "section": "",
+    "text": "You’re ready to start coding! The course starts with a Python review in the next section."
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "",
+    "text": "This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the U.S. Geological Survey (USGS). In this discussion section, you will:"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "Setup",
-    "text": "Setup\n\n\n\n\n\n\n\nIn the Taylor server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python Notebook inside your eds-220-sections directory and rename it to section-1-data-selection-drylands.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
+    "text": "Setup\n\n\n\n\n\n\n\nIn the Taylor server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python Notebook inside your eds-220-sections directory and rename it to section-2-co-basin-water-conflicts.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#general-directions",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#general-directions",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "General directions",
-    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often.\nYou won’t need to upload any data."
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#about-the-data",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#about-the-data",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "About the data",
-    "text": "About the data\nFor these exercises we will use data about prey items for endangered terrestrial vertebrate species within central California drylands[1] [2].\nThis dataset is stored in the Knowledge Network for Biocomplexity (KNB) data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the National Center for Ecological Analysis and Synthesis (NCEAS).\n\n\n\nData collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King."
+    "text": "About the data\nFor these exercises we will use data about Water Conflict and Crisis Events in the Colorado River Basin [1]. This dataset is stored at ScienceBase,a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.\nThe dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.\n\n\n\nColorado River Basin. U.S. Bureau of Reclamation."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#archive-exploration",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#archive-exploration",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "1. Archive exploration",
-    "text": "1. Archive exploration\nWhen possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:\n\nWhat is this data about?\nIs this data collected in-situ by the authors or is it a synthesis of multiple datasets?\nDuring what time frame were the observations in the dataset collected?\nDoes this dataset come with an associated metadata file?\nDoes the dataset contain sensitive data?\n\nIn your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "text": "1. Archive exploration\nTake some time to look through the dataset’s description in the ScienceBase epository. Discuss the following questions with your team:\n\nWhere was the data collected from? \nDuring what time frame were the observations in the dataset collected? \nWhta was the author’s perceived value of this dataset? \nBriefly discuss anything else that seems like relevant information.\n\nIn your notebook, use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#metadata-exploration",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#metadata-exploration",
-    "title": "Preliminary data exploration with pandas",
-    "section": "2. Metadata exploration",
-    "text": "2. Metadata exploration\nYou may have noticed there are two metadata files: Compiled_occurrence_records_for_prey_items_of.xml and metadata_arth_occurrences.csv. The .xml document file type is EML which stands for EML: Ecological Metadata Language. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.\nBack in your notebook, import the pandas package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the pandas.read_csv() function:\n\nNavigate to the data package site and copy the URL to access the metadata_arth_occurrences CSV file. To copy the URL:\n\n\nhover over the Download button –&gt; right click –&gt; “Copy Link”.\n\n\nRead in the data from the URL using the pd.read_csv() function like this:\n# Access metadata from repository\npd.read_csv('the URL goes here')\nTake a minute to look at the descriptions for the columns.\n\nNote: Not all datasets have column descriptions in a CSV file. Often they come with a .doc or .txt file with information."
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "2. Data loading",
+    "text": "2. Data loading\n\nIn class we have (so far) loaded data into our workspace both by downloading the file and storing a copy of the dataset in our computer and by accessing directly through a URL. With your team, discuss what can be, in general, the advantages and disadvantages of these two methods of data access.\nImport the Colorado River Basin Water Conflict Table.csv file from the Science Base repository into your workspace using its URL and store it as a variable named df.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#data-loading",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#data-loading",
-    "title": "Preliminary data exploration with pandas",
-    "section": "3. Data loading",
-    "text": "3. Data loading\n\nFollow steps (a) and (b) from the previous exercise to read in the drylands prey data file arth_occurrences_with_env.csv using pd.read_csv(). Store the dataframe to a variable called prey like this:\n\n# Load data\nprey = pd.read_csv('the URL goes here')\n\nWhat is the type of the prey variable? Use a Python function get this information.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING"
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "3. Preliminary data exploration",
+    "text": "3. Preliminary data exploration"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#look-at-your-data",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#look-at-your-data",
-    "title": "Preliminary data exploration with pandas",
-    "section": "4. Look at your data",
-    "text": "4. Look at your data\n\nRun prey in a cell. What do you notice in the columns section?\nTo see all the column names in the same display we need to set a pandas option. Run the following command and then look at the prey data again:\n\npd.set_option(\"display.max.columns\", None)\n\nAdd a comment explaining what pd.set_option(\"display.max.columns\", None) does.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
-  },
-  {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
-    "title": "Preliminary data exploration with pandas",
-    "section": "5. pd.DataFrame preliminary exploration",
-    "text": "5. pd.DataFrame preliminary exploration\nRun each of the following methods for prey in a different cell and write a brief description of what they do as a comment:\n\nhead()\ntail()\ninfo()\nnunique()\n\nFor example:\n# head()\n# returns the first five rows of the data frame\nprey.head()\nIf you’re not sure about what the method does, try looking it up in the pandas.DataFrame documentation.\n\nCheck the documentation for head(). If this function has any optional parameters, change the default value to get a different output.\n\nPrint each of the following attributes of prey in a different cell and write a brief explanation of what they are as a comment:\n\nshape\ncolumns\ndtypes\n\nIf you’re not sure about what information is the attribute showing, look it up in the pandas.DataFrame documentation.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
-  },
-  {
-    "objectID": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#update-column-names",
-    "href": "discussion-sections-upcoming/ds1-prelim-data-exploration.html#update-column-names",
-    "title": "Preliminary data exploration with pandas",
-    "section": "6. Update column names",
-    "text": "6. Update column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the rename method for pandas.DataFrames.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
-  },
-  {
-    "objectID": "commits-guidelines.html",
-    "href": "commits-guidelines.html",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Write commit messages in the imperative mood (i.e., as if you’re giving a command). This is a widely accepted convention.\nExample: - Good: Add function to process user input - Bad: Added function to process user input or Adding function to process user input\n\n\n\nThe first line of the commit message should summarize the changes in around 50 characters or less. This makes it easy to scan in logs or on GitHub.\nExample:\nFix bug in data processing pipeline\n\n\n\nIf the commit requires further explanation, add a blank line after the summary and provide a more detailed description in the body. Focus on what and why, not necessarily how.\nExample:\nAdd user authentication check before data access\n\nPreviously, users could access the data without proper authentication.\nThis commit adds a check to ensure that only authenticated users can\naccess the sensitive data.\n\n\n\nMake sure the commit message explains the reason behind the change, not just what was changed. This helps future developers (or your future self) understand the motivation.\nExample:\nRefactor database query to improve performance\n\nThe previous query was causing significant lag for larger datasets.\nThis change optimizes the query and reduces execution time by 40%.\n\n\n\nUse a consistent format for commit messages throughout the project. If your team follows a particular convention (e.g., prefixing messages with issue numbers), stick to it.\nExample:\n# Consistent format with issue tracking\n[ISSUE-123] Fix broken link in user dashboard\n\n\n\nAlways start the commit message with a capital letter to keep it professional and uniform.\nExample: - Good: Update documentation for new feature - Bad: update documentation for new feature\n\n\n\nVague or uninformative commit messages are not helpful. Avoid commit messages like “Fixes,” “Updates,” “Miscellaneous changes,” or “WIP.”\nExample:\nBad: \"Fix stuff\"\nGood: \"Fix missing validation for email input\"\n\n\n\nA commit should represent a single logical change. Avoid lumping multiple unrelated changes into a single commit. Instead, break them up into separate, focused commits.\nExample: - Good: Commit the bug fix in one commit and the new feature in another. - Bad: Combine multiple changes in one commit with a message like “Fix bug and add new feature.”\n\n\n\nIf applicable, reference issue numbers, bug reports, or pull requests in the commit message to tie the commit to the broader project context.\nExample:\nFix typo in data validation logic (#456)\n\n\n\nEven for small changes, write clear and meaningful messages. Something like Fix typo or Update README is fine for minor commits as long as it’s clear what the change is about.\n\n\n\nEnsure the code works as expected before committing, and write a commit message that reflects the final, working state of the change.\n\n\n\nCommit messages should be professional. Avoid using emojis, abbreviations, or casual language.\nExample: - Bad: 🔥 Fix all the things! 🚀 - Good: Fix critical bugs in data parsing logic\n\n\n\nRefactor user input validation to reduce redundancy\n\nThe validation logic for user input was repeated in multiple places.\nThis commit refactors the validation into a separate function that\ncan be reused across different modules. This improves code maintainability\nand reduces potential errors.\n\nCloses #123"
-  },
-  {
-    "objectID": "commits-guidelines.html#use-the-imperative-mood",
-    "href": "commits-guidelines.html#use-the-imperative-mood",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Write commit messages in the imperative mood (i.e., as if you’re giving a command). This is a widely accepted convention.\nExample: - Good: Add function to process user input - Bad: Added function to process user input or Adding function to process user input"
-  },
-  {
-    "objectID": "commits-guidelines.html#keep-the-first-line-short-and-descriptive",
-    "href": "commits-guidelines.html#keep-the-first-line-short-and-descriptive",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "The first line of the commit message should summarize the changes in around 50 characters or less. This makes it easy to scan in logs or on GitHub.\nExample:\nFix bug in data processing pipeline"
-  },
-  {
-    "objectID": "commits-guidelines.html#provide-more-detail-in-the-body-if-necessary",
-    "href": "commits-guidelines.html#provide-more-detail-in-the-body-if-necessary",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "If the commit requires further explanation, add a blank line after the summary and provide a more detailed description in the body. Focus on what and why, not necessarily how.\nExample:\nAdd user authentication check before data access\n\nPreviously, users could access the data without proper authentication.\nThis commit adds a check to ensure that only authenticated users can\naccess the sensitive data."
-  },
-  {
-    "objectID": "commits-guidelines.html#explain-the-why-and-the-impact",
-    "href": "commits-guidelines.html#explain-the-why-and-the-impact",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Make sure the commit message explains the reason behind the change, not just what was changed. This helps future developers (or your future self) understand the motivation.\nExample:\nRefactor database query to improve performance\n\nThe previous query was causing significant lag for larger datasets.\nThis change optimizes the query and reduces execution time by 40%."
-  },
-  {
-    "objectID": "commits-guidelines.html#be-consistent",
-    "href": "commits-guidelines.html#be-consistent",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Use a consistent format for commit messages throughout the project. If your team follows a particular convention (e.g., prefixing messages with issue numbers), stick to it.\nExample:\n# Consistent format with issue tracking\n[ISSUE-123] Fix broken link in user dashboard"
-  },
-  {
-    "objectID": "commits-guidelines.html#capitalize-the-first-letter-of-the-summary",
-    "href": "commits-guidelines.html#capitalize-the-first-letter-of-the-summary",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Always start the commit message with a capital letter to keep it professional and uniform.\nExample: - Good: Update documentation for new feature - Bad: update documentation for new feature"
-  },
-  {
-    "objectID": "commits-guidelines.html#avoid-commit-messages-like-fixes-or-miscellaneous",
-    "href": "commits-guidelines.html#avoid-commit-messages-like-fixes-or-miscellaneous",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Vague or uninformative commit messages are not helpful. Avoid commit messages like “Fixes,” “Updates,” “Miscellaneous changes,” or “WIP.”\nExample:\nBad: \"Fix stuff\"\nGood: \"Fix missing validation for email input\""
-  },
-  {
-    "objectID": "commits-guidelines.html#group-related-changes-together",
-    "href": "commits-guidelines.html#group-related-changes-together",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "A commit should represent a single logical change. Avoid lumping multiple unrelated changes into a single commit. Instead, break them up into separate, focused commits.\nExample: - Good: Commit the bug fix in one commit and the new feature in another. - Bad: Combine multiple changes in one commit with a message like “Fix bug and add new feature.”"
-  },
-  {
-    "objectID": "commits-guidelines.html#reference-relevant-issues-or-pull-requests",
-    "href": "commits-guidelines.html#reference-relevant-issues-or-pull-requests",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "If applicable, reference issue numbers, bug reports, or pull requests in the commit message to tie the commit to the broader project context.\nExample:\nFix typo in data validation logic (#456)"
-  },
-  {
-    "objectID": "commits-guidelines.html#use-short-informative-messages-for-small-changes",
-    "href": "commits-guidelines.html#use-short-informative-messages-for-small-changes",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Even for small changes, write clear and meaningful messages. Something like Fix typo or Update README is fine for minor commits as long as it’s clear what the change is about."
-  },
-  {
-    "objectID": "commits-guidelines.html#test-before-committing",
-    "href": "commits-guidelines.html#test-before-committing",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Ensure the code works as expected before committing, and write a commit message that reflects the final, working state of the change."
-  },
-  {
-    "objectID": "commits-guidelines.html#avoid-emoticons-and-slang",
-    "href": "commits-guidelines.html#avoid-emoticons-and-slang",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Commit messages should be professional. Avoid using emojis, abbreviations, or casual language.\nExample: - Bad: 🔥 Fix all the things! 🚀 - Good: Fix critical bugs in data parsing logic"
-  },
-  {
-    "objectID": "commits-guidelines.html#example-of-a-well-structured-commit-message",
-    "href": "commits-guidelines.html#example-of-a-well-structured-commit-message",
-    "title": "Guidelines for Writing Good Commit Messages",
-    "section": "",
-    "text": "Refactor user input validation to reduce redundancy\n\nThe validation logic for user input was repeated in multiple places.\nThis commit refactors the validation into a separate function that\ncan be reused across different modules. This improves code maintainability\nand reduces potential errors.\n\nCloses #123"
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#unique-stakeholders",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#unique-stakeholders",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "4. Unique stakeholders",
+    "text": "4. Unique stakeholders\nWhich were the unique stakeholders?"
   }
 ]
