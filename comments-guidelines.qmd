@@ -10,21 +10,21 @@
 
 #### Example
 
-✅ Comments follow all the basic standards
-```python
-# Calculate the average temperature from the dataset
-average_temp = sum(temperatures) / len(temperatures)
-
-# Apply the temperature correction
-corrected_temp = average_temp + correction_factor
-```
-
 🚫 Typos, incosistent capitalization, spacing, and punctuation
 ```python
 #calculate teh average temp from dataset.
 average_temp = sum(temperatures) / len(temperatures)
+##
+    ##      Apply the TEMPERATURE correction
+corrected_temp = average_temp + correction_factor
+```
 
-    ##      Apply the temperature correction
+✅ Comments follow all the basic standards
+```python
+# Calculate average temperature from dataset
+average_temp = sum(temperatures) / len(temperatures)
+
+# Apply temperature correction
 corrected_temp = average_temp + correction_factor
 ```
 
@@ -36,16 +36,15 @@ As stated in the Python PEP 8 @pep8 guide:
 
 > Comments that contradict the code are worse than no comments. Always make a priority of keeping the comments up-to-date when the code changes!
 
-✅ Comments must be consistent with the code
-```python
-# Convert temperature from Celsius to Fahrenheit.
-df['temp_f'] = df['temp_c'] * 9/5 + 32
-
-```
-
 🚫 Comment is outdated and contradicts the code
 ```python
 # Convert temperature from Fahrenheit to Celsius
+df['temp_f'] = df['temp_c'] * 9/5 + 32
+```
+
+✅ Comments must be consistent with the code
+```python
+# Convert temperature from Celsius to Fahrenheit
 df['temp_f'] = df['temp_c'] * 9/5 + 32
 
 ```
@@ -55,48 +54,24 @@ df['temp_f'] = df['temp_c'] * 9/5 + 32
 Make comments concise and easy to understand. Avoid long-winded explanations.
 
 #### Example
-✅ Comments follow all the basic standards
-```python
-# Filter rows where the region is a wetland
-wetland_data = df[df['region_type'] == 'wetland']
-```
 
-🚫 Typos, incosistent capitalization, spacing, and punctuation
+🚫 Too long and redundant
 ```python
 # In this part of the code, we are filtering the DataFrame 'df' to keep only 
 # the rows where the value in the 'region_type' column is equal to 'wetland'. 
 # This will give us data specifically for wetland regions.
 wetland_data = df[df['region_type'] == 'wetland']
-
 ```
 
-### Use comments to explain why, not what {.unlisted}
-
-Write comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm. Avoid comments that explain what the code is doing in obvious ways.
-
-#### Example
-
-✅  Comment explains the rationale behind the code
+✅ Concise and clear comments
 ```python
-# Find the largest value to normalize the data.
-x = find_max_value(array)  
-```
-
-🚫 Redundant and obvious comment
-```python
-# Assign the maximum value of the array to x.
-x = find_max_value(array)  
+# Filter rows where the region is a wetland
+wetland_data = df[df['region_type'] == 'wetland']
 ```
 
 ### Keep it professional {.unlisted}
 
 Comments should be professional and avoid jokes, personal remarks, or irrelevant information.
-
-✅  Professional and relevant comment
-```python
-# Calculate the total carbon emissions for the region
-total_emissions = df['emissions'].sum()
-```
 
 🚫 Unprofessional comment with casual remarks
 ```python
@@ -104,15 +79,54 @@ total_emissions = df['emissions'].sum()
 total_emissions = df['emissions'].sum()
 ```
 
+✅ Professional and relevant comment
+```python
+# Calculate the total carbon emissions for the region
+total_emissions = df['emissions'].sum()
+```
+
+
 ## Special types of comments
 
 ### Inline comments
-9. Use inline comments sparingly
-Inline comments (comments on the same line as code) should be used only when necessary. Keep them short and place them two spaces after the code.
+Inline comments are comments on the same line as the code. Best practices are:
 
-**Example:**
+- Use inline comments sparingly.
+- Keep them short and place them two spaces after the code.
+
+🚫 In-line comments are overused and don't follow regular spacing and capitalization
 ```python
-value = compute_value(x, y)  # This handles edge cases for x and y.
+years = [2000, 2005, 2010, 2015, 2020]#list of years for x-axis
+co2_levels = [370, 380, 390, 400, 410]  #CO2 levels for y-axis
+
+plt.plot(years, co2_levels)        # Plot years against CO2 levels
+plt.title('CO2 Levels Over Time')  # Add a title
+plt.xlabel('Year')                 # x-axis = Year
+plt.ylabel('CO2 Levels (ppm)')     # y-axis = CO2 Levels (ppm)
+plt.grid(True) # Enable grid on the plot
+plt.axhline(y=400, color='r', linestyle='--', label='400 ppm Threshold')
+plt.show()         #display the plot
+
+```
+
+✅ In-line comments are sparingly used and focused
+```python
+years = [2000, 2005, 2010, 2015, 2020]
+co2_levels = [370, 380, 390, 400, 410]
+
+# Plot to see trend in atmospheric CO2 concentrations
+plt.plot(years, co2_levels)
+
+plt.title('CO2 Levels Over Time')
+plt.xlabel('Year')
+plt.ylabel('CO2 Levels (ppm)')
+
+plt.grid(True)  # Show grid for better readability
+plt.axhline(y=400,  # Add a threshold line for 400 ppm
+            color='r', 
+            linestyle='--', 
+            label='400 ppm Threshold')  
+plt.show()
 ```
 
 ### Block comments
@@ -139,7 +153,7 @@ Proper alignment and consistent indentation contribute to clean, readable commen
     # do this using df[['col1', 'col2']]
 coral_div[['Ecoregion', 'Habitat']].head()
 ```
-
+<!--
 ### Docstrings
 7. Use Docstrings for Functions and Classes
 For functions, classes, and modules, use docstrings (triple quotes) to describe the purpose, parameters, and return values. The first line should be a summary, followed by a blank line, and then a more detailed description if needed.
@@ -159,7 +173,6 @@ def add_numbers(a, b):
     """
     return a + b
 ```
-
 ### TODO comments
 For reminders about future code improvements or unresolved issues, use `TODO:` followed by a brief explanation.
 
@@ -167,7 +180,9 @@ For reminders about future code improvements or unresolved issues, use `TODO:` f
 ```python
 # TODO: Add error handling for invalid input
 ```
+-->
 
+<!--
 ## General advice
 
 ### Avoid over-commenting
@@ -182,9 +197,61 @@ while i < 10:  # Loop while i is less than 10
     i += 1  # Increment i
 ```
 
+
 ### Avoid under-commenting
 
+```python
+# Temporal range of interest
+time_range_1 = "2017"
+time_range_2 = "2020"
+
+bbox = [-112.826843, 32.974108, -111.184387, 33.863574]
+
+# catalog search
+search = catalog.search(
+    collections=['io-biodiversity'],
+    bbox=bbox,
+    datetime=time_range_1)
+```
+
+### Do not rely on commenting for running code
 
 ### Avoid "comments as deodorant"
 The phrase "code smells" refers to symptoms in our code that may indicate deeper problems with its design or structure. In this case, using "comments as deodorant" means using comments to explain overly-complicated code, instead of making your code as self-explanatory as possible. Avoid comments as deodorant and, instead, work on making your code simple and understandable. @fowler_refactoring_1999
+-->
 
+## Next level comments
+
+
+### Use comments to explain why, not what {.unlisted}
+
+When we are learning to code, **it can be super useful to comment on 'what' each line of code does. That's ok!** Over time, as you become more comfortable with the syntax, try to focus your comments on 'why' certain choices were made or when something might not be immediately obvious to others. 
+**Use comments to explain why a piece of code exists, what it’s doing at a high level, or to describe a complex algorithm.** Great comments add value to the code, going beyond describing what is clear from the function and variable names.
+
+Your comments will become more streamlined and naturally shift from technical to conceptual as your coding skills improve!
+
+#### Example
+
+⚠️ Comment restates in plain language what the code does
+```python
+# Assign the maximum value of the array to x
+x = find_max_value(array)  
+```
+
+✅ Comment explains the rationale behind the code
+```python
+# Find the largest value to normalize the data
+x = find_max_value(array)  
+```
+
+### Avoid over-commenting
+Do not over-comment obvious code, as this can clutter your code and reduce readability.
+
+**Example:**
+```python
+# Bad: Over-commenting
+i = 0  # Set i to 0
+while i < 10:  # Loop while i is less than 10
+    print(i)  # Print the value of i
+    i += 1  # Increment i
+```
