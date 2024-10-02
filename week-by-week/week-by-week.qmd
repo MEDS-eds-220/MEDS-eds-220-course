@@ -6,22 +6,88 @@ You will find the course announcements and daily activities here.
 
 ### Class 1
 
-We covered:
-
-- [Course introduction slides](/slides/syllabus-slides.qmd)
-- [Python review](/book/chapters/lesson-1-python-review.qmd)
+1. [Course introduction slides](/slides/syllabus-slides.qmd)
+2. Set up of GitHub repository for in-class coding sessions.
+<!-- TODO: add fold-away with step-by-step instructions -->
+3. [Python review](/book/chapters/lesson-1-python-review.qmd) up to the end of the variables section.
 
 ::: {.callout-warning icon=false}
 ## Preparation for Wednesday class (October 2)
 1. In your `EDS-220/eds220-2024-in-class` directory, create a new Python notebook called `week1-pandas-series.ipynb`.
 2. **Read the notes chapter on [`pandas` series data frames](/book/chapters/lesson-2-series-dataframes.qmd) and follow along with the code.**
-2. Solve the check-in exercises. We'll these during class.
+2. Solve the check-in exercises. We'll present these during class.
 3. Make a summary of the lesson. What are the most important concepts or ideas?
 :::
 
-<!--
+
 ### Class 2
 
+1. Finished [Python review](/book/chapters/lesson-1-python-review.qmd).
+2. Student presentations of [`pandas.Series` and `pandas.DataFrames`](/book/chapters/lesson-2-series-dataframes.qmd) exercises
+3. Completed the following activity to add `data/` directory the `.gitignore` file of the `EDS-220/in-class-notebooks/` directory.
+
+::: {.callout-note collapse="true"}
+## Edit .gitignore file through terminal
+## Setup:
+1. Download the CSV file `wetlands_seasonal_bird_diversity.csv` from our [shared drive](https://drive.google.com/file/d/1VCmBYZ1LmgmvxQt9KEcczc6KPDlAYRp0/view?usp=share_link).
+
+2. In the workbench 1, inside your `EDS-220/in-class-notebooks/` directory, create a new directory called `data`. 
+
+3. Using the file navigation panel, upload the `wetlands_seasonal_bird_diversity.csv` file to the `data/` directory. 
+
+## In the terminal:
+
+1. Verify you are in the `in-class-notebooks/` directory by using `pwd`. Your output should look like this:
+```default
+/Users/c_galazgarcia/MEDS/EDS-220/in-class-notebooks
+```
+
+2. Rung `git status`. At the end of the output you'll see:
+```default
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        data/
+```
+This means git knows the `data/` directory exists and we have the risk of adding it to a commit.
+
+3. Run `ls` to see the files in the directory. Your output will look like this, notice the `.gitiginore` file is not listed:
+```default
+README.md  week1-lesson1-python-review.ipynb
+data       week1-lesson3-pandas-subsetting.ipynb
+```
+
+4. Run `ls -a` to see *all* files in the directory, including hidden files (those that start with a period `.`). At this point, your output will look like this:
+```default
+.                   README.md
+..                  data
+.git                week1-lesson1-python-review.ipynb
+.gitignore          week1-lesson3-pandas-subsetting.ipynb
+.ipynb_checkpoints
+```
+
+4. Run `nano .gitignore`. This will open the `.gitignore` file in the `nano` editor.
+
+5. Add the `data/` folder to the `.gitifnore` file by adding this text at the top of the file:
+```default
+# Ignore the 'data' directory
+data/
+```
+
+5. Once you have made your changes, save the file:
+ - In `nano`, press `CTRL + O` (the letter O, not zero) to save.
+ - Press `Enter` to confirm the file name (`.gitignore`).
+
+6. Exit the editor by pressing `CTRL + X`.
+
+7. Run `less .gitignore` to scroll through the `.gitignore` file and verify the changes are there. 
+- Use the arrow keys or `Page Up`/`Page Down` to scroll through the file.
+- Press `q` to exit. 
+
+8. Run `git status`, the `data/` directroy will no longer be listed!
+
+9. Commit and push your changes to the `.gitignore`.
+:::
+<!--
 
 ### Discussion section
 -->
