@@ -1,18 +1,17 @@
 ---
-title: Exploring water conflicts in the Colorado River Basin
-subtitle: Week 2 - Discussion section 
+title: Water conflicts in the Colorado River Basin
+subtitle: Week 2 - Discussion section
 week: 2
 image: images/Tecopa_site2.JPG
 sidebar: false
+jupyter: mpc-env-kernel
 ---
 
-This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the [U.S. Geological Survey (USGS)](https://www.usgs.gov). In this discussion section, you will:
+This discussion section will guide you exploring data about water-related conflicts at the Colorado River Basin using data from the [U.S. Geological Survey (USGS)](https://www.usgs.gov). In this discussion section, you will:
 
 - Practice version control using git via the terminal
-- Obtain information about a dataset from an online data repository
-- Use core `pandas.DataFrame` methods to answer questions 
 - Discuss advantages and disadvantages about different methods of data loading
-- Practice best practices for clean code
+- Use methods to work with `pandas.Series` of strings using the `.str` accessor
 
 ## Setup
 
@@ -55,9 +54,10 @@ Its management is vital due to the region's arid climate and the competing deman
 
 ![Colorado River Basin.  U.S. Bureau of Reclamation. ](/discussion-sections-upcoming/images/co-river-basin.png)
 
+
 <!-- 10 minutes -->
 ## 1. Archive exploration
-Take some time to look through the dataset's description in the ScienceBase epository. Discuss the following questions with your team:
+Take some time to look through the dataset's description in the ScienceBase repository. Look for the following information:
 
 a. Where was the data collected from?
 <!-- 
@@ -67,13 +67,13 @@ b. During what time frame were the observations in the dataset collected?
 <!--
 2005-2021
 -->
-c. Whta was the author's perceived value of this dataset?
+c. What was the author's perceived value of this dataset?
 <!--
  examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
 -->
-e. Briefly discuss anything else that seems like relevant information.
 
-In your notebook, use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive. 
+
+In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems like relevant information. Include a citation, date of access, and a link to the archive. 
 
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
@@ -82,13 +82,9 @@ In your notebook, use a markdown cell to add a brief description of the dataset,
 <!-- 3 minutes -->
 ## 2. Data loading
 
-a. In class we have (so far) loaded data into our workspace both by downloading the file and storing a copy of the dataset in our computer and by accessing directly through a URL. With your team, discuss what can be, in general, the advantages and disadvantages of these two methods of data access. 
+a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
 
-b. Import the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) into your workspace using its URL and store it as a variable named `df`.
-
-<p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
-</p>
+b. Import the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) into your workspace. Name your data frame variable `df`.
 
 <p style="text-align: center;">
 **CHECK IN WITH YOUR TEAM** 
@@ -97,13 +93,120 @@ b. Import the `Colorado River Basin Water Conflict Table.csv` file [from the Sci
 **MAKE SURE YOU'VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING**
 </p>
 
+<p style="text-align: center;">
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
+</p>
+
+<!--
+```{python}
+import pandas as pd
+
+df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
+df.head(5)
+```
+-->
+
 ## 3. Preliminary data exploration
 
-a. 
+Write a list with at least four ways in which you coud gain preliminary information about this dataset and why these are relevant.
+
+<!--
+```{python}
+# df.head()
+# df.shape
+# df.columns
+# df.Stakeholders.unique()
+```
+
+```{python}
+(df['State'].dropna()
+            .str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .value_counts())
+```
+-->
+
+## 4. String accessor for `pandas.Series`
+
+In the following exercises we will work with `pandas.Series` whose values are strings. This is a common scenario, so `pandas` has special [string methods](https://pandas.pydata.org/docs/user_guide/text.html#string-methods) for this kind of series. These methods are accessed via the **`str` accessor**. **Accessors** provide additional functionality for working with specific kinds of data (in this case, strings). 
 
 
-## 4. Unique stakeholders
+1. Carefully read the code below. We'll use some of it soon.
 
-Which were the unique stakeholders?
+```{python}
+import pandas as pd 
+import numpy as np
 
-## 5. Which were the most frequent stakeholders?
+# Example series
+s = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Utah; Colorado'])
+s
+```
+```{python}
+# str accessor (doesn't do anything by itself)
+s.str
+```
+```{python}
+# Use str accessor with additional methods to perform string operations
+# .split splits strings by ';' and expands output into separate columns
+s.str.split(';', expand=True)
+```
+
+
+
+## Examine state codes
+
+Our goal today is to **find which states are reported in the dataset as having a water conflict**. 
+
+1. What are the unique values in the `States` column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.
+
+```{python}
+print(df['State'].unique())
+```
+
+```{python}
+for x in df['State'].unique():
+    print(x)
+```
+
+## Brainstorm
+
+1. Individually, write step-by-step instructions on how you would create a list (without repetition) with the state codes in which a water conflict reported has been reported. It's ok if you don't know how to code each step - it's more important to have an idea of what we'll do.
+
+2. Discuss your ideas on how to approach this problem with your team.
+
+The next exercises will guide you through finding the state codes in the dataset. There are *many* ways of extracting this information. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `.str` accessor in a `pandas.Series`.
+
+## Drop NAs
+
+Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Check there are no NAs in the new `states` series.
+
+```{python}
+states = df['State'].dropna()
+states
+```
+
+```{python}
+states.hasnans
+```
+
+## Split strings
+
+## Stack the data frame
+
+## Value counts
+
+## Method chaining
+
+
+```{python}
+# stakeholders = (df['Stakeholders'].dropna()
+#                      .str.split(',', expand=True)
+#                      .apply(lambda x: x.str.strip())
+#                      .values
+#                      .ravel())
+
+# stakeholders = pd.unique(stakeholders)
+# print(stakeholders)
+```
+
