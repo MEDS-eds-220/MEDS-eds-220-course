@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exploring water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
+<title>Water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -43,7 +77,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -86,6 +120,9 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -124,11 +161,17 @@ div.csl-indent {
     <a class="nav-link" href="../discussion-sections/discussion-sections-listing.html"> 
 <span class="menu-text">discussion sections</span></a>
   </li>  
-  <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">assignments</span>
-    </span>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-assignments" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">assignments</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-assignments">    
+        <li>
+    <a class="dropdown-item" href="../assignments/assignment1.html">
+ <span class="dropdown-text">assignment 1</span></a>
   </li>  
+    </ul>
+  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-github" role="link" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-github" role="img">
@@ -171,8 +214,14 @@ div.csl-indent {
   <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
   <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
   <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
-  <li><a href="#unique-stakeholders" id="toc-unique-stakeholders" class="nav-link" data-scroll-target="#unique-stakeholders">4. Unique stakeholders</a></li>
-  <li><a href="#which-were-the-most-frequent-stakeholders" id="toc-which-were-the-most-frequent-stakeholders" class="nav-link" data-scroll-target="#which-were-the-most-frequent-stakeholders">5. Which were the most frequent stakeholders?</a></li>
+  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">4. String accessor for <code>pandas.Series</code></a></li>
+  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">Examine state codes</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">Brainstorm</a></li>
+  <li><a href="#drop-nas" id="toc-drop-nas" class="nav-link" data-scroll-target="#drop-nas">Drop NAs</a></li>
+  <li><a href="#split-strings" id="toc-split-strings" class="nav-link" data-scroll-target="#split-strings">Split strings</a></li>
+  <li><a href="#stack-the-data-frame" id="toc-stack-the-data-frame" class="nav-link" data-scroll-target="#stack-the-data-frame">Stack the data frame</a></li>
+  <li><a href="#value-counts" id="toc-value-counts" class="nav-link" data-scroll-target="#value-counts">Value counts</a></li>
+  <li><a href="#method-chaining" id="toc-method-chaining" class="nav-link" data-scroll-target="#method-chaining">Method chaining</a></li>
   </ul>
 </nav>
     </div>
@@ -181,7 +230,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exploring water conflicts in the Colorado River Basin</h1>
+<h1 class="title">Water conflicts in the Colorado River Basin</h1>
 <p class="subtitle lead">Week 2 - Discussion section</p>
 </div>
 
@@ -199,13 +248,11 @@ div.csl-indent {
 </header>
 
 
-<p>This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
+<p>This discussion section will guide you exploring data about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
 <ul>
 <li>Practice version control using git via the terminal</li>
-<li>Obtain information about a dataset from an online data repository</li>
-<li>Use core <code>pandas.DataFrame</code> methods to answer questions</li>
 <li>Discuss advantages and disadvantages about different methods of data loading</li>
-<li>Practice best practices for clean code</li>
+<li>Use methods to work with <code>pandas.Series</code> of strings using the <code>.str</code> accessor</li>
 </ul>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -270,7 +317,7 @@ div.csl-indent {
 </section>
 <section id="archive-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
-<p>Take some time to look through the dataset’s description in the ScienceBase epository. Discuss the following questions with your team:</p>
+<p>Take some time to look through the dataset’s description in the ScienceBase repository. Look for the following information:</p>
 <ol type="a">
 <li>Where was the data collected from? <!-- 
 articles from newspapers describing water-related events in geographic areas in the Basin
@@ -278,12 +325,11 @@ articles from newspapers describing water-related events in geographic areas in 
 <li>During what time frame were the observations in the dataset collected? <!--
 2005-2021
 --></li>
-<li>Whta was the author’s perceived value of this dataset? <!--
+<li>What was the author’s perceived value of this dataset? <!--
  examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
 --></li>
-<li>Briefly discuss anything else that seems like relevant information.</li>
 </ol>
-<p>In your notebook, use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.</p>
+<p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems like relevant information. Include a citation, date of access, and a link to the archive.</p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
@@ -292,37 +338,431 @@ articles from newspapers describing water-related events in geographic areas in 
 <section id="data-loading" class="level2">
 <h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
 <ol type="a">
-<li><p>In class we have (so far) loaded data into our workspace both by downloading the file and storing a copy of the dataset in our computer and by accessing directly through a URL. With your team, discuss what can be, in general, the advantages and disadvantages of these two methods of data access.</p></li>
-<li><p>Import the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> into your workspace using its URL and store it as a variable named <code>df</code>.</p></li>
+<li><p>In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access.</p></li>
+<li><p>Import the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> into your workspace. Name your data frame variable <code>df</code>.</p></li>
 </ol>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
 <p style="text-align: center;">
 <strong>CHECK IN WITH YOUR TEAM</strong>
 </p>
 <p style="text-align: center;">
 <strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING</strong>
 </p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+<!--
+
+::: {#ebd9ad4b .cell execution_count=1}
+``` {.python .cell-code}
+import pandas as pd
+
+df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
+df.head(5)
+```
+
+::: {.cell-output .cell-output-display execution_count=1}
+
+```{=html}
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Event</th>
+<th data-quarto-table-cell-role="th">Search Source</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Article Title</th>
+<th data-quarto-table-cell-role="th">Duplicate</th>
+<th data-quarto-table-cell-role="th">Report Date</th>
+<th data-quarto-table-cell-role="th">Report Year</th>
+<th data-quarto-table-cell-role="th">Event Date</th>
+<th data-quarto-table-cell-role="th">Event Day</th>
+<th data-quarto-table-cell-role="th">Event Month</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water rights</th>
+<th data-quarto-table-cell-role="th">Article Text Search - intergovernmental</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water transfers</th>
+<th data-quarto-table-cell-role="th">Article Text Search - navigation</th>
+<th data-quarto-table-cell-role="th">Article Text Search - fish</th>
+<th data-quarto-table-cell-role="th">Article Text Search - invasive</th>
+<th data-quarto-table-cell-role="th">Article Text Search - diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - instream</th>
+<th data-quarto-table-cell-role="th">Article Text Search - aquatic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>USGS1-50.docx</td>
+<td>The Durango Herald (Colorado)</td>
+<td>Tribes assert water rights on Colorado River B...</td>
+<td>False</td>
+<td>7-Apr-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>4.0</td>
+<td>...</td>
+<td>17</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>USGS1-50.docx</td>
+<td>Journal, The (Cortez, Dolores, Mancos, CO)</td>
+<td>Native American tribes assert water rights on ...</td>
+<td>False</td>
+<td>7-Apr-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>4.0</td>
+<td>...</td>
+<td>17</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>USGS1-50.docx</td>
+<td>The Salt Lake Tribune</td>
+<td>'Very positive change.' New Utah law will be a...</td>
+<td>False</td>
+<td>17-Mar-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>...</td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>USGS1-50.docx</td>
+<td>Casa Grande Dispatch (AZ)</td>
+<td>Legislation would let an Arizona tribe lease C...</td>
+<td>False</td>
+<td>11-Dec-21</td>
+<td>2021.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>12.0</td>
+<td>...</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>USGS1-50.docx</td>
+<td>The Aspen Times (Colorado)</td>
+<td>Historically excluded from Colorado River poli...</td>
+<td>False</td>
+<td>19-Dec-21</td>
+<td>2021.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>11.0</td>
+<td>...</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 48 columns</p>
+</div>
+```
+
+:::
+:::
+
+
+-->
 </section>
 <section id="preliminary-data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
-<ol type="a">
-<li></li>
+<p>Write a list with at least four ways in which you coud gain preliminary information about this dataset and why these are relevant.</p>
+<!--
+
+::: {#9da14ee4 .cell execution_count=2}
+``` {.python .cell-code}
+# df.head()
+# df.shape
+# df.columns
+# df.Stakeholders.unique()
+```
+:::
+
+
+::: {#06f6efce .cell execution_count=3}
+``` {.python .cell-code}
+(df['State'].dropna()
+            .str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .value_counts())
+```
+
+::: {.cell-output .cell-output-display execution_count=3}
+```
+AZ    87
+CO    45
+UT    40
+NV    19
+CA    16
+NM    13
+WY     8
+OH     1
+TX     1
+Name: count, dtype: int64
+```
+:::
+:::
+
+
+-->
+</section>
+<section id="string-accessor-for-pandas.series" class="level2">
+<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">4. String accessor for <code>pandas.Series</code></h2>
+<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
+<ol type="1">
+<li>Carefully read the code below. We’ll use some of it soon.</li>
 </ol>
+<div id="1aca40df" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Utah; Colorado'</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0    California; Nevada
+1               Arizona
+2                   NaN
+3        Utah; Colorado
+dtype: object</code></pre>
+</div>
+</div>
+<div id="332fe457" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x144db2190&gt;</code></pre>
+</div>
+</div>
+<div id="b8666025" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>California</td>
+<td>Nevada</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Arizona</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Utah</td>
+<td>Colorado</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 </section>
-<section id="unique-stakeholders" class="level2">
-<h2 class="anchored" data-anchor-id="unique-stakeholders">4. Unique stakeholders</h2>
-<p>Which were the unique stakeholders?</p>
+<section id="examine-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="examine-state-codes">Examine state codes</h2>
+<p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflict</strong>.</p>
+<ol type="1">
+<li>What are the unique values in the <code>States</code> column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
+</ol>
+<div id="0d68fb5d" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'State'</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
+ 'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'
+ 'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'
+ 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']</code></pre>
+</div>
+</div>
+<div id="c9cb350c" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> df[<span class="st">'State'</span>].unique():</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CO
+UT
+nan
+AZ
+OH; UT
+AZ; CO; NM; UT
+CA
+AZ; UT
+AZ; NV
+CO; UT; WY; NM
+AZ; CA
+UT; AZ
+CO; WY
+NV; AZ
+CO; AZ
+AZ; CA; CO; NV; NM; UT; WY
+AZ; CA; NV
+NV
+NM
+UT; CO; WY
+CA; NV; AZ
+AZ; NM
+WY; UT; CO
+TX</code></pre>
+</div>
+</div>
 </section>
-<section id="which-were-the-most-frequent-stakeholders" class="level2">
-
+<section id="brainstorm" class="level2">
+<h2 class="anchored" data-anchor-id="brainstorm">Brainstorm</h2>
+<ol type="1">
+<li><p>Individually, write step-by-step instructions on how you would create a list (without repetition) with the state codes in which a water conflict reported has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what we’ll do.</p></li>
+<li><p>Discuss your ideas on how to approach this problem with your team.</p></li>
+</ol>
+<p>The next exercises will guide you through finding the state codes in the dataset. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
+</section>
+<section id="drop-nas" class="level2">
+<h2 class="anchored" data-anchor-id="drop-nas">Drop NAs</h2>
+<p>Use the <code>dropna()</code> method on the State column to create a new <code>pandas.Series</code> called <code>states</code> without NAs. Check there are no NAs in the new <code>states</code> series.</p>
+<div id="7b7fe13d" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> df[<span class="st">'State'</span>].dropna()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>0          CO
+1          CO
+2          UT
+5          AZ
+11     OH; UT
+        ...  
+263        CO
+264        CO
+265    AZ; CA
+266        AZ
+267        AZ
+Name: State, Length: 178, dtype: object</code></pre>
+</div>
+</div>
+<div id="b8b1a1b5" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>states.hasnans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>False</code></pre>
+</div>
+</div>
+</section>
+<section id="split-strings" class="level2">
+<h2 class="anchored" data-anchor-id="split-strings">Split strings</h2>
+</section>
+<section id="stack-the-data-frame" class="level2">
+<h2 class="anchored" data-anchor-id="stack-the-data-frame">Stack the data frame</h2>
+</section>
+<section id="value-counts" class="level2">
+<h2 class="anchored" data-anchor-id="value-counts">Value counts</h2>
+</section>
+<section id="method-chaining" class="level2">
+<h2 class="anchored" data-anchor-id="method-chaining">Method chaining</h2>
+<div id="04c19624" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = (df['Stakeholders'].dropna()</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .str.split(',', expand=True)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .apply(lambda x: x.str.strip())</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .values</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .ravel())</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = pd.unique(stakeholders)</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># print(stakeholders)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">5. Which were the most frequent stakeholders?</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-holloman_coded_2023" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. V. Holloman, M. K. Hines, and D. K. Zoanni, <span>“Coded <span>Water</span> <span>Conflict</span> and <span>Crisis</span> <span>Events</span> in the <span>Colorado</span> <span>River</span> <span>Basin</span>, <span>Derived</span> from <span>LexisNexis</span> search 2005-2021.”</span> U.S. Geological Survey, 2023. doi: <a href="https://doi.org/10.5066/P9X6WR7J">10.5066/P9X6WR7J</a>. Available: <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480</a>. [Accessed: Sep. 27, 2024]</div>
 </div>
