@@ -166,8 +166,8 @@ where `column_name` is the name of the column in the data frame `df` we want to 
 
 This operation does not happen in-place. 
 
-- A funciton **acting in-place** means that our original data frame is modified. 
-- If the function **does not act in-place**, a new data frame is created and the original is not modified. 
+- A funciton **acting in-place** means that our original object (in this case a `pandas.DataFrame`) is modified. 
+- If the function **does not act in-place**, a new object (in this case a `pandas.DataFrame`)  is created and the original is not modified. 
 
 If we wanted to update our `df` data frame we could do an **explicit assignment** to reassign the output of `set_index()` to `df`:
 
@@ -203,7 +203,7 @@ df.head()
 df.plot(y='CSM_winter')
 ```
 
- needed, we can reset the index to be the numbering of the rows:
+If needed, we can reset the index to be the numbering of the rows:
 ```{python}
 df = df.reset_index()
 df.head()
@@ -219,7 +219,7 @@ df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 
 2. Is this code modifying the data frame `df`? Why or why not?
 
-3. Run the code and examine the graph. Do we have all the necessary information to make sure it makes sense to directly compare the surveys at these different sites? 
+3. Run the code and examine the graph. Review the data description. Do we have all the necessary information to make sure it makes sense to directly compare the surveys at these different sites? 
 <!--The different sites have very different sizes and the surveys show the total number of birds identified, not the number of birds relative to the extent. -->
 :::
 
@@ -232,15 +232,6 @@ df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 
 is an example of **method chaining**. Each method in the chain returns an object (typically the same object), allowing the next method to be called directly on the result.  This is a powerful technique that makes code concise and readable. 
 
-An alternative to the previous code chaining could have been:
-```python
-year_index_df = df.set_index('year')
-subset_df = year_index_df.loc[:,'SDW_winter':'TJE_fall']
-subset_df.plot()
-```
-
-While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.  
-
 Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parenthesis:
 
 ```python
@@ -251,8 +242,18 @@ Chaining methods can result in lines of code that are too long and hard to read.
 ```
 :::{.callout-note}
 ## Method chaining and the R pipe operator
-If you are familiar with R, you may have noticed that the period `.` in the method chianing acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line while the period is used at the beginning of the line.
+If you are familiar with R, you may have noticed that the period `.` in the method chianing acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line, while the period is used at the beginning of the line.
 :::
+
+An alternative to the previous code chaining could have been:
+```python
+year_index_df = df.set_index('year')
+subset_df = year_index_df.loc[:,'SDW_winter':'TJE_fall']
+subset_df.plot()
+```
+
+While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.  
+
 :::{.callout-caution}
 ## Use method chaining wisely
 Method chaining is particularly useful in `pandas` for streamlining multiple data manipulations. However:
@@ -267,7 +268,7 @@ We will move on to another dataset for the rest of this lesson.
 
 ## About the data
 
-For the next plots we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica. 
+For the next plots we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica  during 2007, 2008, and 2009. 
 
 ![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-4/lter_penguins.png)
 
@@ -283,7 +284,7 @@ penguins.head(3)
 
 ## Data exploration
 
-The data is usually accessed through the `palmerpenguins` R data package @palmerpenguins. Today we will access the CSV directly into Python using the URL: [https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv]()
+The data is usually accessed through the `palmerpenguins` R data package @palmerpenguins. In this lesson we will access the CSV directly into our workspace using the URL: [https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv]()
 
 
 Let's start by reading in the data:
@@ -364,7 +365,7 @@ We can create bar plots of our data setting `kind='bar'` in the `plot()` method.
 For example, let's say we want to get data about the 10 penguins with lowest body mass. We can first select this data using the `nsmallest()` method for series:
 
 ```{python}
-smallest = penguins.body_mass_g.nsmallest(10).sort_values()
+smallest = penguins.body_mass_g.nsmallest(10)
 smallest
 ```
 
@@ -374,10 +375,11 @@ We can then plot this data as a bar plot
 smallest.plot(kind='bar')
 ```
 
-If we wanted to look at other data for these smallest penguins we can use the index of the `smallest` `pandas.Series` to select those rows in the original `penguins` data frame using `loc`:
+
+If we wanted to look at other data for these smallest penguins we can use a different call to the `nsmallest` method:
 
 ```{python}
-penguins.loc[smallest.index]
+penguins.nsmallest(10, 'body_mass_g')
 ```
 
 ## Histograms
@@ -409,19 +411,11 @@ penguins['flipper_length_mm'].plot(kind='hist',
 penguins[['bill_length_mm','bill_depth_mm']].plot(kind='box')
 ```
 -->
-<!--
-2. Select both rows and columns to create a histogram of the flipper length of gentoo penguins. 
 
-
-```{python}
-penguins.loc[penguins.species == 'Gentoo', 'flipper_length_mm'].plot(kind='hist')
-```
--->
-
-2. Create a histogram of the flipper length of female gentoo penguins.
+2. Create a simple histogram of the flipper length of female gentoo penguins.
 <!--
 ```{python}
-penguins.loc[(penguins.species == 'gentoo') & (penguins.sex == 'female'), 'flipper_length_mm'].plot(kind='hist')
+penguins.loc[(penguins.species == 'Gentoo') & (penguins.sex == 'female'), 'flipper_length_mm'].plot(kind='hist')
 ```
 -->
 :::
