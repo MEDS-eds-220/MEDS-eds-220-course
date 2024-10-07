@@ -16,11 +16,11 @@ This discussion section will guide you exploring data about water-related confli
 ## Setup
 
 :::{.callout-tip appearance="minimal"}
-1. In the Taylor server, start a new JupyterLab session or access an active one.
+1. In the workbench-1 server, start a new JupyterLab session or access an active one.
 
 2. In the terminal, use `cd` to navigate into the `eds-220-sections` directory. Use `pwd` to verify `eds-220-sections` is your current working directory.
 
-3. Create a new Python Notebook inside your `eds-220-sections` directory and rename it to `section-2-co-basin-water-conflicts.ipynb`. 
+3. Create a new Python notebook inside your `eds-220-sections` directory and rename it to `section-2-co-basin-water-conflicts.ipynb`. 
 
 4. Use the terminal to stage, commit, and push this file to the remote repository. Remember:
     1. `git status` : check git status
@@ -41,12 +41,12 @@ This discussion section will guide you exploring data about water-related confli
 ## General directions
 :::{.callout-tip appearance="minimal"}
 - Add comments in each one of your code cells. 
-- On each exercise, include markdown cells in between your code cells to add titles and information.
+- Include markdown cells in between your code cells to add titles and information.
 - Indications about when to commit and push changes are included, but you are encouraged to commit and push more often. 
 :::
 
 ## About the data
-For these exercises we will use data about [Water Conflict and Crisis Events in the Colorado River Basin](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) @holloman_coded_2023. This dataset is stored at [ScienceBase](https://www.sciencebase.gov/catalog/),a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources. 
+For these exercises we will use data about [Water Conflict and Crisis Events in the Colorado River Basin](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) @holloman_coded_2023. This dataset is stored at [ScienceBase](https://www.sciencebase.gov/catalog/), a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources. 
 
 The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. 
 The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. 
@@ -55,9 +55,8 @@ Its management is vital due to the region's arid climate and the competing deman
 ![Colorado River Basin.  U.S. Bureau of Reclamation. ](/discussion-sections-upcoming/images/co-river-basin.png)
 
 
-<!-- 10 minutes -->
 ## 1. Archive exploration
-Take some time to look through the dataset's description in the ScienceBase repository. Look for the following information:
+Look through the dataset's description in the ScienceBase repository. Find the following information:
 
 a. Where was the data collected from?
 <!-- 
@@ -73,7 +72,7 @@ c. What was the author's perceived value of this dataset?
 -->
 
 
-In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems like relevant information. Include a citation, date of access, and a link to the archive. 
+In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive. 
 
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
@@ -82,20 +81,11 @@ In a markdown cell, use your answers to the previous questions to add a brief de
 <!-- 3 minutes -->
 ## 2. Data loading
 
+<!--
 a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
+-->
 
-b. Import the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) into your workspace. Name your data frame variable `df`.
-
-<p style="text-align: center;">
-**CHECK IN WITH YOUR TEAM** 
-</p>
-<p style="text-align: center;">
-**MAKE SURE YOU'VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING**
-</p>
-
-<p style="text-align: center;">
-**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
-</p>
+Import the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) into your workspace. Name your data frame variable `df`.
 
 <!--
 ```{python}
@@ -108,7 +98,7 @@ df.head(5)
 
 ## 3. Preliminary data exploration
 
-Write a list with at least four ways in which you coud gain preliminary information about this dataset and why these are relevant.
+Using `pandas` methods, obtain preliminary information and explore this dataset in at least four different ways.
 
 <!--
 ```{python}
@@ -118,28 +108,32 @@ Write a list with at least four ways in which you coud gain preliminary informat
 # df.Stakeholders.unique()
 ```
 
-```{python}
-(df['State'].dropna()
-            .str.split(';', expand=True)
-            .stack()
-            .str.strip()
-            .value_counts())
-```
 -->
+<p style="text-align: center;">
+**CHECK IN WITH YOUR TEAM** 
+</p>
+<p style="text-align: center;">
+**MAKE SURE YOU'VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING**
+</p>
+
+<p style="text-align: center;">
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
+</p>
+
 
 ## 4. String accessor for `pandas.Series`
 
 In the following exercises we will work with `pandas.Series` whose values are strings. This is a common scenario, so `pandas` has special [string methods](https://pandas.pydata.org/docs/user_guide/text.html#string-methods) for this kind of series. These methods are accessed via the **`str` accessor**. **Accessors** provide additional functionality for working with specific kinds of data (in this case, strings). 
 
 
-1. Carefully read the code below. We'll use some of it soon.
+a. The code below gives a brief demonstration of the using the `str` accessor to use the `split()` method for `pandas.Series`. Carefully read the code and check in with your team to see if you have questions about it. We'll use it in a moment.
 
 ```{python}
-import pandas as pd 
 import numpy as np
+import pandas as pd 
 
 # Example series
-s = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Utah; Colorado'])
+s = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Nevada; Utah'])
 s
 ```
 ```{python}
@@ -152,13 +146,18 @@ s.str
 s.str.split(';', expand=True)
 ```
 
+```{python}
+# Use stack() method to flatten the data frame into a series
+# default is to drop NAs and None from result
+s.str.split(';', expand=True).stack()
+```
 
 
-## Examine state codes
+## 5. Examine state codes
 
-Our goal today is to **find which states are reported in the dataset as having a water conflict**. 
+Our goal today is to **find which states are reported in the dataset as having a water conflicts**. 
 
-1. What are the unique values in the `States` column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.
+a. What are the unique values in the `States` column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.
 
 ```{python}
 print(df['State'].unique())
@@ -169,17 +168,18 @@ for x in df['State'].unique():
     print(x)
 ```
 
-## Brainstorm
+## 6. Brainstorm
 
-1. Individually, write step-by-step instructions on how you would create a list (without repetition) with the state codes in which a water conflict reported has been reported. It's ok if you don't know how to code each step - it's more important to have an idea of what we'll do.
+a. Individually, write step-by-step instructions on how you would wrangle the data frame `df` to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It's ok if you don't know how to code each step - it's more important to have an idea of what you would like to do.
 
-2. Discuss your ideas on how to approach this problem with your team.
+b. Discuss your step-by-step instructions with your team.
 
-The next exercises will guide you through finding the state codes in the dataset. There are *many* ways of extracting this information. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `.str` accessor in a `pandas.Series`.
+The next exercises will guide you through finding the unique state codes in the dataset. There are *many* ways of extracting this information. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `.str` accessor in a `pandas.Series`.
 
-## Drop NAs
+<!--
+## 7. Drop NAs
 
-Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Check there are no NAs in the new `states` series.
+Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
 
 ```{python}
 states = df['State'].dropna()
@@ -189,24 +189,37 @@ states
 ```{python}
 states.hasnans
 ```
+-->
 
-## Split strings
+## 7. Find 
+a. Using method chaining and without creating new variables:
+    i. select the State column from the `df` data frame
+    i. split the strings in the column by the delimeter `;` into different columns 
+    ii. stack the results of the resulting data frame to obtain a `pandas.Series`
+    iii. find the unique string values in the resulting series
 
-## Stack the data frame
+```{python}
+df['State'].str.split(';', expand=True).stack().unique()
+```
 
-## Value counts
+<p style="text-align: center;">
+**CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?** 
+</p>
+<p style="text-align: center;">
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
+</p>
+
+
 
 ## Method chaining
 
-
+<!--
 ```{python}
-# stakeholders = (df['Stakeholders'].dropna()
-#                      .str.split(',', expand=True)
-#                      .apply(lambda x: x.str.strip())
-#                      .values
-#                      .ravel())
-
-# stakeholders = pd.unique(stakeholders)
-# print(stakeholders)
+(df['State'].dropna()
+            .str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .value_counts()
+            )
 ```
-
+--> 
