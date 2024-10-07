@@ -125,7 +125,7 @@ df.MUL_spring.head()
 In general, it is better to use the `df['column_name']` syntax. A couple reasons why are:
 
 - `df['column_name']` can take in any column name, while `df.column_name` only works if the column name has no spaces or special characters
-- `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whehter `pd.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
+- `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whether `pd.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
 :::
 
 ## Selecting multiple columns...
@@ -138,7 +138,7 @@ We can select multiple columns in a single call by passing a list with the colum
 df[['column_1', 'column_10', 'column_245']]
 ```
 
-Notice there are double square brackets. This is because we are passing the list of names `['column_1', 'column_10', 'column_245']` to the selection brakcets `[]`. 
+Notice there are double square brackets. This is because we are passing the list of names `['column_1', 'column_10', 'column_245']` to the selection brackets `[]`. 
 
 
 :::{.callout-tip}
@@ -238,7 +238,7 @@ df['year']>2020
 
 :::{.callout-tip}
 ## Check-in
- Get the subset of our data frame on which the San Dieguito Wetland has at least 75 species recorded during spring.
+ Get the subset of the data frame on which the San Dieguito Wetland has at least 75 species recorded during spring.
 :::
 
 #### Example
@@ -291,7 +291,7 @@ We can combine multipe conditions to select rows by surrounding each one in pare
 
 #### Example: or 
 
-Let's select rows in which the Carpinteria Salt Marsh has more than 50 registered in winter *or* fall:
+Let's select rows in which the Carpinteria Salt Marsh has more than 50 species registered in winter *or* fall:
 
 ```{python}
 df[ (df['CSM_winter']>50) | (df['CSM_fall']>50)]
@@ -299,7 +299,7 @@ df[ (df['CSM_winter']>50) | (df['CSM_fall']>50)]
 
 #### Example: and
 
-Let's select rows with in which both the Carpinteria Salt Marsh and the San Dieguito Wetland have more than 60 reported bird species during spring:
+Let's select rows in which both the Carpinteria Salt Marsh and the San Dieguito Wetland have more than 60 reported bird species during spring:
 
 ```{python}
 df[ (df['CSM_spring']>60) & (df['SDW_spring']>60)]
@@ -309,7 +309,7 @@ An empty data frame! That's ok, it just means there are no rows that satisfy the
 
 ### ... by position
 
-All the selections we have done so far have been using labels. Sometimes we may want to select certain rows depending on their *actual position* in the data frame in other words, using **position-based subsetting**.  To do this, we use **`iloc` selection** with the syntax
+All the selections we have done so far have been using labels. Sometimes we may want to select certain rows depending on their *actual position* in the data frame. In other words, using **position-based subsetting**.  To do this, we use **`iloc` selection** with the syntax
 ```python
  df.iloc[row-indices]
  ```
@@ -355,7 +355,7 @@ Let's break down this code:
 
 - the `row-selection` parameter is the condition `df['year']>2020`, which is a boolean array saying which years are greater than 2020
 
-- the `column-selection` parameter is `['MUL_winter','TJE_winter']` which is a list with the names of the two columns we are interested in. 
+- the `column-selection` parameter is `['MUL_winter','TJE_winter']`, which is a list with the names of the two columns we are interested in. 
 
 
 ### ... by position
@@ -393,7 +393,7 @@ And, as always, the documentation will provide you with more information:
 [`pandas.DataFrame.loc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html) and [`pandas.DataFrame.iloc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html).
 :::
 
-
+<!--
 :::{.callout-warning}
 ## `iloc` for column selection? Avoid it!
 We can also access columns by position using `iloc` - but it is best not to if possible.
@@ -419,6 +419,8 @@ Unless you are *really* looking for information about *the 10th column*, **do no
 **Accessing columns by labels helps reproducibility!**
 :::
 
+-->
+
 ## Summary
 :::{.column-page}
 ![Flow diagram for selecting core methods to subset a `pandas.DataFrame`.](/book/images/lesson-3/pandas-selection-diagram.png){#fig-summary}
@@ -426,7 +428,7 @@ Unless you are *really* looking for information about *the 10th column*, **do no
 
 ## Resources
 
-What is presented in this section is a comprehensive, but not  exhaustive list of methods to select data in `pandas.DataFrames`. There are *so many* ways to subset data to get the same result. Some of the content from this lesson is adapted from the following resources and I encourage you to read them to learn more! 
+What is presented in this section is not an  exhaustive list of methods to select data in `pandas.DataFrames`. There are *so many* ways to subset data to get the same result. Some of the content from this lesson is adapted from the following resources and I encourage you to read them to learn more! 
 
 📖 [Pandas getting started tutorials - How to I select a subset of a
 DataFrame](https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html) 
