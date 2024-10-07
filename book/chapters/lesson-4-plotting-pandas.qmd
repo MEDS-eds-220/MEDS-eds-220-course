@@ -105,7 +105,9 @@ You can see all the [optional parameters for the `plot()` function in the docume
 
 :::{.callout-tip}
 ## Check-in
-Plot a graph of the bird surveys at Mugu Lagoon with respect to the years. Include some basic customization.
+1. Plot a graph of the spring bird surveys at Mugu Lagoon with respect to the years. Include some basic customization.
+
+2. Use the [`isna()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.isna.html) method for `pandas.Series` and row selection to select the rows in which Mugu Lagoon has NAs during the spring survey.
 :::
 
 ## Multiple line plots
@@ -153,7 +155,7 @@ df.plot(x='year',
 
 ## Updating the index
 
-**Updating the index** of our data frame's to be something other than the default integers numbering the rows can be a useful operation for plotting. 
+**Updating the index** of our data frame to be something other than the default integers numbering the rows can be a useful operation for plotting. 
 To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. 
 The general syntax for setting a column as the new index is:
 
@@ -237,7 +239,27 @@ subset_df = year_index_df.loc[:,'SDW_winter':'TJE_fall']
 subset_df.plot()
 ```
 
-While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.  Method chaining is particularly useful in `pandas` for streamlining multiple data manipulations. However, it should be used with care to avoid overly complex and difficult-to-debug code!
+While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.  
+
+Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parenthesis:
+
+```python
+(df.set_index('year')
+  .loc[:,'SDW_winter':'TJE_fall']
+  .plot()
+)
+```
+:::{.callout-note}
+## Method chaining and the R pipe operator
+If you are familiar with R, you may have noticed that the period `.` in the method chianing acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line while the period is used at the beginning of the line.
+:::
+:::{.callout-caution}
+## Use method chaining wisely
+Method chaining is particularly useful in `pandas` for streamlining multiple data manipulations. However:
+
+- method chaining should be used with care to avoid overly complex and difficult-to-debug code, and 
+- if you’re not familiar with the methods, it's better to apply them individually and review the results after each step.
+:::
 
 We will move on to another dataset for the rest of this lesson.
 

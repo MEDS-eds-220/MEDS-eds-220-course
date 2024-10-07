@@ -393,33 +393,32 @@ And, as always, the documentation will provide you with more information:
 [`pandas.DataFrame.loc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html) and [`pandas.DataFrame.iloc`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html).
 :::
 
-<!--
+
 :::{.callout-warning}
 ## `iloc` for column selection? Avoid it!
 We can also access columns by position using `iloc` - but it is best not to if possible.
 
-Suppose we want to access the 10th column in the data frame - then we want to select a column *by position*. In this case the 10th column is the annual sea level rise data and the 10th position corresponds to the index 9. We can select this column by position using the `iloc` selection:
+Suppose we want to access the 9th column in the data frame - then we want to select a column *by position*. In this case, the 9th column is the data at San Dieguito Wetland during spring and the 9th position corresponds to the index 8. We can select this column by position using the `iloc` selection:
 
 ```{python}
 # Select column by position using iloc
 # The syntax is iloc[row-indices, column-indices]
-# [:,9] means "select all rows from the 10th column"
-annual_rise_3 = df.iloc[:,9]
-annual_rise_3.head()
+# [:,8] means "select all rows from the 8th column"
+sdw_spring = df.iloc[:,8]
+sdw_spring.head()
 ```
 
-Unless you are *really* looking for information about *the 10th column*, **do not access a column by position**. This is bound to break in many ways:
+Unless you are *really* looking for information about the 9th column, **do not access a column by position**. This is bound to break in many ways:
 
 - it relies on a person correctly counting the position of a column. Even with a small dataset this can be prone to error.
 
-- it is not explicit: if we want information about sea level rise `df.annual_sea_level_rise` or `df['annual_sea_level_rise']` are explicitely telling us we are accessing that information. `df.iloc[:,9]` is obscure and uninformative.
+- it is not explicit: if we want information about San Dieguito Wetland during spring, `df.SDW_spring` or `df['SDW_spring']` are explicitely telling us we are accessing that information. `df.iloc[:,8]` is obscure and uninformative.
 
-- datastets can get updated. Maybe a new column was added before `annual_sea_level_rise`, this would change the position of the column, which would make any code depending on `df.iloc[:,9]` invalid. 
+- datastets can get updated. Maybe a new column was added before `SDW_spring`, this would change the position of the column, which would make any code depending on `df.iloc[:,8]` invalid. 
 
 **Accessing columns by labels helps reproducibility!**
 :::
 
--->
 
 ## Summary
 :::{.column-page}
