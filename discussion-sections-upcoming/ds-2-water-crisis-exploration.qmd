@@ -7,11 +7,11 @@ sidebar: false
 jupyter: mpc-env-kernel
 ---
 
-This discussion section will guide you exploring data about water-related conflicts at the Colorado River Basin using data from the [U.S. Geological Survey (USGS)](https://www.usgs.gov). In this discussion section, you will:
+This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the [U.S. Geological Survey (USGS)](https://www.usgs.gov). In this discussion section, you will:
 
 - Practice version control using git via the terminal
-- Discuss advantages and disadvantages about different methods of data loading
 - Use methods to work with `pandas.Series` of strings using the `.str` accessor
+- Practice method chaining
 
 ## Setup
 
@@ -85,20 +85,24 @@ In a markdown cell, use your answers to the previous questions to add a brief de
 a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
 -->
 
-Import the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) into your workspace. Name your data frame variable `df`.
+a. Create a new directory `data/` inside your `eds-220-sections` directory.
 
-<!--
+b. Download the `Colorado River Basin Water Conflict Table.csv` file [from the Science Base repository](https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480) and upload it into the `data/` folder.
+
+c. Update the `.gitignore` file of your `eds-220-sections` so it ignores the `data/` folder. Push the changes to this file. Verify that git is ignoring the data file. **Note:** If you update the `.gitignore` file via GitHub, you need to run `git pull` when you go back to the server.
+
+d. Load the data into your `section-2-co-basin-water-conflicts.ipynb` notebook. Name your data frame variable `df`.
+
 ```{python}
 import pandas as pd
 
 df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
 df.head(5)
 ```
--->
 
 ## 3. Preliminary data exploration
 
-Using `pandas` methods, obtain preliminary information and explore this dataset in at least four different ways.
+Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways.
 
 <!--
 ```{python}
@@ -191,12 +195,14 @@ states.hasnans
 ```
 -->
 
-## 7. Find 
-a. Using method chaining and without creating new variables:
+## 7. Find unique state codes (first attempt)
+a. Perform the following wrangling:
     i. select the State column from the `df` data frame
     i. split the strings in the column by the delimeter `;` into different columns 
-    ii. stack the results of the resulting data frame to obtain a `pandas.Series`
+    ii. stack the results of the resulting data frame into a single `pandas.Series`
     iii. find the unique string values in the resulting series
+
+Your final answer should use method chaining without creating new variables.
 
 ```{python}
 df['State'].str.split(';', expand=True).stack().unique()
@@ -209,17 +215,26 @@ df['State'].str.split(';', expand=True).stack().unique()
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
+## 8. Find unique state codes (second attempt)
 
+a. Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?
 
-## Method chaining
+b. Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. **Hint:** [str.strip().](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html)
 
-<!--
 ```{python}
-(df['State'].dropna()
-            .str.split(';', expand=True)
+(df['State'].str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .unique()
+            )
+```
+
+c. Bonus: How many articles mention each state? 
+
+```{python}
+(df['State'].str.split(';', expand=True)
             .stack()
             .str.strip()
             .value_counts()
             )
 ```
---> 
