@@ -445,200 +445,130 @@
     "text": "import pandas as pd\n\nDataset: https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6\nMetadata: https://portal.edirepository.org/nis/metadataviewer?packageid=edi.649.6\nMore info: https://marinemitigation.msi.ucsb.edu/data?field_species_target_id=&field_data_category_target_id%5B44%5D=44\nThese data describe annual estimates of bird density collected as part of the SONGS San Dieguito Wetland Restoration mitigation monitoring program designed to evaluate compliance of the restoration project with conditions of the SONGS permit. Monitoring began in 2012 in the San Dieguito Wetlands and Tijuana Estuary in San Diego County, CA, Carpinteria Salt Marsh in Santa Barbara County, CA, and Mugu Lagoon in Ventura County, CA. The abundance of birds is determined from twenty plots spread across each wetland.\nCSM = Carpinteria Salt Marsh MUL = Mugu Lagoon SDW = San Dieguito Wetland TJE = Tijuana Estuary\n\ndf = pd.read_csv('data/wetland_ts_bird_abundance-2024-06-12_14-38-10.csv')\ndf.head()\n\n\n\n\n\n\n\n\nyear\nsurvey\ndate\nwetland_code\nmodule_code\nbird_plot_number\nstart_time\ncloud_cover\ntemperature\nwind_speed\nwind_direction\nprecipitation_code\nbird_count_visibility_code\nspecies_id\nspecies_code\ngenus_name\nspecies_name\nbird_flight_code\ncount\nbird_plot_area_acres\n\n\n\n\n0\n2010\n1\n2010-02-03\nCSM\nCSM\n1\n04:04:00\n-99999\n60\n-99999\nNOT RECORDED\nNONE\nGOOD\n9\nCOHA\nAccipiter\ncooperii\nA\n0\n3.71\n\n\n1\n2010\n1\n2010-02-03\nCSM\nCSM\n1\n04:04:00\n-99999\n60\n-99999\nNOT RECORDED\nNONE\nGOOD\n9\nCOHA\nAccipiter\ncooperii\nG\n0\n3.71\n\n\n2\n2010\n1\n2010-02-03\nCSM\nCSM\n1\n04:04:00\n-99999\n60\n-99999\nNOT RECORDED\nNONE\nGOOD\n13\nSSHA\nAccipiter\nstriatus\nA\n0\n3.71\n\n\n3\n2010\n1\n2010-02-03\nCSM\nCSM\n1\n04:04:00\n-99999\n60\n-99999\nNOT RECORDED\nNONE\nGOOD\n13\nSSHA\nAccipiter\nstriatus\nG\n0\n3.71\n\n\n4\n2010\n1\n2010-02-03\nCSM\nCSM\n1\n04:04:00\n-99999\n60\n-99999\nNOT RECORDED\nNONE\nGOOD\n20\nSPSA\nActitis\nmacularius\nA\n0\n3.71\n\n\n\n\n\n\n\n\ndef month_to_season(month):\n    \"\"\"\n    Returns the season ('winter', 'spring', 'summer', 'fall') for a given month (1-12).\n    \"\"\"    \n    if month in [12, 1, 2]:\n        return 'winter'\n    elif month in [3, 4, 5]:\n        return 'spring'\n    elif month in [6, 7, 8]:\n        return 'summer'\n    elif month in [9, 10, 11]:\n        return 'fall'\n\n# Add column with seasons\ndf['season'] = pd.to_datetime(df.date).dt.month.apply(month_to_season)\n\n# Calculate number of species registered per (year, season, wetland) combination\n# Rows where 'count' is 0 are filtered out to do this\nspecies = df[df['count']&gt;0].groupby(['year','wetland_code','season'])['species_code'].nunique().reset_index()\n\n# Pivot the DataFrame: create columns for wetland-season pairs\nspecies = species.pivot(index='year', columns=['wetland_code','season'], values='species_code')\n\n# Flatten the MultiIndex column names\nspecies.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in species.columns]\n\n# Reset the index to make 'year' a column\nspecies = species.reset_index()\n\n# Reorder column names\nspecies = species[['year', \n    'CSM_winter','CSM_spring','CSM_fall',\n    'MUL_winter','MUL_spring','MUL_fall',\n    'SDW_winter','SDW_spring','SDW_fall',\n    'TJE_winter','TJE_spring','TJE_fall' ]]\nspecies\n\n\n\n\n\n\n\n\nyear\nCSM_winter\nCSM_spring\nCSM_fall\nMUL_winter\nMUL_spring\nMUL_fall\nSDW_winter\nSDW_spring\nSDW_fall\nTJE_winter\nTJE_spring\nTJE_fall\n\n\n\n\n0\n2010\n39.0\n40.0\n50.0\n45.0\nNaN\n61.0\nNaN\n75.0\n85.0\nNaN\nNaN\n81.0\n\n\n1\n2011\n48.0\n44.0\nNaN\n58.0\n52.0\nNaN\n78.0\n74.0\nNaN\n67.0\n70.0\nNaN\n\n\n2\n2012\n51.0\n43.0\n49.0\n57.0\n58.0\n53.0\n71.0\n72.0\n73.0\n70.0\n63.0\n69.0\n\n\n3\n2013\n42.0\n46.0\n38.0\n60.0\n58.0\n62.0\n69.0\n70.0\n70.0\n69.0\n74.0\n64.0\n\n\n4\n2014\n38.0\n43.0\n45.0\n49.0\n52.0\n57.0\n61.0\n78.0\n71.0\n60.0\n81.0\n62.0\n\n\n5\n2015\n44.0\n42.0\n45.0\n58.0\n50.0\n51.0\n71.0\n61.0\n65.0\n73.0\n76.0\n64.0\n\n\n6\n2016\n41.0\n36.0\n47.0\n63.0\n48.0\n58.0\n67.0\n62.0\n57.0\n76.0\n76.0\n58.0\n\n\n7\n2017\n46.0\n41.0\n43.0\n57.0\n54.0\n53.0\n66.0\n45.0\n54.0\n72.0\n63.0\n57.0\n\n\n8\n2018\n48.0\n48.0\n44.0\n56.0\n54.0\n57.0\n55.0\n49.0\n51.0\n66.0\n60.0\n55.0\n\n\n9\n2019\n39.0\n39.0\n40.0\n57.0\n52.0\n53.0\n54.0\n55.0\n53.0\n63.0\n54.0\n50.0\n\n\n10\n2020\n46.0\nNaN\n47.0\n56.0\nNaN\n66.0\n57.0\nNaN\n58.0\n54.0\n40.0\n54.0\n\n\n11\n2021\n47.0\n44.0\n53.0\n54.0\n55.0\n60.0\n57.0\n58.0\n57.0\n53.0\n68.0\n51.0\n\n\n12\n2022\n40.0\n46.0\n49.0\n60.0\n55.0\n65.0\n57.0\n60.0\n57.0\n60.0\n61.0\n60.0\n\n\n13\n2023\n56.0\n43.0\n36.0\n72.0\n59.0\n53.0\n64.0\n63.0\n33.0\n60.0\n56.0\n38.0\n\n\n\n\n\n\n\n\nspecies.to_csv('wetlands_seasonal_bird_diversity.csv',index=False)\n\n\n\n# total bird counts by year, wetland, and season\nseasonal = df.groupby(['year','wetland_code','season'])['count'].sum().reset_index()\n\n# make columns = wetland codes x season pairs\npivot = seasonal.pivot(index='year', columns=['wetland_code','season'], values='count')\n\n# flatten column names\npivot.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in pivot.columns]\npivot = pivot.reset_index()\npivot\n\n\n# check: every year,wetland,season combination has the same number of species listed\n# so all species are listed even if they have 0 counts\ndf.groupby(['year','wetland_code','season'])['species_code'].nunique().nunique()\n\n\n# get number of different species seen per season\ndf[df['count']!=0].groupby(['year','wetland_code','season'])['species_code'].nunique().reset_index()\n\n\nspecies.columns\n\n\ndf.groupby(['year','wetland_code','survey'])['count'].sum()\ndf[(df.year==2010) & (df.wetland_code == 'CSM') & (df.survey == 1)]['count'].sum()\n\nsubset = df[(df.year==2010) & (df.wetland_code == 'SDW') & (df.season == 'fall') & (df['count'] != 0)]\nprint(len(subset.bird_plot_number.unique()))\nprint(subset.groupby('bird_plot_number')['count'].sum())\nsubset.sort_values(by='count', ascending=False).head()\n\n\nabundance = pd.read_csv('wetland_ps_bird_abundance_and_richness-2024-06-12_14-47-54.csv')\nabundance.head()\n\n\nabundance.wetland_code.unique()\n\n\n# checking plot numbers are not repeated in a year\nfor year in range(2010,2024):\n plot_num = len(abundance.loc[(abundance.wetland_code == 'SDW') & (abundance.year == 2013),'bird_plot_number'].unique())\n n = len(abundance[(abundance.wetland_code == 'SDW') & (abundance.year == 2013)])\n if n != plot_num:\n    print(\"doesn't match\")"
   },
   {
-    "objectID": "discussion-sections/discussion-sections-listing.html",
-    "href": "discussion-sections/discussion-sections-listing.html",
-    "title": "Discussion sections",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html",
+    "title": "Water conflicts in the Colorado River Basin",
     "section": "",
-    "text": "week\n\n\ntopic\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n1\n\n\nPreliminary data exploration with pandas\n\n\n\n\n\nNo matching items"
+    "text": "This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the U.S. Geological Survey (USGS). In this discussion section, you will:"
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html",
-    "title": "Preliminary data exploration with pandas",
-    "section": "",
-    "text": "This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:"
-  },
-  {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#setup",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#setup",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#setup",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#setup",
+    "title": "Water conflicts in the Colorado River Basin",
     "section": "Setup",
-    "text": "Setup\n\n\n\n\n\n\n\nIn the workbench-1 server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python notebook inside your eds-220-sections directory and rename it to section-1-data-selection-drylands.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
+    "text": "Setup\n\n\n\n\n\n\n\nIn the workbench-1 server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python notebook inside your eds-220-sections directory and rename it to section-2-co-basin-water-conflicts.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#general-directions",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#general-directions",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#general-directions",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#general-directions",
+    "title": "Water conflicts in the Colorado River Basin",
     "section": "General directions",
-    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often.\nYou won’t need to upload any data."
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nInclude markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often."
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#about-the-data",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#about-the-data",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#about-the-data",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#about-the-data",
+    "title": "Water conflicts in the Colorado River Basin",
     "section": "About the data",
-    "text": "About the data\nFor these exercises we will use data about prey items for endangered terrestrial vertebrate species within central California drylands[1] [2].\nThis dataset is stored in the Knowledge Network for Biocomplexity (KNB) data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the National Center for Ecological Analysis and Synthesis (NCEAS).\n\n\n\nData collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King."
+    "text": "About the data\nFor these exercises we will use data about Water Conflict and Crisis Events in the Colorado River Basin [1]. This dataset is stored at ScienceBase, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.\nThe dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.\n\n\n\nColorado River Basin. U.S. Bureau of Reclamation."
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#archive-exploration",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#archive-exploration",
-    "title": "Preliminary data exploration with pandas",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#archive-exploration",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#archive-exploration",
+    "title": "Water conflicts in the Colorado River Basin",
     "section": "1. Archive exploration",
-    "text": "1. Archive exploration\nWhen possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:\n\nWhat is this data about?\nIs this data collected in-situ by the authors or is it a synthesis of multiple datasets?\nDuring what time frame were the observations in the dataset collected?\nDoes this dataset come with an associated metadata file?\nDoes the dataset contain sensitive data?\n\nIn your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "text": "1. Archive exploration\n\nLook through the dataset’s description in the ScienceBase repository. Find the following information:\n\nWhere was the data collected from?? \nDuring what time frame were the observations in the dataset collected? \nWhat was the author’s perceived value of this dataset? \n\nIn a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.\nTake a look at the data’s metadata by clicking on the “View” icon of the Coded Events Colorado River Basin Water Conflict Table Metadata.xml file.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#metadata-exploration",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#metadata-exploration",
-    "title": "Preliminary data exploration with pandas",
-    "section": "2. Metadata exploration",
-    "text": "2. Metadata exploration\nYou may have noticed there are two metadata files: Compiled_occurrence_records_for_prey_items_of.xml and metadata_arth_occurrences.csv. The .xml document file type is EML which stands for EML: Ecological Metadata Language. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.\nBack in your notebook, import the pandas package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the pandas.read_csv() function:\n\nNavigate to the data package site and copy the URL to access the metadata_arth_occurrences CSV file. To copy the URL:\n\n\nhover over the Download button –&gt; right click –&gt; “Copy Link”.\n\n\nRead in the data from the URL using the pd.read_csv() function like this:\n# Access metadata from repository\npd.read_csv('the URL goes here')\nTake a minute to look at the descriptions for the columns.\n\nNote: Not all datasets have column descriptions in a CSV file. Often they come with a .doc or .txt file with information."
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#data-loading",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#data-loading",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "2. Data loading",
+    "text": "2. Data loading\n\n\nCreate a new directory data/ inside your eds-220-sections directory.\nDownload the Colorado River Basin Water Conflict Table.csv file from the Science Base repository and upload it into the data/ folder.\nUpdate the .gitignore file of your eds-220-sections so it ignores the data/ folder. Push the changes to this file. Verify that git is ignoring the data file. Note: If you update the .gitignore file via GitHub, you need to run git pull when you go back to the server.\nLoad the data into your section-2-co-basin-water-conflicts.ipynb notebook. Name your data frame variable df."
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#data-loading",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#data-loading",
-    "title": "Preliminary data exploration with pandas",
-    "section": "3. Data loading",
-    "text": "3. Data loading\n\nFollow steps (a) and (b) from the previous exercise to read in the drylands prey data file arth_occurrences_with_env.csv using pd.read_csv(). Store the dataframe to a variable called prey like this:\n\n# Load data\nprey = pd.read_csv('the URL goes here')\n\nWhat is the type of the prey variable? Use a Python function get this information.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING"
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "3. Preliminary data exploration",
+    "text": "3. Preliminary data exploration\n\nSet pandas to display all columns in the data frame.\nUsing pandas methods, obtain preliminary information and explore this data frame in at least four different ways.\n\n\n\nCHECK IN WITH YOUR TEAM 🙌\n\n\nYOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#look-at-your-data",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#look-at-your-data",
-    "title": "Preliminary data exploration with pandas",
-    "section": "4. Look at your data",
-    "text": "4. Look at your data\n\nRun prey in a cell. What do you notice in the columns section?\nTo see all the column names in the same display we need to set a pandas option. Run the following command and then look at the prey data again:\n\npd.set_option(\"display.max.columns\", None)\n\nAdd a comment explaining what pd.set_option(\"display.max.columns\", None) does.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#location-column-descriptions",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#location-column-descriptions",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "4. Location column descriptions",
+    "text": "4. Location column descriptions\nIn these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:\n\n\n\n\n\n\n\nColumn\nDescription\n\n\n\n\nPlace\nWhere the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.\n\n\nState\nState Name coded from Place field."
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
-    "title": "Preliminary data exploration with pandas",
-    "section": "5. pd.DataFrame preliminary exploration",
-    "text": "5. pd.DataFrame preliminary exploration\nRun each of the following methods for prey in a different cell and write a brief description of what they do as a comment:\n\nhead()\ntail()\ninfo()\nnunique()\n\nFor example:\n# head()\n# returns the first five rows of the data frame\nprey.head()\nIf you’re not sure about what the method does, try looking it up in the pandas.DataFrame documentation.\n\nCheck the documentation for head(). If this function has any optional parameters, change the default value to get a different output.\n\nPrint each of the following attributes of prey in a different cell and write a brief explanation of what they are as a comment:\n\nshape\ncolumns\ndtypes\n\nIf you’re not sure about what information is the attribute showing, look it up in the pandas.DataFrame documentation.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#string-accessor-for-pandas.series",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#string-accessor-for-pandas.series",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "5. String accessor for pandas.Series",
+    "text": "5. String accessor for pandas.Series\nIn the following exercises we will work with pandas.Series whose values are strings. This is a common scenario, so pandas has special string methods for this kind of series. These methods are accessed via the str accessor. Accessors provide additional functionality for working with specific kinds of data (in this case, strings).\n\nThe code below gives a brief demonstration of the using the str accessor to use the split() method for pandas.Series. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.\n\n\nimport numpy as np\nimport pandas as pd \n\n# Example series\ns = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Nevada; Utah'])\ns\n\n0    California; Nevada\n1               Arizona\n2                   NaN\n3          Nevada; Utah\ndtype: object\n\n\n\n# str accessor (doesn't do anything by itself)\ns.str\n\n&lt;pandas.core.strings.accessor.StringMethods at 0x10989bb90&gt;\n\n\n\n# Use str accessor with additional methods to perform string operations\n# .split splits strings by ';' and expands output into separate columns\ns.str.split(';', expand=True)\n\n\n\n\n\n\n\n\n0\n1\n\n\n\n\n0\nCalifornia\nNevada\n\n\n1\nArizona\nNone\n\n\n2\nNaN\nNaN\n\n\n3\nNevada\nUtah\n\n\n\n\n\n\n\n\n# Use stack() method to flatten the data frame into a series\n# default is to drop NAs and None from result\ns.str.split(';', expand=True).stack()\n\n0  0    California\n   1        Nevada\n1  0       Arizona\n3  0        Nevada\n   1          Utah\ndtype: object"
   },
   {
-    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#update-column-names",
-    "href": "discussion-sections/ds1-prelim-data-exploration.html#update-column-names",
-    "title": "Preliminary data exploration with pandas",
-    "section": "6. Update column names",
-    "text": "6. Update column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the rename method for pandas.DataFrames.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#examine-state-codes",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#examine-state-codes",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "6. Examine state codes",
+    "text": "6. Examine state codes\nOur goal today is to find which states are reported in the dataset as having a water conflicts.\n\nWhat are the unique values in the States column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome!",
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#brainstorm",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#brainstorm",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "7. Brainstorm",
+    "text": "7. Brainstorm\n\nIndividually, write step-by-step instructions on how you would wrangle the data frame df to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.\nDiscuss your step-by-step instructions with your team.\n\nThe next exercises will guide you through finding the unique state codes in the dataset. There are many ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the .str accessor in a pandas.Series."
+  },
+  {
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#exploratory-wrangling",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#exploratory-wrangling",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "8. Exploratory wrangling",
+    "text": "8. Exploratory wrangling\n\nPerform the following wrangling:\n\nselect the State column from the df data frame\nsplit the strings in the column by the delimeter ; into different columns\nstack the results of the resulting data frame into a single pandas.Series\nfind the unique string values in the resulting series\n\n\nYour final answer should use method chaining without creating new variables.\n\n\nCHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds-2-water-crisis-exploration.html#find-unique-state-codes",
+    "href": "discussion-sections/ds-2-water-crisis-exploration.html#find-unique-state-codes",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "9. Find unique state codes",
+    "text": "9. Find unique state codes\n\nDiscuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?\nUpdate your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. Hint: str.strip().\n\n\n\nBonus: How many articles mention each state?\n\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds0-sections-setup.html",
+    "href": "discussion-sections/ds0-sections-setup.html",
+    "title": "Repository setup",
     "section": "",
-    "text": "Welcome to the course materials for EDS 220 - Working with Environmental Datasets! In this website you will find all the materials for the Fall 2024 term. This course is part of the UCSB Masters in Environmental Data Science.\n\n\nThis hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses.\n\n\n\n\n\n\nCarmen Galaz García (she/her/hers)\n\nE-mail: galazgarcia@bren.ucsb.edu\nStudent hours: Wednesday 4-5 @ Bren Hall 4424\n\n\n\n\nAnnie Adams (she/her/hers)\n\nE-mail: aradams@ucsb.edu\nStudent hours: Thursday 12 pm - 1 pm @ Bren Hall 3022\n\n\n\n\n\n\nClick here to access the syllabus.\n\n\n\nThe following is our tentative calendar. The course content and calendar may be subject to change as the course progresses.\n\n\n\n\n📝 If you have suggestions on how to correct, improve, or expand these course materials, please feel free to email the course instructor at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these materials have been useful to you, consider adding a star to the project’s repository!"
+    "text": "This discussion section will guide you through setting up a repository where you will collect your notebooks for the course’s discussion sections. In this discussion section, you will:"
   },
   {
-    "objectID": "index.html#course-description",
-    "href": "index.html#course-description",
-    "title": "Welcome!",
-    "section": "",
-    "text": "This hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses."
+    "objectID": "discussion-sections/ds0-sections-setup.html#setup",
+    "href": "discussion-sections/ds0-sections-setup.html#setup",
+    "title": "Repository setup",
+    "section": "Setup",
+    "text": "Setup\n\n\n\n\n\n\nOur TA will guide the activities for this discussion section."
   },
   {
-    "objectID": "index.html#instruction-team",
-    "href": "index.html#instruction-team",
-    "title": "Welcome!",
-    "section": "",
-    "text": "Carmen Galaz García (she/her/hers)\n\nE-mail: galazgarcia@bren.ucsb.edu\nStudent hours: Wednesday 4-5 @ Bren Hall 4424\n\n\n\n\nAnnie Adams (she/her/hers)\n\nE-mail: aradams@ucsb.edu\nStudent hours: Thursday 12 pm - 1 pm @ Bren Hall 3022"
+    "objectID": "discussion-sections/ds0-sections-setup.html#create-repository",
+    "href": "discussion-sections/ds0-sections-setup.html#create-repository",
+    "title": "Repository setup",
+    "section": "1. Create repository",
+    "text": "1. Create repository\n\nCreate a new repository on GitHub. Use the following settings:\n\nRepository name: eds220-2024-sections.\nDescription: Work during discussion sections for the EDS 220 MEDS course.\nKeep the repository public.\nAdd a README file.\nAdd a Python .gitignore template.\n\nIn GitHub, update your repository’s README by:\n\nDeleting the text that was automatically generated when you created the repo.\nCopy-pasting the markdown text below, do not update [YOUR NAME HERE] yet.\n\n\n# EDS 220 Discussion Sections Repository\n\nThis repository hosts all the work completed by [YOUR NAME HERE] during the discussion sections of EDS 220 - *Working with Environmental Datasets*.\n\n## Course Information\n\n- **Course Title:** EDS 220 - Working with Environmental Datasets\n- **Term:** Fall 2024\n- **Program:** [UCSB Masters in Environmental Data Science](https://bren.ucsb.edu/masters-programs/master-environmental-data-science)\n- **Instructor:** Carmen Galaz García\n- **TA:** Annie Adams \n\nComplete materials for the discussion sections and additional resources can be found on the [course website](https://meds-eds-220.github.io/MEDS-eds-220-course/discussion-sections/discussion-sections-listing.html).\n\nAdd the URL to your GitHub repository to this spreadhseet.\n\n\nMAKE SURE YOU’VE SUCCESSFULLY SET UP YOUR REPOSITORY ON GITHUB BEFORE CONTINUING"
   },
   {
-    "objectID": "index.html#syllabus",
-    "href": "index.html#syllabus",
-    "title": "Welcome!",
-    "section": "",
-    "text": "Click here to access the syllabus."
+    "objectID": "discussion-sections/ds0-sections-setup.html#clone-the-repository",
+    "href": "discussion-sections/ds0-sections-setup.html#clone-the-repository",
+    "title": "Repository setup",
+    "section": "2. Clone the repository",
+    "text": "2. Clone the repository\n\nAt Bren’s workbench 1 server, start a new JupyterLab session or access an active one.\nInside your MEDS/ directory, create a new directory called EDS-220. We’ll use this directory to collect all the repositories used in the course.\nIn the terminal, navigate to the EDS-220 directory by using cd NAME-OF-DIRECTORY.\nUsing the terminal, clone the repository into your EDS-220 directory. To do this:\n\nIn your repository’s landing page on GitHub, click on the green button that says &lt; &gt; Code. In the HTTPS tab option, copy the URL that appears there.\nGo back to the server. In the terminal, run pwd (print working directory) to make sure we’ll be cloning into the desired location (inside the EDS-220 directory). The ouput should look like:\n\n/Users/c_galazgarcia/MEDS/EDS-220/\n\nRun git clone URL. You should see the directory appear in the folder navigation bar to the left\nGo into the cloned repo in the terminal: cd eds220-2024-sections."
   },
   {
-    "objectID": "index.html#calendar",
-    "href": "index.html#calendar",
-    "title": "Welcome!",
-    "section": "",
-    "text": "The following is our tentative calendar. The course content and calendar may be subject to change as the course progresses."
-  },
-  {
-    "objectID": "index.html#contribute",
-    "href": "index.html#contribute",
-    "title": "Welcome!",
-    "section": "",
-    "text": "📝 If you have suggestions on how to correct, improve, or expand these course materials, please feel free to email the course instructor at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these materials have been useful to you, consider adding a star to the project’s repository!"
-  },
-  {
-    "objectID": "assignments/assignment1.html",
-    "href": "assignments/assignment1.html",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "This assignment covers topics in the notes from the Python review to the plotting with pandas lesson. Task 1 will contribute 20% to the total grade of the assignment and tasks 2 and 3 will contribute 40% each.\n\n\n\n\n\n\n\n\nThis assignment is due by 11:59 pm on Saturday, September 12. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in this checklist:\n\nAnswer for task 1 must be a PDF file.\nAnswers for tasks 2 and 3 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, not a PDF, html or other format.\nEnsure your notebooks include a link to your assignment’s GitHub repository in the designated section.\nThe notebooks you submit must have your solutions to the exercises, They should not be the blank template notebooks.\nThe notebooks you submit must include your code and all required rendered plots, graphs, and printed output. Run all cells before submitting your .ipynb file and make sure all the outputs are visible.\nDouble-check that each notebook or PDF is uploaded to the correct task on Gradescope.\n\nResubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).\nIf you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, September 11. \n\n\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!\n\n\n\n\n\nSo much goes into creating a dataset, and data is more than numbers and words in a file. Without a proper understanding of the whole context where data was created, biases, omissions, and inacuracies can go undetected. The Datasheets for Datasets [1] advocates for transparency about the purpose and contents of datasets.\nCheck out this short interview with lead author Dr. Timnit Gebru, the executive director of the Distributed Artificial Intelligence Research Institute (DAIR), on the motivation to write this article:\n\nRead the paper and write a one-paragraph (between 100 and 150 words) open reflection about it. Review the rubric for this assignment here. Answer at least one of the following questions for your reflection:\n\nCan you think of a dataset you have worked with or encountered in your studies that would have benefited from a datasheet? Explain why or why not, using specific details about the dataset’s context, collection methods, or biases.\nWhat do you think are the limitations of the datasheets framework? Are there any challenges or risks associated with this approach, and how might they be addressed in practical settings?\nHow does the topic of transparency in datasets relate to your understanding of ethical data science practices? Provide an example where increased transparency could have changed the outcome of a dataset you have used or read about.\nBased on your previous professional experience, if you were tasked with creating a dataset for a project, what challenges or decisions would you face when creating its datasheet? Reflect on one or two aspects of data collection or transparency that you feel are particularly important.\n\n\n\n\n\n\n\n\nReady to submit your answer? Make sure your submission follows the checklist at the top of the assginment!\n\n\n\n\n\n\n\n\n\n\n\n\n\nFork this repository: https://github.com/MEDS-eds-220/eds220-hwk1\nIn the Taylor server, start a new JupyterLab session or access an active one.\nUsing the terminal, clone your eds220-hwk1 repository into your eds-220 directory.\nIn the terminal, use cd to navigate into the eds-220-hwk1 directory. Use pwd to verify eds-220-hwk1 is your current working directory.\n\n\n\n\n\n\n\nFor this task we are going to use data about Western Indian Ocean Coral Diversity [2] stored in the the Knowledge Network for Biocomplexity (KNB) data repository. The author for this dataset is Dr. Tim McClanahan, senior conservation zoologist at Wildlife Conservation Society.\n\n\n\nDr. Tim McClanahan underwater surveying coral reefs in coastal Tanzania. Photo credit: ©Michael Markovina. From the online article How Mount Kilimanjaro and We Can Save Corals\n\n\nFollow the instructions in the notebook hwk1-task2-corals.ipynb to complete this task. Review the rubric for this assignment here. In this task you will practice:\n\npreliminary data exploration\naccessing data using a URL from a data archive\nselecting data from a data frame\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!\n\n\n\n\n\n\nThis task is adapted from the Pandas Fundamentals with Earthquake Data assignment from the e-book Earth and Environmental Data Science [3].\nYou will use simplified data from the USGS Earthquakes Database.\nFollow the instructions in the notebook hwk1-task3-earthquakes.ipynb to complete this task.Review the rubric for this assignment here. Here you will practice:\n\naccessing data from your directory\nselecting data from a data frame\ncreating exploratory graphs\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
-  },
-  {
-    "objectID": "assignments/assignment1.html#submission-instructions",
-    "href": "assignments/assignment1.html#submission-instructions",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "This assignment is due by 11:59 pm on Saturday, September 12. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in this checklist:\n\nAnswer for task 1 must be a PDF file.\nAnswers for tasks 2 and 3 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, not a PDF, html or other format.\nEnsure your notebooks include a link to your assignment’s GitHub repository in the designated section.\nThe notebooks you submit must have your solutions to the exercises, They should not be the blank template notebooks.\nThe notebooks you submit must include your code and all required rendered plots, graphs, and printed output. Run all cells before submitting your .ipynb file and make sure all the outputs are visible.\nDouble-check that each notebook or PDF is uploaded to the correct task on Gradescope.\n\nResubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).\nIf you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, September 11. \n\n\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
-  },
-  {
-    "objectID": "assignments/assignment1.html#task-1-datasheets-for-datasets-reading",
-    "href": "assignments/assignment1.html#task-1-datasheets-for-datasets-reading",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "So much goes into creating a dataset, and data is more than numbers and words in a file. Without a proper understanding of the whole context where data was created, biases, omissions, and inacuracies can go undetected. The Datasheets for Datasets [1] advocates for transparency about the purpose and contents of datasets.\nCheck out this short interview with lead author Dr. Timnit Gebru, the executive director of the Distributed Artificial Intelligence Research Institute (DAIR), on the motivation to write this article:\n\nRead the paper and write a one-paragraph (between 100 and 150 words) open reflection about it. Review the rubric for this assignment here. Answer at least one of the following questions for your reflection:\n\nCan you think of a dataset you have worked with or encountered in your studies that would have benefited from a datasheet? Explain why or why not, using specific details about the dataset’s context, collection methods, or biases.\nWhat do you think are the limitations of the datasheets framework? Are there any challenges or risks associated with this approach, and how might they be addressed in practical settings?\nHow does the topic of transparency in datasets relate to your understanding of ethical data science practices? Provide an example where increased transparency could have changed the outcome of a dataset you have used or read about.\nBased on your previous professional experience, if you were tasked with creating a dataset for a project, what challenges or decisions would you face when creating its datasheet? Reflect on one or two aspects of data collection or transparency that you feel are particularly important.\n\n\n\n\n\n\n\n\nReady to submit your answer? Make sure your submission follows the checklist at the top of the assginment!"
-  },
-  {
-    "objectID": "assignments/assignment1.html#setup-for-tasks-2-and-3",
-    "href": "assignments/assignment1.html#setup-for-tasks-2-and-3",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "Fork this repository: https://github.com/MEDS-eds-220/eds220-hwk1\nIn the Taylor server, start a new JupyterLab session or access an active one.\nUsing the terminal, clone your eds220-hwk1 repository into your eds-220 directory.\nIn the terminal, use cd to navigate into the eds-220-hwk1 directory. Use pwd to verify eds-220-hwk1 is your current working directory."
-  },
-  {
-    "objectID": "assignments/assignment1.html#task-2-exploring-coral-diversity-data",
-    "href": "assignments/assignment1.html#task-2-exploring-coral-diversity-data",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "For this task we are going to use data about Western Indian Ocean Coral Diversity [2] stored in the the Knowledge Network for Biocomplexity (KNB) data repository. The author for this dataset is Dr. Tim McClanahan, senior conservation zoologist at Wildlife Conservation Society.\n\n\n\nDr. Tim McClanahan underwater surveying coral reefs in coastal Tanzania. Photo credit: ©Michael Markovina. From the online article How Mount Kilimanjaro and We Can Save Corals\n\n\nFollow the instructions in the notebook hwk1-task2-corals.ipynb to complete this task. Review the rubric for this assignment here. In this task you will practice:\n\npreliminary data exploration\naccessing data using a URL from a data archive\nselecting data from a data frame\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
-  },
-  {
-    "objectID": "assignments/assignment1.html#task-3-pandas-fundamentals-with-earthquake-data",
-    "href": "assignments/assignment1.html#task-3-pandas-fundamentals-with-earthquake-data",
-    "title": "Assignment 1",
-    "section": "",
-    "text": "This task is adapted from the Pandas Fundamentals with Earthquake Data assignment from the e-book Earth and Environmental Data Science [3].\nYou will use simplified data from the USGS Earthquakes Database.\nFollow the instructions in the notebook hwk1-task3-earthquakes.ipynb to complete this task.Review the rubric for this assignment here. Here you will practice:\n\naccessing data from your directory\nselecting data from a data frame\ncreating exploratory graphs\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
-  },
-  {
-    "objectID": "week-by-week/week-by-week.html",
-    "href": "week-by-week/week-by-week.html",
-    "title": "Week by week",
-    "section": "",
-    "text": "You will find the course announcements and daily activities here.\n\n\n\n\n\n\n\n\nWhat happened\n\n\n\n\n\n\n\n\nCourse introduction slides\nSet up of GitHub repository for in-class coding sessions. \nCovered Python review up to the end of the variables section.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 2)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week1-pandas-series.ipynb.\nRead the notes chapter on pandas series data frames and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished Python review.\nStudent presentations of pandas.Series and pandas.DataFrames exercises\n\n\n\n\nThere’s no setup for this week’s discussion section. We’ll follow the materials in Discussion Section 1.\n\n\n\n\n\n\n\n\n\n\nCompleted the following activity to add the data/ directory to the .gitignore file of the EDS-220/in-class-notebooks/ directory.\n\n\n\n\n\n\n\nEdit .gitignore file through terminal\n\n\n\n\n\n\n\n\nDownload the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory.\n\n\n\n\n\nVerify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore.\n\n\n\n\n\n\nCovered pandas subsetting notes up to selecting rows using a condition.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 9)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week2-basic-plotting.ipynb.\nRead the notes on basic plotting up to and including the “updating the index” section and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of this part of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished pandas subsetting notes.\nStudent presentations of basic plotting exercises\nFinished basic plotting notes\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
-  },
-  {
-    "objectID": "week-by-week/week-by-week.html#week-1-sept-30---oct-6",
-    "href": "week-by-week/week-by-week.html#week-1-sept-30---oct-6",
-    "title": "Week by week",
-    "section": "",
-    "text": "What happened\n\n\n\n\n\n\n\n\nCourse introduction slides\nSet up of GitHub repository for in-class coding sessions. \nCovered Python review up to the end of the variables section.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 2)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week1-pandas-series.ipynb.\nRead the notes chapter on pandas series data frames and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished Python review.\nStudent presentations of pandas.Series and pandas.DataFrames exercises\n\n\n\n\nThere’s no setup for this week’s discussion section. We’ll follow the materials in Discussion Section 1."
-  },
-  {
-    "objectID": "week-by-week/week-by-week.html#week-2-oct-7---oct-13",
-    "href": "week-by-week/week-by-week.html#week-2-oct-7---oct-13",
-    "title": "Week by week",
-    "section": "",
-    "text": "Completed the following activity to add the data/ directory to the .gitignore file of the EDS-220/in-class-notebooks/ directory.\n\n\n\n\n\n\n\nEdit .gitignore file through terminal\n\n\n\n\n\n\n\n\nDownload the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory.\n\n\n\n\n\nVerify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore.\n\n\n\n\n\n\nCovered pandas subsetting notes up to selecting rows using a condition.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 9)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week2-basic-plotting.ipynb.\nRead the notes on basic plotting up to and including the “updating the index” section and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of this part of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished pandas subsetting notes.\nStudent presentations of basic plotting exercises\nFinished basic plotting notes\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
-  },
-  {
-    "objectID": "week-by-week/week-by-week.html#setup",
-    "href": "week-by-week/week-by-week.html#setup",
-    "title": "Week by week",
-    "section": "",
-    "text": "Download the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory."
-  },
-  {
-    "objectID": "week-by-week/week-by-week.html#in-the-terminal",
-    "href": "week-by-week/week-by-week.html#in-the-terminal",
-    "title": "Week by week",
-    "section": "",
-    "text": "Verify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore."
+    "objectID": "discussion-sections/ds0-sections-setup.html#update-your-name-and-push-changes",
+    "href": "discussion-sections/ds0-sections-setup.html#update-your-name-and-push-changes",
+    "title": "Repository setup",
+    "section": "3. Update your name and push changes",
+    "text": "3. Update your name and push changes\n\nOpen the README.md file and update the [YOUR NAME HERE] with your name. Save your changes.\nPush your changes to your remote repository (remember, in this case, this is how we call the copy of your repo that lives in GitHub). To do this, remember the basic git routine:\n\ngit status : check git status, shows which files are staged, modified, or untracked\ngit add FILE-NAME : stage files that have been updated, these files will be added to your next commit\ngit status : check git status again to confirm you have staged the right files\ngit commit -m \"Commit message\" : create a commit with message\ngit pull : pull latest changes before pushing to ensure your local repo is up-to-date\ngit push : push your changes to upstream repo\n\nYou should have previously configured your personal access token (PAT) during summer session, but it might be possible that it is not cached anymore and you are prompted to create a new one when doing git push. If this is the case:\n\nFollow the instructions in the MEDS setup guide to create a new PAT.\nOnce you have created your PAT, do git push again to push your changes.\n\n\n\nMAKE SURE YOU’VE SUCCESSFULLY PUSHED YOUR UPDATES BEFORE ENDING"
   },
   {
     "objectID": "slides/syllabus-slides.html#title-slide",
@@ -760,39 +690,200 @@
     "text": "Student Resources\n\n\nBasic Needs Resources & Food Security: https://basicneeds.ucsb.edu/ (schedule a CalFresh Appoinment or Basic Needs Advising Session)\nCounseling & Psychological Services (CAPS): http://caps.sa.ucsb.edu\nResource Center for Sexual and Gender Diversity (RCSGD): https://rcsgd.sa.ucsb.edu/\nUndocumented Student Services (USS) Program: https://uss.sa.ucsb.edu/\nCampus Learning Assistance Services (CLAS): http://clas.sa.ucsb.edu\nStudent Resource Building (SRB): http://www.sa.ucsb.edu/student-resource-building/home\nMulticultural Center (MCC): http://mcc.sa.ucsb.edu/\nCampus Advocacy, Resources, & Education (CARE): http://wgse.sa.ucsb.edu/care/home\nFinancial Crisis Response Team: financialcrisis@sa.ucsb.edu (contact)\nHealth and Wellness: https://wellbeing.ucsb.edu/"
   },
   {
-    "objectID": "discussion-sections/ds0-sections-setup.html",
-    "href": "discussion-sections/ds0-sections-setup.html",
-    "title": "Repository setup",
+    "objectID": "week-by-week/week-by-week.html",
+    "href": "week-by-week/week-by-week.html",
+    "title": "Week by week",
     "section": "",
-    "text": "This discussion section will guide you through setting up a repository where you will collect your notebooks for the course’s discussion sections. In this discussion section, you will:"
+    "text": "You will find the course announcements and daily activities here.\n\n\n\n\n\n\n\n\nWhat happened\n\n\n\n\n\n\n\n\nCourse introduction slides\nSet up of GitHub repository for in-class coding sessions. \nCovered Python review up to the end of the variables section.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 2)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week1-pandas-series.ipynb.\nRead the notes chapter on pandas series data frames and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished Python review.\nStudent presentations of pandas.Series and pandas.DataFrames exercises\n\n\n\n\nThere’s no setup for this week’s discussion section. We’ll follow the materials in Discussion Section 1.\n\n\n\n\n\n\n\n\n\n\nCompleted the following activity to add the data/ directory to the .gitignore file of the EDS-220/in-class-notebooks/ directory.\n\n\n\n\n\n\n\nEdit .gitignore file through terminal\n\n\n\n\n\n\n\n\nDownload the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory.\n\n\n\n\n\nVerify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore.\n\n\n\n\n\n\nCovered pandas subsetting notes up to selecting rows using a condition.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 9)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week2-basic-plotting.ipynb.\nRead the notes on basic plotting up to and including the “updating the index” section and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of this part of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished pandas subsetting notes.\nStudent presentations of basic plotting exercises\nFinished basic plotting notes\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
   },
   {
-    "objectID": "discussion-sections/ds0-sections-setup.html#setup",
-    "href": "discussion-sections/ds0-sections-setup.html#setup",
-    "title": "Repository setup",
+    "objectID": "week-by-week/week-by-week.html#week-1-sept-30---oct-6",
+    "href": "week-by-week/week-by-week.html#week-1-sept-30---oct-6",
+    "title": "Week by week",
+    "section": "",
+    "text": "What happened\n\n\n\n\n\n\n\n\nCourse introduction slides\nSet up of GitHub repository for in-class coding sessions. \nCovered Python review up to the end of the variables section.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 2)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week1-pandas-series.ipynb.\nRead the notes chapter on pandas series data frames and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished Python review.\nStudent presentations of pandas.Series and pandas.DataFrames exercises\n\n\n\n\nThere’s no setup for this week’s discussion section. We’ll follow the materials in Discussion Section 1."
+  },
+  {
+    "objectID": "week-by-week/week-by-week.html#week-2-oct-7---oct-13",
+    "href": "week-by-week/week-by-week.html#week-2-oct-7---oct-13",
+    "title": "Week by week",
+    "section": "",
+    "text": "Completed the following activity to add the data/ directory to the .gitignore file of the EDS-220/in-class-notebooks/ directory.\n\n\n\n\n\n\n\nEdit .gitignore file through terminal\n\n\n\n\n\n\n\n\nDownload the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory.\n\n\n\n\n\nVerify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore.\n\n\n\n\n\n\nCovered pandas subsetting notes up to selecting rows using a condition.\n\n\n\n\n\n\n\nPreparation for Wednesday class (October 9)\n\n\n\n\nIn your EDS-220/eds220-2024-in-class directory, create a new Python notebook called week2-basic-plotting.ipynb.\nRead the notes on basic plotting up to and including the “updating the index” section and follow along with the code.\nSolve the check-in exercises. We’ll present these during class.\nMake a summary of this part of the lesson. What are the most important concepts or ideas?\n\n\n\n\n\n\n\nFinished pandas subsetting notes.\nStudent presentations of basic plotting exercises\nFinished basic plotting notes\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
+  },
+  {
+    "objectID": "week-by-week/week-by-week.html#setup",
+    "href": "week-by-week/week-by-week.html#setup",
+    "title": "Week by week",
+    "section": "",
+    "text": "Download the CSV file wetlands_seasonal_bird_diversity.csv from our shared drive.\nIn the workbench 1 server, inside your EDS-220/in-class-notebooks/ directory, create a new directory called data.\nUsing the file navigation panel, upload the wetlands_seasonal_bird_diversity.csv file to the data/ directory."
+  },
+  {
+    "objectID": "week-by-week/week-by-week.html#in-the-terminal",
+    "href": "week-by-week/week-by-week.html#in-the-terminal",
+    "title": "Week by week",
+    "section": "",
+    "text": "Verify you are in the in-class-notebooks/ directory by using pwd. Your output should look like this:\n\n/Users/your-username/MEDS/EDS-220/in-class-notebooks\n\nRun git status. At the end of the output you’ll see:\n\nUntracked files:\n  (use \"git add &lt;file&gt;...\" to include in what will be committed)\n        data/\nThis means git knows the data/ directory exists and we have the risk of adding it to a commit.\n\nRun ls to see the files in the directory. Your output will look like this, notice the .gitiginore file is not listed:\n\nREADME.md  week1-lesson1-python-review.ipynb\ndata       week1-lesson3-pandas-subsetting.ipynb\n\nRun ls -a to see all files in the directory, including hidden files (those that start with a period .). At this point, your output will look like this:\n\n.                   README.md\n..                  data\n.git                week1-lesson1-python-review.ipynb\n.gitignore          week1-lesson3-pandas-subsetting.ipynb\n.ipynb_checkpoints\n\nRun nano .gitignore. This will open the .gitignore file in the nano editor.\nAdd the data/ folder to the .gitignore file by adding this text at the top of the file:\n\n# Ignore the 'data' directory\ndata/\n\nOnce you have made your changes, save the file:\n\n\nIn nano, press CTRL + O (the letter O, not zero) to save.\nPress Enter to confirm the file name (.gitignore).\n\n\nExit the editor by pressing CTRL + X.\nRun less .gitignore to scroll through the .gitignore file and verify the changes are there.\n\n\nUse the arrow keys or Page Up/Page Down to scroll through the file.\nPress q to exit.\n\n\nRun git status and check the output. The data/ directroy will no longer be listed!\nCommit and push your changes to the .gitignore."
+  },
+  {
+    "objectID": "assignments/assignment1.html",
+    "href": "assignments/assignment1.html",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "This assignment covers topics in the notes from the Python review to the plotting with pandas lesson. Task 1 will contribute 20% to the total grade of the assignment and tasks 2 and 3 will contribute 40% each.\n\n\n\n\n\n\n\n\nThis assignment is due by 11:59 pm on Saturday, September 12. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in this checklist:\n\nAnswer for task 1 must be a PDF file.\nAnswers for tasks 2 and 3 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, not a PDF, html or other format.\nEnsure your notebooks include a link to your assignment’s GitHub repository in the designated section.\nThe notebooks you submit must have your solutions to the exercises, They should not be the blank template notebooks.\nThe notebooks you submit must include your code and all required rendered plots, graphs, and printed output. Run all cells before submitting your .ipynb file and make sure all the outputs are visible.\nDouble-check that each notebook or PDF is uploaded to the correct task on Gradescope.\n\nResubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).\nIf you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, September 11. \n\n\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!\n\n\n\n\n\nSo much goes into creating a dataset, and data is more than numbers and words in a file. Without a proper understanding of the whole context where data was created, biases, omissions, and inacuracies can go undetected. The Datasheets for Datasets [1] advocates for transparency about the purpose and contents of datasets.\nCheck out this short interview with lead author Dr. Timnit Gebru, the executive director of the Distributed Artificial Intelligence Research Institute (DAIR), on the motivation to write this article:\n\nRead the paper and write a one-paragraph (between 100 and 150 words) open reflection about it. Review the rubric for this assignment here. Answer at least one of the following questions for your reflection:\n\nCan you think of a dataset you have worked with or encountered in your studies that would have benefited from a datasheet? Explain why or why not, using specific details about the dataset’s context, collection methods, or biases.\nWhat do you think are the limitations of the datasheets framework? Are there any challenges or risks associated with this approach, and how might they be addressed in practical settings?\nHow does the topic of transparency in datasets relate to your understanding of ethical data science practices? Provide an example where increased transparency could have changed the outcome of a dataset you have used or read about.\nBased on your previous professional experience, if you were tasked with creating a dataset for a project, what challenges or decisions would you face when creating its datasheet? Reflect on one or two aspects of data collection or transparency that you feel are particularly important.\n\n\n\n\n\n\n\n\nReady to submit your answer? Make sure your submission follows the checklist at the top of the assginment!\n\n\n\n\n\n\n\n\n\n\n\n\n\nFork this repository: https://github.com/MEDS-eds-220/eds220-hwk1\nIn the Taylor server, start a new JupyterLab session or access an active one.\nUsing the terminal, clone your eds220-hwk1 repository into your eds-220 directory.\nIn the terminal, use cd to navigate into the eds-220-hwk1 directory. Use pwd to verify eds-220-hwk1 is your current working directory.\n\n\n\n\n\n\n\nFor this task we are going to use data about Western Indian Ocean Coral Diversity [2] stored in the the Knowledge Network for Biocomplexity (KNB) data repository. The author for this dataset is Dr. Tim McClanahan, senior conservation zoologist at Wildlife Conservation Society.\n\n\n\nDr. Tim McClanahan underwater surveying coral reefs in coastal Tanzania. Photo credit: ©Michael Markovina. From the online article How Mount Kilimanjaro and We Can Save Corals\n\n\nFollow the instructions in the notebook hwk1-task2-corals.ipynb to complete this task. Review the rubric for this assignment here. In this task you will practice:\n\npreliminary data exploration\naccessing data using a URL from a data archive\nselecting data from a data frame\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!\n\n\n\n\n\n\nThis task is adapted from the Pandas Fundamentals with Earthquake Data assignment from the e-book Earth and Environmental Data Science [3].\nYou will use simplified data from the USGS Earthquakes Database.\nFollow the instructions in the notebook hwk1-task3-earthquakes.ipynb to complete this task.Review the rubric for this assignment here. Here you will practice:\n\naccessing data from your directory\nselecting data from a data frame\ncreating exploratory graphs\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
+  },
+  {
+    "objectID": "assignments/assignment1.html#submission-instructions",
+    "href": "assignments/assignment1.html#submission-instructions",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "This assignment is due by 11:59 pm on Saturday, September 12. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in this checklist:\n\nAnswer for task 1 must be a PDF file.\nAnswers for tasks 2 and 3 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, not a PDF, html or other format.\nEnsure your notebooks include a link to your assignment’s GitHub repository in the designated section.\nThe notebooks you submit must have your solutions to the exercises, They should not be the blank template notebooks.\nThe notebooks you submit must include your code and all required rendered plots, graphs, and printed output. Run all cells before submitting your .ipynb file and make sure all the outputs are visible.\nDouble-check that each notebook or PDF is uploaded to the correct task on Gradescope.\n\nResubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).\nIf you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, September 11. \n\n\n\n\n\n\n\n\n\nRename homework notebooks before uploading them to Gradescope\n\n\n\nFor your upcoming assignment submission, you’ll be downloading your notebooks and then uploading them to Gradescope. Before you upload your finished notebooks to Gradescope, please rename your notebooks so they are called\n\nhwk1-task2-corals-YOURLASTNAME.ipynb and\nhwk1-task3-earthquakes-YOURLASTNAME.ipynb.\n\nIt’s important to do this so we can keep track of resubmissions.\nThanks!"
+  },
+  {
+    "objectID": "assignments/assignment1.html#task-1-datasheets-for-datasets-reading",
+    "href": "assignments/assignment1.html#task-1-datasheets-for-datasets-reading",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "So much goes into creating a dataset, and data is more than numbers and words in a file. Without a proper understanding of the whole context where data was created, biases, omissions, and inacuracies can go undetected. The Datasheets for Datasets [1] advocates for transparency about the purpose and contents of datasets.\nCheck out this short interview with lead author Dr. Timnit Gebru, the executive director of the Distributed Artificial Intelligence Research Institute (DAIR), on the motivation to write this article:\n\nRead the paper and write a one-paragraph (between 100 and 150 words) open reflection about it. Review the rubric for this assignment here. Answer at least one of the following questions for your reflection:\n\nCan you think of a dataset you have worked with or encountered in your studies that would have benefited from a datasheet? Explain why or why not, using specific details about the dataset’s context, collection methods, or biases.\nWhat do you think are the limitations of the datasheets framework? Are there any challenges or risks associated with this approach, and how might they be addressed in practical settings?\nHow does the topic of transparency in datasets relate to your understanding of ethical data science practices? Provide an example where increased transparency could have changed the outcome of a dataset you have used or read about.\nBased on your previous professional experience, if you were tasked with creating a dataset for a project, what challenges or decisions would you face when creating its datasheet? Reflect on one or two aspects of data collection or transparency that you feel are particularly important.\n\n\n\n\n\n\n\n\nReady to submit your answer? Make sure your submission follows the checklist at the top of the assginment!"
+  },
+  {
+    "objectID": "assignments/assignment1.html#setup-for-tasks-2-and-3",
+    "href": "assignments/assignment1.html#setup-for-tasks-2-and-3",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "Fork this repository: https://github.com/MEDS-eds-220/eds220-hwk1\nIn the Taylor server, start a new JupyterLab session or access an active one.\nUsing the terminal, clone your eds220-hwk1 repository into your eds-220 directory.\nIn the terminal, use cd to navigate into the eds-220-hwk1 directory. Use pwd to verify eds-220-hwk1 is your current working directory."
+  },
+  {
+    "objectID": "assignments/assignment1.html#task-2-exploring-coral-diversity-data",
+    "href": "assignments/assignment1.html#task-2-exploring-coral-diversity-data",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "For this task we are going to use data about Western Indian Ocean Coral Diversity [2] stored in the the Knowledge Network for Biocomplexity (KNB) data repository. The author for this dataset is Dr. Tim McClanahan, senior conservation zoologist at Wildlife Conservation Society.\n\n\n\nDr. Tim McClanahan underwater surveying coral reefs in coastal Tanzania. Photo credit: ©Michael Markovina. From the online article How Mount Kilimanjaro and We Can Save Corals\n\n\nFollow the instructions in the notebook hwk1-task2-corals.ipynb to complete this task. Review the rubric for this assignment here. In this task you will practice:\n\npreliminary data exploration\naccessing data using a URL from a data archive\nselecting data from a data frame\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
+  },
+  {
+    "objectID": "assignments/assignment1.html#task-3-pandas-fundamentals-with-earthquake-data",
+    "href": "assignments/assignment1.html#task-3-pandas-fundamentals-with-earthquake-data",
+    "title": "Assignment 1",
+    "section": "",
+    "text": "This task is adapted from the Pandas Fundamentals with Earthquake Data assignment from the e-book Earth and Environmental Data Science [3].\nYou will use simplified data from the USGS Earthquakes Database.\nFollow the instructions in the notebook hwk1-task3-earthquakes.ipynb to complete this task.Review the rubric for this assignment here. Here you will practice:\n\naccessing data from your directory\nselecting data from a data frame\ncreating exploratory graphs\nbasic git workflow\ncommenting your code\n\n\n\n\n\n\n\nReady to submit your answers? Make sure your submission follows the checklist at the top of the assginment!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome!",
+    "section": "",
+    "text": "Welcome to the course materials for EDS 220 - Working with Environmental Datasets! In this website you will find all the materials for the Fall 2024 term. This course is part of the UCSB Masters in Environmental Data Science.\n\n\nThis hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses.\n\n\n\n\n\n\nCarmen Galaz García (she/her/hers)\n\nE-mail: galazgarcia@bren.ucsb.edu\nStudent hours: Wednesday 4-5 @ Bren Hall 4424\n\n\n\n\nAnnie Adams (she/her/hers)\n\nE-mail: aradams@ucsb.edu\nStudent hours: Thursday 12 pm - 1 pm @ Bren Hall 3022\n\n\n\n\n\n\nClick here to access the syllabus.\n\n\n\nThe following is our tentative calendar. The course content and calendar may be subject to change as the course progresses.\n\n\n\n\n📝 If you have suggestions on how to correct, improve, or expand these course materials, please feel free to email the course instructor at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these materials have been useful to you, consider adding a star to the project’s repository!"
+  },
+  {
+    "objectID": "index.html#course-description",
+    "href": "index.html#course-description",
+    "title": "Welcome!",
+    "section": "",
+    "text": "This hands-on course explores widely used environmental data formats and Python libraries for analyzing diverse environmental data. Students will gain experience working with popular open data repositories and cloud platforms to source and analyze real-world environmental datasets. The course will also serve as an introduction to Python programming and provide opportunities to practice effective communication of the strengths and weaknesses of students’ data products and analyses."
+  },
+  {
+    "objectID": "index.html#instruction-team",
+    "href": "index.html#instruction-team",
+    "title": "Welcome!",
+    "section": "",
+    "text": "Carmen Galaz García (she/her/hers)\n\nE-mail: galazgarcia@bren.ucsb.edu\nStudent hours: Wednesday 4-5 @ Bren Hall 4424\n\n\n\n\nAnnie Adams (she/her/hers)\n\nE-mail: aradams@ucsb.edu\nStudent hours: Thursday 12 pm - 1 pm @ Bren Hall 3022"
+  },
+  {
+    "objectID": "index.html#syllabus",
+    "href": "index.html#syllabus",
+    "title": "Welcome!",
+    "section": "",
+    "text": "Click here to access the syllabus."
+  },
+  {
+    "objectID": "index.html#calendar",
+    "href": "index.html#calendar",
+    "title": "Welcome!",
+    "section": "",
+    "text": "The following is our tentative calendar. The course content and calendar may be subject to change as the course progresses."
+  },
+  {
+    "objectID": "index.html#contribute",
+    "href": "index.html#contribute",
+    "title": "Welcome!",
+    "section": "",
+    "text": "📝 If you have suggestions on how to correct, improve, or expand these course materials, please feel free to email the course instructor at galazgarcia@bren.ucsb.edu or file a GitHub issue.\n🌟 If these materials have been useful to you, consider adding a star to the project’s repository!"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html",
+    "title": "Preliminary data exploration with pandas",
+    "section": "",
+    "text": "This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#setup",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#setup",
+    "title": "Preliminary data exploration with pandas",
     "section": "Setup",
-    "text": "Setup\n\n\n\n\n\n\nOur TA will guide the activities for this discussion section."
+    "text": "Setup\n\n\n\n\n\n\n\nIn the workbench-1 server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python notebook inside your eds-220-sections directory and rename it to section-1-data-selection-drylands.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
   },
   {
-    "objectID": "discussion-sections/ds0-sections-setup.html#create-repository",
-    "href": "discussion-sections/ds0-sections-setup.html#create-repository",
-    "title": "Repository setup",
-    "section": "1. Create repository",
-    "text": "1. Create repository\n\nCreate a new repository on GitHub. Use the following settings:\n\nRepository name: eds220-2024-sections.\nDescription: Work during discussion sections for the EDS 220 MEDS course.\nKeep the repository public.\nAdd a README file.\nAdd a Python .gitignore template.\n\nIn GitHub, update your repository’s README by:\n\nDeleting the text that was automatically generated when you created the repo.\nCopy-pasting the markdown text below, do not update [YOUR NAME HERE] yet.\n\n\n# EDS 220 Discussion Sections Repository\n\nThis repository hosts all the work completed by [YOUR NAME HERE] during the discussion sections of EDS 220 - *Working with Environmental Datasets*.\n\n## Course Information\n\n- **Course Title:** EDS 220 - Working with Environmental Datasets\n- **Term:** Fall 2024\n- **Program:** [UCSB Masters in Environmental Data Science](https://bren.ucsb.edu/masters-programs/master-environmental-data-science)\n- **Instructor:** Carmen Galaz García\n- **TA:** Annie Adams \n\nComplete materials for the discussion sections and additional resources can be found on the [course website](https://meds-eds-220.github.io/MEDS-eds-220-course/discussion-sections/discussion-sections-listing.html).\n\nAdd the URL to your GitHub repository to this spreadhseet.\n\n\nMAKE SURE YOU’VE SUCCESSFULLY SET UP YOUR REPOSITORY ON GITHUB BEFORE CONTINUING"
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#general-directions",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#general-directions",
+    "title": "Preliminary data exploration with pandas",
+    "section": "General directions",
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often.\nYou won’t need to upload any data."
   },
   {
-    "objectID": "discussion-sections/ds0-sections-setup.html#clone-the-repository",
-    "href": "discussion-sections/ds0-sections-setup.html#clone-the-repository",
-    "title": "Repository setup",
-    "section": "2. Clone the repository",
-    "text": "2. Clone the repository\n\nAt Bren’s workbench 1 server, start a new JupyterLab session or access an active one.\nInside your MEDS/ directory, create a new directory called EDS-220. We’ll use this directory to collect all the repositories used in the course.\nIn the terminal, navigate to the EDS-220 directory by using cd NAME-OF-DIRECTORY.\nUsing the terminal, clone the repository into your EDS-220 directory. To do this:\n\nIn your repository’s landing page on GitHub, click on the green button that says &lt; &gt; Code. In the HTTPS tab option, copy the URL that appears there.\nGo back to the server. In the terminal, run pwd (print working directory) to make sure we’ll be cloning into the desired location (inside the EDS-220 directory). The ouput should look like:\n\n/Users/c_galazgarcia/MEDS/EDS-220/\n\nRun git clone URL. You should see the directory appear in the folder navigation bar to the left\nGo into the cloned repo in the terminal: cd eds220-2024-sections."
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#about-the-data",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#about-the-data",
+    "title": "Preliminary data exploration with pandas",
+    "section": "About the data",
+    "text": "About the data\nFor these exercises we will use data about prey items for endangered terrestrial vertebrate species within central California drylands[1] [2].\nThis dataset is stored in the Knowledge Network for Biocomplexity (KNB) data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the National Center for Ecological Analysis and Synthesis (NCEAS).\n\n\n\nData collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr. Rachel King."
   },
   {
-    "objectID": "discussion-sections/ds0-sections-setup.html#update-your-name-and-push-changes",
-    "href": "discussion-sections/ds0-sections-setup.html#update-your-name-and-push-changes",
-    "title": "Repository setup",
-    "section": "3. Update your name and push changes",
-    "text": "3. Update your name and push changes\n\nOpen the README.md file and update the [YOUR NAME HERE] with your name. Save your changes.\nPush your changes to your remote repository (remember, in this case, this is how we call the copy of your repo that lives in GitHub). To do this, remember the basic git routine:\n\ngit status : check git status, shows which files are staged, modified, or untracked\ngit add FILE-NAME : stage files that have been updated, these files will be added to your next commit\ngit status : check git status again to confirm you have staged the right files\ngit commit -m \"Commit message\" : create a commit with message\ngit pull : pull latest changes before pushing to ensure your local repo is up-to-date\ngit push : push your changes to upstream repo\n\nYou should have previously configured your personal access token (PAT) during summer session, but it might be possible that it is not cached anymore and you are prompted to create a new one when doing git push. If this is the case:\n\nFollow the instructions in the MEDS setup guide to create a new PAT.\nOnce you have created your PAT, do git push again to push your changes.\n\n\n\nMAKE SURE YOU’VE SUCCESSFULLY PUSHED YOUR UPDATES BEFORE ENDING"
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#archive-exploration",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#archive-exploration",
+    "title": "Preliminary data exploration with pandas",
+    "section": "1. Archive exploration",
+    "text": "1. Archive exploration\nWhen possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:\n\nWhat is this data about?\nIs this data collected in-situ by the authors or is it a synthesis of multiple datasets?\nDuring what time frame were the observations in the dataset collected?\nDoes this dataset come with an associated metadata file?\nDoes the dataset contain sensitive data?\n\nIn your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#metadata-exploration",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#metadata-exploration",
+    "title": "Preliminary data exploration with pandas",
+    "section": "2. Metadata exploration",
+    "text": "2. Metadata exploration\nYou may have noticed there are two metadata files: Compiled_occurrence_records_for_prey_items_of.xml and metadata_arth_occurrences.csv. The .xml document file type is EML which stands for EML: Ecological Metadata Language. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.\nBack in your notebook, import the pandas package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the pandas.read_csv() function:\n\nNavigate to the data package site and copy the URL to access the metadata_arth_occurrences CSV file. To copy the URL:\n\n\nhover over the Download button –&gt; right click –&gt; “Copy Link”.\n\n\nRead in the data from the URL using the pd.read_csv() function like this:\n# Access metadata from repository\npd.read_csv('the URL goes here')\nTake a minute to look at the descriptions for the columns.\n\nNote: Not all datasets have column descriptions in a CSV file. Often they come with a .doc or .txt file with information."
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#data-loading",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#data-loading",
+    "title": "Preliminary data exploration with pandas",
+    "section": "3. Data loading",
+    "text": "3. Data loading\n\nFollow steps (a) and (b) from the previous exercise to read in the drylands prey data file arth_occurrences_with_env.csv using pd.read_csv(). Store the dataframe to a variable called prey like this:\n\n# Load data\nprey = pd.read_csv('the URL goes here')\n\nWhat is the type of the prey variable? Use a Python function get this information.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#look-at-your-data",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#look-at-your-data",
+    "title": "Preliminary data exploration with pandas",
+    "section": "4. Look at your data",
+    "text": "4. Look at your data\n\nRun prey in a cell. What do you notice in the columns section?\nTo see all the column names in the same display we need to set a pandas option. Run the following command and then look at the prey data again:\n\npd.set_option(\"display.max.columns\", None)\n\nAdd a comment explaining what pd.set_option(\"display.max.columns\", None) does.\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#pd.dataframe-preliminary-exploration",
+    "title": "Preliminary data exploration with pandas",
+    "section": "5. pd.DataFrame preliminary exploration",
+    "text": "5. pd.DataFrame preliminary exploration\nRun each of the following methods for prey in a different cell and write a brief description of what they do as a comment:\n\nhead()\ntail()\ninfo()\nnunique()\n\nFor example:\n# head()\n# returns the first five rows of the data frame\nprey.head()\nIf you’re not sure about what the method does, try looking it up in the pandas.DataFrame documentation.\n\nCheck the documentation for head(). If this function has any optional parameters, change the default value to get a different output.\n\nPrint each of the following attributes of prey in a different cell and write a brief explanation of what they are as a comment:\n\nshape\ncolumns\ndtypes\n\nIf you’re not sure about what information is the attribute showing, look it up in the pandas.DataFrame documentation.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds1-prelim-data-exploration.html#update-column-names",
+    "href": "discussion-sections/ds1-prelim-data-exploration.html#update-column-names",
+    "title": "Preliminary data exploration with pandas",
+    "section": "6. Update column names",
+    "text": "6. Update column names\nChange the column names of institutionCode and datasetKey to institution_code and dataset_key, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the rename method for pandas.DataFrames.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/discussion-sections-listing.html",
+    "href": "discussion-sections/discussion-sections-listing.html",
+    "title": "Discussion sections",
+    "section": "",
+    "text": "week\n\n\ntopic\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n1\n\n\nPreliminary data exploration with pandas\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "conventions.html",
@@ -1199,85 +1290,113 @@
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html",
-    "title": "Water conflicts in the Colorado River Basin",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "",
-    "text": "This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the U.S. Geological Survey (USGS). In this discussion section, you will:"
+    "text": "This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the U.S. Geological Survey (USGS). In this discussion section, you will:"
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#setup",
-    "title": "Water conflicts in the Colorado River Basin",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "Setup",
-    "text": "Setup\n\n\n\n\n\n\n\nIn the workbench-1 server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python notebook inside your eds-220-sections directory and rename it to section-2-co-basin-water-conflicts.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
+    "text": "Setup\n\n\n\n\n\n\n\nIn the Taylor server, start a new JupyterLab session or access an active one.\nIn the terminal, use cd to navigate into the eds-220-sections directory. Use pwd to verify eds-220-sections is your current working directory.\nCreate a new Python Notebook inside your eds-220-sections directory and rename it to section-2-co-basin-water-conflicts.ipynb.\nUse the terminal to stage, commit, and push this file to the remote repository. Remember:\n\ngit status : check git status\ngit add FILE-NAME : stage updated file\ngit status : check git status again to confirm\ngit commit -m \"Commit message\" : commit with message\ngit pull : check local repo is up to date (best practice)\ngit push : push changes to upstream repository\n\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING"
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#general-directions",
-    "title": "Water conflicts in the Colorado River Basin",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "General directions",
-    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in each one of your code cells.\nInclude markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often."
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments in your code cells following comments best practices.\nOn each exercise, include markdown cells in between your code cells to add titles and information.\nIndications about when to commit and push changes are included, but you are encouraged to commit and push more often."
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#about-the-data",
-    "title": "Water conflicts in the Colorado River Basin",
+    "title": "Exploring water conflicts in the Colorado River Basin",
     "section": "About the data",
-    "text": "About the data\nFor these exercises we will use data about Water Conflict and Crisis Events in the Colorado River Basin [1]. This dataset is stored at ScienceBase, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.\nThe dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.\n\n\n\nColorado River Basin. U.S. Bureau of Reclamation."
-  },
-  {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "1. Archive exploration",
-    "text": "1. Archive exploration\nLook through the dataset’s description in the ScienceBase repository. Find the following information:\n\nWhere was the data collected from? \nDuring what time frame were the observations in the dataset collected? \nWhat was the author’s perceived value of this dataset? \n\nIn a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
-  },
-  {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "2. Data loading",
-    "text": "2. Data loading\n\n\nCreate a new directory data/ inside your eds-220-sections directory.\nDownload the Colorado River Basin Water Conflict Table.csv file from the Science Base repository and upload it into the data/ folder.\nUpdate the .gitignore file of your eds-220-sections so it ignores the data/ folder. Push the changes to this file. Verify that git is ignoring the data file. Note: If you update the .gitignore file via GitHub, you need to run git pull when you go back to the server.\nLoad the data into your section-2-co-basin-water-conflicts.ipynb notebook. Name your data frame variable df.\n\n\nimport pandas as pd\n\ndf = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')\ndf.head(5)\n\n\n\n\n\n\n\n\nEvent\nSearch Source\nNewspaper\nArticle Title\nDuplicate\nReport Date\nReport Year\nEvent Date\nEvent Day\nEvent Month\n...\nArticle Text Search - water rights\nArticle Text Search - intergovernmental\nArticle Text Search - water transfers\nArticle Text Search - navigation\nArticle Text Search - fish\nArticle Text Search - invasive\nArticle Text Search - diversion\nArticle Text Search - water diversion\nArticle Text Search - instream\nArticle Text Search - aquatic\n\n\n\n\n0\n1\nUSGS1-50.docx\nThe Durango Herald (Colorado)\nTribes assert water rights on Colorado River B...\nFalse\n7-Apr-22\n2022.0\nNaN\nNaN\n4.0\n...\n17\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n1\n2\nUSGS1-50.docx\nJournal, The (Cortez, Dolores, Mancos, CO)\nNative American tribes assert water rights on ...\nFalse\n7-Apr-22\n2022.0\nNaN\nNaN\n4.0\n...\n17\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n2\n3\nUSGS1-50.docx\nThe Salt Lake Tribune\n'Very positive change.' New Utah law will be a...\nFalse\n17-Mar-22\n2022.0\nNaN\nNaN\n3.0\n...\n12\n0\n0\n0\n1\n0\n0\n0\n12\n1\n\n\n3\n4\nUSGS1-50.docx\nCasa Grande Dispatch (AZ)\nLegislation would let an Arizona tribe lease C...\nFalse\n11-Dec-21\n2021.0\nNaN\nNaN\n12.0\n...\n6\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n4\n5\nUSGS1-50.docx\nThe Aspen Times (Colorado)\nHistorically excluded from Colorado River poli...\nFalse\n19-Dec-21\n2021.0\nNaN\nNaN\n11.0\n...\n18\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n\n\n5 rows × 48 columns"
-  },
-  {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "3. Preliminary data exploration",
-    "text": "3. Preliminary data exploration\nUsing pandas methods, obtain preliminary information and explore this data frame in at least four different ways.\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "text": "About the data\nFor these exercises we will use data about Water Conflict and Crisis Events in the Colorado River Basin [1]. This dataset is stored at ScienceBase,a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.\nThe dataset is a CSV file containing information about conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.\n\n\n\nColorado River Basin. U.S. Bureau of Reclamation."
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#string-accessor-for-pandas.series",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#string-accessor-for-pandas.series",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "4. String accessor for pandas.Series",
-    "text": "4. String accessor for pandas.Series\nIn the following exercises we will work with pandas.Series whose values are strings. This is a common scenario, so pandas has special string methods for this kind of series. These methods are accessed via the str accessor. Accessors provide additional functionality for working with specific kinds of data (in this case, strings).\n\nThe code below gives a brief demonstration of the using the str accessor to use the split() method for pandas.Series. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.\n\n\nimport numpy as np\nimport pandas as pd \n\n# Example series\ns = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Nevada; Utah'])\ns\n\n0    California; Nevada\n1               Arizona\n2                   NaN\n3          Nevada; Utah\ndtype: object\n\n\n\n# str accessor (doesn't do anything by itself)\ns.str\n\n&lt;pandas.core.strings.accessor.StringMethods at 0x10914bb90&gt;\n\n\n\n# Use str accessor with additional methods to perform string operations\n# .split splits strings by ';' and expands output into separate columns\ns.str.split(';', expand=True)\n\n\n\n\n\n\n\n\n0\n1\n\n\n\n\n0\nCalifornia\nNevada\n\n\n1\nArizona\nNone\n\n\n2\nNaN\nNaN\n\n\n3\nNevada\nUtah\n\n\n\n\n\n\n\n\n# Use stack() method to flatten the data frame into a series\n# default is to drop NAs and None from result\ns.str.split(';', expand=True).stack()\n\n0  0    California\n   1        Nevada\n1  0       Arizona\n3  0        Nevada\n   1          Utah\ndtype: object"
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "1. String accessor for pandas.Series",
+    "text": "1. String accessor for pandas.Series\nIn this session we will work with pandas.Series whose values are strings. This is a common scenario and pandas has special string methods for this kind of series. These methods are accessed via the str accessor. Accessors provide additional functionality for working with specific kinds of data (in this case, strings).\n\nCarefully read the code below. We’ll use some of it in the next exercises.\n\n\nimport pandas as pd \nimport numpy as np\n\n# Example series\ns = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Utah; Colorado'])\nprint(s)\n\n# str accessor (doesn't do anything by itself)\nprint(s.str)\n\n# Use str accessor with additional methods to perform string operations\n# .split splits strings by ';' and expands output into separate columns\ns.str.split(';', expand=True)\n\n0    California; Nevada\n1               Arizona\n2                   NaN\n3        Utah; Colorado\ndtype: object\n&lt;pandas.core.strings.accessor.StringMethods object at 0x166f07090&gt;\n\n\n\n\n\n\n\n\n\n0\n1\n\n\n\n\n0\nCalifornia\nNevada\n\n\n1\nArizona\nNone\n\n\n2\nNaN\nNaN\n\n\n3\nUtah\nColorado"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#archive-exploration",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "2. Archive exploration",
+    "text": "2. Archive exploration\nTake some time to look through the dataset’s description in the ScienceBase repository. Discuss the following questions with your team:\n\nWhere was the data collected from? \nDuring what time frame were the observations in the dataset collected? \nWhta was the author’s perceived value of this dataset? \nBriefly discuss anything else that seems like relevant information.\n\nIn a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Include a citation, date of access, and a link to the archive.\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#data-loading",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "3. Data loading",
+    "text": "3. Data loading\n\nIn class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access.\nImport the Colorado River Basin Water Conflict Table.csv file from the Science Base repository into your workspace. Name your data frame variable df.\n\n\nCHECK IN WITH YOUR TEAM\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes\n\n\nimport pandas as pd\n\ndf = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')\ndf.head(5)\n\n\n\n\n\n\n\n\nEvent\nSearch Source\nNewspaper\nArticle Title\nDuplicate\nReport Date\nReport Year\nEvent Date\nEvent Day\nEvent Month\n...\nArticle Text Search - water rights\nArticle Text Search - intergovernmental\nArticle Text Search - water transfers\nArticle Text Search - navigation\nArticle Text Search - fish\nArticle Text Search - invasive\nArticle Text Search - diversion\nArticle Text Search - water diversion\nArticle Text Search - instream\nArticle Text Search - aquatic\n\n\n\n\n0\n1\nUSGS1-50.docx\nThe Durango Herald (Colorado)\nTribes assert water rights on Colorado River B...\nFalse\n7-Apr-22\n2022.0\nNaN\nNaN\n4.0\n...\n17\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n1\n2\nUSGS1-50.docx\nJournal, The (Cortez, Dolores, Mancos, CO)\nNative American tribes assert water rights on ...\nFalse\n7-Apr-22\n2022.0\nNaN\nNaN\n4.0\n...\n17\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n2\n3\nUSGS1-50.docx\nThe Salt Lake Tribune\n'Very positive change.' New Utah law will be a...\nFalse\n17-Mar-22\n2022.0\nNaN\nNaN\n3.0\n...\n12\n0\n0\n0\n1\n0\n0\n0\n12\n1\n\n\n3\n4\nUSGS1-50.docx\nCasa Grande Dispatch (AZ)\nLegislation would let an Arizona tribe lease C...\nFalse\n11-Dec-21\n2021.0\nNaN\nNaN\n12.0\n...\n6\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n4\n5\nUSGS1-50.docx\nThe Aspen Times (Colorado)\nHistorically excluded from Colorado River poli...\nFalse\n19-Dec-21\n2021.0\nNaN\nNaN\n11.0\n...\n18\n0\n0\n0\n0\n0\n0\n0\n0\n0\n\n\n\n\n5 rows × 48 columns"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#preliminary-data-exploration",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "4. Preliminary data exploration",
+    "text": "4. Preliminary data exploration\nWrite a list with at least four ways in which you coud gain preliminary information about this dataset and why these are relevant.\n\n# df.head()\n# df.shape\n# df.columns\n# df.Stakeholders.unique()\n\n\n(df['State'].dropna()\n            .str.split(';', expand=True)\n            .stack()\n            .str.strip()\n            .value_counts())\n\nAZ    87\nCO    45\nUT    40\nNV    19\nCA    16\nNM    13\nWY     8\nOH     1\nTX     1\nName: count, dtype: int64"
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#examine-state-codes",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#examine-state-codes",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "5. Examine state codes",
-    "text": "5. Examine state codes\nOur goal today is to find which states are reported in the dataset as having a water conflicts.\n\nWhat are the unique values in the States column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.\n\n\nprint(df['State'].unique())\n\n['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'\n 'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'\n 'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'\n 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']\n\n\n\nfor x in df['State'].unique():\n    print(x)\n\nCO\nUT\nnan\nAZ\nOH; UT\nAZ; CO; NM; UT\nCA\nAZ; UT\nAZ; NV\nCO; UT; WY; NM\nAZ; CA\nUT; AZ\nCO; WY\nNV; AZ\nCO; AZ\nAZ; CA; CO; NV; NM; UT; WY\nAZ; CA; NV\nNV\nNM\nUT; CO; WY\nCA; NV; AZ\nAZ; NM\nWY; UT; CO\nTX"
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Examine state codes",
+    "text": "Examine state codes\nOur goal today is to find which states are reported in the dataset as having a water-conflict.\n\nExamine the unique values in the States column. What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.\n\n\nprint(df['State'].unique())\n\n['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'\n 'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'\n 'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'\n 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']\n\n\n\nfor x in df['State'].unique():\n    print(x)\n\nCO\nUT\nnan\nAZ\nOH; UT\nAZ; CO; NM; UT\nCA\nAZ; UT\nAZ; NV\nCO; UT; WY; NM\nAZ; CA\nUT; AZ\nCO; WY\nNV; AZ\nCO; AZ\nAZ; CA; CO; NV; NM; UT; WY\nAZ; CA; NV\nNV\nNM\nUT; CO; WY\nCA; NV; AZ\nAZ; NM\nWY; UT; CO\nTX"
   },
   {
     "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#brainstorm",
     "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#brainstorm",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "6. Brainstorm",
-    "text": "6. Brainstorm\n\nIndividually, write step-by-step instructions on how you would wrangle the data frame df to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.\nDiscuss your step-by-step instructions with your team.\n\nThe next exercises will guide you through finding the unique state codes in the dataset. There are many ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the .str accessor in a pandas.Series."
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Brainstorm",
+    "text": "Brainstorm\n\nFirst, individually, write step-by-step instructions of how you would create a list with the state codes in which there’s a water-conflict reported (without repetition). It’s ok if you don’t know how to code each step, it’s just important to have an idea of what we’ll do before starting to code.\nDiscuss your ideas with your team.\n\nThe next exercises will guide you through finding the state codes in the dataset. There are many ways of extracting this information from the dataset. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the .str accessor in a pandas.Series."
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#find-unique-state-codes-first-attempt",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#find-unique-state-codes-first-attempt",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "7. Find unique state codes (first attempt)",
-    "text": "7. Find unique state codes (first attempt)\n\nPerform the following wrangling:\n\nselect the State column from the df data frame\nsplit the strings in the column by the delimeter ; into different columns\nstack the results of the resulting data frame into a single pandas.Series\nfind the unique string values in the resulting series\n\n\nYour final answer should use method chaining without creating new variables.\n\ndf['State'].str.split(';', expand=True).stack().unique()\n\narray(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',\n       ' CA', ' AZ', 'NV', 'NM', 'WY', 'TX'], dtype=object)\n\n\n\nCHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#drop-nas",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#drop-nas",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Drop NAs",
+    "text": "Drop NAs\nUse the dropna() method for pandas.Series on the State column to create a new pandas.Series states without NAs. Check there are no NAs in the new states series.\n\nstates = df['State'].dropna()\nstates\n\n0          CO\n1          CO\n2          UT\n5          AZ\n11     OH; UT\n        ...  \n263        CO\n264        CO\n265    AZ; CA\n266        AZ\n267        AZ\nName: State, Length: 178, dtype: object\n\n\n\nstates.hasnans\n\nFalse"
   },
   {
-    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#find-unique-state-codes-second-attempt",
-    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#find-unique-state-codes-second-attempt",
-    "title": "Water conflicts in the Colorado River Basin",
-    "section": "8. Find unique state codes (second attempt)",
-    "text": "8. Find unique state codes (second attempt)\n\nDiscuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?\nUpdate your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. Hint: str.strip().\n\n\n(df['State'].str.split(';', expand=True)\n            .stack()\n            .str.strip()\n            .unique()\n            )\n\narray(['CO', 'UT', 'AZ', 'OH', 'NM', 'CA', 'NV', 'WY', 'TX'], dtype=object)\n\n\n\nBonus: How many articles mention each state?\n\n\n(df['State'].str.split(';', expand=True)\n            .stack()\n            .str.strip()\n            .value_counts()\n            )\n\nAZ    87\nCO    45\nUT    40\nNV    19\nCA    16\nNM    13\nWY     8\nOH     1\nTX     1\nName: count, dtype: int64"
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#split-strings",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#split-strings",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Split strings",
+    "text": "Split strings"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#stack-the-data-frame",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#stack-the-data-frame",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Stack the data frame",
+    "text": "Stack the data frame"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#string-accessor",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#string-accessor",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "String accessor",
+    "text": "String accessor"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#value-counts",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#value-counts",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Value counts",
+    "text": "Value counts"
+  },
+  {
+    "objectID": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#method-chaining",
+    "href": "discussion-sections-upcoming/ds-2-water-crisis-exploration.html#method-chaining",
+    "title": "Exploring water conflicts in the Colorado River Basin",
+    "section": "Method chaining",
+    "text": "Method chaining\n\n# stakeholders = (df['Stakeholders'].dropna()\n#                      .str.split(',', expand=True)\n#                      .apply(lambda x: x.str.strip())\n#                      .values\n#                      .ravel())\n\n# stakeholders = pd.unique(stakeholders)\n# print(stakeholders)"
   }
 ]

@@ -2,7 +2,7 @@
 title: Water conflicts in the Colorado River Basin
 subtitle: Week 2 - Discussion section
 week: 2
-image: images/Tecopa_site2.JPG
+image: images/free-photo-of-colorado-river-in-usa.jpeg
 sidebar: false
 jupyter: mpc-env-kernel
 ---
@@ -56,23 +56,25 @@ Its management is vital due to the region's arid climate and the competing deman
 
 
 ## 1. Archive exploration
-Look through the dataset's description in the ScienceBase repository. Find the following information:
+a. Look through the dataset's description in the ScienceBase repository. Find the following information:
 
-a. Where was the data collected from?
+    i. Where was the data collected from??
 <!-- 
 articles from newspapers describing water-related events in geographic areas in the Basin
 -->
-b. During what time frame were the observations in the dataset collected?
+    ii. During what time frame were the observations in the dataset collected?
 <!--
 2005-2021
 -->
-c. What was the author's perceived value of this dataset?
+    iii. What was the author's perceived value of this dataset?
 <!--
  examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
 -->
 
 
-In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive. 
+b. In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive. 
+
+c. Take a look at the data's metadata by clicking on the "View" icon of the `Coded Events Colorado River Basin Water Conflict Table Metadata.xml` file.
 
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
@@ -93,16 +95,21 @@ c. Update the `.gitignore` file of your `eds-220-sections` so it ignores the `da
 
 d. Load the data into your `section-2-co-basin-water-conflicts.ipynb` notebook. Name your data frame variable `df`.
 
+<!--
 ```{python}
 import pandas as pd
+pd.set_option("display.max.columns", None)
 
 df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
 df.head(5)
 ```
+-->
 
 ## 3. Preliminary data exploration
 
-Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways.
+a. Set pandas to display all columns in the data frame. 
+
+b. Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways.
 
 <!--
 ```{python}
@@ -114,7 +121,10 @@ Using `pandas` methods, obtain preliminary information and explore this data fra
 
 -->
 <p style="text-align: center;">
-**CHECK IN WITH YOUR TEAM** 
+**CHECK IN WITH YOUR TEAM  🙌** 
+</p>
+<p style="text-align: center;">
+**YOU CAN SLACK THEM TO LET THEM KNOW YOU'RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS** 
 </p>
 <p style="text-align: center;">
 **MAKE SURE YOU'VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING**
@@ -124,8 +134,19 @@ Using `pandas` methods, obtain preliminary information and explore this data fra
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
+## 4. Location column descriptions
 
-## 4. String accessor for `pandas.Series`
+In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:
+
+| Column | Description |
+|---------|-----|
+| Place      | Where the event actually occurred, but also where the event's direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.|
+| State | State Name coded from Place field. |
+: {tbl-colwidths="[10,90]"}
+
+
+
+## 5. String accessor for `pandas.Series`
 
 In the following exercises we will work with `pandas.Series` whose values are strings. This is a common scenario, so `pandas` has special [string methods](https://pandas.pydata.org/docs/user_guide/text.html#string-methods) for this kind of series. These methods are accessed via the **`str` accessor**. **Accessors** provide additional functionality for working with specific kinds of data (in this case, strings). 
 
@@ -156,13 +177,13 @@ s.str.split(';', expand=True)
 s.str.split(';', expand=True).stack()
 ```
 
-
-## 5. Examine state codes
+## 6. Examine state codes
 
 Our goal today is to **find which states are reported in the dataset as having a water conflicts**. 
 
 a. What are the unique values in the `States` column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.
 
+<!--
 ```{python}
 print(df['State'].unique())
 ```
@@ -171,8 +192,9 @@ print(df['State'].unique())
 for x in df['State'].unique():
     print(x)
 ```
+-->
 
-## 6. Brainstorm
+## 7. Brainstorm
 
 a. Individually, write step-by-step instructions on how you would wrangle the data frame `df` to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It's ok if you don't know how to code each step - it's more important to have an idea of what you would like to do.
 
@@ -181,7 +203,7 @@ b. Discuss your step-by-step instructions with your team.
 The next exercises will guide you through finding the unique state codes in the dataset. There are *many* ways of extracting this information. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `.str` accessor in a `pandas.Series`.
 
 <!--
-## 7. Drop NAs
+## X. Drop NAs
 
 Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
 
@@ -195,7 +217,7 @@ states.hasnans
 ```
 -->
 
-## 7. Find unique state codes (first attempt)
+## 8. Exploratory wrangling
 a. Perform the following wrangling:
     i. select the State column from the `df` data frame
     i. split the strings in the column by the delimeter `;` into different columns 
@@ -204,9 +226,11 @@ a. Perform the following wrangling:
 
 Your final answer should use method chaining without creating new variables.
 
+<!--
 ```{python}
 df['State'].str.split(';', expand=True).stack().unique()
 ```
+-->
 
 <p style="text-align: center;">
 **CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?** 
@@ -215,12 +239,13 @@ df['State'].str.split(';', expand=True).stack().unique()
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
-## 8. Find unique state codes (second attempt)
+## 9. Find unique state codes
 
 a. Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?
 
 b. Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. **Hint:** [str.strip().](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html)
 
+<!--
 ```{python}
 (df['State'].str.split(';', expand=True)
             .stack()
@@ -228,9 +253,11 @@ b. Update your code to obtain a list of codes (without repetition) of the states
             .unique()
             )
 ```
+-->
 
 c. Bonus: How many articles mention each state? 
 
+<!--
 ```{python}
 (df['State'].str.split(';', expand=True)
             .stack()
@@ -238,3 +265,8 @@ c. Bonus: How many articles mention each state?
             .value_counts()
             )
 ```
+-->
+
+<p style="text-align: center;">
+**check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
+</p>

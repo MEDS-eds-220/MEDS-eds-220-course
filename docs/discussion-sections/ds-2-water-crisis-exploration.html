@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Exploring water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
+<title>Water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -211,18 +211,15 @@ div.csl-indent {
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">1. String accessor for <code>pandas.Series</code></a></li>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">2. Archive exploration</a></li>
-  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">3. Data loading</a></li>
-  <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">4. Preliminary data exploration</a></li>
-  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">Examine state codes</a></li>
-  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">Brainstorm</a></li>
-  <li><a href="#drop-nas" id="toc-drop-nas" class="nav-link" data-scroll-target="#drop-nas">Drop NAs</a></li>
-  <li><a href="#split-strings" id="toc-split-strings" class="nav-link" data-scroll-target="#split-strings">Split strings</a></li>
-  <li><a href="#stack-the-data-frame" id="toc-stack-the-data-frame" class="nav-link" data-scroll-target="#stack-the-data-frame">Stack the data frame</a></li>
-  <li><a href="#string-accessor" id="toc-string-accessor" class="nav-link" data-scroll-target="#string-accessor">String accessor</a></li>
-  <li><a href="#value-counts" id="toc-value-counts" class="nav-link" data-scroll-target="#value-counts">Value counts</a></li>
-  <li><a href="#method-chaining" id="toc-method-chaining" class="nav-link" data-scroll-target="#method-chaining">Method chaining</a></li>
+  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
+  <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
+  <li><a href="#location-column-descriptions" id="toc-location-column-descriptions" class="nav-link" data-scroll-target="#location-column-descriptions">4. Location column descriptions</a></li>
+  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></a></li>
+  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">6. Examine state codes</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">7. Brainstorm</a></li>
+  <li><a href="#exploratory-wrangling" id="toc-exploratory-wrangling" class="nav-link" data-scroll-target="#exploratory-wrangling">8. Exploratory wrangling</a></li>
+  <li><a href="#find-unique-state-codes" id="toc-find-unique-state-codes" class="nav-link" data-scroll-target="#find-unique-state-codes">9. Find unique state codes</a></li>
   </ul>
 </nav>
     </div>
@@ -231,7 +228,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exploring water conflicts in the Colorado River Basin</h1>
+<h1 class="title">Water conflicts in the Colorado River Basin</h1>
 <p class="subtitle lead">Week 2 - Discussion section</p>
 </div>
 
@@ -249,13 +246,11 @@ div.csl-indent {
 </header>
 
 
-<!--SETUP: ask them to download the data and add data folder to gitignore -->
-<p>This discussion section will guide you through answering questions about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
+<p>This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
 <ul>
 <li>Practice version control using git via the terminal</li>
-<li>Discuss advantages and disadvantages about different methods of data loading</li>
-<li>Use core <code>pandas.DataFrame</code> methods to answer questions</li>
-<li>Practice best practices for clean code</li>
+<li>Use methods to work with <code>pandas.Series</code> of strings using the <code>.str</code> accessor</li>
+<li>Practice method chaining</li>
 </ul>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -266,9 +261,9 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>In the Taylor server, start a new JupyterLab session or access an active one.</p></li>
+<li><p>In the workbench-1 server, start a new JupyterLab session or access an active one.</p></li>
 <li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
-<li><p>Create a new Python Notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-2-co-basin-water-conflicts.ipynb</code>.</p></li>
+<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-2-co-basin-water-conflicts.ipynb</code>.</p></li>
 <li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
 <ol type="1">
 <li><code>git status</code> : check git status</li>
@@ -298,8 +293,8 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ul>
-<li>Add comments in your code cells following <a href="../book/appendices/comments-guidelines.html">comments best practices</a>.</li>
-<li>On each exercise, include markdown cells in between your code cells to add titles and information.</li>
+<li>Add comments in each one of your code cells.</li>
+<li>Include markdown cells in between your code cells to add titles and information.</li>
 <li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
 </ul>
 </div>
@@ -308,8 +303,8 @@ div.csl-indent {
 </section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>,a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
-<p>The dataset is a CSV file containing information about conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
+<p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
+<p>The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../discussion-sections-upcoming/images/co-river-basin.png" class="img-fluid figure-img"></p>
@@ -317,35 +312,482 @@ div.csl-indent {
 </figure>
 </div>
 </section>
-<section id="string-accessor-for-pandas.series" class="level2">
-<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">1. String accessor for <code>pandas.Series</code></h2>
-<p>In this session we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario and <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
-<ol type="1">
-<li>Carefully read the code below. We’ll use some of it in the next exercises.</li>
+<section id="archive-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
+<ol type="a">
+<li><p>Look through the dataset’s description in the ScienceBase repository. Find the following information:</p>
+<ol type="i">
+<li>Where was the data collected from?? <!-- 
+articles from newspapers describing water-related events in geographic areas in the Basin
+--></li>
+<li>During what time frame were the observations in the dataset collected? <!--
+2005-2021
+--></li>
+<li>What was the author’s perceived value of this dataset? <!--
+ examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
+--></li>
+</ol></li>
+<li><p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.</p></li>
+<li><p>Take a look at the data’s metadata by clicking on the “View” icon of the <code>Coded Events Colorado River Basin Water Conflict Table Metadata.xml</code> file.</p></li>
 </ol>
-<div id="cell-2" class="cell" data-execution_count="81">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+<!-- 3 minutes -->
+</section>
+<section id="data-loading" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
+<!--
+a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
+-->
+<ol type="a">
+<li><p>Create a new directory <code>data/</code> inside your <code>eds-220-sections</code> directory.</p></li>
+<li><p>Download the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> and upload it into the <code>data/</code> folder.</p></li>
+<li><p>Update the <code>.gitignore</code> file of your <code>eds-220-sections</code> so it ignores the <code>data/</code> folder. Push the changes to this file. Verify that git is ignoring the data file. <strong>Note:</strong> If you update the <code>.gitignore</code> file via GitHub, you need to run <code>git pull</code> when you go back to the server.</p></li>
+<li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
+</ol>
+<!--
+
+::: {#a6b30457 .cell execution_count=1}
+``` {.python .cell-code}
+import pandas as pd
+pd.set_option("display.max.columns", None)
+
+df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
+df.head(5)
+```
+
+::: {.cell-output .cell-output-display execution_count=14}
+
+```{=html}
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Event</th>
+<th data-quarto-table-cell-role="th">Search Source</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Article Title</th>
+<th data-quarto-table-cell-role="th">Duplicate</th>
+<th data-quarto-table-cell-role="th">Report Date</th>
+<th data-quarto-table-cell-role="th">Report Year</th>
+<th data-quarto-table-cell-role="th">Event Date</th>
+<th data-quarto-table-cell-role="th">Event Day</th>
+<th data-quarto-table-cell-role="th">Event Month</th>
+<th data-quarto-table-cell-role="th">Event Year</th>
+<th data-quarto-table-cell-role="th">Conflict Present</th>
+<th data-quarto-table-cell-role="th">Crisis Present</th>
+<th data-quarto-table-cell-role="th">Basin</th>
+<th data-quarto-table-cell-role="th">HUC6</th>
+<th data-quarto-table-cell-role="th">HUC2</th>
+<th data-quarto-table-cell-role="th">Place</th>
+<th data-quarto-table-cell-role="th">County</th>
+<th data-quarto-table-cell-role="th">County FIPS</th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">State FIPS</th>
+<th data-quarto-table-cell-role="th">Urban or Rural</th>
+<th data-quarto-table-cell-role="th">Issue Type</th>
+<th data-quarto-table-cell-role="th">Event Summary</th>
+<th data-quarto-table-cell-role="th">Stakeholders</th>
+<th data-quarto-table-cell-role="th">Intensity Value</th>
+<th data-quarto-table-cell-role="th">Comments</th>
+<th data-quarto-table-cell-role="th">Related Observation Themes</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water quality</th>
+<th data-quarto-table-cell-role="th">Article Text Search - invasive species</th>
+<th data-quarto-table-cell-role="th">Article Text Search - conservation</th>
+<th data-quarto-table-cell-role="th">Article Text Search - drought</th>
+<th data-quarto-table-cell-role="th">Article Text Search - flood</th>
+<th data-quarto-table-cell-role="th">Article Text Search - ground water depletion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - depletion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - infrastructure</th>
+<th data-quarto-table-cell-role="th">Article Text Search - fish passage</th>
+<th data-quarto-table-cell-role="th">Article Text Search - instream water rights</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water rights</th>
+<th data-quarto-table-cell-role="th">Article Text Search - intergovernmental</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water transfers</th>
+<th data-quarto-table-cell-role="th">Article Text Search - navigation</th>
+<th data-quarto-table-cell-role="th">Article Text Search - fish</th>
+<th data-quarto-table-cell-role="th">Article Text Search - invasive</th>
+<th data-quarto-table-cell-role="th">Article Text Search - diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - instream</th>
+<th data-quarto-table-cell-role="th">Article Text Search - aquatic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>USGS1-50.docx</td>
+<td>The Durango Herald (Colorado)</td>
+<td>Tribes assert water rights on Colorado River B...</td>
+<td>False</td>
+<td>7-Apr-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>4.0</td>
+<td>2022.0</td>
+<td>Y</td>
+<td>N</td>
+<td>Upper San Juan</td>
+<td>140801</td>
+<td>14</td>
+<td>Durango, CO</td>
+<td>La Plata</td>
+<td>8067.0</td>
+<td>CO</td>
+<td>8</td>
+<td>Both</td>
+<td>Water rights more generally</td>
+<td>Ute Mountain and Southern Ute representatives ...</td>
+<td>Tribal Nations, State Government, Federal Gove...</td>
+<td>2.0</td>
+<td>The article highlights calls for negotiation b...</td>
+<td>Lack of tribal representation</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>17</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>USGS1-50.docx</td>
+<td>Journal, The (Cortez, Dolores, Mancos, CO)</td>
+<td>Native American tribes assert water rights on ...</td>
+<td>False</td>
+<td>7-Apr-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>4.0</td>
+<td>2022.0</td>
+<td>Y</td>
+<td>N</td>
+<td>Upper San Juan</td>
+<td>140801</td>
+<td>14</td>
+<td>Durango, CO</td>
+<td>La Plata</td>
+<td>8067.0</td>
+<td>CO</td>
+<td>8</td>
+<td>Both</td>
+<td>Water rights more generally</td>
+<td>Ute Mountain and Southern Ute representatives ...</td>
+<td>Southern Ute Indian Tribe, Ute Mountain Tribe,...</td>
+<td>2.0</td>
+<td>The article highlights calls for negotiation b...</td>
+<td>Lack of tribal representation</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>17</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>USGS1-50.docx</td>
+<td>The Salt Lake Tribune</td>
+<td>'Very positive change.' New Utah law will be a...</td>
+<td>False</td>
+<td>17-Mar-22</td>
+<td>2022.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>2022.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Great Salt Lake</td>
+<td>160203</td>
+<td>16</td>
+<td>Great Salt Lake</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>UT</td>
+<td>49</td>
+<td>Both</td>
+<td>Instream water rights</td>
+<td>A bill is proposed in Utah that would expand t...</td>
+<td>State Government, Any Water Rights Holder, Agr...</td>
+<td>3.0</td>
+<td>The event is the proposal of the bill at the s...</td>
+<td>Dishonoring the absent</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>USGS1-50.docx</td>
+<td>Casa Grande Dispatch (AZ)</td>
+<td>Legislation would let an Arizona tribe lease C...</td>
+<td>False</td>
+<td>11-Dec-21</td>
+<td>2021.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>12.0</td>
+<td>2021.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Lower Colorado</td>
+<td>150301</td>
+<td>15</td>
+<td>Colorado River Indian Reservation</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Rural</td>
+<td>Water rights more generally</td>
+<td>The Colorado River Indian Tribes Water Resilie...</td>
+<td>Colorado River Indian Tribes, State Government...</td>
+<td>3.0</td>
+<td>Event is proposal of the bill, preliminary agr...</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>USGS1-50.docx</td>
+<td>The Aspen Times (Colorado)</td>
+<td>Historically excluded from Colorado River poli...</td>
+<td>False</td>
+<td>19-Dec-21</td>
+<td>2021.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>11.0</td>
+<td>2021.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>Upper San Juan</td>
+<td>140801</td>
+<td>14</td>
+<td>Southern Ute Indian Reservation</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Rural</td>
+<td>Intergovernmental issues</td>
+<td>State and federal officials say that Tribal Na...</td>
+<td>Sothern Ute Indian Tribe, Ute Mountain Tribe, ...</td>
+<td>-1.0</td>
+<td>Interaction between tribal nations and state/f...</td>
+<td>Lack of tribal representation</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+```
+
+:::
+:::
+
+
+-->
+</section>
+<section id="preliminary-data-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
+<ol type="a">
+<li><p>Set pandas to display all columns in the data frame.</p></li>
+<li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
+</ol>
+<!--
+
+::: {#a1bd4565 .cell execution_count=2}
+``` {.python .cell-code}
+# df.head()
+# df.shape
+# df.columns
+# df.Stakeholders.unique()
+```
+:::
+
+
+-->
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM 🙌</strong>
+</p>
+<p style="text-align: center;">
+<strong>YOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS</strong>
+</p>
+<p style="text-align: center;">
+<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+</section>
+<section id="location-column-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="location-column-descriptions">4. Location column descriptions</h2>
+<p>In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Place</td>
+<td>Where the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td>State Name coded from Place field.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="string-accessor-for-pandas.series" class="level2">
+<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></h2>
+<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
+<ol type="a">
+<li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
+</ol>
+<div id="291ca3f6" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Utah; Colorado'</span>])</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(s.<span class="bu">str</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>0    California; Nevada
 1               Arizona
 2                   NaN
-3        Utah; Colorado
-dtype: object
-&lt;pandas.core.strings.accessor.StringMethods object at 0x166f07090&gt;</code></pre>
+3          Nevada; Utah
+dtype: object</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="81">
+</div>
+<div id="c06c5a78" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x10989bb90&gt;</code></pre>
+</div>
+</div>
+<div id="9e56571a" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -375,8 +817,8 @@ dtype: object
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
+<td>Nevada</td>
 <td>Utah</td>
-<td>Colorado</td>
 </tr>
 </tbody>
 </table>
@@ -384,258 +826,53 @@ dtype: object
 </div>
 </div>
 </div>
-<!-- 10 minutes -->
-</section>
-<section id="archive-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="archive-exploration">2. Archive exploration</h2>
-<p>Take some time to look through the dataset’s description in the ScienceBase repository. Discuss the following questions with your team:</p>
-<ol type="a">
-<li>Where was the data collected from? <!-- 
-articles from newspapers describing water-related events in geographic areas in the Basin
---></li>
-<li>During what time frame were the observations in the dataset collected? <!--
-2005-2021
---></li>
-<li>Whta was the author’s perceived value of this dataset? <!--
- examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
---></li>
-<li>Briefly discuss anything else that seems like relevant information.</li>
-</ol>
-<p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Include a citation, date of access, and a link to the archive.</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-<!-- 3 minutes -->
-</section>
-<section id="data-loading" class="level2">
-<h2 class="anchored" data-anchor-id="data-loading">3. Data loading</h2>
-<ol type="a">
-<li><p>In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access.</p></li>
-<li><p>Import the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> into your workspace. Name your data frame variable <code>df</code>.</p></li>
-</ol>
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA BEFORE CONTINUING</strong>
-</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-<div id="cell-4" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/Colorado River Basin Water Conflict Table.csv'</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Event</th>
-<th data-quarto-table-cell-role="th">Search Source</th>
-<th data-quarto-table-cell-role="th">Newspaper</th>
-<th data-quarto-table-cell-role="th">Article Title</th>
-<th data-quarto-table-cell-role="th">Duplicate</th>
-<th data-quarto-table-cell-role="th">Report Date</th>
-<th data-quarto-table-cell-role="th">Report Year</th>
-<th data-quarto-table-cell-role="th">Event Date</th>
-<th data-quarto-table-cell-role="th">Event Day</th>
-<th data-quarto-table-cell-role="th">Event Month</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water rights</th>
-<th data-quarto-table-cell-role="th">Article Text Search - intergovernmental</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water transfers</th>
-<th data-quarto-table-cell-role="th">Article Text Search - navigation</th>
-<th data-quarto-table-cell-role="th">Article Text Search - fish</th>
-<th data-quarto-table-cell-role="th">Article Text Search - invasive</th>
-<th data-quarto-table-cell-role="th">Article Text Search - diversion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water diversion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - instream</th>
-<th data-quarto-table-cell-role="th">Article Text Search - aquatic</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1</td>
-<td>USGS1-50.docx</td>
-<td>The Durango Herald (Colorado)</td>
-<td>Tribes assert water rights on Colorado River B...</td>
-<td>False</td>
-<td>7-Apr-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>4.0</td>
-<td>...</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2</td>
-<td>USGS1-50.docx</td>
-<td>Journal, The (Cortez, Dolores, Mancos, CO)</td>
-<td>Native American tribes assert water rights on ...</td>
-<td>False</td>
-<td>7-Apr-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>4.0</td>
-<td>...</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>3</td>
-<td>USGS1-50.docx</td>
-<td>The Salt Lake Tribune</td>
-<td>'Very positive change.' New Utah law will be a...</td>
-<td>False</td>
-<td>17-Mar-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>3.0</td>
-<td>...</td>
-<td>12</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>12</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>4</td>
-<td>USGS1-50.docx</td>
-<td>Casa Grande Dispatch (AZ)</td>
-<td>Legislation would let an Arizona tribe lease C...</td>
-<td>False</td>
-<td>11-Dec-21</td>
-<td>2021.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>12.0</td>
-<td>...</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>5</td>
-<td>USGS1-50.docx</td>
-<td>The Aspen Times (Colorado)</td>
-<td>Historically excluded from Colorado River poli...</td>
-<td>False</td>
-<td>19-Dec-21</td>
-<td>2021.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>11.0</td>
-<td>...</td>
-<td>18</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-
-<p>5 rows × 48 columns</p>
-</div>
-</div>
-</div>
-</section>
-<section id="preliminary-data-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="preliminary-data-exploration">4. Preliminary data exploration</h2>
-<p>Write a list with at least four ways in which you coud gain preliminary information about this dataset and why these are relevant.</p>
-<div id="cell-6" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df.head()</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df.shape</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df.columns</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># df.Stakeholders.unique()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-7" class="cell" data-execution_count="55">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(df[<span class="st">'State'</span>].dropna()</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            .stack()</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.strip()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            .value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="55">
-<pre><code>AZ    87
-CO    45
-UT    40
-NV    19
-CA    16
-NM    13
-WY     8
-OH     1
-TX     1
-Name: count, dtype: int64</code></pre>
+<div id="d1f12bf1" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0  0    California
+   1        Nevada
+1  0       Arizona
+3  0        Nevada
+   1          Utah
+dtype: object</code></pre>
 </div>
 </div>
 </section>
 <section id="examine-state-codes" class="level2">
-<h2 class="anchored" data-anchor-id="examine-state-codes">Examine state codes</h2>
-<p>Our goal today is to find which states are reported in the dataset as having a water-conflict.</p>
-<ol type="1">
-<li>Examine the unique values in the <code>States</code> column. What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
+<h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
+<p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflicts</strong>.</p>
+<ol type="a">
+<li>What are the unique values in the <code>States</code> column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
 </ol>
-<div id="cell-9" class="cell" data-execution_count="60">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'State'</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
+<!--
+
+::: {#079ad8dc .cell execution_count=7}
+``` {.python .cell-code}
+print(df['State'].unique())
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
  'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'
  'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'
- 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']</code></pre>
-</div>
-</div>
-<div id="cell-10" class="cell" data-execution_count="62">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> df[<span class="st">'State'</span>].unique():</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>CO
+ 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']
+```
+:::
+:::
+
+
+::: {#c4f0228b .cell execution_count=8}
+``` {.python .cell-code}
+for x in df['State'].unique():
+    print(x)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+CO
 UT
 nan
 AZ
@@ -658,26 +895,35 @@ UT; CO; WY
 CA; NV; AZ
 AZ; NM
 WY; UT; CO
-TX</code></pre>
-</div>
-</div>
+TX
+```
+:::
+:::
+
+
+-->
 </section>
 <section id="brainstorm" class="level2">
-<h2 class="anchored" data-anchor-id="brainstorm">Brainstorm</h2>
-<ol type="1">
-<li><p>First, individually, write step-by-step instructions of how you would create a list with the state codes in which there’s a water-conflict reported (without repetition). It’s ok if you don’t know how to code each step, it’s just important to have an idea of what we’ll do before starting to code.</p></li>
-<li><p>Discuss your ideas with your team.</p></li>
+<h2 class="anchored" data-anchor-id="brainstorm">7. Brainstorm</h2>
+<ol type="a">
+<li><p>Individually, write step-by-step instructions on how you would wrangle the data frame <code>df</code> to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.</p></li>
+<li><p>Discuss your step-by-step instructions with your team.</p></li>
 </ol>
-<p>The next exercises will guide you through finding the state codes in the dataset. There are <em>many</em> ways of extracting this information from the dataset. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <strong><code>.str</code> accessor</strong> in a <code>pandas.Series</code>.</p>
-</section>
-<section id="drop-nas" class="level2">
-<h2 class="anchored" data-anchor-id="drop-nas">Drop NAs</h2>
-<p>Use the <code>dropna()</code> method for <code>pandas.Series</code> on the State column to create a new <code>pandas.Series</code> <code>states</code> without NAs. Check there are no NAs in the new <code>states</code> series.</p>
-<div id="cell-13" class="cell" data-execution_count="64">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> df[<span class="st">'State'</span>].dropna()</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="64">
-<pre><code>0          CO
+<p>The next exercises will guide you through finding the unique state codes in the dataset. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
+<!--
+## X. Drop NAs
+
+Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
+
+::: {#c439402d .cell execution_count=9}
+``` {.python .cell-code}
+states = df['State'].dropna()
+states
+```
+
+::: {.cell-output .cell-output-display execution_count=22}
+```
+0          CO
 1          CO
 2          UT
 5          AZ
@@ -688,40 +934,124 @@ TX</code></pre>
 265    AZ; CA
 266        AZ
 267        AZ
-Name: State, Length: 178, dtype: object</code></pre>
-</div>
-</div>
-<div id="cell-14" class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>states.hasnans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="66">
-<pre><code>False</code></pre>
-</div>
-</div>
+Name: State, Length: 178, dtype: object
+```
+:::
+:::
+
+
+::: {#9b7956b1 .cell execution_count=10}
+``` {.python .cell-code}
+states.hasnans
+```
+
+::: {.cell-output .cell-output-display execution_count=23}
+```
+False
+```
+:::
+:::
+
+
+-->
 </section>
-<section id="split-strings" class="level2">
-<h2 class="anchored" data-anchor-id="split-strings">Split strings</h2>
+<section id="exploratory-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-wrangling">8. Exploratory wrangling</h2>
+<ol type="a">
+<li>Perform the following wrangling:
+<ol type="i">
+<li>select the State column from the <code>df</code> data frame</li>
+<li>split the strings in the column by the delimeter <code>;</code> into different columns</li>
+<li>stack the results of the resulting data frame into a single <code>pandas.Series</code></li>
+<li>find the unique string values in the resulting series</li>
+</ol></li>
+</ol>
+<p>Your final answer should use method chaining without creating new variables.</p>
+<!--
+
+::: {#ef1ed23b .cell execution_count=11}
+``` {.python .cell-code}
+df['State'].str.split(';', expand=True).stack().unique()
+```
+
+::: {.cell-output .cell-output-display execution_count=24}
+```
+array(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',
+       ' CA', ' AZ', 'NV', 'NM', 'WY', 'TX'], dtype=object)
+```
+:::
+:::
+
+
+-->
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
 </section>
-<section id="stack-the-data-frame" class="level2">
-<h2 class="anchored" data-anchor-id="stack-the-data-frame">Stack the data frame</h2>
-</section>
-<section id="string-accessor" class="level2">
-<h2 class="anchored" data-anchor-id="string-accessor">String accessor</h2>
-</section>
-<section id="value-counts" class="level2">
-<h2 class="anchored" data-anchor-id="value-counts">Value counts</h2>
-</section>
-<section id="method-chaining" class="level2">
-<h2 class="anchored" data-anchor-id="method-chaining">Method chaining</h2>
-<div id="cell-20" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = (df['Stakeholders'].dropna()</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .str.split(',', expand=True)</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .apply(lambda x: x.str.strip())</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .values</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .ravel())</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = pd.unique(stakeholders)</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># print(stakeholders)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="find-unique-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="find-unique-state-codes">9. Find unique state codes</h2>
+<ol type="a">
+<li><p>Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?</p></li>
+<li><p>Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
+</ol>
+<!--
+
+::: {#d955f576 .cell execution_count=12}
+``` {.python .cell-code}
+(df['State'].str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .unique()
+            )
+```
+
+::: {.cell-output .cell-output-display execution_count=25}
+```
+array(['CO', 'UT', 'AZ', 'OH', 'NM', 'CA', 'NV', 'WY', 'TX'], dtype=object)
+```
+:::
+:::
+
+
+-->
+<ol start="3" type="a">
+<li>Bonus: How many articles mention each state?</li>
+</ol>
+<!--
+
+::: {#6c6a21cc .cell execution_count=13}
+``` {.python .cell-code}
+(df['State'].str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .value_counts()
+            )
+```
+
+::: {.cell-output .cell-output-display execution_count=26}
+```
+AZ    87
+CO    45
+UT    40
+NV    19
+CA    16
+NM    13
+WY     8
+OH     1
+TX     1
+Name: count, dtype: int64
+```
+:::
+:::
+
+
+-->
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
 
 
 
