@@ -348,7 +348,7 @@ a. In class we have (so far) loaded data into our workspace either by downloadin
 </ol>
 <!--
 
-::: {#de1c8c55 .cell execution_count=1}
+::: {#12044908 .cell execution_count=1}
 ``` {.python .cell-code}
 import pandas as pd
 pd.set_option("display.max.columns", None)
@@ -700,12 +700,12 @@ df.head(5)
 <section id="preliminary-data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
 <ol type="a">
-<li><p>Set pandas to display all columns in the data frame.</p></li>
+<li><p>Set <code>pandas</code> to display all columns in the data frame.</p></li>
 <li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
 </ol>
 <!--
 
-::: {#171db20b .cell execution_count=2}
+::: {#c8fa5b6d .cell execution_count=2}
 ``` {.python .cell-code}
 # df.head()
 # df.shape
@@ -750,7 +750,7 @@ df.head(5)
 </tr>
 <tr class="even">
 <td>State</td>
-<td>State Name coded from Place field.</td>
+<td>State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded.</td>
 </tr>
 </tbody>
 </table>
@@ -761,7 +761,7 @@ df.head(5)
 <ol type="a">
 <li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
 </ol>
-<div id="b9dab95b" class="cell" data-execution_count="3">
+<div id="298fbbba" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -776,14 +776,14 @@ df.head(5)
 dtype: object</code></pre>
 </div>
 </div>
-<div id="4d4e515a" class="cell" data-execution_count="4">
+<div id="05805c59" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x109169190&gt;</code></pre>
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x10ad43d90&gt;</code></pre>
 </div>
 </div>
-<div id="ebce746d" class="cell" data-execution_count="5">
+<div id="c990c3a4" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -826,7 +826,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="c2635ff9" class="cell" data-execution_count="6">
+<div id="185fa455" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -848,7 +848,7 @@ dtype: object</code></pre>
 </ol>
 <!--
 
-::: {#324ce8fa .cell execution_count=7}
+::: {#98f7697b .cell execution_count=7}
 ``` {.python .cell-code}
 print(df['State'].unique())
 ```
@@ -864,7 +864,7 @@ print(df['State'].unique())
 :::
 
 
-::: {#4160291f .cell execution_count=8}
+::: {#bd34f434 .cell execution_count=8}
 ``` {.python .cell-code}
 for x in df['State'].unique():
     print(x)
@@ -915,7 +915,7 @@ TX
 
 Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
 
-::: {#93e87940 .cell execution_count=9}
+::: {#1159e2bf .cell execution_count=9}
 ``` {.python .cell-code}
 states = df['State'].dropna()
 states
@@ -940,7 +940,7 @@ Name: State, Length: 178, dtype: object
 :::
 
 
-::: {#e23e05ac .cell execution_count=10}
+::: {#e01d9b55 .cell execution_count=10}
 ``` {.python .cell-code}
 states.hasnans
 ```
@@ -969,7 +969,7 @@ False
 <p>Your final answer should use method chaining without creating new variables.</p>
 <!--
 
-::: {#dac0aacc .cell execution_count=11}
+::: {#066f73f1 .cell execution_count=11}
 ``` {.python .cell-code}
 df['State'].str.split(';', expand=True).stack().unique()
 ```
@@ -999,7 +999,7 @@ array(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',
 </ol>
 <!--
 
-::: {#02e51c3d .cell execution_count=12}
+::: {#56475c7e .cell execution_count=12}
 ``` {.python .cell-code}
 (df['State'].str.split(';', expand=True)
             .stack()
@@ -1022,7 +1022,7 @@ array(['CO', 'UT', 'AZ', 'OH', 'NM', 'CA', 'NV', 'WY', 'TX'], dtype=object)
 </ol>
 <!--
 
-::: {#09952994 .cell execution_count=13}
+::: {#b7310299 .cell execution_count=13}
 ``` {.python .cell-code}
 (df['State'].str.split(';', expand=True)
             .stack()
