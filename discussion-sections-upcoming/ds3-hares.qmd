@@ -1,0 +1,155 @@
+---
+title: Snowshoe hares at Bonanza Creek Experimental Forest
+subtitle: Week 3 - Discussion section
+week: 3
+image: images/free-photo-of-colorado-river-in-usa.jpeg
+sidebar: false
+jupyter: mpc-env-kernel
+---
+
+This discussion section will guide you through exploring data about snowshoe hares in the (*Lepus americanus*) in the Bonanza Creek Experimental Forest. In this discussion section, you will:
+
+**TODO: Update these**
+
+- Practice markdown syntax for creating tables and inserting images.
+
+## Setup
+
+:::{.callout-tip appearance="minimal"}
+1. Access the workbench-1 server.
+
+2. Navigate to the`eds-220-sections` directory in the file navigation panel and the terminal.
+
+3. Create a new Python notebook inside your `eds-220-sections` directory and rename it to `section-3-snowshoe-hares.ipynb`. 
+
+4. Use the terminal to push this file to you remote repository. 
+:::
+
+## General directions
+:::{.callout-tip appearance="minimal"}
+- Add comments as appropriate along your code.
+- Include markdown cells in between your code cells to add titles and information to each exercise
+- Commit every time you finish a major step.
+- You won't need to upload any data.
+:::
+
+## About the data
+For these exercises we will use data about [Snowshoe hares (*Lepus americanus*) in the Bonanza Creek Experimental Forest @kielland_snowshoe_2017](https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-bnz.55.22). 
+
+This dataset is stored in the [Environmental Data Initiative (EDI)](https://edirepository.org) data repository. This is a huge data repository committed to make data Findable, Accessible, Interoperable, and Reusable (FAIR). 
+It is the main repository for all the data associated to the [Long Term Ecological Research Network (LTER)](https://lternet.edu).
+
+
+## Archive exploration
+a. Take some time to look through the dataset's description in EDI and click around. Discuss the following questions with your team:
+
+    i. What is this data about?
+    ii. During what time frame were the observations in the dataset collected?
+    iii. Does the dataset contain sensitive data?
+    iv. Is there a publication associated with this dataset?
+
+b. In your notebook: use a markdown cell to add a *brief* description of the dataset, including a citation, date of access, and a link to the archive. 
+
+c. Back in the EDI repository, click on *View Full Metadata* to access more information if you haven't done so already. Go to the "Detailed Metadata" section and click on "Data Entities". Take some time to look at the descriptions for the dataset's columns.  
+
+## 1. Adding an image
+Back in your notebook, follow these steps to add an image of a hare using a URL:
+
+a. Go to [this link](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
+
+b. Get the URL of the hare image. To do this:
+
+- hover over the image –> right click –> “Copy Image Address".
+
+c. At the end of the markdown cell with the dataset description, use markdown sytanx to add the image from its URL:
+```default
+![image description](URL-goes-here)
+```
+
+d. Do you need to add an attribution in the image description? Check the license at the [bottom of wikimedia page](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
+
+
+## 2. Data loading and preliminary exploration
+
+a. Back in your notebook, import the `55_Hare_Data_2012.txt` file from its URL using the `pandas.read_csv()` function. Store it in a variable named `hares`. 
+
+```{python}
+import pandas as pd
+
+hares = pd.read_csv('https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701')
+
+hares.head()
+```
+
+b. Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways. For each method, write a short sentence explaining why you decided to obtain that information.
+
+<p style="text-align: center;">
+**CHECK IN WITH YOUR TEAM** 
+</p>
+<p style="text-align: center;">
+**MAKE SURE YOU'VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING**
+</p>
+
+## 3. Detecting messy values
+
+a. In the metadata section of the EDI repository, find which are the allowed values for the hares' sex. Create a small table in a markdown cell showing the values and their definitions.
+
+*Allowed values are:*
+
+| Value | Definition |
+| ------| ---------- |
+| f | female |
+| m | male |
+| m?| male not confirmed |
+
+
+b. Get the number of times each unique sex non-NA value by using the `value_counts()` method on the `sex` column. 
+
+```{python}
+hares['sex'].value_counts()
+```
+
+b. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
+
+```{python}
+hares['sex'].value_counts(dropna=False)
+```
+
+c. Discuss with your team the output of the unique value counts. Notice anything odd?
+
+d. You likely noticed there seems to be some repeated values, for example `m` appears twice. 
+Use the `unique()` method on the sex column to see the unique non-NA values in this column. 
+Discuss with your team what is the cause of the seemingly repeated values.
+
+Discuss with your team whether these values correspond to the values present in the dataset. 
+
+<p style="text-align: center;">
+**commit and push changes**
+</p>
+
+## Clean values
+
+6. Use `np.select` like we did on Monday to create a new column called `sex_simple` 
+
+- 'F', 'f', and 'f ' get assigned to 'female', 
+- 'M', 'm', and 'm ' get assigned to 'male', and 
+- anything else gets assigned `np.nan`
+
+HINTS: 
+
+a. You need to create a list with two conditions and a list with two choices. 
+b. To write the condition think about what does `(hares.sex=='F') | (hares.sex=='f')` mean? Do you need to add anything else?
+
+7. Check the counts of unique values (including NAs) in the new `sex_simple` column.
+
+<p style="text-align: center;">
+**commit and push changes**
+</p>
+
+## Calculate mean weight
+
+8. Use `groupby()` to calculate the mean weight by sex (use the new column). 
+
+<p style="text-align: center;">
+**commit and push changes**
+</p>
