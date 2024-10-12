@@ -12,6 +12,8 @@ This discussion section will guide you through exploring data about snowshoe har
 **TODO: Update these**
 
 - Practice markdown syntax for creating tables and inserting images.
+- Use `groupby()` to calculate summary statistics by groups.
+- Select, clean, and comment your code to create a condensed data analysis workflow
 
 ## Setup
 
@@ -29,8 +31,8 @@ This discussion section will guide you through exploring data about snowshoe har
 :::{.callout-tip appearance="minimal"}
 - Add comments as appropriate along your code.
 - Include markdown cells in between your code cells to add titles and information to each exercise
-- Commit every time you finish a major step.
 - You won't need to upload any data.
+- Indications about when to commit and push changes are included. Commit every time you finish a major step! **Remember to write your commits in the imperative mood.**
 :::
 
 ## About the data
@@ -40,7 +42,7 @@ This dataset is stored in the [Environmental Data Initiative (EDI)](https://edir
 It is the main repository for all the data associated to the [Long Term Ecological Research Network (LTER)](https://lternet.edu).
 
 
-## Archive exploration
+## 1. Archive exploration
 a. Take some time to look through the dataset's description in EDI and click around. Discuss the following questions with your team:
 
     i. What is this data about?
@@ -52,7 +54,7 @@ b. In your notebook: use a markdown cell to add a *brief* description of the dat
 
 c. Back in the EDI repository, click on *View Full Metadata* to access more information if you haven't done so already. Go to the "Detailed Metadata" section and click on "Data Entities". Take some time to look at the descriptions for the dataset's columns.  
 
-## 1. Adding an image
+## 2. Adding an image
 Back in your notebook, follow these steps to add an image of a hare using a URL:
 
 a. Go to [this link](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
@@ -68,15 +70,20 @@ c. At the end of the markdown cell with the dataset description, use markdown sy
 
 d. Do you need to add an attribution in the image description? Check the license at the [bottom of wikimedia page](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
 
+<p style="text-align: center;">
+**commit and push changes**
+</p>
 
-## 2. Data loading and preliminary exploration
+## 3. Data loading and preliminary exploration
 
 a. Back in your notebook, import the `55_Hare_Data_2012.txt` file from its URL using the `pandas.read_csv()` function. Store it in a variable named `hares`. 
 
 ```{python}
+import numpy as np
 import pandas as pd
 
-hares = pd.read_csv('https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701')
+URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
+hares = pd.read_csv(URL)
 
 hares.head()
 ```
@@ -90,7 +97,11 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 **MAKE SURE YOU'VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING**
 </p>
 
-## 3. Detecting messy values
+<p style="text-align: center;">
+**commit and push changes**
+</p>
+
+## 4. Detecting messy values
 
 a. In the metadata section of the EDI repository, find which are the allowed values for the hares' sex. Create a small table in a markdown cell showing the values and their definitions.
 
@@ -109,46 +120,108 @@ b. Get the number of times each unique sex non-NA value by using the `value_coun
 hares['sex'].value_counts()
 ```
 
-b. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
+b. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
 
 ```{python}
 hares['sex'].value_counts(dropna=False)
 ```
 
-c. Discuss with your team the output of the unique value counts. Notice anything odd?
+c. Discuss with your team the output of the unique value counts. In particular: 
+    i. Do the values in the `sex` column correspond to the values declared in the metadata?
+    ii. What could have been potential causes for multiple codes?
+    iii. Are there seemingly repated values? If so, what could be the cause?
 
-d. You likely noticed there seems to be some repeated values, for example `m` appears twice. 
-Use the `unique()` method on the sex column to see the unique non-NA values in this column. 
-Discuss with your team what is the cause of the seemingly repeated values.
+d. Write code to confirm your suspicions about c-iii.
 
-Discuss with your team whether these values correspond to the values present in the dataset. 
+```{python}
+hares['sex'].unique()
+```
 
 <p style="text-align: center;">
 **commit and push changes**
 </p>
 
-## Clean values
+## 5. Brainstorm
 
-6. Use `np.select` like we did on Monday to create a new column called `sex_simple` 
+a. Individually, write step-by-step instructions on how you would wrangle the `hares` data frame to clean the values in the `sex` column to have only two classes `female` and `male`. Which codes would you assign to each new class? **Remember:** It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.
 
-- 'F', 'f', and 'f ' get assigned to 'female', 
-- 'M', 'm', and 'm ' get assigned to 'male', and 
+b. Discuss your step-by-step instructions with your team.
+
+The next exercise will guide you through cleaning the codes. There are *many* ways of doing this. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `numpy.select()` function.
+
+## 6. Clean values
+
+a. Create a new column called `sex_simple` using the `numpy.select()` function so that 
+
+- 'F', 'f', and 'f_' in the `sex` column get assigned to 'female', 
+- 'M', 'm', and 'm_' get assigned to 'male', and 
 - anything else gets assigned `np.nan`
 
-HINTS: 
+HINT: 
+You need to create a list with two conditions and a list with two choices. 
 
-a. You need to create a list with two conditions and a list with two choices. 
-b. To write the condition think about what does `(hares.sex=='F') | (hares.sex=='f')` mean? Do you need to add anything else?
+```{python}
+conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
+              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
 
-7. Check the counts of unique values (including NAs) in the new `sex_simple` column.
+choices = ['female', 
+            'male']
+
+hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
+hares.head()
+```
+
+b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
+
+```{python}
+hares['sex_simple'].value_counts()
+```
 
 <p style="text-align: center;">
 **commit and push changes**
 </p>
 
-## Calculate mean weight
+## 7. Calculate mean weight
 
-8. Use `groupby()` to calculate the mean weight by sex (use the new column). 
+a. Use `groupby()` to calculate the mean weight by sex using the new column. 
+
+```{python}
+hares.groupby('sex_simple')['weight'].mean()
+```
+
+<p style="text-align: center;">
+**commit and push changes**
+</p>
+
+## 8. Collect your code and explain your results
+
+In a new code cell, collect all the relevant code to obtain to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:
+
+- Only print the final results for mean weight by sex_simple. 
+- Not include output from intermediate variables or checks.
+- Not include methods or functions that do not contribute to the analysis (even if they don't print anything ex: `df.head()`).
+- If appropriate, combine methods using code chaining instead of creating intermediate variables
+- Have appropriate comments following our class comments guidelines. 
+- Use appropriate line breaks and indentation to make code readable.
+
+```{python}
+# Load data from EDI data repository
+URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
+hares = pd.read_csv(URL)
+
+# Create new sex_simpel column dropping the uncertain sex codes and 
+# simplifying codes without no question mark
+conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
+              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
+choices = ['female', 'male']
+
+hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
+
+# Calculate average hare weight by sex
+hares.groupby('sex_simple')['weight'].mean()
+```
+
+b. Write a full sentence explaining the results you obtained.
 
 <p style="text-align: center;">
 **commit and push changes**
