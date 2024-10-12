@@ -84,8 +84,9 @@ We can also create or update an existing column using the [`assign()`](https://p
 ```python
 df = df.assign(new_col_name=new_column_values)
 ```
+Notice the new column names are not strings, we declare them as if we were creating variables.
 
-Notice that this way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in-place. This can be useful for chaining operations:
+This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in-place. This can be useful for chaining operations:
 
 ```{python}
 (penguins.assign(bill_length_cm=penguins.bill_length_mm/10)
@@ -97,11 +98,11 @@ Notice that this way of creating a new column, unlike the dictionary-like syntax
 
 ### ...at a specific location
 
-Notice that the new column was added at the end of the data frame. If we want to create a new column and insert it at a particular position we can use the data frame method [`insert()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html):
+The new column was addedby default at the end of the data frame. If we want to create a new column and insert it at a particular position we can use the data frame method [`insert()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html):
 ```python
-df.insert(loc = integer_index,  # Location of new column
-          column = 'new_col_name', 
-          value = new_col_values)
+df.insert(loc=integer_index,  # Location of new column
+          column='new_col_name', 
+          value=new_col_values)
 ```
 
 #### Example
@@ -133,14 +134,14 @@ df.columns.get_loc()
 
 ## Adding multiple columns
 
-We can assign multiple columns in the same call by using the data frame's `assign()` method. The general syntax is:
+We can also use the [`assign()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html) method to create or update multiple columns in the same call. The general syntax is:
 ```python
-df = df.assign( new_col1_name = new_col1_values, 
-           new_col2_name = new_col2_values)
+df = df.assign(new_col1_name=new_col1_values, 
+               new_col2_name=new_col2_values)
 ```
-Notice the new column names are not strings, we declare them as if we were creating variables.
+Remember this method does not modify the data frame, so you will need to reassign the output to the original data frame to update it.
 
-**Example**
+#### Example
 
 Suppose we want to add these new columns: 
 
@@ -150,34 +151,33 @@ Suppose we want to add these new columns:
 We can add these columns to `penguins` using `assign()`:
 
 ```{python}
-# create new columns in the data frame
-# random.choices used for random sampling with replacement
-# need to reassign output of assign() to update the data frame
-penguins = penguins.assign( flipper_length_cm = penguins.flipper_length_mm /10, 
-                            observer =   random.choices(['A','B','C'], k=len(penguins)))
-# look at result
+# Create columns with observer codes and flipper length in cm
+penguins = penguins.assign(flipper_length_cm=penguins.flipper_length_mm/10, 
+                           observer=random.choices(['A','B','C'],  # Sample with replacement
+                                                    k=len(penguins))
+                          )
+# Examine result
 penguins.head()
 ```
 
 ## Removing columns
 
-We can remove columns using the [`drop()` method for data frames](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html), the syntax is:
+We can remove columns using the [`drop()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html) method for `pandas.Data.Frames`, the syntax is:
 ```python
-df = df.drop(columns = col_names)
+df = df.drop(columns=col_names)
 ```
-where `col_names` can be a single column name (str) or a list of column names. The `drop()` method does not modify the data frame in place, so you need to reassign the output.
+where `col_names` can be a single column name (string) or a list of column names. Notice again that the `drop()` method does not modify the data frame in place, so you need to reassign the output.
 
 
-**Example**
+#### Example
 
 Now that we updated the units for flipper length and body mass, it makes sense to remove the previous columns to avoid duplicate information. We can do this using `drop()`:
 
 ```{python}
-# use a list of column names
-# reassign output of drop() to dataframe to update it
+# Remove duplicate length and mass measurements
 penguins = penguins.drop(columns=['flipper_length_mm','body_mass_g'])
 
-# check columns
+# Confirm result
 print(penguins.columns)
 ```
 
@@ -388,6 +388,3 @@ To learn more about the `SettingWithCopyWarning`, these are some articles that g
 📖 [Real Python-  SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/#reader-comments)
 
 📖 [Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas](https://www.dataquest.io/blog/settingwithcopywarning/)
-
-## References
-Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0. https://allisonhorst.github.io/palmerpenguins/. doi:10.5281/zenodo.3960218.
