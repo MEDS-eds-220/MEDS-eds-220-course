@@ -251,15 +251,16 @@ penguins.columns.get_loc('column_name')
 
 :::{.callout-tip}
 ## Check-in
-a. Obtain the 
+a. Obtain the location of the `bill_length_mm` column.
 
-Use `iat[]` to access the same bill length value for the penguin with ID 859 and revert it back to an NA. Confirm your update using `iloc[]`.
+b. Use `iat[]` to access the same bill length value for the penguin with ID 859 and revert it back to an NA. Confirm your update using `iloc[]`.
 :::
 
 <!--
 ```{python}
 # Set to NaN using iat
-penguins.iat[3,2] = np.nan
+col_index = penguins.columns.get_loc('bill_length_mm')
+penguins.iat[3,col_index] = np.nan
 
 # Confirm using iloc
 penguins.iloc[3]
@@ -271,61 +272,68 @@ penguins.iloc[3]
 What if we want to update multiple values in a column? We'll cover two cases: with a condition on the column values and by selecting a few values to update. 
 
 
-#### By condition
+#### Using a condition 
 
-Often we want to create a new column where the new values depend on conditions on another column's values. 
+Often, we need to create a new column where the new values depend on conditions on another column. 
 
-**Example**
+#### Example
 
-Suppose we want to classify all penguins with body mass less than 3kg as small, penguins with body mass greater or equal than 3kg but less than 5kg as medium, and those with body mass greater or equal than 5kg as large. One way to add this information in a new column using `numpy.select()`:
+We want to classify the Palmer penguins such that :
+
+- penguins with body mass less than 3kg as small, 
+- penguins with body mass greater or equal than 3 kg but less than 5 kg as medium, 
+- and those with body mass greater or equal than 5 kg as large. 
+
+One way to add this information in a new column is using the [`numpy.select()`](https://numpy.org/doc/stable/reference/generated/numpy.select.html) function:
 
 ```{python}
-# create a list with the conditions
+# Create a list with the conditions
 conditions = [penguins.body_mass_kg < 3, 
               (3 <= penguins.body_mass_kg) & (penguins.body_mass_kg < 5),
               5 <= penguins.body_mass_kg]
 
-# create a list with the choices
+# Create a list with the choices
 choices = ["small",
            "medium",
            "large"]
 
-# add the selections using np.select
-# default = value for anything that falls outside conditions
-penguins['size'] = np.select(conditions, choices, default=np.nan)
+# Add the selections using np.select
+penguins['size'] = np.select(conditions, 
+                             choices, 
+                             default=np.nan) # Value for anything outside conditions
 
+# Display the updated data frame to confirm the new column
 penguins.head()
 ```
 
 <!-- 
 https://stackoverflow.com/questions/54653356/case-when-function-from-r-to-python
 
-https://numpy.org/doc/stable/reference/generated/numpy.select.html
+Add np.where and pd.cut()
 -->
 
 #### By selecting values
 
-When we only want to update some values in a column we can do this by selecting this data using `loc` (if selecting by labels) or `iloc` (if selecting by position). The general sytanx for updating data with `loc` is:
+When we only want to update some values in a column we can do this by selecting this data using `loc` (if selecting by labels) or `iloc` (if selecting by position). The general syntax for updating data with `loc` is:
 ```python
-# modifies data in place
-df.loc[row_selection, col_name] = new_values
+df.loc[row_selection, column_name] = new_values
 ```
 where 
 
-- `row_selection` is the rows we want to update, 
+- `row_selection` is the rows we want to update, this can be any expression that gives us a boolean `pandas.Series`, 
 - `col_name` is a single column name, and 
-- `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected, 
+- `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected. Using `loc[]` in assignment modifies the data frame directly without the need for reassignment.
 
-**Example**
+#### Example
 
-Suppose we want to update the "Male" value in the sex column to "M".
+We want to update the "Male" value in the sex column to "M".
 
 ```{python}
-# select rows with sex=male and update the values in the sex column
-penguins.loc[penguins.sex=='Male', 'sex'] = 'M'
+# Select rows with sex=male and simplify values in 'sex' column
+penguins.loc[penguins.sex=='male', 'sex'] = 'M'
 
-# check changes
-penguins.head()
+# Check changes in 'sex' column specifically
+print(penguins['sex'].unique())
 ```
 
 
