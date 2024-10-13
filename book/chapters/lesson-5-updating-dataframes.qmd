@@ -1,14 +1,14 @@
-# Updating data frames
+# 4 Updating data frames
 
 In this lesson we will introduce methods for updating a pandas data frame, these include adding and removing columns and updating specific values. 
 
+<!--
 ## Learning objectives
 
 **TODO**
 
 By the end of this lesson students will be able to:
-
-- 
+-->
 
 ## About the data
 
@@ -47,9 +47,11 @@ URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/e
 penguins = pd.read_csv(URL)
 ```
 
+<!--
 :::{.callout-caution}
 **TODO** Explain seed.
 :::
+-->
 
 ### ... using dictionary-like syntax
 The simplest syntax to add a new column to a `pandas.DataFrame` is 
@@ -192,10 +194,12 @@ print(penguins.columns)
 ## Reordering columns and updating names
 -->
 
+<!--
 :::{.callout-tip}
 ## Check-in
 **TODO**
 :::
+-->
 
 ## Updating values
 
@@ -337,101 +341,110 @@ print(penguins['sex'].unique())
 ```
 
 
-## `SettingWithCopyWarning`
+### Best practices
 
-Suppose we want to similarly update the "Female" values in the sex column to "F". This is an example of another way we might try to do it, but it won't update our data frame:
-
-```{python}
-# select rows and columns with two selection brackets [][] (chained indexing), instead of loc[]
-# then trying to update the values
-penguins[penguins.sex=='Female']['sex'] = 'F'
-```
-
-When we select the data we want to update using **chained indexing** (`[][]`) instead of `loc[]` we get a `SettingWithCopyWarning`. Wit this warning, `pandas` is trying to alert us to a potential bug. In this case that we did not update our data frame:
+Suppose we want to similarly update the "Female" values in the `sex` column to "F". This is an example of another way we might try to do it:
 
 ```{python}
-# no values were updated
-penguins.sex.unique()
+# Select rows where 'sex' is 'female' and then attempt to update 'sex' column values
+penguins[penguins.sex=='female']['sex'] = 'F' # This raises SettingWithCopyWarning
 ```
 
-::: {.callout-warning}
-The `SettingWithCopyWarning` is letting us know our code is ambiguous and we need to double check the code is doing what we intended. In the words of the [`pandas` documentation](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#why-does-assignment-fail-when-using-chained-indexing):
+When we select the data we want to update using **chained indexing** (two selection brackets `[][]`) instead of `loc[]` we get a `SettingWithCopyWarning`. With this warning, `pandas` is trying to alert us to a potential bug. In this case, the bug is that we actually did not update our data frame:
+
+```{python}
+# Confirm values were updated
+print(penguins['sex'].unique())
+```
+
+::: {.callout-caution}
+## Avoid chained indexing `[][]` and use `.loc[]`
+The `SettingWithCopyWarning` often arises from chained indexing:
+```python
+df[df['col'] == value]['col2'] = new_value
+```
+In the words of the [`pandas` documentation](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#why-does-assignment-fail-when-using-chained-indexing):
 
 > assigning to the product of chained indexing has inherently unpredictable results.
 
+The best practice is to use `.loc[]` instead:
+```python
+df.loc[df['col'] == value,'col2'] = new_value
+```
+`.loc[]` is generally more readable and explicitly modifies the original data frame.
+
+Warnings in Python are intended to be helpful and can prevent unintended data modification errors! 
 :::
 
-<!-- MAKE SOME DIAGRAMS LIKE DATAQUEST https://www.dataquest.io/blog/settingwithcopywarning/ -->
+:::{.callout-tip}
+## Check-in
+Update the "female" values in the `penguins` data frame to "F". Don't use chained indexing. Confirm that the values in the column were updated.
+:::
+<!--
+```{python}
+# no chained indexing in assignment = no warning
+penguins.loc[penguins.sex=='female','sex'] = 'F'
 
-To see what is going on we need to understand that some `pandas` operations return a view to your data, while others return a copy of your data.
+# notice the values were updated now
+penguins.head()
+```
+-->
+
+To understand why the `SettingWithCopyWarning` pops up we need to understand that some `pandas` operations return a view to your data, while others return a copy of your data.
 
 - **Views** are actual subsets of the original data, when we update them, we are modifying the original data frame. 
 
 - **Copies** are unique objects, independent of our original data frames. When we update a copy we are not modifying the original data frame. 
 
+<!-- MAKE SOME DIAGRAMS LIKE DATAQUEST https://www.dataquest.io/blog/settingwithcopywarning/ -->
+
+![](/book/images/lesson-5/view-copy.png)
+
 Depending on what we are trying to do we might want to modify the original data frame or we might want to modify a copy. 
 
-**Check-in** 
+![](/book/images/lesson-5/modify-view-copy.png)
 
-Update the "Female" values in the `penguins` data frame to "F". Don't use chained indexing
+Pandas raises the `SettingWithCopyWarning`  because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).
 
-```{python}
-# no chained indexing in assignment = no warning
-penguins.loc[penguins.sex=='Female','sex'] = 'F'
+#### Example
 
-# notice the values were updated now
-penguins.head()
-```
-
-
-#### Another `SettingWithCopyWarning`
-
-Another common situation where `SettingWithCopyWarning` comes up is when we try to update a subset of a data frame we have already stored in a new variable. 
-
-**Example** 
-
-Suppose we only want to use data from Biscoe island and, after doing some analyses, we want to add a new column to it:
+We only want to use data from Biscoe island and, after doing some analyses, we want to add a new column to it:
 
 ```{python}
-# select penguins from Biscoe island
+# Select penguins from Biscoe island
 biscoe = penguins[penguins.island=='Biscoe']
 
-# 50 lines of code here
+# ... Other analyses ...
 
-# add a column, we get a warning
-biscoe['sample_col'] = 100
+# Add a column
+biscoe['sample_col'] = 100  # This raises SettingWithCopyWarning
 ```
 
-It might not seem like it, but we have a chained assignment here too. We essentialy wrote:
+`pandas` is trying to alert you that it is unsure about whether `biscoe` is a view or a copy and it's unclear whether an of our code will modify our dataset or not.
 
-```python
-penguins[penguins.island=='Biscoe']['sample_col'] = 100
-```
-
-To fix this we can **take control of the copy-view situation and explicitely ask for a copy of the dataset when subsetting the data**. Use the `copy()` method to do this:
+To fix this we can **take control of the copy-view situation and explicitly ask for a copy of the dataset when subsetting the data**. Use the [`copy()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html) method to do this:
 
 ```{python}
-# make sure you get a new data frame with penguins from Biscoe island
+# Make sure you get an independent data frame that won't alter the original
 biscoe = penguins[penguins.island=='Biscoe'].copy()
 
-# add a column, no warning
+# Add a column, no warning
 biscoe['sample_col'] = 100
 ```
 
 Now we are sure we did not modify our initial data, but rather the `biscoe` data frame:
 
 ```{python}
-# new column is there
+# Confirm the new column is in our subset data
 biscoe.head()
 ```
 
 ```{python}
-# and we are sure our original df wasn't modified
-penguins.head()
+# Confirm that original data was not modified
+print('sample_column' in penguins.columns)
 ```
 
-
-The `SettingWithCopyWarning` can often be tricky, there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset whenever possible will save you from the usual pitfalls. 
+The `SettingWithCopyWarning` can be tricky, there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset when needed and possible will save you from the usual pitfalls! 
 
 To learn more about the `SettingWithCopyWarning`, these are some articles that go into more depth:
 
