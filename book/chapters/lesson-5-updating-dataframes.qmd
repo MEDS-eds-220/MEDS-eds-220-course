@@ -1,6 +1,6 @@
 # 4 Updating data frames
 
-In this lesson we will introduce methods for updating a pandas data frame, these include adding and removing columns and updating specific values. 
+In this lesson we will introduce methods for updating a `pandas.DataFrame`, these include adding and removing columns and updating specific values. 
 
 <!--
 ## Learning objectives
@@ -78,7 +78,7 @@ We want to create a new column where the body mass is in kilograms instead of gr
 
 ```{python}
 # Add new column body_mass_kg 
-penguins['body_mass_kg'] = penguins.body_mass_g/1000
+penguins['body_mass_kg'] = penguins['body_mass_g']/1000
 
 # Confirm the new column is in the data frame
 print("body_mass_kg is in the data frame's columns: ", 'body_mass_kg' in penguins.columns)
@@ -107,7 +107,7 @@ This way of creating a new column, unlike the dictionary-like syntax, does not m
 
 ### ...at a specific location
 
-The new column was addedby default at the end of the data frame. If we want to create a new column and insert it at a particular position we can use the data frame method [`insert()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html):
+The new column was added by default at the end of the data frame. If we want to create a new column and insert it at a particular position we can use the data frame method [`insert()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html):
 ```python
 df.insert(loc=integer_index,  # Location of new column
           column='new_col_name', 
@@ -229,7 +229,7 @@ penguins
 If we want to know what was the bill length of the penguin which has ID number 859, we can directly access that information using `at[]`:
 
 ```{python}
-# Check bil length of penguin with ID 859
+# Check bill length of penguin with ID 859
 penguins.at[859, 'bill_length_mm']
 ```
 
@@ -263,8 +263,8 @@ b. Use `iat[]` to access the same bill length value for the penguin with ID 859 
 <!--
 ```{python}
 # Set to NaN using iat
-col_index = penguins.columns.get_loc('bill_length_mm')
-penguins.iat[3,col_index] = np.nan
+bill_length_index = penguins.columns.get_loc('bill_length_mm')
+penguins.iat[3,bill_length_index] = np.nan
 
 # Confirm using iloc
 penguins.iloc[3]
@@ -326,11 +326,13 @@ where
 
 - `row_selection` is the rows we want to update, this can be any expression that gives us a boolean `pandas.Series`, 
 - `col_name` is a single column name, and 
-- `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected. Using `loc[]` in assignment modifies the data frame directly without the need for reassignment.
+- `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected. 
+
+Using `loc[]` in assignment modifies the data frame directly without the need for reassignment.
 
 #### Example
 
-We want to update the "Male" value in the sex column to "M".
+We want to update the "male" values in the sex column to "M".
 
 ```{python}
 # Select rows with sex=male and simplify values in 'sex' column
@@ -343,7 +345,7 @@ print(penguins['sex'].unique())
 
 ### Best practices
 
-Suppose we want to similarly update the "Female" values in the `sex` column to "F". This is an example of another way we might try to do it:
+Suppose we want to similarly update the "female" values in the `sex` column to "F". This is an example of another way we might try to do it:
 
 ```{python}
 # Select rows where 'sex' is 'female' and then attempt to update 'sex' column values

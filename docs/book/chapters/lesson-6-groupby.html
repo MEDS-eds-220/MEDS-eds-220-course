@@ -301,7 +301,8 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link active" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
   <li><a href="#summary-statistics" id="toc-summary-statistics" class="nav-link" data-scroll-target="#summary-statistics">Summary statistics</a></li>
   <li><a href="#grouping" id="toc-grouping" class="nav-link" data-scroll-target="#grouping">Grouping</a></li>
   </ul>
@@ -332,7 +333,16 @@ div.csl-indent {
 <!-- TODO: improve introduction -->
 <p>In this section we will go over the split-apply-combine strategy and the <code>groupby()</code> function.</p>
 <p>This lesson is based on the <a href="https://learning.nceas.ucsb.edu/2023-06-delta/session_11.html#summary-statistics-using-group_by-and-summarize">R lesson on summary statistics using group-by and summarize</a> <span class="citation" data-cites="do-linh_open_2023"><a href="#ref-do-linh_open_2023" role="doc-biblioref">[1]</a></span> co-developed at the NCEAS Learning Hub.</p>
-<!-- TODO: add learning objectives -->
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson students will be able to:</p>
+<ul>
+<li>Understand and apply the Split-Apply-Combine strategy to analyze grouped data.</li>
+<li>Use <code>groupby()</code> to split a <code>pandas.DataFrame</code> by one or more columns.</li>
+<li>Calculate summary statistics for groups in a <code>pandas.DataFrame</code>.</li>
+<li>Use method chaining for efficient data analysis.</li>
+</ul>
+</section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
 <p>For this section we will use the Palmer Penguins dataset <span class="citation" data-cites="palmerpenguins"><a href="#ref-palmerpenguins" role="doc-biblioref">[2]</a></span> developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009.</p>
@@ -343,7 +353,7 @@ div.csl-indent {
 </figure>
 </div>
 <p>The dataset has 344 rows and 8 columns. Let’s start by loading the data:</p>
-<div id="21cec303" class="cell" data-execution_count="1">
+<div id="66e6f7b2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -352,7 +362,7 @@ div.csl-indent {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(URL)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="166">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
 
@@ -446,10 +456,10 @@ div.csl-indent {
 </ul>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
-<div id="9ba7813c" class="cell" data-execution_count="2">
+<div id="f784e10c" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the number of non-NA values in each column </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>penguins.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="167">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>species              344
 island               344
 bill_length_mm       342
@@ -461,10 +471,10 @@ year                 344
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="288334e3" class="cell" data-execution_count="3">
+<div id="16ad6055" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get minimum value in each column with numerical values</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>penguins.select_dtypes(<span class="st">'number'</span>).<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="168">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>bill_length_mm         32.1
 bill_depth_mm          13.1
 flipper_length_mm     172.0
@@ -503,36 +513,30 @@ Add a note about select_dtypes
 </div>
 </div>
 <p>For a <code>pandas.DataFrame</code> or <code>pandas.Series</code>, we can use the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html"><code>groupby()</code></a> method to split (i.e.&nbsp;group) the data into different categories.</p>
-<!--
-The general syntax for `groupby()` is
-
-```python
-df.groupby(columns_to_group_by).summary_method()
-```
-Most often, we will have that
-`columns_to_group_by` will be a single column name (a string) or a list of column names. The unique values of the column (or columns) will be used as the groups of the data frame. The `summary_method()` will then be applied to each group.
--->
+<p>The general syntax for <code>groupby()</code> is</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.groupby(columns_to_group_by).summary_method()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Most often, we will have that <code>columns_to_group_by</code> will be a single column name (a string) or a list of column names. The unique values of the column (or columns) will be used as the groups of the data frame.</p>
 <section id="example-1" class="level4">
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>If we don’t use <code>groupby()</code> and directly apply the <code>mean()</code> method to our flipper length column, we obtain the average of all the values in the column:</p>
-<div id="1a0ece1b" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="169">
+<div id="4f4c5077" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>200.91520467836258</code></pre>
 </div>
 </div>
 <p>To get the mean flipper length by species we first group our dataset by the species column’s values. However, if we just use the <code>groupby()</code> method without specifying what we wish to calculate on each group, not much happens up front:</p>
-<div id="2a53f7d7" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="170">
-<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x14ac73010&gt;</code></pre>
+<div id="dfcd980f" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x11255ec90&gt;</code></pre>
 </div>
 </div>
 <p>We get a <code>GroupBy</code> object, which is like an intermediate step. It doesn’t perform the actual calculations until we specify an operation:</p>
-<div id="a760d093" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="171">
+<div id="e5cc96d0" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>species
 Adelie       189.953642
 Chinstrap    195.823529
@@ -548,16 +552,16 @@ Name: flipper_length_mm, dtype: float64</code></pre>
 <li>calculate the <code>mean()</code> of this column with respect to the groups.</li>
 </ul>
 <p>Notice that the name of the series is the same as the column on which we calculated the summary statistc. We can easily update this using the <code>rename()</code> method:</p>
-<div id="dced9694" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>avg_flipper <span class="op">=</span> (penguins.groupby(<span class="st">"species"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                        .flipper_length_mm</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                        .mean()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                        .rename(<span class="st">'mean_flipper_length'</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                        .sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                        )</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>avg_flipper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="172">
+<div id="70cae813" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>avg_flipper <span class="op">=</span> (penguins.groupby(<span class="st">"species"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                        .flipper_length_mm</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                        .mean()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                        .rename(<span class="st">'mean_flipper_length'</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                        .sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>avg_flipper</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>species
 Gentoo       217.186992
 Chinstrap    195.823529
@@ -570,9 +574,9 @@ Name: mean_flipper_length, dtype: float64</code></pre>
 <section id="example-2" class="level4">
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
 <p>We want to know what was the number of penguins surveyed in each island on different years. We can use the <code>count()</code> method to count the number of non-NA values in each column like this:</p>
-<div id="cc87f4ea" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>penguins.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="173">
+<div id="92237939" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>penguins.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>species              344
 island               344
 bill_length_mm       342
@@ -585,9 +589,9 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>When we group by island and year we get the count of non-NA values for each column across each combination of island and year:</p>
-<div id="fe57d1fd" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>]).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="174">
+<div id="b254750b" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>]).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -706,15 +710,15 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Let’s say we want to plot the surveyed population per year and island. We could then use method chaining to do this:</p>
-<div id="1e729850" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>(penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>])</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>         .count()</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         .species</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         .sort_values()</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         .plot(kind<span class="op">=</span><span class="st">'barh'</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                title<span class="op">=</span><span class="st">'Penguins surveyed at the Palmer Archipelago'</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                ylabel<span class="op">=</span>(<span class="st">'Island, Year'</span>))</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="918fb798" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>])</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>         .count()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         .species</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         .sort_values()</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>         .plot(kind<span class="op">=</span><span class="st">'barh'</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                title<span class="op">=</span><span class="st">'Penguins surveyed at the Palmer Archipelago'</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                ylabel<span class="op">=</span>(<span class="st">'Island, Year'</span>))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -738,7 +742,7 @@ Check-in
 </ol>
 <!--
 
-::: {#47d6b6ab .cell execution_count=11}
+::: {#2bcaa68b .cell execution_count=11}
 ``` {.python .cell-code}
 (penguins.groupby(['year','species'])
         .body_mass_g.max()
@@ -746,7 +750,7 @@ Check-in
         )
 ```
 
-::: {.cell-output .cell-output-display execution_count=176}
+::: {.cell-output .cell-output-display execution_count=11}
 ```
 year  species  
 2007  Adelie       4675.0
@@ -770,7 +774,7 @@ Name: max_body_mass, dtype: float64
 </ol>
 <!--
 
-::: {#441a7a72 .cell execution_count=12}
+::: {#a856452c .cell execution_count=12}
 ``` {.python .cell-code}
 (penguins.groupby(['year','species'])
         .body_mass_g
