@@ -2,17 +2,16 @@
 title: Snowshoe hares at Bonanza Creek Experimental Forest
 subtitle: Week 3 - Discussion section
 week: 3
-image: images/free-photo-of-colorado-river-in-usa.jpeg
+image: images/hare.jpg
 sidebar: false
 jupyter: mpc-env-kernel
 ---
 
-This discussion section will guide you through exploring data about snowshoe hares in the (*Lepus americanus*) in the Bonanza Creek Experimental Forest. In this discussion section, you will:
+This discussion section will guide you through exploring data about snowshoe hares in the (*Lepus americanus*) in the Bonanza Creek Experimental Forest located in Alaska, USA. In this discussion section, you will:
 
-**TODO: Update these**
-
-- Practice markdown syntax for creating tables and inserting images.
-- Use `groupby()` to calculate summary statistics by groups.
+- Practice markdown syntax for creating tables and inserting images
+- Practice detecting and cleaning messy data
+- Use `groupby()` to calculate summary statistics by groups
 - Select, clean, and comment your code to create a condensed data analysis workflow
 
 ## Setup
@@ -71,13 +70,14 @@ c. At the end of the markdown cell with the dataset description, use markdown sy
 d. Do you need to add an attribution in the image description? Check the license at the [bottom of wikimedia page](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
 
 ## 3. Data loading and preliminary exploration
 
 a. Back in your notebook, import the `55_Hare_Data_2012.txt` file from its URL using the `pandas.read_csv()` function. Store it in a variable named `hares`. 
 
+<!--
 ```{python}
 import numpy as np
 import pandas as pd
@@ -87,6 +87,7 @@ hares = pd.read_csv(URL)
 
 hares.head()
 ```
+-->
 
 b. Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways. For each method, write a short sentence explaining why you decided to obtain that information.
 
@@ -98,13 +99,14 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 </p>
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
 
 ## 4. Detecting messy values
 
 a. In the metadata section of the EDI repository, find which are the allowed values for the hares' sex. Create a small table in a markdown cell showing the values and their definitions.
 
+<!--
 *Allowed values are:*
 
 | Value | Definition |
@@ -112,33 +114,38 @@ a. In the metadata section of the EDI repository, find which are the allowed val
 | f | female |
 | m | male |
 | m?| male not confirmed |
+-->
 
+b. Get the number of times each unique sex non-NA value appears.
 
-b. Get the number of times each unique sex non-NA value by using the `value_counts()` method on the `sex` column. 
-
+<!--
 ```{python}
 hares['sex'].value_counts()
 ```
+-->
 
-b. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
-
+c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
+<!--
 ```{python}
 hares['sex'].value_counts(dropna=False)
 ```
+-->
 
-c. Discuss with your team the output of the unique value counts. In particular: 
+d. Discuss with your team the output of the unique value counts. In particular: 
     i. Do the values in the `sex` column correspond to the values declared in the metadata?
     ii. What could have been potential causes for multiple codes?
     iii. Are there seemingly repated values? If so, what could be the cause?
 
-d. Write code to confirm your suspicions about c-iii.
+e. Write code to confirm your suspicions about c-iii.
 
+<!--
 ```{python}
 hares['sex'].unique()
 ```
+-->
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
 
 ## 5. Brainstorm
@@ -159,7 +166,7 @@ a. Create a new column called `sex_simple` using the `numpy.select()` function s
 
 HINT: 
 You need to create a list with two conditions and a list with two choices. 
-
+<!--
 ```{python}
 conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
               (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
@@ -170,40 +177,47 @@ choices = ['female',
 hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 hares.head()
 ```
+-->
 
 b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
-
+<!--
 ```{python}
 hares['sex_simple'].value_counts()
 ```
+-->
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
 
 ## 7. Calculate mean weight
 
 a. Use `groupby()` to calculate the mean weight by sex using the new column. 
 
+<!--
 ```{python}
 hares.groupby('sex_simple')['weight'].mean()
 ```
+-->
+
+b. Write a full sentence explaining the results you obtained.
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
 
 ## 8. Collect your code and explain your results
 
 In a new code cell, collect all the relevant code to obtain to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:
 
-- Only print the final results for mean weight by sex_simple. 
+- Only print the final results for mean weight by `sex_simple`. 
 - Not include output from intermediate variables or checks.
-- Not include methods or functions that do not contribute to the analysis (even if they don't print anything ex: `df.head()`).
-- If appropriate, combine methods using code chaining instead of creating intermediate variables
-- Have appropriate comments following our class comments guidelines. 
+- Not include methods or functions that do not directly contribute to the analysis (even if they don't print anything ex: `df.head()`).
+- If appropriate, combine methods using code chaining instead of creating intermediate variables.
+- Comment your code following our class comments guidelines. 
 - Use appropriate line breaks and indentation to make code readable.
 
+<!-- 
 ```{python}
 # Load data from EDI data repository
 URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
@@ -220,9 +234,10 @@ hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 # Calculate average hare weight by sex
 hares.groupby('sex_simple')['weight'].mean()
 ```
+-->
 
-b. Write a full sentence explaining the results you obtained.
+<!--TODO: add explanation of why this is important-->
 
 <p style="text-align: center;">
-**commit and push changes**
+**commit, pull, and push changes**
 </p>
