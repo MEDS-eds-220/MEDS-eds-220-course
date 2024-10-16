@@ -245,11 +245,11 @@ div.csl-indent {
 </header>
 
 
-<p>This discussion section will guide you through exploring data about snowshoe hares in the (<em>Lepus americanus</em>) in the Bonanza Creek Experimental Forest. In this discussion section, you will:</p>
-<p><strong>TODO: Update these</strong></p>
+<p>This discussion section will guide you through exploring data about snowshoe hares in the (<em>Lepus americanus</em>) in the Bonanza Creek Experimental Forest located in Alaska, USA. In this discussion section, you will:</p>
 <ul>
-<li>Practice markdown syntax for creating tables and inserting images.</li>
-<li>Use <code>groupby()</code> to calculate summary statistics by groups.</li>
+<li>Practice markdown syntax for creating tables and inserting images</li>
+<li>Practice detecting and cleaning messy data</li>
+<li>Use <code>groupby()</code> to calculate summary statistics by groups</li>
 <li>Select, clean, and comment your code to create a condensed data analysis workflow</li>
 </ul>
 <section id="setup" class="level2">
@@ -325,7 +325,7 @@ div.csl-indent {
 <li>Do you need to add an attribution in the image description? Check the license at the <a href="https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg">bottom of wikimedia page</a>.</li>
 </ol>
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 </section>
 <section id="data-loading-and-preliminary-exploration" class="level2">
@@ -333,21 +333,40 @@ div.csl-indent {
 <ol type="a">
 <li>Back in your notebook, import the <code>55_Hare_Data_2012.txt</code> file from its URL using the <code>pandas.read_csv()</code> function. Store it in a variable named <code>hares</code>.</li>
 </ol>
-<div id="889d9da0" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&amp;entityid=f01f5d71be949b8c700b6ecd1c42c701'</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>hares <span class="op">=</span> pd.read_csv(URL)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>hares.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="85">
+<!--
+
+::: {#6832f293 .cell execution_count=1}
+``` {.python .cell-code}
+import numpy as np
+import pandas as pd
+
+URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
+hares = pd.read_csv(URL)
+
+hares.head()
+```
+
+::: {.cell-output .cell-output-display execution_count=257}
+
+```{=html}
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
 <thead>
-<tr class="header">
+<tr class="header" style="text-align: right;">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">date</th>
 <th data-quarto-table-cell-role="th">time</th>
@@ -455,8 +474,13 @@ div.csl-indent {
 </table>
 
 </div>
-</div>
-</div>
+```
+
+:::
+:::
+
+
+-->
 <ol start="2" type="a">
 <li>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways. For each method, write a short sentence explaining why you decided to obtain that information.</li>
 </ol>
@@ -467,7 +491,7 @@ div.csl-indent {
 <strong>MAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING</strong>
 </p>
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 </section>
 <section id="detecting-messy-values" class="level2">
@@ -475,36 +499,28 @@ div.csl-indent {
 <ol type="a">
 <li>In the metadata section of the EDI repository, find which are the allowed values for the hares’ sex. Create a small table in a markdown cell showing the values and their definitions.</li>
 </ol>
-<p><em>Allowed values are:</em></p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Value</th>
-<th>Definition</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>f</td>
-<td>female</td>
-</tr>
-<tr class="even">
-<td>m</td>
-<td>male</td>
-</tr>
-<tr class="odd">
-<td>m?</td>
-<td>male not confirmed</td>
-</tr>
-</tbody>
-</table>
+<!--
+*Allowed values are:*
+
+| Value | Definition |
+| ------| ---------- |
+| f | female |
+| m | male |
+| m?| male not confirmed |
+-->
 <ol start="2" type="a">
-<li>Get the number of times each unique sex non-NA value by using the <code>value_counts()</code> method on the <code>sex</code> column.</li>
+<li>Get the number of times each unique sex non-NA value appears.</li>
 </ol>
-<div id="9bfb7428" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="86">
-<pre><code>sex
+<!--
+
+::: {#764660a7 .cell execution_count=2}
+``` {.python .cell-code}
+hares['sex'].value_counts()
+```
+
+::: {.cell-output .cell-output-display execution_count=258}
+```
+sex
 F     1161
 M      730
 f      556
@@ -517,16 +533,24 @@ f?       3
 M?       2
 m?       2
 pf       1
-Name: count, dtype: int64</code></pre>
-</div>
-</div>
-<ol start="2" type="a">
-<li>Check the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html">documentation of <code>value_counts()</code></a>. What is the purpose of the <code>dropna</code> parameter and what is its default value? Repeat step (a), this time adding the <code>dropna=False</code> parameter to <code>value_counts()</code>.</li>
-</ol>
-<div id="9904e456" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex'</span>].value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="87">
-<pre><code>sex
+Name: count, dtype: int64
+```
+:::
+:::
+
+
+-->
+<ol start="3" type="a">
+<li><p>Check the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html">documentation of <code>value_counts()</code></a>. What is the purpose of the <code>dropna</code> parameter and what is its default value? Repeat step (a), this time adding the <code>dropna=False</code> parameter to <code>value_counts()</code>. <!--
+
+::: {#ab984b11 .cell execution_count=3}
+``` {.python .cell-code}
+hares['sex'].value_counts(dropna=False)
+```
+
+::: {.cell-output .cell-output-display execution_count=259}
+```
+sex
 F      1161
 M       730
 f       556
@@ -540,27 +564,40 @@ f?        3
 M?        2
 m?        2
 pf        1
-Name: count, dtype: int64</code></pre>
-</div>
-</div>
-<ol start="3" type="a">
-<li>Discuss with your team the output of the unique value counts. In particular:
+Name: count, dtype: int64
+```
+:::
+:::
+
+
+--></p></li>
+<li><p>Discuss with your team the output of the unique value counts. In particular:</p>
 <ol type="i">
 <li>Do the values in the <code>sex</code> column correspond to the values declared in the metadata?</li>
 <li>What could have been potential causes for multiple codes?</li>
 <li>Are there seemingly repated values? If so, what could be the cause?</li>
 </ol></li>
-<li>Write code to confirm your suspicions about c-iii.</li>
+<li><p>Write code to confirm your suspicions about c-iii.</p></li>
 </ol>
-<div id="8d30cf62" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="88">
-<pre><code>array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
-       'm '], dtype=object)</code></pre>
-</div>
-</div>
+<!--
+
+::: {#5fffc25f .cell execution_count=4}
+``` {.python .cell-code}
+hares['sex'].unique()
+```
+
+::: {.cell-output .cell-output-display execution_count=260}
+```
+array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
+       'm '], dtype=object)
+```
+:::
+:::
+
+
+-->
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 </section>
 <section id="brainstorm" class="level2">
@@ -581,153 +618,183 @@ Name: count, dtype: int64</code></pre>
 <li>‘M’, ‘m’, and ‘m_’ get assigned to ‘male’, and</li>
 <li>anything else gets assigned <code>np.nan</code></li>
 </ul>
-<p>HINT: You need to create a list with two conditions and a list with two choices.</p>
-<div id="a24cffab" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [(hares.sex<span class="op">==</span><span class="st">'F'</span>) <span class="op">|</span> (hares.sex<span class="op">==</span><span class="st">'f'</span>) <span class="op">|</span>(hares.sex<span class="op">==</span><span class="st">'f '</span>),</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>              (hares.sex<span class="op">==</span><span class="st">'M'</span>) <span class="op">|</span> (hares.sex<span class="op">==</span><span class="st">'m'</span>) <span class="op">|</span>(hares.sex<span class="op">==</span><span class="st">'m '</span>)]</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [<span class="st">'female'</span>, </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'male'</span>]</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex_simple'</span>] <span class="op">=</span> np.select(conditions, choices, default<span class="op">=</span>np.nan)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>hares.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="89">
+<p>HINT: You need to create a list with two conditions and a list with two choices. <!--
+
+::: {#5062be4f .cell execution_count=5}
+``` {.python .cell-code}
+conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
+              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
+
+choices = ['female', 
+            'male']
+
+hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
+hares.head()
+```
+
+::: {.cell-output .cell-output-display execution_count=261}
+
+```{=html}
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">time</th>
-<th data-quarto-table-cell-role="th">grid</th>
-<th data-quarto-table-cell-role="th">trap</th>
-<th data-quarto-table-cell-role="th">l_ear</th>
-<th data-quarto-table-cell-role="th">r_ear</th>
-<th data-quarto-table-cell-role="th">sex</th>
-<th data-quarto-table-cell-role="th">age</th>
-<th data-quarto-table-cell-role="th">weight</th>
-<th data-quarto-table-cell-role="th">hindft</th>
-<th data-quarto-table-cell-role="th">notes</th>
-<th data-quarto-table-cell-role="th">b_key</th>
-<th data-quarto-table-cell-role="th">session_id</th>
-<th data-quarto-table-cell-role="th">study</th>
-<th data-quarto-table-cell-role="th">sex_simple</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>11/26/1998</td>
-<td>NaN</td>
-<td>bonrip</td>
-<td>1A</td>
-<td>414D096A08</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1370.0</td>
-<td>160.0</td>
-<td>NaN</td>
-<td>917.0</td>
-<td>51</td>
-<td>Population</td>
-<td>nan</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>11/26/1998</td>
-<td>NaN</td>
-<td>bonrip</td>
-<td>2C</td>
-<td>414D320671</td>
-<td>NaN</td>
-<td>M</td>
-<td>NaN</td>
-<td>1430.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>936.0</td>
-<td>51</td>
-<td>Population</td>
-<td>male</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>11/26/1998</td>
-<td>NaN</td>
-<td>bonrip</td>
-<td>2D</td>
-<td>414D103E3A</td>
-<td>NaN</td>
-<td>M</td>
-<td>NaN</td>
-<td>1430.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>921.0</td>
-<td>51</td>
-<td>Population</td>
-<td>male</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>11/26/1998</td>
-<td>NaN</td>
-<td>bonrip</td>
-<td>2E</td>
-<td>414D262D43</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1490.0</td>
-<td>135.0</td>
-<td>NaN</td>
-<td>931.0</td>
-<td>51</td>
-<td>Population</td>
-<td>nan</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>11/26/1998</td>
-<td>NaN</td>
-<td>bonrip</td>
-<td>3B</td>
-<td>414D2B4B58</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1710.0</td>
-<td>150.0</td>
-<td>NaN</td>
-<td>933.0</td>
-<td>51</td>
-<td>Population</td>
-<td>nan</td>
-</tr>
-</tbody>
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>time</th>
+      <th>grid</th>
+      <th>trap</th>
+      <th>l_ear</th>
+      <th>r_ear</th>
+      <th>sex</th>
+      <th>age</th>
+      <th>weight</th>
+      <th>hindft</th>
+      <th>notes</th>
+      <th>b_key</th>
+      <th>session_id</th>
+      <th>study</th>
+      <th>sex_simple</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>11/26/1998</td>
+      <td>NaN</td>
+      <td>bonrip</td>
+      <td>1A</td>
+      <td>414D096A08</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1370.0</td>
+      <td>160.0</td>
+      <td>NaN</td>
+      <td>917.0</td>
+      <td>51</td>
+      <td>Population</td>
+      <td>nan</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>11/26/1998</td>
+      <td>NaN</td>
+      <td>bonrip</td>
+      <td>2C</td>
+      <td>414D320671</td>
+      <td>NaN</td>
+      <td>M</td>
+      <td>NaN</td>
+      <td>1430.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>936.0</td>
+      <td>51</td>
+      <td>Population</td>
+      <td>male</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>11/26/1998</td>
+      <td>NaN</td>
+      <td>bonrip</td>
+      <td>2D</td>
+      <td>414D103E3A</td>
+      <td>NaN</td>
+      <td>M</td>
+      <td>NaN</td>
+      <td>1430.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>921.0</td>
+      <td>51</td>
+      <td>Population</td>
+      <td>male</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>11/26/1998</td>
+      <td>NaN</td>
+      <td>bonrip</td>
+      <td>2E</td>
+      <td>414D262D43</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1490.0</td>
+      <td>135.0</td>
+      <td>NaN</td>
+      <td>931.0</td>
+      <td>51</td>
+      <td>Population</td>
+      <td>nan</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>11/26/1998</td>
+      <td>NaN</td>
+      <td>bonrip</td>
+      <td>3B</td>
+      <td>414D2B4B58</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1710.0</td>
+      <td>150.0</td>
+      <td>NaN</td>
+      <td>933.0</td>
+      <td>51</td>
+      <td>Population</td>
+      <td>nan</td>
+    </tr>
+  </tbody>
 </table>
+</div>
+```
 
-</div>
-</div>
-</div>
+:::
+:::
+
+
+--></p>
 <ol start="2" type="a">
-<li>Check the counts of unique values (including NAs) in the new <code>sex_simple</code> column.</li>
-</ol>
-<div id="c64661d6" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex_simple'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="90">
-<pre><code>sex_simple
+<li>Check the counts of unique values (including NAs) in the new <code>sex_simple</code> column. <!--
+
+::: {#0df03a81 .cell execution_count=6}
+``` {.python .cell-code}
+hares['sex_simple'].value_counts()
+```
+
+::: {.cell-output .cell-output-display execution_count=262}
+```
+sex_simple
 female    1721
 male      1249
 nan        410
-Name: count, dtype: int64</code></pre>
-</div>
-</div>
+Name: count, dtype: int64
+```
+:::
+:::
+
+
+--></li>
+</ol>
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 </section>
 <section id="calculate-mean-weight" class="level2">
@@ -735,59 +802,80 @@ Name: count, dtype: int64</code></pre>
 <ol type="a">
 <li>Use <code>groupby()</code> to calculate the mean weight by sex using the new column.</li>
 </ol>
-<div id="15d972d4" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>hares.groupby(<span class="st">'sex_simple'</span>)[<span class="st">'weight'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="91">
-<pre><code>sex_simple
+<!--
+
+::: {#995d8005 .cell execution_count=7}
+``` {.python .cell-code}
+hares.groupby('sex_simple')['weight'].mean()
+```
+
+::: {.cell-output .cell-output-display execution_count=263}
+```
+sex_simple
 female    1365.164792
 male      1349.935542
 nan       1193.364055
-Name: weight, dtype: float64</code></pre>
-</div>
-</div>
+Name: weight, dtype: float64
+```
+:::
+:::
+
+
+-->
+<ol start="2" type="a">
+<li>Write a full sentence explaining the results you obtained.</li>
+</ol>
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 </section>
 <section id="collect-your-code-and-explain-your-results" class="level2">
 <h2 class="anchored" data-anchor-id="collect-your-code-and-explain-your-results">8. Collect your code and explain your results</h2>
 <p>In a new code cell, collect all the relevant code to obtain to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:</p>
 <ul>
-<li>Only print the final results for mean weight by sex_simple.</li>
+<li>Only print the final results for mean weight by <code>sex_simple</code>.</li>
 <li>Not include output from intermediate variables or checks.</li>
-<li>Not include methods or functions that do not contribute to the analysis (even if they don’t print anything ex: <code>df.head()</code>).</li>
-<li>If appropriate, combine methods using code chaining instead of creating intermediate variables</li>
-<li>Have appropriate comments following our class comments guidelines.</li>
+<li>Not include methods or functions that do not directly contribute to the analysis (even if they don’t print anything ex: <code>df.head()</code>).</li>
+<li>If appropriate, combine methods using code chaining instead of creating intermediate variables.</li>
+<li>Comment your code following our class comments guidelines.</li>
 <li>Use appropriate line breaks and indentation to make code readable.</li>
 </ul>
-<div id="bf08caf4" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from EDI data repository</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&amp;entityid=f01f5d71be949b8c700b6ecd1c42c701'</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>hares <span class="op">=</span> pd.read_csv(URL)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new sex_simpel column dropping the uncertain sex codes and </span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># simplifying codes without no question mark</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [(hares.sex<span class="op">==</span><span class="st">'F'</span>) <span class="op">|</span> (hares.sex<span class="op">==</span><span class="st">'f'</span>) <span class="op">|</span>(hares.sex<span class="op">==</span><span class="st">'f '</span>),</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>              (hares.sex<span class="op">==</span><span class="st">'M'</span>) <span class="op">|</span> (hares.sex<span class="op">==</span><span class="st">'m'</span>) <span class="op">|</span>(hares.sex<span class="op">==</span><span class="st">'m '</span>)]</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [<span class="st">'female'</span>, <span class="st">'male'</span>]</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'sex_simple'</span>] <span class="op">=</span> np.select(conditions, choices, default<span class="op">=</span>np.nan)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average hare weight by sex</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>hares.groupby(<span class="st">'sex_simple'</span>)[<span class="st">'weight'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="92">
-<pre><code>sex_simple
+<!-- 
+
+::: {#51e524d9 .cell execution_count=8}
+``` {.python .cell-code}
+# Load data from EDI data repository
+URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
+hares = pd.read_csv(URL)
+
+# Create new sex_simpel column dropping the uncertain sex codes and 
+# simplifying codes without no question mark
+conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
+              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
+choices = ['female', 'male']
+
+hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
+
+# Calculate average hare weight by sex
+hares.groupby('sex_simple')['weight'].mean()
+```
+
+::: {.cell-output .cell-output-display execution_count=264}
+```
+sex_simple
 female    1365.164792
 male      1349.935542
 nan       1193.364055
-Name: weight, dtype: float64</code></pre>
-</div>
-</div>
-<ol start="2" type="a">
-<li>Write a full sentence explaining the results you obtained.</li>
-</ol>
+Name: weight, dtype: float64
+```
+:::
+:::
+
+
+-->
+<!--TODO: add explanation of why this is important-->
 <p style="text-align: center;">
-<strong>commit and push changes</strong>
+<strong>commit, pull, and push changes</strong>
 </p>
 
 
