@@ -335,7 +335,7 @@ div.csl-indent {
 </ol>
 <!--
 
-::: {#6832f293 .cell execution_count=1}
+::: {#f51b2636 .cell execution_count=1}
 ``` {.python .cell-code}
 import numpy as np
 import pandas as pd
@@ -346,7 +346,7 @@ hares = pd.read_csv(URL)
 hares.head()
 ```
 
-::: {.cell-output .cell-output-display execution_count=257}
+::: {.cell-output .cell-output-display execution_count=34}
 
 ```{=html}
 <div>
@@ -482,8 +482,15 @@ hares.head()
 
 -->
 <ol start="2" type="a">
-<li>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways. For each method, write a short sentence explaining why you decided to obtain that information.</li>
+<li>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame. Consider answering some of these questions:</li>
 </ol>
+<ul>
+<li>What are the dimensions of the dataframe and what are the data types of the columns? Do the data types match what you would expect from each column?</li>
+<li>Are there any columns that have a significant number of NA values?</li>
+<li>What are the minimum and maximum values for the weight and hind feet measurements?</li>
+<li>What are the unique values for some of the categorical columns?</li>
+<li>An explroatory question about the data frame you come up with!</li>
+</ul>
 <p style="text-align: center;">
 <strong>CHECK IN WITH YOUR TEAM</strong>
 </p>
@@ -497,7 +504,7 @@ hares.head()
 <section id="detecting-messy-values" class="level2">
 <h2 class="anchored" data-anchor-id="detecting-messy-values">4. Detecting messy values</h2>
 <ol type="a">
-<li>In the metadata section of the EDI repository, find which are the allowed values for the hares’ sex. Create a small table in a markdown cell showing the values and their definitions.</li>
+<li>In the metadata section of the EDI repository, find which are the allowed values for the hares’ sex. Create a small <a href="https://www.markdownguide.org/extended-syntax/#tables">table in a markdown cell</a> showing the values and their definitions.</li>
 </ol>
 <!--
 *Allowed values are:*
@@ -513,12 +520,12 @@ hares.head()
 </ol>
 <!--
 
-::: {#764660a7 .cell execution_count=2}
+::: {#287b6720 .cell execution_count=2}
 ``` {.python .cell-code}
 hares['sex'].value_counts()
 ```
 
-::: {.cell-output .cell-output-display execution_count=258}
+::: {.cell-output .cell-output-display execution_count=35}
 ```
 sex
 F     1161
@@ -543,12 +550,12 @@ Name: count, dtype: int64
 <ol start="3" type="a">
 <li><p>Check the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html">documentation of <code>value_counts()</code></a>. What is the purpose of the <code>dropna</code> parameter and what is its default value? Repeat step (a), this time adding the <code>dropna=False</code> parameter to <code>value_counts()</code>. <!--
 
-::: {#ab984b11 .cell execution_count=3}
+::: {#ad574a56 .cell execution_count=3}
 ``` {.python .cell-code}
 hares['sex'].value_counts(dropna=False)
 ```
 
-::: {.cell-output .cell-output-display execution_count=259}
+::: {.cell-output .cell-output-display execution_count=36}
 ```
 sex
 F      1161
@@ -581,12 +588,12 @@ Name: count, dtype: int64
 </ol>
 <!--
 
-::: {#5fffc25f .cell execution_count=4}
+::: {#9d1ed16f .cell execution_count=4}
 ``` {.python .cell-code}
 hares['sex'].unique()
 ```
 
-::: {.cell-output .cell-output-display execution_count=260}
+::: {.cell-output .cell-output-display execution_count=37}
 ```
 array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
        'm '], dtype=object)
@@ -606,7 +613,7 @@ array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
 <li><p>Individually, write step-by-step instructions on how you would wrangle the <code>hares</code> data frame to clean the values in the <code>sex</code> column to have only two classes <code>female</code> and <code>male</code>. Which codes would you assign to each new class? <strong>Remember:</strong> It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.</p></li>
 <li><p>Discuss your step-by-step instructions with your team.</p></li>
 </ol>
-<p>The next exercise will guide you through cleaning the codes. There are <em>many</em> ways of doing this. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>numpy.select()</code> function.</p>
+<p>The next exercise will guide you through cleaning the sex codes. There are <em>many</em> ways of doing this. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>numpy.select()</code> function.</p>
 </section>
 <section id="clean-values" class="level2">
 <h2 class="anchored" data-anchor-id="clean-values">6. Clean values</h2>
@@ -618,9 +625,9 @@ array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
 <li>‘M’, ‘m’, and ‘m_’ get assigned to ‘male’, and</li>
 <li>anything else gets assigned <code>np.nan</code></li>
 </ul>
-<p>HINT: You need to create a list with two conditions and a list with two choices. <!--
+<!--
 
-::: {#5062be4f .cell execution_count=5}
+::: {#db2927e3 .cell execution_count=5}
 ``` {.python .cell-code}
 conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
               (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
@@ -632,7 +639,7 @@ hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 hares.head()
 ```
 
-::: {.cell-output .cell-output-display execution_count=261}
+::: {.cell-output .cell-output-display execution_count=38}
 
 ```{=html}
 <div>
@@ -649,120 +656,122 @@ hares.head()
         text-align: right;
     }
 </style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>date</th>
-      <th>time</th>
-      <th>grid</th>
-      <th>trap</th>
-      <th>l_ear</th>
-      <th>r_ear</th>
-      <th>sex</th>
-      <th>age</th>
-      <th>weight</th>
-      <th>hindft</th>
-      <th>notes</th>
-      <th>b_key</th>
-      <th>session_id</th>
-      <th>study</th>
-      <th>sex_simple</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>11/26/1998</td>
-      <td>NaN</td>
-      <td>bonrip</td>
-      <td>1A</td>
-      <td>414D096A08</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1370.0</td>
-      <td>160.0</td>
-      <td>NaN</td>
-      <td>917.0</td>
-      <td>51</td>
-      <td>Population</td>
-      <td>nan</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>11/26/1998</td>
-      <td>NaN</td>
-      <td>bonrip</td>
-      <td>2C</td>
-      <td>414D320671</td>
-      <td>NaN</td>
-      <td>M</td>
-      <td>NaN</td>
-      <td>1430.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>936.0</td>
-      <td>51</td>
-      <td>Population</td>
-      <td>male</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>11/26/1998</td>
-      <td>NaN</td>
-      <td>bonrip</td>
-      <td>2D</td>
-      <td>414D103E3A</td>
-      <td>NaN</td>
-      <td>M</td>
-      <td>NaN</td>
-      <td>1430.0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>921.0</td>
-      <td>51</td>
-      <td>Population</td>
-      <td>male</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>11/26/1998</td>
-      <td>NaN</td>
-      <td>bonrip</td>
-      <td>2E</td>
-      <td>414D262D43</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1490.0</td>
-      <td>135.0</td>
-      <td>NaN</td>
-      <td>931.0</td>
-      <td>51</td>
-      <td>Population</td>
-      <td>nan</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>11/26/1998</td>
-      <td>NaN</td>
-      <td>bonrip</td>
-      <td>3B</td>
-      <td>414D2B4B58</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>1710.0</td>
-      <td>150.0</td>
-      <td>NaN</td>
-      <td>933.0</td>
-      <td>51</td>
-      <td>Population</td>
-      <td>nan</td>
-    </tr>
-  </tbody>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">grid</th>
+<th data-quarto-table-cell-role="th">trap</th>
+<th data-quarto-table-cell-role="th">l_ear</th>
+<th data-quarto-table-cell-role="th">r_ear</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">weight</th>
+<th data-quarto-table-cell-role="th">hindft</th>
+<th data-quarto-table-cell-role="th">notes</th>
+<th data-quarto-table-cell-role="th">b_key</th>
+<th data-quarto-table-cell-role="th">session_id</th>
+<th data-quarto-table-cell-role="th">study</th>
+<th data-quarto-table-cell-role="th">sex_simple</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>11/26/1998</td>
+<td>NaN</td>
+<td>bonrip</td>
+<td>1A</td>
+<td>414D096A08</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1370.0</td>
+<td>160.0</td>
+<td>NaN</td>
+<td>917.0</td>
+<td>51</td>
+<td>Population</td>
+<td>nan</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>11/26/1998</td>
+<td>NaN</td>
+<td>bonrip</td>
+<td>2C</td>
+<td>414D320671</td>
+<td>NaN</td>
+<td>M</td>
+<td>NaN</td>
+<td>1430.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>936.0</td>
+<td>51</td>
+<td>Population</td>
+<td>male</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>11/26/1998</td>
+<td>NaN</td>
+<td>bonrip</td>
+<td>2D</td>
+<td>414D103E3A</td>
+<td>NaN</td>
+<td>M</td>
+<td>NaN</td>
+<td>1430.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>921.0</td>
+<td>51</td>
+<td>Population</td>
+<td>male</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>11/26/1998</td>
+<td>NaN</td>
+<td>bonrip</td>
+<td>2E</td>
+<td>414D262D43</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1490.0</td>
+<td>135.0</td>
+<td>NaN</td>
+<td>931.0</td>
+<td>51</td>
+<td>Population</td>
+<td>nan</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>11/26/1998</td>
+<td>NaN</td>
+<td>bonrip</td>
+<td>3B</td>
+<td>414D2B4B58</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1710.0</td>
+<td>150.0</td>
+<td>NaN</td>
+<td>933.0</td>
+<td>51</td>
+<td>Population</td>
+<td>nan</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 ```
 
@@ -770,16 +779,16 @@ hares.head()
 :::
 
 
---></p>
+-->
 <ol start="2" type="a">
 <li>Check the counts of unique values (including NAs) in the new <code>sex_simple</code> column. <!--
 
-::: {#0df03a81 .cell execution_count=6}
+::: {#303e41af .cell execution_count=6}
 ``` {.python .cell-code}
 hares['sex_simple'].value_counts()
 ```
 
-::: {.cell-output .cell-output-display execution_count=262}
+::: {.cell-output .cell-output-display execution_count=39}
 ```
 sex_simple
 female    1721
@@ -804,12 +813,12 @@ Name: count, dtype: int64
 </ol>
 <!--
 
-::: {#995d8005 .cell execution_count=7}
+::: {#06cb2272 .cell execution_count=7}
 ``` {.python .cell-code}
 hares.groupby('sex_simple')['weight'].mean()
 ```
 
-::: {.cell-output .cell-output-display execution_count=263}
+::: {.cell-output .cell-output-display execution_count=40}
 ```
 sex_simple
 female    1365.164792
@@ -823,7 +832,7 @@ Name: weight, dtype: float64
 
 -->
 <ol start="2" type="a">
-<li>Write a full sentence explaining the results you obtained.</li>
+<li>Write a full sentence explaining the results you obtained. Don’t forget to include units.</li>
 </ol>
 <p style="text-align: center;">
 <strong>commit, pull, and push changes</strong>
@@ -842,7 +851,7 @@ Name: weight, dtype: float64
 </ul>
 <!-- 
 
-::: {#51e524d9 .cell execution_count=8}
+::: {#f7e43623 .cell execution_count=8}
 ``` {.python .cell-code}
 # Load data from EDI data repository
 URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
@@ -860,7 +869,7 @@ hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 hares.groupby('sex_simple')['weight'].mean()
 ```
 
-::: {.cell-output .cell-output-display execution_count=264}
+::: {.cell-output .cell-output-display execution_count=41}
 ```
 sex_simple
 female    1365.164792
