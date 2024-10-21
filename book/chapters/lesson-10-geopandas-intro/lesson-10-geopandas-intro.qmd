@@ -1,0 +1,248 @@
+---
+toc-title: In this lesson
+fig-cap-location: margin
+---
+
+# `geopandas`
+
+GeoPandas is a Python library that extends the `pandas` library by adding support for geospatial data. In this lesson we will introduce the `geopandas` library to work with vector data. We will also make our first map. 
+
+<!-- TODO
+## Learning objectives
+-->
+
+## About the data
+
+In this lesson we will use simplified point data about wild pigs (*Sus scrofa*) sightings in California, USA from the [Global Biodiversity Information Facility](https://www.gbif.org). 
+
+- Say more about wild pigs and invasive species. 
+- Say more about GBIF
+- column descriptions
+
+## Data import
+To begin with, let's import `geopandas` with its standard abbreviation `gpd`:
+
+```{python}
+import os
+import geopandas as gpd
+import matplotlib.pyplot as plt
+```
+
+We can read in a shapefile with `geopandas` by using the `geopandas.read_file()` function:
+
+```{python}
+fp = os.path.join('data','gbif_sus_scrofa_california','gbif_sus_scrofa_california.shp')
+pigs = gpd.read_file(fp)
+pigs.head()
+```
+
+::: {.callout-caution}
+## One shapefile = multiple files
+Although the parameter for `geopandas.read_file()` is only the file with `.shp` extension, remember that we need to have at least the `.shx` and `.dbf` files in the same directory as the `.shp` to read in the data. 
+:::
+
+## `GeoSeries` and `GeoDataFrame`
+
+The core data structure in GeoPandas is the `geopandas.GeoDataFrame`. 
+We can think of it as a `pandas.DataFrame` with a dedicated geometry column that can perform spatial operations. 
+
+The **geometry column** in a `geopandas.GeoDataFrame` holds the geometry (point, polygon, etc) of each spatial feature. This geometry column is of type `geopandas.GeoSeries`. Columns in the `geopandas.GeoDataFrame` with attributes about the features are `pandas.Series` like in a regular `pandas.DataFrame`. 
+
+![Image adapted from [*Introduction to GeoPandas*](https://geopandas.org/en/stable/getting_started/introduction.html).](/book/images/lesson-10/geodataframe.png){width="70%"}
+
+#### Example
+
+First, notice that the leftmost column of the `pigs` geo-dataframe is a column named `geometry` whose values indicate points:
+
+```{python}
+pigs.head(3)
+```
+
+As usual, we can check the type of our objects using the `type` Python function:
+
+```{python}
+# Check the data type of the pigs dataframe 
+print(type(pigs))
+
+# Check the data type of the geometry column
+print(type(pigs.geometry))
+
+# Check the data type of the gbifID column
+print(type(pigs.gbifID))
+```
+
+The data type of the geometry column is also reflected when we look at the data types of the values in each column:
+
+```{python}
+# Check the data type of each column
+pigs.dtypes
+```
+
+We can also check the type of each element in the geometry column using the `geom_type` attribute of a `geopandas.GeoDataFrame`:
+
+```{python}
+pigs.geom_type
+```
+
+<!--
+
+This is a `shapely` point. `shapely` is another Python library that to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.
+-->
+
+## CRS and extent
+
+Two other important attributes of a `geopandas.GeoDataFrame` are its coordinate reference system (CRS) and its extent. 
+
+We can think of the **coordinate reference system (CRS)** as the instructions to locate each spatial feature of our data frame on the surface of the Earth. We access the CRS of a `geopandas.GeoDataFrame` using the `crs` attribute:
+
+```{python}
+# Access the CRS of the GeoDataFrame
+pigs.crs
+```
+
+<!-- TODO: explain what we are getting here -->
+
+The **extent** of the geo-dataframe is the bounding box covering *all* the spatial features in our geo-dataframe. This is formed by finding the points that are furthest west, east, south, and north.
+
+![Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-10/spatial-extent.png)
+
+We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attribute:
+
+```{python}
+# Obtain the geographic extent of the geo-dataframe
+pigs.total_bounds
+```
+<!-- TODO: explain what we are getting here -->
+
+## Data wrangling
+
+GeoPandas is conveniently built on top of `pandas`, so we may use everything we have learned about data selection, wrangling, and modification for a `pandas.DataFrame` to wrange `geopandas.GeoDataFrames`.
+
+#### Example
+
+We only want to use recent data for wild pig observations. A quick check shows that this dataframe has data since 1818:
+
+```{python}
+# Examine pig observation by year
+pigs['year'].value_counts().sort_index()
+```
+
+We can use our usual data selection to get data from 2020 onwards:
+
+```{python}
+# Select data from 2020 onwards
+pigs_recent = pigs[pigs.year>=2020]
+
+# Check length of original dataframe
+print('Initial number of observations: ' , len(pigs))
+
+# Check length of new dataframe
+print('Number of observations since 2020: ' , len(pigs_recent))
+```
+
+## Create a map
+
+### `plot()`
+
+Similarly to a `pandas.DataFrame`, a `geopandas.GeoDataFrame` has a `plot()` method that we can call directly to create a quick view of our data. 
+The geospatial information of the `geopandas.GeoDataFrame` will be used to create the axes of the plot.
+
+#### Example
+
+Let us take a quick look at our recent pigs data:
+
+```{python}
+pigs_recent.plot()
+```
+
+### `matplotlib`'s `fig` and `ax`
+
+Going forward, we will make more complex visualizations where we add different layers to a graph and customize it. 
+To do this, we will use the `matplotlib` Python library for creating visualizations. 
+We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
+
+Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
+The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can icnlude multiple axes in it.  
+
+![Image source: [Getting Started with Matplotlib](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
+
+To create a new blank figure:
+
+1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function, and
+2. show the graph using `plt.show()`:
+
+```{python}
+# Initialize empyt figure (fig) and axis (ax)
+fig, ax = plt.subplots()
+
+# Display figure
+plt.show()
+```
+
+Notice that `plt.subplots()` is a function that returns two objects, when we call it, get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+
+
+### Adding a layer
+
+When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
+The general syntax to plot a datafram `df` onto an axis is:
+```python
+# Initialize empyt figure and axis
+fig, ax = plt.subplots()
+
+# Plot a df on the ax axis
+df.plot(ax=ax, 
+        ...)   # Other arguments for plot function
+
+# Display figure
+plt.show()
+``` 
+
+#### Example
+
+The first layer that we want to add to our axis is the `pigs_recent` point data. 
+We can plot our data using `matplotlib` like this:
+
+```{python}
+# Initialize empyt figure and axis
+fig, ax = plt.subplots()
+
+# Add pigs point plot to our figure's axis
+pigs_recent.plot(ax=ax)
+
+# Display figure
+plt.show()
+```
+
+### Customization 
+
+Matplotlib allows for a lot of customization. 
+Some of it can be done directly in the `plot()` method for the dataframe (like we've done when ploting data using `pandas`), while other is done by updating attributes of the axis `ax`. 
+The following diagram shows some examples of elements in the axis that can be updated.
+
+![Image source: Matplotlib documentation](/book/images/lesson-10/anatomy.png){width="70%"}
+
+#### Example
+
+Some basic customization for our pigs data could looke like this:
+
+```{python}
+# Initialize empty figure
+fig, ax = plt.subplots()
+
+# add data to axis
+# notice customization happens as arguments in plot()
+pigs_recent.plot(ax=ax,
+                 alpha=0.5,
+                 color='brown'
+                 )
+
+# update axis 
+# customization separate from the data plotting
+ax.set_title('Reported "Sus scrofa" sightings in CA (2020-2023)')
+ax.set_xlabel('Longitude')
+ax.set_ylabel('Latitude')
+
+# display figure
+plt.show()
+```
