@@ -41,6 +41,21 @@ pigs.head()
 Although the parameter for `geopandas.read_file()` is only the file with `.shp` extension, remember that we need to have at least the `.shx` and `.dbf` files in the same directory as the `.shp` to read in the data. 
 :::
 
+::: {.callout-tip}
+## Check-in
+Create a file path using `os.path.join()` to import the shapefile of the California state boundary as a `geopandas.GeoDataFrame`. Once imported, take a look at the data.
+:::
+
+<!--
+```{python}
+#| include: false
+
+fp = os.path.join('data','ca_state_boundary','ca_state_boundary.shp')
+ca_boundary = gpd.read_file(fp)
+ca_boundary
+```
+-->
+
 ## `GeoSeries` and `GeoDataFrame`
 
 The core data structure in GeoPandas is the `geopandas.GeoDataFrame`. 
@@ -85,9 +100,13 @@ pigs.geom_type
 ```
 
 <!--
-
 This is a `shapely` point. `shapely` is another Python library that to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.
 -->
+
+::: {.callout-tip}
+## Check-in
+What is the geometry type of the single geospatial feature of the California state boundary?
+:::
 
 ## CRS and extent
 
@@ -104,7 +123,7 @@ pigs.crs
 
 The **extent** of the geo-dataframe is the bounding box covering *all* the spatial features in our geo-dataframe. This is formed by finding the points that are furthest west, east, south, and north.
 
-![Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-10/spatial-extent.png)
+![Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-10/spatial-extent.png){width="80%"}
 
 We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attribute:
 
@@ -113,6 +132,20 @@ We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attr
 pigs.total_bounds
 ```
 <!-- TODO: explain what we are getting here -->
+
+::: {.callout-tip}
+## Check-in
+Print the CRS, and extent of the California boundary. 
+:::
+
+<!--
+```{python}
+#| include: false
+
+print('CRS: ', ca_boundary.crs, '\n')
+print(ca_boundary.total_bounds)
+```
+-->
 
 ## Data wrangling
 
@@ -134,7 +167,7 @@ We can use our usual data selection to get data from 2020 onwards:
 pigs_recent = pigs[pigs.year>=2020]
 
 # Check length of original dataframe
-print('Initial number of observations: ' , len(pigs))
+print('Total number of observations: ' , len(pigs))
 
 # Check length of new dataframe
 print('Number of observations since 2020: ' , len(pigs_recent))
@@ -191,8 +224,8 @@ The general syntax to plot a datafram `df` onto an axis is:
 fig, ax = plt.subplots()
 
 # Plot a df on the ax axis
-df.plot(ax=ax, 
-        ...)   # Other arguments for plot function
+df.plot(ax=ax,  # Add plot to axis
+        ...)    # Other arguments for plot function
 
 # Display figure
 plt.show()
@@ -230,19 +263,49 @@ Some basic customization for our pigs data could looke like this:
 # Initialize empty figure
 fig, ax = plt.subplots()
 
-# add data to axis
-# notice customization happens as arguments in plot()
-pigs_recent.plot(ax=ax,
-                 alpha=0.5,
-                 color='brown'
+# Add data to axis
+pigs_recent.plot(ax=ax,         # Add plot to axis
+                 alpha=0.5,     # Adjust transparency
+                 color='brown'  # Update point color
                  )
 
-# update axis 
-# customization separate from the data plotting
+# Update axis 
 ax.set_title('Reported "Sus scrofa" sightings in CA (2020-2023)')
 ax.set_xlabel('Longitude')
 ax.set_ylabel('Latitude')
 
-# display figure
+# Display figure
 plt.show()
 ```
+
+::: {.callout-tip}
+## Check-in 
+Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!
+
+```{python}
+#| echo: false
+
+# Initialize an empty figure 
+fig, ax = plt.subplots()
+
+# Add CA boundary
+ca_boundary.plot(ax = ax,
+                color = 'none',
+                edgecolor = '#362312')
+
+# Add pig point data
+pigs_recent.plot(ax = ax,
+                alpha = .5,
+                color = '#FF5768',
+                edgecolor = '#FFBF65')
+
+# Customization
+ax.set_title('Reported "Sus scrofa" sightings in CA (2020-2023)')
+ax.set_xlabel('Longitude')
+ax.set_ylabel('Latitude')
+
+# Display figure
+plt.show()
+```
+
+:::
