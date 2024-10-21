@@ -156,13 +156,16 @@ df.plot(x='year',
 ## Updating the index
 
 **Updating the index** of our data frame to be something other than the default integers numbering the rows can be a useful operation for plotting. 
-To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. 
-The general syntax for setting a column as the new index is:
+To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. It's general syntax is:
 
 ```python
-df.set_index('column_name')
+df = df.set_index(new_index)
 ```
-where `column_name` is the name of the column in the data frame `df` we want to use as new index.
+where `new_index` is:
+
+- the name of the column in the data frame `df` we want to use as new index
+- if our new index is not a column in the data frame, an array or `pandas.Series` of the same length as our data frame (we need one index per row). 
+
 
 This operation does not happen in-place. 
 
@@ -172,17 +175,19 @@ This operation does not happen in-place.
 If we wanted to update our `df` data frame we could do an **explicit assignment** to reassign the output of `set_index()` to `df`:
 
 ```python
+# Set `column_name` column in df as the new index (reassignment)
 df = df.set_index('column_name')
 ```
 
 or use the optional `inplace` parameter:
 
 ```python
+# Set `column_name` column in df as the new index (modify df in-place)
 df.set_index('column_name', inplace=True)
 ```
 
 :::{.callout-caution}
-## Avoid using the `inplace=True` argument, favor explicit variable assignments
+## In general, avoid using the `inplace=True` argument and favor explicit variable assignments
 Check the information about the `inplace` parameter in the [`set_index()` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html). You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for better readability and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
 :::
 
