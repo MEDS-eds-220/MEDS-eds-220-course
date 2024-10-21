@@ -2,6 +2,9 @@
 
 In this section we will learn some basic handling of time series. 
 
+This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Lesson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/).
+
+
 <!--
 TODO
 ## Learning objectives
@@ -66,7 +69,7 @@ precip.head()
 
 ```{python}
 # Plot hourly precipitation in Boulder CO 
-precip.HPCP.plot()
+precip.plot()
 ```
 
 There are a few things going on with this graph:
@@ -97,7 +100,7 @@ Notice that the first hourly precipitation value used to be 999.99 and it is now
 We can try making our plot again:
 
 ```{python}
-precip.HPCP.plot()
+precip.plot()
 ```
 
 This looks better and we can already see there is something going on close to the end of the time series. 
@@ -137,42 +140,25 @@ print(precip.dtypes)
 precip.DATE.head()
 ```
 
-W can make another attempt at plotting our precipitation data:
+We can make another attempt at plotting our precipitation data:
 
 ```{python}
 precip.plot(x='DATE', y='HPCP')
 ```
 
-Notice the $x$-axis is now neatly organized into years.
+Notice the $x$-axis is now neatly organized into years. 
 
-## Timestamp index
-
-At its core, we have time series data if our data frame is indexed by moments in time. Using our DATE column as the index will allows us to do many operations with respect to  time, including subsetting and resampling. 
-
-Updating the index of a dataframe is simple, we use the `set_index()` method. It's general syntax is
-```python
-df = df.set_index(new_index)
-```
-where `new_index` is:
-
-- the name of the column (string) we want to set as index, or
-- if our new index is not a column in the dataframe, an array or `pd.Series` of the same length as our data frame (we need one index per row!). 
-
-Notice that `set_index` does not modify the data frame in place.
-
-**Example**
-
-In our precipitation data this is:
+Next, using our `DATE` column as the index will allows to perform operations with respect to time, including subsetting and resampling. 
 
 ```{python}
-# set DATE coumn as index
+# Set DATE coumn as index
 precip = precip.set_index('DATE')
 
-# check new index
+# Inspect new index
 precip.head()
 ```
 
-Since we know the default behaviour of `plot()` is to use the index as the x-axis and make a line plot for each numeric column, we can simplify our plot making like this:
+Since we know the default behaviour of `plot()` is to use the index as the $x$-axis and make a line plot for each numeric column, we can simplify our plot making like this:
 
 ```{python}
 precip.plot()
@@ -187,18 +173,19 @@ df = pd.read_csv(file, index_col=['date'], parse_dates=['date'])
 -->
 
 ## Subsetting by date
-`pandas` has great functionality to subset a dataframe when using a time index. These are some examples:
+`pandas` has great functionality to subset a dataframe when using a time index. 
 
+#### Example
 
+We can use `.loc[year-month]` to select data from a specific year and month:
 ```{python}
-# select data from a given month and year
-# use loc['year-month']
+# Select precipitation data from September 2013
 precip.loc['2013-09']
 ```
 
+Or simply select data from a given year using `.loc[year]`:
 ```{python}
-# select data from a given year
-# use loc['year']
+# Select 2013 precipitation data
 precip.loc['2013']
 ```
 
@@ -209,39 +196,38 @@ precip.loc['2013'].plot()
 ```
 
 ## Resample
-Resampling a time series means converting a time series from one frequency to another. For example, monthly to yearly (downsampling) or weekly to daily (upsampling). We can resample with the `resample()` method. The simplest use is to call
+Resampling a time series means converting a time series from one frequency to another. For example, monthly to yearly (downsampling) or weekly to daily (upsampling). We can resample with the [`resample()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html) method. The simplest use is to call
 ```python
 df.resample(new_frequency).aggregator_function()
 ```
 where:
 -  `new_frequency` is a string representing the new frequence to resample the data, for example `'D'` for day, `w` for week, `M` for month, `Y` for year, and
-- `aggregator_function()` is the function we will use to aggregate the data into the new frequence. For example, `max()`, `min()`, `sum()` or `average()`. 
+- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `average()`. 
 
-`resample()` works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output. 
+The `resample()` method works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output. 
 
-**Example**
+#### Example
 
-Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency. 
+Our 2013 precipitation data has hourly frequency, we want to resample it to daily frequency. 
 
 ```{python}
-# resample 2013 hourly data to daily frequency
-# nothing happens
+# Resample 2013 hourly data to daily frequency: no output
 precip.loc['2013'].resample('D')
 ```
 
-To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggreagte using `sum()`:
+To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggreagate it using `sum()`:
 
 ```{python}
-# total daily precipitation in 2013
+# Total daily precipitation in 2013
 daily_precip_2013 = precip.loc['2013'].resample('D').sum()
 
 daily_precip_2013
 ```
 
-Notice the index now is every day in 2013. We should rename that column since it is not longer hourly precipitation:
+Notice the index has now changed to be days in 2013. We should also rename the `HPCP` column since it is not longer hourly precipitation:
 
 ```{python}
-# rename column
+# Rename hourly precipitation column to match resample
 daily_precip_2013 = daily_precip_2013.rename(columns={'HPCP':'daily_precipitation'})
 ```
 
@@ -249,7 +235,31 @@ daily_precip_2013 = daily_precip_2013.rename(columns={'HPCP':'daily_precipitatio
 
 ```{python}
 daily_precip_2013.plot(ylabel='daily precipitation (in)', 
-                       xlabel='date',
+                       xlabel=' ',
+                       title='Precipitation in Boulder, CO during 2013',
+                       legend=False)
+```
+
+## Complete workflow
+
+```{python}
+import pandas as pd
+
+# Read in Boulder, CO hourly precipitation data 
+URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'
+precip = pd.read_csv(URL, index_col=['DATE'], parse_dates=['DATE'])
+
+
+# Calculate daily total precipitation during 2013
+daily_precip_2013 = (precip.loc['2013']
+                            .resample('D')
+                            .sum()
+                            .rename(columns={'HPCP':'daily_precipitation'})
+                            )
+
+# Plot time series
+daily_precip_2013.plot(ylabel='daily precipitation (in)', 
+                       xlabel=' ',
                        title='Precipitation in Boulder, CO during 2013',
                        legend=False)
 ```
@@ -257,7 +267,7 @@ daily_precip_2013.plot(ylabel='daily precipitation (in)',
 
 ## More info
 
-As usual, there's so much more to learn about time series data. These documents will allow you to dive deeper:
+There is so much more to learn about time series data. These documents will allow you to dive deeper:
 
 📖 [`pandas` getting started tutorials - How to handle time series data with ease](https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#min-tut-09-timeseries)
 
@@ -265,7 +275,3 @@ As usual, there's so much more to learn about time series data. These documents 
 
 📖 [`pandas` User Guide - Time series/date functionality](https://pandas.pydata.org/docs/user_guide/timeseries.html)
 
-
-## Acknowledgements
-
-This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Lesson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/).
