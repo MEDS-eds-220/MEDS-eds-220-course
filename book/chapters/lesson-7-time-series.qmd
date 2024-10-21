@@ -2,7 +2,7 @@
 
 In this section we will learn some basic handling of time series. 
 
-This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Lesson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/).
+This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Le"sson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/) @wasser_earthlabearth_textbook_2024.
 
 
 <!--
@@ -164,13 +164,18 @@ Since we know the default behaviour of `plot()` is to use the index as the $x$-a
 precip.plot()
 ```
 
-<!--
 :::{.callout-note}
-More on pd.read_csv(). You can set the index and the date columns
-df = pd.read_csv(file, index_col=['date'], parse_dates=['date'])
+## Leverage `pandas.read_csv()` to set a known index
 
+If we already have information about our data frame and know which column we will use as the index, we can directly set the index when we load the data by using:
+```python
+df = pandas.read_csv(file, index_col=['index_column'])
+```
+If we also need our index to be of type `datetime` and we have a known dates column, then we can also create a `datetime` index directly when loading the data:
+```python
+df = pandas.read_csv(file, index_col=['date_column'], parse_dates=['date_column'])
+```
 :::
--->
 
 ## Subsetting by date
 `pandas` has great functionality to subset a dataframe when using a time index. 
@@ -189,7 +194,7 @@ Or simply select data from a given year using `.loc[year]`:
 precip.loc['2013']
 ```
 
-We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data. 
+We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data: 
 
 ```{python}
 precip.loc['2013'].plot()
@@ -221,7 +226,7 @@ To get an output we need to add an aggregator function that indicates how we wan
 # Total daily precipitation in 2013
 daily_precip_2013 = precip.loc['2013'].resample('D').sum()
 
-daily_precip_2013
+daily_precip_2013.head(3)
 ```
 
 Notice the index has now changed to be days in 2013. We should also rename the `HPCP` column since it is not longer hourly precipitation:
@@ -229,6 +234,7 @@ Notice the index has now changed to be days in 2013. We should also rename the `
 ```{python}
 # Rename hourly precipitation column to match resample
 daily_precip_2013 = daily_precip_2013.rename(columns={'HPCP':'daily_precipitation'})
+daily_precip_2013.columns
 ```
 
  Finally, we can plot our data:
@@ -242,19 +248,28 @@ daily_precip_2013.plot(ylabel='daily precipitation (in)',
 
 ## Complete workflow
 
+The previous code includes a lot of exploratory functions and trials. While it is important to keep our data exploration documented, once we are certain of our data wrangling, we can streamline our analyses to only include the code that directly contributes to the output. Moving on, we will start to collect all our relevant code to create such complete workflows. For this lesson, the code below will produce the final graph:
+
 ```{python}
 import pandas as pd
 
-# Read in Boulder, CO hourly precipitation data 
+'''
+Read in Boulder, CO hourly precipitation data 
+HPCP = hourly precipitation (unique numerical column in data frame)
+'''
 URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'
-precip = pd.read_csv(URL, index_col=['DATE'], parse_dates=['DATE'])
+precip = pd.read_csv(URL, 
+                    na_values=[999.99],  # Known from metadata
+                    index_col=['DATE'], 
+                    parse_dates=['DATE']
+                    )
 
 
 # Calculate daily total precipitation during 2013
 daily_precip_2013 = (precip.loc['2013']
                             .resample('D')
                             .sum()
-                            .rename(columns={'HPCP':'daily_precipitation'})
+                            .rename(columns={'HPCP':'daily_precipitation'})  
                             )
 
 # Plot time series
@@ -264,10 +279,11 @@ daily_precip_2013.plot(ylabel='daily precipitation (in)',
                        legend=False)
 ```
 
+<!-- TODO Add plot description. -->
 
 ## More info
 
-There is so much more to learn about time series data. These documents will allow you to dive deeper:
+There is so much more to learn about time series data. These resources will allow you to dive deeper:
 
 📖 [`pandas` getting started tutorials - How to handle time series data with ease](https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#min-tut-09-timeseries)
 
