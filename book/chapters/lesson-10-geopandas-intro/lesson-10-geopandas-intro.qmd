@@ -13,14 +13,26 @@ GeoPandas is a Python library that extends the `pandas` library by adding suppor
 
 ## About the data
 
-In this lesson we will use simplified point data about wild pigs (*Sus scrofa*) sightings in California, USA from the [Global Biodiversity Information Facility](https://www.gbif.org). 
+Wild pigs (*Sus scrofa*) are a destructive invasive species in California, causing significant environmental and agricultural damage. Introduced to the region in the 1700s, they have since spread across the state, impacting native ecosystems through habitat destruction, soil disturbance due to their rooting behavior, and competition with native wildlife for food @finzel_wild_2015. This widespread damage has made managing wild pig populations a critical issue for conservation and agricultural communities in California.
 
-- Say more about wild pigs and invasive species. 
-- Say more about GBIF
-- column descriptions
+![Wild boar in Santa Teresa Park, CA. [Photo by Don DeBold](https://www.flickr.com/photos/ddebold/52936296848)](/book/images/lesson-10/wild_pig.png){width="70%"}
 
-## Data import
-To begin with, let's import `geopandas` with its standard abbreviation `gpd`:
+In this lesson we will use simplified point data about wild pig sightings in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). 
+GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
+
+The data we will use today has been simplified from the complete *Sus scrofa* occurrencies data @gbiforg_user_occurrence_2023 accessed through the GBIF website. 
+
+<!-- TODO: column descriptions -->
+<!-- TODO: add info about the CA shapefile -->
+
+## Reproducible file paths
+In this lesson we will introduce three Python packages:
+
+- `geopandas` @jordahl_geopandasgeopandas_2020: a package that extends `pandas` to work with geospatial data. This is the main package we will be working with in the next few lessons.
+- `os`: a package that provides functions for interacting with the operating system, allowing us to perform tasks like file manipulation in a platform-independent way.
+- `matplotlib` @Hunter:2007: one of the most popular and widely used Python libraries for data visualization.
+
+Let's start by importing these packages:
 
 ```{python}
 import os
@@ -28,10 +40,18 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 ```
 
-We can read in a shapefile with `geopandas` by using the `geopandas.read_file()` function:
+To import our data we will first use the `os` package to create a reproducible file path:
 
 ```{python}
 fp = os.path.join('data','gbif_sus_scrofa_california','gbif_sus_scrofa_california.shp')
+fp
+```
+
+Using the `os.path.join()` function allows us to create file paths that work on any operating system. Each operating system uses a different way to separate folders in a path (e.g., Windows uses backslashes `\`, while macOS and Linux use forward slashes `/`). By using `os.path.join()`, Python automatically handles the correct separator for the operating system you're working on. This avoids errors and makes your code more portable.
+
+We can then use this file path to read in a shapefile with `geopandas` by using the `geopandas.read_file()` function:
+
+```{python}
 pigs = gpd.read_file(fp)
 pigs.head()
 ```
@@ -105,7 +125,7 @@ This is a `shapely` point. `shapely` is another Python library that to construct
 
 ::: {.callout-tip}
 ## Check-in
-What is the geometry type of the single geospatial feature of the California state boundary?
+What is the geometry type of the single feature in the California state boundary?
 :::
 
 ## CRS and extent
