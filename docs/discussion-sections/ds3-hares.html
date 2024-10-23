@@ -339,7 +339,7 @@ div.csl-indent {
 </ol>
 <!--
 
-::: {#f51b2636 .cell execution_count=1}
+::: {#7eadec08 .cell execution_count=1}
 ``` {.python .cell-code}
 import numpy as np
 import pandas as pd
@@ -350,7 +350,7 @@ hares = pd.read_csv(URL)
 hares.head()
 ```
 
-::: {.cell-output .cell-output-display execution_count=34}
+::: {.cell-output .cell-output-display execution_count=1}
 
 ```{=html}
 <div>
@@ -524,12 +524,12 @@ hares.head()
 </ol>
 <!--
 
-::: {#287b6720 .cell execution_count=2}
+::: {#fa349380 .cell execution_count=2}
 ``` {.python .cell-code}
 hares['sex'].value_counts()
 ```
 
-::: {.cell-output .cell-output-display execution_count=35}
+::: {.cell-output .cell-output-display execution_count=2}
 ```
 sex
 F     1161
@@ -554,12 +554,12 @@ Name: count, dtype: int64
 <ol start="3" type="a">
 <li><p>Check the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html">documentation of <code>value_counts()</code></a>. What is the purpose of the <code>dropna</code> parameter and what is its default value? Repeat step (a), this time adding the <code>dropna=False</code> parameter to <code>value_counts()</code>. <!--
 
-::: {#ad574a56 .cell execution_count=3}
+::: {#0401efe2 .cell execution_count=3}
 ``` {.python .cell-code}
 hares['sex'].value_counts(dropna=False)
 ```
 
-::: {.cell-output .cell-output-display execution_count=36}
+::: {.cell-output .cell-output-display execution_count=3}
 ```
 sex
 F      1161
@@ -592,12 +592,12 @@ Name: count, dtype: int64
 </ol>
 <!--
 
-::: {#9d1ed16f .cell execution_count=4}
+::: {#aa3634e5 .cell execution_count=4}
 ``` {.python .cell-code}
 hares['sex'].unique()
 ```
 
-::: {.cell-output .cell-output-display execution_count=37}
+::: {.cell-output .cell-output-display execution_count=4}
 ```
 array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
        'm '], dtype=object)
@@ -631,7 +631,7 @@ array([nan, 'M', 'F', '?', 'F?', 'M?', 'pf', 'm', 'f', 'f?', 'm?', 'f ',
 </ul>
 <!--
 
-::: {#db2927e3 .cell execution_count=5}
+::: {#fcc1ca36 .cell execution_count=5}
 ``` {.python .cell-code}
 conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
               (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
@@ -643,7 +643,7 @@ hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 hares.head()
 ```
 
-::: {.cell-output .cell-output-display execution_count=38}
+::: {.cell-output .cell-output-display execution_count=5}
 
 ```{=html}
 <div>
@@ -787,12 +787,12 @@ hares.head()
 <ol start="2" type="a">
 <li>Check the counts of unique values (including NAs) in the new <code>sex_simple</code> column. <!--
 
-::: {#303e41af .cell execution_count=6}
+::: {#758e16b3 .cell execution_count=6}
 ``` {.python .cell-code}
 hares['sex_simple'].value_counts()
 ```
 
-::: {.cell-output .cell-output-display execution_count=39}
+::: {.cell-output .cell-output-display execution_count=6}
 ```
 sex_simple
 female    1721
@@ -817,12 +817,12 @@ Name: count, dtype: int64
 </ol>
 <!--
 
-::: {#06cb2272 .cell execution_count=7}
+::: {#b34389fd .cell execution_count=7}
 ``` {.python .cell-code}
 hares.groupby('sex_simple')['weight'].mean()
 ```
 
-::: {.cell-output .cell-output-display execution_count=40}
+::: {.cell-output .cell-output-display execution_count=7}
 ```
 sex_simple
 female    1365.164792
@@ -844,7 +844,7 @@ Name: weight, dtype: float64
 </section>
 <section id="collect-your-code-and-explain-your-results" class="level2">
 <h2 class="anchored" data-anchor-id="collect-your-code-and-explain-your-results">8. Collect your code and explain your results</h2>
-<p>In a new code cell, collect all the relevant code to obtain to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:</p>
+<p>In a new code cell, collect all the relevant code to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:</p>
 <ul>
 <li>Only print the final results for mean weight by <code>sex_simple</code>.</li>
 <li>Not include output from intermediate variables or checks.</li>
@@ -855,7 +855,7 @@ Name: weight, dtype: float64
 </ul>
 <!-- 
 
-::: {#f7e43623 .cell execution_count=8}
+::: {#61f87386 .cell execution_count=8}
 ``` {.python .cell-code}
 # Load data from EDI data repository
 URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
@@ -873,7 +873,7 @@ hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
 hares.groupby('sex_simple')['weight'].mean()
 ```
 
-::: {.cell-output .cell-output-display execution_count=41}
+::: {.cell-output .cell-output-display execution_count=8}
 ```
 sex_simple
 female    1365.164792

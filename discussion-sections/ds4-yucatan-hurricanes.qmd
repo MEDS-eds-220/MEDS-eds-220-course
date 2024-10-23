@@ -2,16 +2,16 @@
 title: Yucatan Peninsula Hurricanes
 subtitle: Week 4 - Discussion section
 week: 4
-image: images/yucatan-huracanes.jpg
+image: images/hurricane-mitch.jpg
 sidebar: false
 jupyter: mpc-env-kernel
 ---
 
-In this discussion section you will inspect data historical data about hurricanes at the Yucatan Peninsula in Mexico.  In this discussion section, you will:
+In this discussion section you will wrangle historical data about hurricanes at the Yucatan Peninsula in Mexico. In this discussion section, you will:
 
 - Practice breaking down a question into accessible data wrangling steps
 - Choose approrpiate packages and methods to carry out your analysis
-- Practice finding additional guidance to carry out your analysis online
+- Practice finding additional guidance online to carry out your analysis 
 
 ## Setup
 
@@ -33,40 +33,40 @@ In this discussion section you will inspect data historical data about hurricane
 :::
 
 ## About the data
-In this discussion section we will use [historical data about hurricanes in the Yucatan Peninsula  @boose_ecological_2023](https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hfr.71.23). This dataset is stored in the [Environmental Data Initiative (EDI)](https://edirepository.org) data repository. 
+In this discussion section we will use [historical data about hurricanes in the Yucatan Peninsula  @boose_ecological_2023](https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hfr.71.23).
+
+The Yucatan Peninsula, located in southeastern Mexico and bordered by the Gulf of Mexico and the Caribbean Sea, is a region highly susceptible to hurricanes due to its geographic location. These intense storms bring strong winds, heavy rainfall, and storm surges that significantly impact both terrestrial and coastal ecosystems. Hurricanes can cause widespread deforestation, alter habitats, and disrupt biodiversity,  affecting, among other habitats, mangroves and coral reefs.
+
+![Hurricane Mitch (Category 5 on the Saffir-Simpson Hurricane Wind Scale) impacted the Yucatan Peninsula in late October 1998, with its effects felt most strongly around October 28-29. The Yucatan experienced heavy rains and flooding as Mitch passed near the region. [Image source: NOAA](https://www.nesdis.noaa.gov/news/25-years-later-looking-back-the-october-monster-named-mitch)](/discussion-sections/images/hurricane-mitch.jpg)
+
+This dataset includes information about the Saffir-Simpson hurricane category for each huricane. The [Saffir-Simpson scale](https://www.weather.gov/mfl/saffirsimpson#:~:text=The%20Saffir%2DSimpson%20Hurricane%20Wind,loss%20of%20life%20and%20damage.) is a widely used classification system that categorizes hurricanes based on their sustained wind speeds and potential for damage. Ranging from Category 1 to Category 5, the scale assesses the intensity of hurricanes, with Category 1 being the least severe and Category 5 representing catastrophic storms. Categories 3 and above are considered major hurricanes, capable of causing significant structural damage, flooding, and long-lasting environmental impacts. 
 
 
 ## 1. Archive exploration
-a. Take some time to look through the dataset's description and metadata in EDI.
+a. Take some time to look through the dataset's description and metadata.
 
 b. In your notebook: use a markdown cell to add a *brief* description of the dataset, including a citation, date of access, and a link to the archive. 
 
 
 ## 2. Data loading and preliminary exploration
 
-a. Back in your notebook, import the `hf071-01-hurricanes.csv` file. Store it in a variable named `hares`. 
+a. We will be using the `hf071-01-hurricanes.csv` file. Agree with your team on how you will import this file to your notebook and store it in a variable named `df`. 
 
 <!--
-```{python}
-import numpy as np
+```python
+# VIA FILEPATH
+import os
 import pandas as pd
 
-URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
-hares = pd.read_csv(URL)
+fp = os.path.join('data', 'hf071-01-hurricanes.csv')
+df = pd.read_csv(fp)
 
-hares.head()
+
+# VIA URL
+URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-hfr.71.23&entityid=ab0fe2bf4f3ad850371ccb9c69d78469'
+df = pd.read_csv(URL)
 ```
 -->
-
-b. Using `pandas` methods, obtain preliminary information and explore this data frame. Consider answering some of these questions:
-
-- What are the dimensions of the dataframe and what are the data types of the columns? Do the data types match what you would expect from each column?
-- Are there any columns that have a significant number of NA values?
-- What are the minimum and maximum values for the weight and hind feet measurements?
-- What are the unique values for some of the categorical columns?
-- An explroatory question about the data frame you come up with!
-
-
 <p style="text-align: center;">
 **CHECK IN WITH YOUR TEAM** 
 </p>
@@ -74,144 +74,59 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 **MAKE SURE YOU'VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING**
 </p>
 
-<p style="text-align: center;">
-**commit, pull, and push changes**
-</p>
+b. Obtain preliminary information and explore this data frame using `pandas` methods. 
 
-## 4. Detecting messy values
 
-a. In the metadata section of the EDI repository, find which are the allowed values for the hares' sex. Create a small [table in a markdown cell](https://www.markdownguide.org/extended-syntax/#tables) showing the values and their definitions.
+## 4. Brainstorm
+In this session we want to answer the following question:
 
-<!--
-*Allowed values are:*
+> How many hurricanes with Saffir-Simpson category 5 have been registered and what was their duration? 
 
-| Value | Definition |
-| ------| ---------- |
-| f | female |
-| m | male |
-| m?| male not confirmed |
--->
+a. Individually, write down step-by-step_instructions on how you would wrangle the `df` data frame to answer the question. Do not code anything yet. **Remember:** It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.
 
-b. Get the number of times each unique sex non-NA value appears.
+b. Discuss your step-by-step instructions with your team. What do you see as potential challenges to implementing your plan? 
 
-<!--
-```{python}
-hares['sex'].value_counts()
-```
--->
+c. As a team, select an initial data wrangling plan for answering the question. 
 
-c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
-<!--
-```{python}
-hares['sex'].value_counts(dropna=False)
-```
--->
+## 9. Data wrangling
 
-d. Discuss with your team the output of the unique value counts. In particular: 
-    i. Do the values in the `sex` column correspond to the values declared in the metadata?
-    ii. What could have been potential causes for multiple codes?
-    iii. Are there seemingly repated values? If so, what could be the cause?
-
-e. Write code to confirm your suspicions about c-iii.
-
-<!--
-```{python}
-hares['sex'].unique()
-```
--->
-
-<p style="text-align: center;">
-**commit, pull, and push changes**
-</p>
-
-## 5. Brainstorm
-
-a. Individually, write step-by-step instructions on how you would wrangle the `hares` data frame to clean the values in the `sex` column to have only two classes `female` and `male`. Which codes would you assign to each new class? **Remember:** It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.
-
-b. Discuss your step-by-step instructions with your team.
-
-The next exercise will guide you through cleaning the sex codes. There are *many* ways of doing this. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `numpy.select()` function.
-
-## 6. Clean values
-
-a. Create a new column called `sex_simple` using the `numpy.select()` function so that 
-
-- 'F', 'f', and 'f_' in the `sex` column get assigned to 'female', 
-- 'M', 'm', and 'm_' get assigned to 'male', and 
-- anything else gets assigned `np.nan`
-
-<!--
-```{python}
-conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
-              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
-
-choices = ['female', 
-            'male']
-
-hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
-hares.head()
-```
--->
-
-b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
-<!--
-```{python}
-hares['sex_simple'].value_counts()
-```
--->
-
-<p style="text-align: center;">
-**commit, pull, and push changes**
-</p>
-
-## 7. Calculate mean weight
-
-a. Use `groupby()` to calculate the mean weight by sex using the new column. 
-
-<!--
-```{python}
-hares.groupby('sex_simple')['weight'].mean()
-```
--->
-
-b. Write a full sentence explaining the results you obtained. Don't forget to include units.
-
-<p style="text-align: center;">
-**commit, pull, and push changes**
-</p>
+Apply your plan to answer the question. You may (or not) need to look online to carry out some of the steps in your plan. Totally fine to look for help online if you need to find a specific method! Also, it's ok if the plan changes as you work with the data! Thie brainstorm is to create a shared starting point. 
 
 ## 8. Collect your code and explain your results
 
-In a new code cell, collect all the relevant code to obtain to create a streamlined workflow to obtain the final result from exercise 7 starting from importing the data. Your code cell should:
+a. In a new code cell, collect all the relevant code to create a streamlined workflow to obtain the final data to answer the question. Your code cell should:
 
-- Only print the final results for mean weight by `sex_simple`. 
+- Only print the final results. 
 - Not include output from intermediate variables or checks.
 - Not include methods or functions that do not directly contribute to the analysis (even if they don't print anything ex: `df.head()`).
 - If appropriate, combine methods using code chaining instead of creating intermediate variables.
 - Comment your code following our class comments guidelines. 
 - Use appropriate line breaks and indentation to make code readable.
 
-<!-- 
-```{python}
-# Load data from EDI data repository
-URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
-hares = pd.read_csv(URL)
-
-# Create new sex_simpel column dropping the uncertain sex codes and 
-# simplifying codes without no question mark
-conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
-              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
-choices = ['female', 'male']
-
-hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
-
-# Calculate average hare weight by sex
-hares.groupby('sex_simple')['weight'].mean()
-```
--->
-
-<!--TODO: add explanation of why this is important-->
+b. Write a full sentence explaining the results you obtained. Don't forget to include units.
 
 <p style="text-align: center;">
-**commit, pull, and push changes**
+**Don't forget to commit, pull, and push changes your final results.**
 </p>
+
+b. Write a full sentence explaining the results you obtained.
+
+<!--
+```python
+import os
+import pandas as pd
+
+fp = os.path.join('data', 'hf071-01-hurricanes.csv')
+df = pd.read_csv(fp)
+
+# Convert datetime 
+df['start.date'] = pd.to_datetime(df['start.date'])
+df['end.date'] = pd.to_datetime(df['end.date'])
+
+# Calculate duration of events
+df['duration']= df['end.date'] - df['start.date']
+
+# Select rows with Saffir-Simpson category 5
+df[df.ss==5]
+```
+-->
