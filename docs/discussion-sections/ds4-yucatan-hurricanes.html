@@ -183,6 +183,7 @@ div.csl-indent {
   <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">3. Brainstorm</a></li>
   <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">4. Data wrangling</a></li>
   <li><a href="#collect-your-code-and-explain-your-results" id="toc-collect-your-code-and-explain-your-results" class="nav-link" data-scroll-target="#collect-your-code-and-explain-your-results">5. Collect your code and explain your results</a></li>
+  <li><a href="#bonus-visualize-saffir-simpson-categories-across-time" id="toc-bonus-visualize-saffir-simpson-categories-across-time" class="nav-link" data-scroll-target="#bonus-visualize-saffir-simpson-categories-across-time">BONUS: Visualize Saffir-Simpson categories across time</a></li>
   </ul>
 </nav>
     </div>
@@ -333,7 +334,14 @@ df = pd.read_csv(URL)
 <li>Use appropriate line breaks and indentation to make code readable.</li>
 </ul>
 <ol start="2" type="a">
-<li>Write a full sentence explaining the your answer to the question in (3). Don’t forget to include units. You may also want to include any insights about the rest of the data for the Category 5 hurricanes.</li>
+<li>Write a full sentence explaining your answer to the question in (3). Don’t forget to include units. You may also want to include any insights about the rest of the data for the Category 5 hurricanes.</li>
+</ol>
+</section>
+<section id="bonus-visualize-saffir-simpson-categories-across-time" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-visualize-saffir-simpson-categories-across-time">BONUS: Visualize Saffir-Simpson categories across time</h2>
+<ol type="a">
+<li><p>Create a scatter plot of the start date of the hurricanes against the Saffir-Simpson scale. Use <code>matplotlib</code> to customize your graph, including updating the tick labels to be only 1, 2, 3, 4, and 5 since the Saffir-Simpsn scale does not take decimal values.</p></li>
+<li><p>Analyze your plot and write (in full sentences!) any trends that you observe.</p></li>
 </ol>
 <p style="text-align: center;">
 <strong>Don’t forget to commit, pull, and push.</strong>
@@ -343,6 +351,7 @@ df = pd.read_csv(URL)
 import os
 import pandas as pd
 
+# Import data
 fp = os.path.join('data', 'hf071-01-hurricanes.csv')
 df = pd.read_csv(fp)
 
@@ -355,6 +364,26 @@ df['duration']= df['end.date'] - df['start.date']
 
 # Select rows with Saffir-Simpson category 5
 df[df.ss==5]
+```
+
+```python
+# Plot 
+fig, ax = plt.subplots()
+
+df.plot(ax=ax,
+        x='start.date',
+        y='ss',
+        kind='scatter', 
+        alpha=0.5 )
+
+ax.set_title('')
+ax.set_yticks([1,2,3,4,5])  # note that we don't need to specify labels
+ax.set_ylabel('Saffir-Simpson Category')
+ax.set_xlabel(' ')
+
+ax.set_title('Saffir-Simpson Category of Hurricanes in the Yucatan Peninsula (1851-2000)')
+
+plt.show
 ```
 -->
 

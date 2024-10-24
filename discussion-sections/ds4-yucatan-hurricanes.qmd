@@ -106,7 +106,13 @@ a. In a new code cell, collect all the relevant code to create a streamlined wor
 - Comment your code following our class comments guidelines. 
 - Use appropriate line breaks and indentation to make code readable.
 
-b. Write a full sentence explaining the your answer to the question in (3). Don't forget to include units. You may also want to include any insights about the rest of the data for the Category 5 hurricanes.
+b. Write a full sentence explaining your answer to the question in (3). Don't forget to include units. You may also want to include any insights about the rest of the data for the Category 5 hurricanes.
+
+## BONUS: Visualize Saffir-Simpson categories across time
+
+a. Create a scatter plot of the start date of the hurricanes against the Saffir-Simpson scale. Use `matplotlib` to customize your graph, including updating the tick labels to be only 1, 2, 3, 4, and 5 since the  Saffir-Simpsn scale does not take decimal values.
+
+b. Analyze your plot and write (in full sentences!) any trends that you observe.
 
 <p style="text-align: center;">
 **Don't forget to commit, pull, and push.**
@@ -117,6 +123,7 @@ b. Write a full sentence explaining the your answer to the question in (3). Don'
 import os
 import pandas as pd
 
+# Import data
 fp = os.path.join('data', 'hf071-01-hurricanes.csv')
 df = pd.read_csv(fp)
 
@@ -129,5 +136,25 @@ df['duration']= df['end.date'] - df['start.date']
 
 # Select rows with Saffir-Simpson category 5
 df[df.ss==5]
+```
+
+```python
+# Plot 
+fig, ax = plt.subplots()
+
+df.plot(ax=ax,
+        x='start.date',
+        y='ss',
+        kind='scatter', 
+        alpha=0.5 )
+
+ax.set_title('')
+ax.set_yticks([1,2,3,4,5])  # note that we don't need to specify labels
+ax.set_ylabel('Saffir-Simpson Category')
+ax.set_xlabel(' ')
+
+ax.set_title('Saffir-Simpson Category of Hurricanes in the Yucatan Peninsula (1851-2000)')
+
+plt.show
 ```
 -->
