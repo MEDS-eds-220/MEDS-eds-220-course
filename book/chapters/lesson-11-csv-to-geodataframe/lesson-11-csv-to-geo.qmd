@@ -89,7 +89,7 @@ We can now also access information about the CRS of our power plants dataset:
 
 ```{python}
 # Explore CRS
-print(power_plants.crs, '\n')
+print('CRS: ', power_plants.crs)
 print('ellipsoid: ', power_plants.crs.ellipsoid)
 print('datum: ', power_plants.crs.datum)
 print('is the CRS geographic?: ', power_plants.crs.is_geographic)
@@ -102,3 +102,82 @@ With the `geometry` column and CRS, we can plot our dataset:
 power_plants.plot()
 ```
 
+## Import shapefile
+
+Let's import the TIGER shapefile
+```{python}
+# Import states data
+fp = os.path.join('data','tl_2022_us_state','tl_2022_us_state.shp')
+states = gpd.read_file(fp)
+
+# Simplify column names
+states.columns = states.columns.str.lower()
+
+states.head(3)
+```
+
+and obtain some preliminary geospatial information about the states geodataframe:
+
+```{python}
+print(states.crs)
+states.plot()
+```
+
+## Data selection
+ For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger extension. From the TIGER shapefiles metadata we know that:
+ 
+ > In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
+
+ In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) we can see what each code for the region, division, and state corresponds to. 
+ These should be numeric codes, so we can start by updating the corresponding columns in the states geo-dataframe:
+
+```{python}
+ # Notice region, division, and statefp are strings (object) types
+ states.dtypes
+```
+
+```{python}
+ # Update data types of code columns
+for column in ['region', 'division', 'statefp']:
+    states[column] = states[column].astype('int')
+
+states.region = states.region.astype('int')
+states.division = states.division.astype('int')
+states.statefp = states.statefp.astype('int')
+```
+
+ States corresponds to regions 1 through 4. 
+ However, there's also a region code 9.
+ These rows correspond to non-state regions:
+
+```{python}
+print(states.region.unique())
+states[states.region==9]
+``` 
+
+ We can check that Alaska and the non-state regions are causing the long map:
+
+```{python}
+# plot data in states that is not Alaska (code 2) and doesn't have region code 9
+states[(states.statefp!=2) & (states.region!=9)].plot()
+```
+
+## Data selection
+
+For the pupose of this exercise, we want to keep only data for the contiguous states.
+Let's overwrite the geo-dataframes accordingly:
+
+```{python}
+states = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
+power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Alaska'])]
+```
+
+::: {.callout-tip}
+## `~` = not
+In the previous code we used the syntax 
+```python
+~df.column.isin([val1, val2, val3])
+```
+The `~` tilde symbol is used in Python to negate a statement. 
+So the previous line could be read as "the values in df's column which are *not* in the list [val1, val2, val3]."
+:::
