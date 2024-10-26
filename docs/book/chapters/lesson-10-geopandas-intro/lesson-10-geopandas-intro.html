@@ -157,7 +157,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../../styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed slimcontent">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -301,6 +301,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../../book/chapters/merging-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Merging data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-7-time-series.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">6 Time series</span></a>
   </div>
@@ -332,6 +338,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-10-geopandas-intro/lesson-10-geopandas-intro.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">9 <code>geopandas</code></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10 US energy sources</span></a>
   </div>
 </li>
       </ul>
@@ -388,24 +400,24 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 
 
-<section id="geopandas" class="level1 page-columns page-full">
+<section id="geopandas" class="level1">
 <h1>9 <code>geopandas</code></h1>
 <p>GeoPandas is a Python library that extends the <code>pandas</code> library by adding support for geospatial data. In this lesson we will introduce the <code>geopandas</code> library to work with vector data. We will also make our first map.</p>
 <!-- TODO
 ## Learning objectives
 -->
-<section id="about-the-data" class="level2 page-columns page-full">
+<section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
 <p>Wild pigs (<em>Sus scrofa</em>) are a destructive invasive species in California, causing significant environmental and agricultural damage. Introduced to the region in the 1700s, they have since spread across the state, impacting native ecosystems through habitat destruction, soil disturbance due to their rooting behavior, and competition with native wildlife for food <span class="citation" data-cites="finzel_wild_2015"><a href="#ref-finzel_wild_2015" role="doc-biblioref">[1]</a></span>. This widespread damage has made managing wild pig populations a critical issue for conservation and agricultural communities in California.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="../../../book/images/lesson-10/wild_pig.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption class="margin-caption">Wild boar in Santa Teresa Park, CA. <a href="https://www.flickr.com/photos/ddebold/52936296848">Photo by Don DeBold</a></figcaption>
+<figcaption>Wild boar in Santa Teresa Park, CA. <a href="https://www.flickr.com/photos/ddebold/52936296848">Photo by Don DeBold</a></figcaption>
 </figure>
 </div>
 <p>In this lesson we will use simplified point data about wild pig sightings in California from the <a href="https://www.gbif.org">Global Biodiversity Information Facility (GBIF)</a>. GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends.</p>
@@ -422,25 +434,25 @@ window.Quarto = {
 <li><code>matplotlib</code> <span class="citation" data-cites="Hunter:2007"><a href="#ref-Hunter:2007" role="doc-biblioref">[4]</a></span>: one of the most popular and widely used Python libraries for data visualization.</li>
 </ul>
 <p>Let’s start by importing these packages:</p>
-<div id="bdd85808" class="cell" data-execution_count="1">
+<div id="bac95f9e" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To import our data we will first use the <code>os</code> package to create a reproducible file path:</p>
-<div id="0ee2432a" class="cell" data-execution_count="2">
+<div id="64a1f260" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'gbif_sus_scrofa_california'</span>,<span class="st">'gbif_sus_scrofa_california.shp'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>'data/gbif_sus_scrofa_california/gbif_sus_scrofa_california.shp'</code></pre>
 </div>
 </div>
 <p>Using the <code>os.path.join()</code> function allows us to create file paths that work on any operating system. Each operating system uses a different way to separate folders in a path (e.g., Windows uses backslashes <code>\</code>, while macOS and Linux use forward slashes <code>/</code>). By using <code>os.path.join()</code>, Python automatically handles the correct separator for the operating system you’re working on. This avoids errors and makes your code more portable.</p>
 <p>We can then use this file path to read in a shapefile with <code>geopandas</code> by using the <code>geopandas.read_file()</code> function:</p>
-<div id="320ba74d" class="cell" data-execution_count="3">
+<div id="31eb070f" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pigs <span class="op">=</span> gpd.read_file(fp)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pigs.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <div>
 
 
@@ -575,22 +587,22 @@ Check-in
 
 -->
 </section>
-<section id="geoseries-and-geodataframe" class="level2 page-columns page-full">
+<section id="geoseries-and-geodataframe" class="level2">
 <h2 class="anchored" data-anchor-id="geoseries-and-geodataframe"><code>GeoSeries</code> and <code>GeoDataFrame</code></h2>
 <p>The core data structure in GeoPandas is the <code>geopandas.GeoDataFrame</code>. We can think of it as a <code>pandas.DataFrame</code> with a dedicated geometry column that can perform spatial operations.</p>
 <p>The <strong>geometry column</strong> in a <code>geopandas.GeoDataFrame</code> holds the geometry (point, polygon, etc) of each spatial feature. This geometry column is of type <code>geopandas.GeoSeries</code>. Columns in the <code>geopandas.GeoDataFrame</code> with attributes about the features are <code>pandas.Series</code> like in a regular <code>pandas.DataFrame</code>.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="../../../book/images/lesson-10/geodataframe.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption class="margin-caption">Image adapted from <a href="https://geopandas.org/en/stable/getting_started/introduction.html"><em>Introduction to GeoPandas</em></a>.</figcaption>
+<figcaption>Image adapted from <a href="https://geopandas.org/en/stable/getting_started/introduction.html"><em>Introduction to GeoPandas</em></a>.</figcaption>
 </figure>
 </div>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>First, notice that the leftmost column of the <code>pigs</code> geo-dataframe is a column named <code>geometry</code> whose values indicate points:</p>
-<div id="c408aff4" class="cell" data-execution_count="5">
+<div id="c5ba56ac" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pigs.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 
 
@@ -665,7 +677,7 @@ Check-in
 </div>
 </div>
 <p>As usual, we can check the type of our objects using the <code>type</code> Python function:</p>
-<div id="d79129ba" class="cell" data-execution_count="6">
+<div id="3fd6b4bf" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the data type of the pigs dataframe </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(pigs))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -681,10 +693,10 @@ Check-in
 </div>
 </div>
 <p>The data type of the geometry column is also reflected when we look at the data types of the values in each column:</p>
-<div id="d1125253" class="cell" data-execution_count="7">
+<div id="61273696" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the data type of each column</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pigs.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>gbifID           int64
 species         object
 state           object
@@ -701,9 +713,9 @@ dtype: object</code></pre>
 </div>
 </div>
 <p>We can also check the type of each element in the geometry column using the <code>geom_type</code> attribute of a <code>geopandas.GeoDataFrame</code>:</p>
-<div id="462926ea" class="cell" data-execution_count="8">
+<div id="a24e6a1d" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pigs.geom_type</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>0       Point
 1       Point
 2       Point
@@ -736,14 +748,15 @@ Check-in
 </div>
 </section>
 </section>
-<section id="crs-and-extent" class="level2 page-columns page-full">
+<section id="crs-and-extent" class="level2">
 <h2 class="anchored" data-anchor-id="crs-and-extent">CRS and extent</h2>
 <p>Two other important attributes of a <code>geopandas.GeoDataFrame</code> are its coordinate reference system (CRS) and its extent.</p>
 <p>We can think of the <strong>coordinate reference system (CRS)</strong> as the instructions to locate each spatial feature of our data frame on the surface of the Earth. We access the CRS of a <code>geopandas.GeoDataFrame</code> using the <code>crs</code> attribute:</p>
-<div id="f809fef0" class="cell" data-execution_count="9">
+<!--TODO: add the other information about CRS as in the in-class notebook and csv to geodf lesson -->
+<div id="a4e209c5" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access the CRS of the GeoDataFrame</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pigs.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>&lt;Geographic 2D CRS: EPSG:4326&gt;
 Name: WGS 84
 Axis Info [ellipsoidal]:
@@ -759,17 +772,17 @@ Datum: World Geodetic System 1984 ensemble
 </div>
 <!-- TODO: explain what we are getting here -->
 <p>The <strong>extent</strong> of the geo-dataframe is the bounding box covering <em>all</em> the spatial features in our geo-dataframe. This is formed by finding the points that are furthest west, east, south, and north.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="../../../book/images/lesson-10/spatial-extent.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption class="margin-caption">Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)</figcaption>
+<figcaption>Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)</figcaption>
 </figure>
 </div>
 <p>We access the extent of a <code>geopandas.GeoDataFrame</code> using the <code>total_bounds</code> attribute:</p>
-<div id="eaceef18" class="cell" data-execution_count="10">
+<div id="fc2c6563" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtain the geographic extent of the geo-dataframe</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pigs.total_bounds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>array([-124.29448 ,   32.593433, -115.4356  ,   40.934296])</code></pre>
 </div>
 </div>
@@ -798,10 +811,10 @@ Check-in
 <section id="example-1" class="level4">
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>We only want to use recent data for wild pig observations. A quick check shows that this dataframe has data since 1818:</p>
-<div id="fdea98cc" class="cell" data-execution_count="12">
+<div id="47b79972" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine pig observation by year</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pigs[<span class="st">'year'</span>].value_counts().sort_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>year
 1818.0     31
 1910.0      1
@@ -818,7 +831,7 @@ Name: count, Length: 61, dtype: int64</code></pre>
 </div>
 </div>
 <p>We can use our usual data selection to get data from 2020 onwards:</p>
-<div id="92a54f2e" class="cell" data-execution_count="13">
+<div id="a1f6fc32" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select data from 2020 onwards</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pigs_recent <span class="op">=</span> pigs[pigs.year<span class="op">&gt;=</span><span class="dv">2020</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -834,7 +847,7 @@ Number of observations since 2020:  606</code></pre>
 </div>
 </section>
 </section>
-<section id="create-a-map" class="level2 page-columns page-full">
+<section id="create-a-map" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-map">Create a map</h2>
 <section id="plot" class="level3">
 <h3 class="anchored" data-anchor-id="plot"><code>plot()</code></h3>
@@ -842,26 +855,26 @@ Number of observations since 2020:  606</code></pre>
 <section id="example-2" class="level4">
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
 <p>Let us take a quick look at our recent pigs data:</p>
-<div id="bb41f82b" class="cell" data-execution_count="14">
+<div id="5a438e6f" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pigs_recent.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-15-output-1.png" class="figure-img" width="368" height="411"></p>
+<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-15-output-1.png" width="368" height="411" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="matplotlibs-fig-and-ax" class="level3 page-columns page-full">
+<section id="matplotlibs-fig-and-ax" class="level3">
 <h3 class="anchored" data-anchor-id="matplotlibs-fig-and-ax"><code>matplotlib</code>’s <code>fig</code> and <code>ax</code></h3>
 <p>Going forward, we will make more complex visualizations where we add different layers to a graph and customize it. To do this, we will use the <code>matplotlib</code> Python library for creating visualizations. We can interact with <code>matplotlib</code> via its <code>pyplot</code> interface, which we imported at the top of the notebook.</p>
 <p>Matplotlib graphs the data in a <strong>figure</strong> which can have one or more <strong>axes</strong>. The axes is <em>only</em> the area specified by the <span class="math inline">\(x\)</span> axis and <span class="math inline">\(y\)</span> axis and what is plotted in it, while the figure can icnlude multiple axes in it.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="../../../book/images/lesson-10/matplotlib_figure_axes_axis.png" class="img-fluid figure-img"></p>
-<figcaption class="margin-caption">Image source: <a href="https://www.skytowner.com/explore/getting_started_with_matplotlib">Getting Started with Matplotlib</a></figcaption>
+<figcaption>Image source: <a href="https://www.skytowner.com/explore/getting_started_with_matplotlib">Getting Started with Matplotlib</a></figcaption>
 </figure>
 </div>
 <p>To create a new blank figure:</p>
@@ -869,7 +882,7 @@ Number of observations since 2020:  606</code></pre>
 <li>Initialize a new figure and axes by calling <code>pyplot</code>’s <code>subplots()</code> function, and</li>
 <li>show the graph using <code>plt.show()</code>:</li>
 </ol>
-<div id="da85ad29" class="cell" data-execution_count="15">
+<div id="805e80db" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empyt figure (fig) and axis (ax)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -878,7 +891,7 @@ Number of observations since 2020:  606</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-16-output-1.png" class="figure-img" width="581" height="416"></p>
+<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-16-output-1.png" width="581" height="416" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -900,7 +913,7 @@ Number of observations since 2020:  606</code></pre>
 <section id="example-3" class="level4">
 <h4 class="anchored" data-anchor-id="example-3">Example</h4>
 <p>The first layer that we want to add to our axis is the <code>pigs_recent</code> point data. We can plot our data using <code>matplotlib</code> like this:</p>
-<div id="bf4d152b" class="cell" data-execution_count="16">
+<div id="684a0231" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empyt figure and axis</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -912,26 +925,26 @@ Number of observations since 2020:  606</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-17-output-1.png" class="figure-img" width="368" height="411"></p>
+<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-17-output-1.png" width="368" height="411" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="customization" class="level3 page-columns page-full">
+<section id="customization" class="level3">
 <h3 class="anchored" data-anchor-id="customization">Customization</h3>
 <p>Matplotlib allows for a lot of customization. Some of it can be done directly in the <code>plot()</code> method for the dataframe (like we’ve done when ploting data using <code>pandas</code>), while other is done by updating attributes of the axis <code>ax</code>. The following diagram shows some examples of elements in the axis that can be updated.</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="../../../book/images/lesson-10/anatomy.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption class="margin-caption">Image source: Matplotlib documentation</figcaption>
+<figcaption>Image source: Matplotlib documentation</figcaption>
 </figure>
 </div>
 <section id="example-4" class="level4">
 <h4 class="anchored" data-anchor-id="example-4">Example</h4>
 <p>Some basic customization for our pigs data could looke like this:</p>
-<div id="a1e7ce25" class="cell" data-execution_count="17">
+<div id="ea3d640c" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -951,7 +964,7 @@ Number of observations since 2020:  606</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-18-output-1.png" class="figure-img" width="423" height="449"></p>
+<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-18-output-1.png" width="423" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -967,11 +980,11 @@ Check-in
 </div>
 <div class="callout-body-container callout-body">
 <p>Add the California state boundary to the plot so the boundary appears behind the points as below. Don’t forget to customize your graph!</p>
-<div id="70d71b56" class="cell" data-execution_count="18">
+<div id="f34deb95" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-19-output-1.png" class="figure-img" width="428" height="449"></p>
+<p><img src="lesson-10-geopandas-intro_files/figure-html/cell-19-output-1.png" width="428" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
