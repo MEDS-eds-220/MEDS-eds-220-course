@@ -188,7 +188,7 @@ for column in code_cols:
 Now we are ready to select our data:
 
 ```{python}
-states = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
+states_cont = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
 ```
 
 In this code we used the syntax 
@@ -214,7 +214,7 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 Before we plot our data, let's make sure they are in the same CRS:
 
 ```{python}
-states.crs == power_plants.crs
+states_cont.crs == power_plants.crs
 ```
 
 We can now try plotting both datasets together. 
@@ -224,7 +224,7 @@ To color the power_plants dots according to color we just need
 fig, ax = plt.subplots()
 
 # add states 
-states.plot(ax=ax,
+states_cont.plot(ax=ax,
             color='none',
             edgecolor = 'slategray')
 
