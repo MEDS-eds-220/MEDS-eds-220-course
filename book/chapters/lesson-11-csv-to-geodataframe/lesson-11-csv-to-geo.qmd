@@ -101,7 +101,8 @@ print('is the CRS projected?: ', power_plants.crs.is_projected)
 With the `geometry` column and CRS, we can plot our dataset:
 
 ```{python}
-power_plants.plot()
+# Color points according to values in primsource column
+power_plants.plot(column='primsource')  
 ```
 
 ## Import shapefile
@@ -188,7 +189,7 @@ for column in code_cols:
 Now we are ready to select our data:
 
 ```{python}
-states_cont = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
+contiguous = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
 ```
 
 In this code we used the syntax 
@@ -214,71 +215,53 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 Before we plot our data, let's make sure they are in the same CRS:
 
 ```{python}
-states_cont.crs == power_plants.crs
+contiguous.crs == power_plants.crs
 ```
 
-We can now try plotting both datasets together. 
-To color the power_plants dots according to color we just need
+We can go ahead and plot the datasets together. 
+In the map below we are controling the legend location using `loc` and `bbox_to_anchor` in the `legend_kwds`:
+
+- `loc` indicates the corner of the legend we want to use for placement, and
+- `bbox_to_anchor` is a tuple with coordinates indicating where to place the corner specified in `loc` relative to the axes. Values between 0 and 1 are within the axes.
 
 ```{python}
-fig, ax = plt.subplots()
+#| code-fold: true
 
-# add states 
-states_cont.plot(ax=ax,
-            color='none',
-            edgecolor = 'slategray')
+# Updates figure size
+fig, ax = plt.subplots(figsize=(9, 5))
 
-# add electric power plants colored by energy source
-power_plants.plot(ax=ax, 
-                  column='primsource', # color points according to primsource value
-                  legend=True,    # add legend
-                  markersize = 4, # adjust point size
-                  cmap='tab20', # this color map has 20 different colors
-                  alpha=0.5)
-
-plt.show()
-```
-
-And we can finish by adding more information to contextualize our map:
-
-```{python}
-# figsize updates the figure size
-fig, ax = plt.subplots(figsize=(10, 6))
-
-# --------------------------
-# remove the axis box around the map
+# Remove the axis box around the map
 ax.axis('off')
 
-# update title
+# Title for the plot
 ax.set_title('Operable electric generating plants in the contiguous United States',
-fontsize=20)
+fontsize=17)
 
-# annotate the data source
-ax.annotate("Data: U.S. Energy Information Administration (EIA), accessed Oct 30, 2023 \nhttps://atlas.eia.gov/datasets/eia::power-plants/about", 
-            xy=(0.25, .06), # position
-            xycoords='figure fraction', 
-            fontsize=10, 
-            color='#555555')
-
-# --------------------------
-# add states 
-states.plot(ax=ax,
+# Add states layer
+contiguous.plot(ax=ax,
                color='none',
                edgecolor = '#362312')
 
-# add electric power plants colored by energy source
+# Add electric power plants colored by energy source
 power_plants.plot(ax=ax, 
                   column='primsource',
                   legend=True,
-                  markersize = 4,
+                  markersize=4,
                   cmap='tab20',
                   alpha=0.5,
-                  # adjust legend
-                  legend_kwds={'loc': "lower right", 
-                                'title':'Primary energy source',
-                                'title_fontsize':'small', 
-                                'fontsize':'small'})
+                  legend_kwds={
+                      'title': 'Primary energy source',
+                      'title_fontsize': 'small',
+                      'fontsize': 'small',
+                      'loc': 'upper left',
+                      'bbox_to_anchor': (0, 0),
+                      'ncol': 6  
+                  })
+                  
+plt.show()
 ```
+
+
 <!--
 
 https://www.flexprojector.com
