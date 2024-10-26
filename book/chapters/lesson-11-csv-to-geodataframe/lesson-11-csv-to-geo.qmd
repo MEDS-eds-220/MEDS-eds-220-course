@@ -1,4 +1,4 @@
-# CSV to `GeoDataFrame`
+# 10 US energy sources
 
 In this lesson we will learn how to extract geospatial data from a CSV to create a `geopandas.GeoDataFrame` and go over some more customizations for maps and matplotlib figures.
 
@@ -45,7 +45,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 
 
-# Display all column when looking at dataframes
+# Display all columns when looking at dataframes
 pd.set_option("display.max.columns", None)
 ```
 
@@ -77,7 +77,7 @@ points = gpd.points_from_xy(power_plants.longitude,
 # Create geodataframe
 power_plants = gpd.GeoDataFrame(power_plants,    # Data
                                 geometry=points, # Specify geometry column
-                                crs='EPSG:4269'  # Specify crs
+                                crs='EPSG:4269'  # Specify CRS
                                 )
 ```
 
@@ -101,7 +101,7 @@ print('is the CRS projected?: ', power_plants.crs.is_projected)
 With the `geometry` column and CRS, we can plot our dataset:
 
 ```{python}
-# Color points according to values in primsource column
+# Plot points and color them according to values in primsource column
 power_plants.plot(column='primsource')  
 ```
 
@@ -126,7 +126,7 @@ print(states.crs)
 states.plot()
 ```
 
-## `for` loops
+## `for` loops for DRY code
 For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger extension. From the TIGER shapefiles metadata we know that:
  
 > In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
@@ -157,7 +157,7 @@ In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/
 for column in code_cols:
     states[column] = states[column].astype('int')
 
-# Check wheter code columns are numeric
+# Check whether code columns are numeric
 print('\n','After update:' )
 for column in code_cols:
     print(column, 'is numeric dtype?', is_numeric_dtype(states[column]))
@@ -218,29 +218,22 @@ Before we plot our data, let's make sure they are in the same CRS:
 contiguous.crs == power_plants.crs
 ```
 
-We can go ahead and plot the datasets together. 
-In the map below we are controling the legend location using `loc` and `bbox_to_anchor` in the `legend_kwds`:
-
-- `loc` indicates the corner of the legend we want to use for placement, and
-- `bbox_to_anchor` is a tuple with coordinates indicating where to place the corner specified in `loc` relative to the axes. Values between 0 and 1 are within the axes.
-
 ```{python}
 #| code-fold: true
 
-# Updates figure size
-fig, ax = plt.subplots(figsize=(9, 5))
+fig, ax = plt.subplots(figsize=(9, 5)) # Update figure size
 
-# Remove the axis box around the map
+# Remove the axis for a cleaner map
 ax.axis('off')
 
 # Title for the plot
-ax.set_title('Operable electric generating plants in the contiguous United States',
-fontsize=17)
+ax.set_title('Operable electric generating plants in the contiguous United States', 
+              fontsize=15)
 
-# Add states layer
+# Add states
 contiguous.plot(ax=ax,
                color='none',
-               edgecolor = '#362312')
+               edgecolor='#362312')
 
 # Add electric power plants colored by energy source
 power_plants.plot(ax=ax, 
@@ -261,6 +254,14 @@ power_plants.plot(ax=ax,
 plt.show()
 ```
 
+In the map above we specified the figure size when creating the plot. This size is given in inches, but [can be updated to other units](https://matplotlib.org/stable/gallery/subplots_axes_and_figures/figure_size_units.html) (pixels, cm, etc). 
+
+We also controlled the legend location using `loc` and `bbox_to_anchor` in the `legend_kwds`:
+
+- `loc` indicates the corner of the legend we want to use for placement, and
+- `bbox_to_anchor` is a tuple with coordinates indicating where to place the corner specified in `loc` relative to the axes. Values between 0 and 1 are within the axes.
+
+`matplotlib` uses a variety of ways to locate elements within the graph and it is best to check the documentation to not spend too much time fidling with locations.
 
 <!--
 
@@ -269,4 +270,22 @@ https://www.flexprojector.com
 https://www.earthdatascience.org/courses/scientists-guide-to-plotting-data-in-python/plot-spatial-data/customize-vector-plots/python-customize-map-legends-geopandas/
 
 https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopandas
+-->
+
+<!-- TODO: add exercise with for and plot 
+unique_sources = power_plants['primsource'].unique()
+fig, axes = plt.subplots(nrows=1, ncols=len(unique_sources), figsize=(15, 5))
+
+# Loop through each energy source and plot it in a separate subplot
+for ax, source in zip(axes, unique_sources):
+    subset = power_plants[power_plants['primsource'] == source]
+    subset.plot(ax=ax, markersize=5)
+    ax.set_title(source)
+    ax.axis('off')  # Remove axes for a cleaner look
+
+plt.suptitle("Power Plants by Primary Energy Source")
+plt.tight_layout()
+plt.show()
+
+
 -->
