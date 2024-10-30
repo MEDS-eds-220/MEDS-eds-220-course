@@ -1,17 +1,17 @@
 ---
-title: Earthquakes
+title: Plotting geospatial data
 subtitle: Week 5 - Discussion section
 week: 5
-image: images/earthquake_map.jpg
+image: images/earthquakes_map.png
 sidebar: false
 jupyter: mpc-env-kernel
 ---
 
-In this discussion section you will wrangle data about earthquakes. In this discussion section, you will:
+In this discussion section you will wrangle data about earthquakes and practice:
 
-- Practice breaking down a question into accessible data wrangling steps
-- Choose appropriate packages and methods to carry out your analysis
-- Practice finding additional guidance online to carry out your data wrangling plans 
+- Breaking down a question into accessible data wrangling steps
+- Importing and plotting differnt types of geospatial data
+- Finding additional guidance online to carry out your data wrangling plans 
 
 
 ## Setup
@@ -48,24 +48,17 @@ The first dataset is simplified data from the [USGS Earthquakes Database](https:
 | place | where the event took place  |
 | type | type of event  |
 
-You can access the data through [this link](https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv).
+This is the same dataset you used in assginment 1. You can access the data through [this link](https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv).
 
 Further information about the dataset can be accessed in the [ANSS Comprehensive Earthquake Catalog (ComCat) Documentation](https://earthquake.usgs.gov/data/comcat/).
 
-
-The second dataset is [Natural Earth](https://www.naturalearthdata.com)'s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis.
-
-These low-resolution polygons are available directly through `geopandas` using this code:
-```python
-worldmap = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
-worldmap
-```
+The second dataset is [Natural Earth](https://www.naturalearthdata.com)'s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis. You can access the "Admin 0 – Countries" dataset available in [this link](https://www.naturalearthdata.com/downloads/110m-cultural-vectors/).
 
 ## 1. Brainstorm
 
 In this session you will recreate the following map:
 
-![](/discussion-sections/images/earthquake_map.png)
+![](/discussion-sections/images/earthquakes_map.png)
 
 1. Individually, write down high-level steps on how you would explore and wrangle the data to produce this map. Do not code anything yet. 
 
@@ -85,5 +78,60 @@ Use your plan as a starting point to recreate the plot.
 **Don't forget to write informative commits in the imperative every time you finish a major step.**
 </p>
 
-## 3. Clean your notebook
+## 3. Update your notebook
 
+a. nclude any takeaways from the map in a markdown cell after your plot.
+
+b. Go over your notebook and add markdown cells with appropriate titles and subtitles to guide the reader through the different steps in your workflow. 
+
+c. Include a markdown cell at the top with a title for your notebook and a description of what it is about.
+
+
+<!--
+```python
+
+import os
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Read in data
+raw_eqk = pd.read_csv('https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv')
+
+fp = os.path.join('data','ne_110m_admin_0_countries','ne_110m_admin_0_countries.shp')
+worldmap = gpd.read_file(fp)
+
+# Select only earthquakes of magnitude geq 6.5
+eqk = raw_eqk[(raw_eqk.type == 'earthquake') & (raw_eqk.mag >= 6.5)]
+
+# Convert earthquake data into geo-df
+eqk = gpd.GeoDataFrame(eqk, 
+                       geometry = gpd.points_from_xy(eqk.longitude, eqk.latitude),
+                       crs='EPSG:4326'
+                       )
+
+# Create plot
+fig, ax = plt.subplots(figsize=(10,8))
+ax.axis('off')
+
+worldmap.plot(ax=ax,
+           color='lightgrey')
+eqk.plot(ax=ax,
+        column='mag',
+        cmap='Oranges',
+        edgecolor='brown',
+        legend=True,
+        legend_kwds={'shrink':.6,
+                    'label':'moment magnitude'})
+
+ax.set_title('Earthquakes of magnitude at least 6.5 in 2014')
+
+ax.annotate('Data: USGS Earthquakes Database',
+             xy=(0.085,0.15),
+             xycoords='figure fraction',
+             fontsize=9,
+             color='0.7')
+
+plt.show()
+```
+-->

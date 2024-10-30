@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Discussion sections – EDS 220 - Working with Environmental Datasets</title>
+<title>Plotting geospatial data – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -68,65 +66,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-week','listing-title',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -161,7 +101,7 @@ window.Quarto = {
 <span class="menu-text">notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../discussion-sections/discussion-sections-listing.html" aria-current="page"> 
+    <a class="nav-link" href="../discussion-sections/discussion-sections-listing.html"> 
 <span class="menu-text">discussion sections</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -210,15 +150,27 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">1. Brainstorm</a></li>
+  <li><a href="#create-the-plot" id="toc-create-the-plot" class="nav-link" data-scroll-target="#create-the-plot">2. Create the plot</a></li>
+  <li><a href="#update-your-notebook" id="toc-update-your-notebook" class="nav-link" data-scroll-target="#update-your-notebook">3. Update your notebook</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Discussion sections</h1>
+<h1 class="title">Plotting geospatial data</h1>
+<p class="subtitle lead">Week 5 - Discussion section</p>
 </div>
 
 
@@ -235,103 +187,177 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
-<div class="listing-actions-group">
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
+<p>In this discussion section you will wrangle data about earthquakes and practice:</p>
+<ul>
+<li>Breaking down a question into accessible data wrangling steps</li>
+<li>Importing and plotting differnt types of geospatial data</li>
+<li>Finding additional guidance online to carry out your data wrangling plans</li>
+</ul>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<table class="quarto-listing-table table">
+<div class="callout-body-container">
+<ol type="1">
+<li><p>Access the workbench-1 server.</p></li>
+<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-5-earthquakes.ipynb</code>.</p></li>
+<li><p>Use the terminal to push this file to your remote repository.</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="general-directions" class="level2">
+<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<ul>
+<li>Add comments as appropriate along your code following the course commenting standards.</li>
+<li>Include markdown cells in between your code cells to add titles and information to each exercise</li>
+<li>Commit every time you finish a major step. <strong>Remember to write informative commits in the imperative mood.</strong></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="about-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
+<p>For this task you will use two datasets.</p>
+<p>The first dataset is simplified data from the <a href="https://earthquake.usgs.gov/earthquakes/search/">USGS Earthquakes Database</a>. This data is in tabular format and has the following columns:</p>
+<table class="caption-top table">
 <thead>
-<tr>
-<th>
-</th>
-<th>
-week
-</th>
-<th>
-topic
-</th>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
 </tr>
 </thead>
-<tbody class="list">
-<tr data-index="0" data-listing-file-modified-sort="1729699188623" data-listing-reading-time-sort="4" data-listing-word-count-sort="717" data-listing-title-sort="Repository setup" data-listing-filename-sort="ds0-sections-setup.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/ds0-manufacturetocat.png" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">&nbsp;</span>
-</td>
-<td>
-<a href="../discussion-sections/ds0-sections-setup.html" class="title listing-title">Repository setup</a>
-</td>
+<tbody>
+<tr class="odd">
+<td>time</td>
+<td>date and time of event (all events from 2014)</td>
 </tr>
-<tr data-index="1" data-listing-file-modified-sort="1729699188623" data-listing-reading-time-sort="6" data-listing-word-count-sort="1048" data-listing-title-sort="Prey species in the California drylands" data-listing-filename-sort="ds1-prelim-data-exploration.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/Tecopa_site2.JPG" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">1</span>
-</td>
-<td>
-<a href="../discussion-sections/ds1-prelim-data-exploration.html" class="title listing-title">Prey species in the California drylands</a>
-</td>
+<tr class="even">
+<td>latitude</td>
+<td>decimal degrees [-90,90]</td>
 </tr>
-<tr data-index="2" data-listing-file-modified-sort="1729699188622" data-listing-reading-time-sort="9" data-listing-word-count-sort="1641" data-listing-title-sort="Water conflicts in the Colorado River Basin" data-listing-filename-sort="ds-2-water-crisis-exploration.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/free-photo-of-colorado-river-in-usa.jpeg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">2</span>
-</td>
-<td>
-<a href="../discussion-sections/ds-2-water-crisis-exploration.html" class="title listing-title">Water conflicts in the Colorado River Basin</a>
-</td>
+<tr class="odd">
+<td>longitude</td>
+<td>decimal degrees [-360,360]</td>
 </tr>
-<tr data-index="3" data-listing-file-modified-sort="1729719758711" data-listing-reading-time-sort="7" data-listing-word-count-sort="1257" data-listing-title-sort="Snowshoe hares at Bonanza Creek Experimental Forest" data-listing-filename-sort="ds3-hares.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/hare.jpg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">3</span>
-</td>
-<td>
-<a href="../discussion-sections/ds3-hares.html" class="title listing-title">Snowshoe hares at Bonanza Creek Experimental Forest</a>
-</td>
+<tr class="even">
+<td>depth</td>
+<td>depth of the event (km)</td>
 </tr>
-<tr data-index="4" data-listing-file-modified-sort="1729789509799" data-listing-reading-time-sort="5" data-listing-word-count-sort="968" data-listing-title-sort="Yucatan Peninsula Hurricanes" data-listing-filename-sort="ds4-yucatan-hurricanes.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/hurricane-mitch.jpg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">4</span>
-</td>
-<td>
-<a href="../discussion-sections/ds4-yucatan-hurricanes.html" class="title listing-title">Yucatan Peninsula Hurricanes</a>
-</td>
+<tr class="odd">
+<td>mag</td>
+<td>magnitude of event</td>
 </tr>
-<tr data-index="5" data-listing-file-modified-sort="1730325409160" data-listing-reading-time-sort="4" data-listing-word-count-sort="774" data-listing-title-sort="Plotting geospatial data" data-listing-filename-sort="ds5-earthquakes.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/earthquakes_map.png" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">5</span>
-</td>
-<td>
-<a href="../discussion-sections/ds5-earthquakes.html" class="title listing-title">Plotting geospatial data</a>
-</td>
+<tr class="even">
+<td>id</td>
+<td>event identifier</td>
+</tr>
+<tr class="odd">
+<td>place</td>
+<td>where the event took place</td>
+</tr>
+<tr class="even">
+<td>type</td>
+<td>type of event</td>
 </tr>
 </tbody>
 </table>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+<p>This is the same dataset you used in assginment 1. You can access the data through <a href="https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv">this link</a>.</p>
+<p>Further information about the dataset can be accessed in the <a href="https://earthquake.usgs.gov/data/comcat/">ANSS Comprehensive Earthquake Catalog (ComCat) Documentation</a>.</p>
+<p>The second dataset is <a href="https://www.naturalearthdata.com">Natural Earth</a>’s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis. You can access the “Admin 0 – Countries” dataset available in <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/">this link</a>.</p>
+</section>
+<section id="brainstorm" class="level2">
+<h2 class="anchored" data-anchor-id="brainstorm">1. Brainstorm</h2>
+<p>In this session you will recreate the following map:</p>
+<p><img src="../discussion-sections/images/earthquakes_map.png" class="img-fluid"></p>
+<ol type="1">
+<li><p>Individually, write down high-level steps on how you would explore and wrangle the data to produce this map. Do not code anything yet.</p></li>
+<li><p>Discuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?</p></li>
+<li><p>As a team, select an initial plan for recreating this plot.</p></li>
+</ol>
+</section>
+<section id="create-the-plot" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-plot">2. Create the plot</h2>
+<p>Use your plan as a starting point to recreate the plot.</p>
+<ul>
+<li><p>You may (or not) need to look online to carry out some of the steps in your plan. It is completely fine to seek help online! Resourceful troubleshooting is a key skill in data science.</p></li>
+<li><p>It’s ok if your initial plan changes as you work with the data and discuss challenges with your team! This brainstorm is to create a shared starting point.</p></li>
+</ul>
+<p style="text-align: center;">
+<strong>Don’t forget to write informative commits in the imperative every time you finish a major step.</strong>
+</p>
+</section>
+<section id="update-your-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="update-your-notebook">3. Update your notebook</h2>
+<ol type="a">
+<li><p>nclude any takeaways from the map in a markdown cell after your plot.</p></li>
+<li><p>Go over your notebook and add markdown cells with appropriate titles and subtitles to guide the reader through the different steps in your workflow.</p></li>
+<li><p>Include a markdown cell at the top with a title for your notebook and a description of what it is about.</p></li>
+</ol>
+<!--
+```python
+
+import os
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+
+# Read in data
+raw_eqk = pd.read_csv('https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv')
+
+fp = os.path.join('data','ne_110m_admin_0_countries','ne_110m_admin_0_countries.shp')
+worldmap = gpd.read_file(fp)
+
+# Select only earthquakes of magnitude geq 6.5
+eqk = raw_eqk[(raw_eqk.type == 'earthquake') & (raw_eqk.mag >= 6.5)]
+
+# Convert earthquake data into geo-df
+eqk = gpd.GeoDataFrame(eqk, 
+                       geometry = gpd.points_from_xy(eqk.longitude, eqk.latitude),
+                       crs='EPSG:4326'
+                       )
+
+# Create plot
+fig, ax = plt.subplots(figsize=(10,8))
+ax.axis('off')
+
+worldmap.plot(ax=ax,
+           color='lightgrey')
+eqk.plot(ax=ax,
+        column='mag',
+        cmap='Oranges',
+        edgecolor='brown',
+        legend=True,
+        legend_kwds={'shrink':.6,
+                    'label':'moment magnitude'})
+
+ax.set_title('Earthquakes of magnitude at least 6.5 in 2014')
+
+ax.annotate('Data: USGS Earthquakes Database',
+             xy=(0.085,0.15),
+             xycoords='figure fraction',
+             fontsize=9,
+             color='0.7')
+
+plt.show()
+```
+-->
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
