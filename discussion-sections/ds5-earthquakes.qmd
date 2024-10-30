@@ -1,0 +1,89 @@
+---
+title: Earthquakes
+subtitle: Week 5 - Discussion section
+week: 5
+image: images/earthquake_map.jpg
+sidebar: false
+jupyter: mpc-env-kernel
+---
+
+In this discussion section you will wrangle data about earthquakes. In this discussion section, you will:
+
+- Practice breaking down a question into accessible data wrangling steps
+- Choose appropriate packages and methods to carry out your analysis
+- Practice finding additional guidance online to carry out your data wrangling plans 
+
+
+## Setup
+
+:::{.callout-tip appearance="minimal"}
+1. Access the workbench-1 server.
+
+2. Create a new Python notebook inside your `eds-220-sections` directory and rename it to `section-5-earthquakes.ipynb`. 
+
+3. Use the terminal to push this file to your remote repository. 
+:::
+
+## General directions
+:::{.callout-tip appearance="minimal"}
+- Add comments as appropriate along your code following the course commenting standards.
+- Include markdown cells in between your code cells to add titles and information to each exercise
+- Commit every time you finish a major step. **Remember to write informative commits in the imperative mood.**
+:::
+
+## About the data
+
+For this task you will use two datasets. 
+
+The first dataset is simplified data from the [USGS Earthquakes Database](https://earthquake.usgs.gov/earthquakes/search/). This data is in tabular format and has the following columns:
+
+| Column | Description |
+|------|-----|
+| time |  date and time of event (all events from 2014)     |
+| latitude | decimal degrees [-90,90]|
+| longitude | decimal degrees [-360,360] |
+| depth | depth of the event (km) |
+| mag | magnitude of event  |
+| id | event identifier  |
+| place | where the event took place  |
+| type | type of event  |
+
+You can access the data through [this link](https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv).
+
+Further information about the dataset can be accessed in the [ANSS Comprehensive Earthquake Catalog (ComCat) Documentation](https://earthquake.usgs.gov/data/comcat/).
+
+
+The second dataset is [Natural Earth](https://www.naturalearthdata.com)'s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis.
+
+These low-resolution polygons are available directly through `geopandas` using this code:
+```python
+worldmap = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+worldmap
+```
+
+## 1. Brainstorm
+
+In this session you will recreate the following map:
+
+![](/discussion-sections/images/earthquake_map.png)
+
+1. Individually, write down high-level steps on how you would explore and wrangle the data to produce this map. Do not code anything yet. 
+
+2. Discuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?
+
+3. As a team, select an initial plan for recreating this plot.
+
+## 2. Create the plot
+
+Use your plan as a starting point to recreate the plot.
+
+- You may (or not) need to look online to carry out some of the steps in your plan. It is completely fine to seek help online! Resourceful troubleshooting is a key skill in data science.
+
+- It’s ok if your initial plan changes as you work with the data and discuss challenges with your team! This brainstorm is to create a shared starting point.
+
+<p style="text-align: center;">
+**Don't forget to write informative commits in the imperative every time you finish a major step.**
+</p>
+
+## 3. Clean your notebook
+
