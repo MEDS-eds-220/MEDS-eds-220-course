@@ -59,10 +59,13 @@ power_plants = pd.read_csv(URL)
 # Simpify column names
 power_plants.columns = power_plants.columns.str.lower()
 
+# Drop first column
+power_plants = power_plants.drop(columns='unnamed: 0')
+
 power_plants.head(3)
 ```
 
-<!--TO DO: Need to drop the unnamed column--> 
+<!--TO DO: Need to drop the unnamed column from file--> 
 
 The power plants file is a CSV. Unlike shapefiles or other geospatial file formats, `geopandas` doesn't have a way to extract a geometry column from a CSV file, so we will need to create this geometry manually. 
 
@@ -87,23 +90,55 @@ Let's check that we now have a `geometry` column:
 power_plants['geometry']
 ```
 
-We can now also access information about the CRS of our power plants dataset:
-
-```{python}
-# Explore CRS
-print('CRS: ', power_plants.crs)
-print('ellipsoid: ', power_plants.crs.ellipsoid)
-print('datum: ', power_plants.crs.datum)
-print('is the CRS geographic?: ', power_plants.crs.is_geographic)
-print('is the CRS projected?: ', power_plants.crs.is_projected)
-```
-
 With the `geometry` column and CRS, we can plot our dataset:
 
 ```{python}
-# Plot points and color them according to values in primsource column
-power_plants.plot(column='primsource')  
+power_plants.plot()  
 ```
+
+## f-strings
+
+So far, we have printed variables using string concatenation inside the `print()` function. 
+This means that we write commas between every string and variable we want to print, and then the `print()` function concatenates these into a single string. For example:
+
+```{python}
+print('CRS: ', power_plants.crs)
+```
+
+Another popular way of mixing strings and variables in print statements is by creating an **f-string** which stands for "formatted string". 
+The simplest syntax for an f-string is:
+```python
+f" some text {replace}"
+```
+where `replace` can be a variable, an expression, or a function or method call. 
+For example:
+```{python}
+# Explore CRS
+print(f"ellipsoid: {power_plants.crs.ellipsoid}")
+print(f"datum: {power_plants.crs.datum}")
+```
+
+We just created a string replacing the value inside the curly brackets `{}`. 
+
+One of the advantages of using f-strings is that they offer customization for formatting the output:
+
+```{python}
+# Set the label width to 25 characters, aligning the answers
+print(f"{'Is the CRS geographic?:':<25} {power_plants.crs.is_geographic}")
+print(f"{'Is the CRS projected?:':<25} {power_plants.crs.is_projected}")
+```
+
+:::{.callout-caution}
+## Use f-strings or not?
+
+Whether you use an f-string or simply concatenate strings with variables inside your print statements depends entirely on the application. For quickly checking a variable, a print statement might be enough, while using f-strings can be better to include custom messages during runtime. The best tool can be different depending on the task!
+
+These are some good resources to learn more about f-string formatting:
+
+- [Real Python - Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)
+
+- [Python documentation- Format Specification Mini-Language](https://docs.python.org/3/library/string.html#formatspec)
+:::
 
 ## Import shapefile
 
@@ -126,17 +161,78 @@ print(states.crs)
 states.plot()
 ```
 
-## `for` loops for DRY code
-For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger extension. From the TIGER shapefiles metadata we know that:
- 
-> In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
+## `for` loops
+
+ It can be easier to work with the codes as numbers instead of strings, so let's update the corresponding columns in the states geo-dataframe. We start by checking the data type of the `region`, `division`, and `statefp` columns:
+
+```{python}
+ code_cols = ['region', 'division', 'statefp']
+
+# Check whether codes columns are strings
+ for column in code_cols: 
+    print(f"{column} is string dtype? {is_string_dtype(states[column])}")
+```
+
+Remember `for` loops execute a block of code a fixed number of times, iterating over a set of objects. In this case, we iterate over the list of column names `code_cols = ['region', 'division', 'statefp']`.
+
+:::{.callout-caution}
+## DRY code
+We could have checked whether all the `region`, `division`, and `statefp` columns were of string data type by using the following code:
+
+```python
+print(f"region is string dtype? {is_string_dtype(states['region'])}")
+print(f"division is string dtype? {is_string_dtype(states['division'])}")
+print(f"statefp is string dtype? {is_string_dtype(states['statefp'])}")
+```
+However, this is inconvenient as it repeats the same pieces of code, only changing the column name. Instead, using the `for` loop allows us to succintly print the same information:
+```python
+code_cols = ['region', 'division', 'statefp']
+
+for column in code_cols: 
+    print(f"{column} is string dtype? {is_string_dtype(states[column])}")
+```
+**Don't Repeat Yourself (DRY)** is a core programming principle that encourages  reducing redundancy and consolidating repeated logic. Try implementing it as much as possible! If you need to repeat the "same" code more than twice, you likely need a `for` loop.
+:::
+
+Next, we update the data type of the code columns to be integers. This time, we check the data type of the column using the `is_numeric_dtype()` function inside an **`assert`** statement:
+
+```{python}
+# Update code columns into integers
+for column in code_cols:
+    states[column] = states[column].astype('int')
+    assert is_numeric_dtype(states[column])  # Check conversion
+```
+
+The `assert` keyword does nothing if the expression next to it evaluates to `True` and raises an `AssertionError` exception and stops your code form running any further. For example, 
+
+```{python}
+#| error: true
+# Does nothing if statement is True
+assert 2+2 == 4
+
+# Raises an error if statement is False
+assert 2+2 == 3
+```
+
+In our data type conversion code, since no `AssertionError` was raised, we can be confident that the data type was updated. 
+
+## Data selection
+
+For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger extension. 
 
 :::{.callout-tip}
 ## Check-in
-In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) we can see what each code for the region, division, and state corresponds to. What are the unique values for region, division, or state codes in the data and which should should we select to keep ponly states in the contiguous US?
+From the TIGER shapefiles metadata we know that:
+ 
+> In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
+
+In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) we can see what each code for the region, division, and state corresponds to. 
+
+- What are the unique values for region, division, or state codes in the data?
+- Which codes should should we select to keep only states in the contiguous US?
 
 <!--
- States corresponds to regions 1 through 4. 
+ States correspond to regions 1 through 4. 
  However, there's also a region code 9.
  Hawaii = state code 15
  Alaska = satate code 02
@@ -144,51 +240,10 @@ In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/
  -->
 :::
 
- These should be numeric codes, so we can start by updating the corresponding columns in the states geo-dataframe:
+Let's go ahead and select the data:
 
 ```{python}
- code_cols = ['region', 'division', 'statefp']
-
-# Check whether codes columns are strings
- for column in code_cols: 
-    print(column, 'is string dtype?', is_string_dtype(states[column]))
-
- # Update code columns into integers
-for column in code_cols:
-    states[column] = states[column].astype('int')
-
-# Check whether code columns are numeric
-print('\n','After update:' )
-for column in code_cols:
-    print(column, 'is numeric dtype?', is_numeric_dtype(states[column]))
-```
-
-Remember `for` loops execute a code of blocked a fixed number of times, iterating over a set of objects. In this case, we iterate over the list of column names `code_cols = ['region', 'division', 'statefp']`.
-
-:::{.callout-caution}
-## DRY code
-Notice that we could have initially checked whether all the code columns were of string data type by using the following code:
-
-```python
-print(column, 'is string dtype?', is_string_dtypes(states['region']))
-print(column, 'is string dtype?', is_string_dtypes(states['division']))
-print(column, 'is string dtype?', is_string_dtypes(states['statefp']))
-```
-However, this is inconvenient as it repeats the same pieces of code, only changing the column name. Instead, using the `for` loop allows us to succintly print the same information:
-```python
-code_cols = ['region', 'division', 'statefp']
-
-for column in code_cols: 
-    print(column, 'is string dtype?', is_string_dtypes(states[column]))
-```
-**Don't Repeat Yourself (DRY)** is a core programming principle that encourages on reducing redundancy and consolidating repeated logic. Try implementing it as much as possible! If you need to repeat the "same" code more than twice, you likely need a for loop.
-:::
-
-## Data selection
-
-Now we are ready to select our data:
-
-```{python}
+# Select contiguous US states
 contiguous = states[(states.region!=9) & (~states.statefp.isin([2,15]))]
 ```
 
@@ -206,7 +261,6 @@ Select the data in the `power_plants` data frame for the contiguous US states.
 ```{python}
 power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Alaska'])]
 ```
-
 -->
 :::
 
