@@ -1,4 +1,4 @@
-# 10 US energy sources
+# 10 `for` loops
 
 In this lesson we will learn how to extract geospatial data from a CSV to create a `geopandas.GeoDataFrame` and go over some more customizations for maps and matplotlib figures.
 
@@ -315,6 +315,8 @@ We also controlled the legend location using `loc` and `bbox_to_anchor` in the `
 - `loc` indicates the corner of the legend we want to use for placement, and
 - `bbox_to_anchor` is a tuple with coordinates indicating where to place the corner specified in `loc` relative to the axes. Values between 0 and 1 are within the axes.
 
+<!--TODO: add diagram of bbox-->
+
 `matplotlib` uses a variety of ways to locate elements within the graph and it is best to check the documentation to not spend too much time fidling with locations.
 
 <!--
@@ -326,20 +328,97 @@ https://www.earthdatascience.org/courses/scientists-guide-to-plotting-data-in-py
 https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopandas
 -->
 
-<!-- TODO: add exercise with for and plot 
-unique_sources = power_plants['primsource'].unique()
-fig, axes = plt.subplots(nrows=1, ncols=len(unique_sources), figsize=(15, 5))
+## `for` with `zip`
 
-# Loop through each energy source and plot it in a separate subplot
-for ax, source in zip(axes, unique_sources):
-    subset = power_plants[power_plants['primsource'] == source]
-    subset.plot(ax=ax, markersize=5)
+Often, we need to iterate simultaneously over two iterables. 
+The `zip()` function in Python allows you to combine two or more lists (or other iterables) so that you can iterate over their elements in pairs. When used with a `for` loop, it lets you process elements from each list together, like this example:
+
+
+```{python}
+# Iterate over a single list
+numbers = [1, 2, 3]
+for num in numbers:
+    print(num)
+
+print('\n')  # Blank line
+
+# Iterate over two lists in pairs using zip()
+letters = ['a', 'b', 'c']
+for num, letter in zip(numbers, letters):
+    print(num, letter)
+```
+
+A common situation when code gets repeated is when creating subplots. For example:
+
+```{python}
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(7, 3))
+
+axes[0].set_title('This is axis 0')
+axes[1].set_title('This is axis 1')
+axes[2].set_title('This is axis 2')
+
+plt.show()
+```
+
+In this example, notice that the `axes` variable returned by the `plt.subplots()` function is actually a list of axes we can iterate over. 
+
+:::{.callout-tip}
+## Check-in
+Use `for` and `zip()` to create the same subplots and avoid redundancy.
+<!--
+```python
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(7, 3))
+for ax, i in zip(axes, [0,1,2]):
+    ax.set_title(f'This is axis {i}')
+plt.show()
+```
+-->
+:::
+
+Remember that the figure and the axes are separete elements in a `matplotlib` plot.
+
+![Image source: [Getting Started with Matplotlib](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
+
+
+:::{.callout-tip}
+## Exercise
+1. Select the power plants in California in a variable named `ca_power_plants`.
+
+2. Create a _list_ named `top_sources` with California's top 3 electric primary sources.
+
+3. Isolate the California state boundary in a variable named `ca_boundary`.
+
+4. Recreate the following plot:
+
+```{python}
+#| echo: false
+# Create a list with california top 3 electric primary sources
+ca_power_plants = power_plants[power_plants.state=='California']
+top_sources = (ca_power_plants['primsource']
+                            .value_counts()
+                            .index[:3]
+                            .tolist()
+                            )
+
+# Isolate the CA boundary
+ca_boundary = states[states.name=='California']
+
+# Create plot
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(6, 3))
+
+for ax, source in zip(axes, top_sources):
+    ca_boundary.plot(ax=ax,                
+                    color='none',
+                    edgecolor='#362312')
+    subset = ca_power_plants[ca_power_plants['primsource'] == source]
+    subset.plot(ax=ax, markersize=5, alpha=0.5)
     ax.set_title(source)
     ax.axis('off')  # Remove axes for a cleaner look
 
-plt.suptitle("Power Plants by Primary Energy Source")
+plt.suptitle("Top 3 energy sources for electric power plants in CA")
 plt.tight_layout()
 plt.show()
+```
+:::
 
-
--->
+<!--TODO: add functions here-->
