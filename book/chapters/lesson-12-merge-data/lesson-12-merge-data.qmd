@@ -11,16 +11,11 @@ warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
 ```
 -->
 
-# Merging data
+# 11 Choropleth maps
 
 In this section we will learn how to join dataframes and will apply this to creating a [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) with `geopandas`.
 
 ## About the data
-
-We will use two datasets in this lesson. 
-The first dataset is [Natural Earth's medium scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
-We can obtain this dataset by downloading the shapefile. 
-[Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with ready-to-use data for creating maps. 
 
 The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comess in GeoJSON file with the following attributes:
 
@@ -29,83 +24,64 @@ The first dataset we will use is a [list of Arctic communities and their locatio
 - **country**: country that the Arctic community falls within (see dataset metadata for the codes)
 - **geoname-id**: numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data
 
-## Data preparation
+The second dataset is [Natural Earth's medium scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
+We can obtain this dataset by downloading the shapefile. 
+[Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with ready-to-use data for creating maps. 
 
-We start our analysis by importing the necessary libraries:
+## Import data
 
-```{python}
-import pandas as pd
-import matplotlib.pyplot as plt
-
-import geopandas as gpd
-```
+We will first import the countries shapefile and adapt it for wrangling purposes:
 
 <!--
 # will use this library to add a background to our map
 import contextily as ctx
 -->
 
-The Natural Earth dataset has many columns, so we need to update the `pandas` display settings to show all columns:
-
 ```{python}
-# display all column when looking at dataframes
-pd.set_option("display.max.columns", None)
-```
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import geopandas as gpd
 
-### Countries 
+# Import countries polygons
+fp = os.path.join('data', 'ne_50m_admin_0_countries', 'ne_50m_admin_0_countries.shp')
+countries = gpd.read_file(fp)
 
-Now we move on to preparing the polygons for the Scandinavian countries.
-To import the Natural Earth countries polygons we use the `geopandas.read_file()` function again:
+# Simplify column names
+countries.columns = countries.columns.str.lower()
 
-```{python}
-# import countries polygons
-countries = gpd.read_file('data/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp')
+# Select columns for analysis
+countries = countries[['admin', 'type', 'geometry']]
+
 countries.head()
 ```
 
-Taking a quick look at this dataset:
-
 ```{python}
-# quick view
+# Quick view
 countries.plot()
 ```
 
-Notice the column names are in all caps. 
-It is easier to work with column names in small caps because we don't need to be pressing shift or capslock. 
-We can do this update like this:
+
+Next, we import the Arctic communitites data. In the same way as we previously used `pandas.read_csv()`, we can read in the Arctic communities GeoJSON data directly from the data repository using `geopandas.read_file()`:
 
 ```{python}
-# re-assign the column names: .str.lower() makes them lower case
-countries.columns = countries.columns.str.lower()
-print(countries.columns)
-```
+# Import Arctic communities data
+URL = 'https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3Aed7718ae-fb0d-43dd-9270-fbfe80bfc7a4'
+communities = gpd.read_file(URL)
 
-Finally, we have too many columns, so let's only keep a few*:
-
-```{python}
-# remeber: the geometry column has the polygons for each country
-countries_sub = countries[['admin','type','geometry']]
-countries_sub.head()
-```
-
-### Arctic communities
-
-In the same way as we previously used `pandas.read_csv()`, we can read in the Arctic communities data directly from the data repository using `geopandas.read_file()`:
-
-```{python}
-# read in Arctic communities data
-communities = gpd.read_file('https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3Aed7718ae-fb0d-43dd-9270-fbfe80bfc7a4')
 communities.head()
 ```
 
-
-Notice that the `countries` and `communities` GeoDataFrames both have the same crs:
+The CRS of the `communitites` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees. In this case, the `countries` and `communities` GeoDataFrames both have the same CRS:
 
 ```{python}
-countries.crs == communities.crs
+print(countries.crs)
+
+# Verify CRSs match
+assert countries.crs == communities.crs
 ```
 
-This makes it easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
+Since the CRSs match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
 
 ```{python}
 fig, ax = plt.subplots()
@@ -114,28 +90,26 @@ communities.plot(ax=ax, color='red')
 plt.show()
 ```
 
+## Arctic communities by country
+
 Next, we want to calculate the number of Arctic communities by country. 
 
 ```{python}
-# calculate number of communities by country
-
-# extract number of communities by country as a pd.Series
-n_comms = communities.groupby('country').count().name
-
-# convert the pd.Series into a pd.DataFrame and update it
-n_comms = pd.DataFrame(n_comms).rename(columns={'name':'n_communities'}).reset_index()
+# Create data frame with number of communities per country
+n_comms = (communities.groupby('country')
+                      .size()
+                      .reset_index(name='n_communities'))
 ```
 
 Let's break this down a bit:
 
 - We start with our `communities` dataframe and use `groupby('country')` to group by country code, 
-- then we use `count()` as an aggregator function to count how many rows belong to each country code.
-- The result of this operation is a dataframe (run `communities.groupby('country').count()` to check) and we select a single column with the counts by selecting the `name` column.
-- The result is a single `pd.Series` in the variable `n_comms`.
-- We then convert this `pd.Series` into a `pd.DataFrame` and clean it up a bit.
+- then we use [`size()`](https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.size.html) as an aggregator function to calculate the size of each group.
+- The result of this operation is a `pandas.Series` indexed by the `country` values.
+- By resetting the index we transform the `pandas.Series` into a `pandas.DataFrame`, the index is now a column named `country` and the values of the series are named `n_communities`.
 
 ```{python}
-# number of communities per country
+# Number of Arctic communities per country
 n_comms
 ```
 
@@ -154,7 +128,7 @@ To merge two datasets they need to have at least one column in common.
 Currently our datasets do not have any columns in common:
 
 ```{python}
-countries_sub.head(2)
+countries.head(2)
 ```
 
 ```{python}
@@ -200,7 +174,7 @@ In our case we want to perform an inner join between our dataframes. This will m
 
 ```{python}
 # merge dataframes 
-scandi_countries = pd.merge(countries_sub,
+scandi_countries = pd.merge(countries,
                             scandi_n_comms,
                             how='inner',
                             on='admin')
@@ -293,7 +267,7 @@ countries.head()
 countries.columns = countries.columns.str.lower()
 
 # select a subset of the columns
-countries_sub = countries[['admin','type','geometry']]
+countries = countries[['admin','type','geometry']]
 
 
 # ======= COMMUNITIES PREPARATION =======
@@ -322,7 +296,7 @@ scandi_names = ['Aland Islands',
                 'Sweden']
 scandi_n_comms['admin'] = scandi_names
 # merge dataframes 
-scandi_countries = pd.merge(countries_sub,
+scandi_countries = pd.merge(countries,
                             scandi_n_comms,
                             how='inner',
                             on='admin')
@@ -352,14 +326,3 @@ ax.set_ylabel('Latitude')
 
 plt.show()
 ```
-
-
-## Acknowledgments
-
-The section about merging data is based on the [Data Modeling Essentials R lesson](https://learning.nceas.ucsb.edu/2023-06-delta/session_09.html#merging-data) from the NCEAS Learning Hub. 
-
-Halina Do-Linh, Carmen Galaz García, Matthew B. Jones, Camila Vargas Poulsen. 2023. Open Science Synthesis training Week 1. NCEAS Learning Hub & Delta Stewardship Council.
-
-## References
-
-Mike Brook. (2023). Approximate Arctic Communities and Populations, (latitude >= 55, 2022). Arctic Data Center. doi:10.18739/A28S4JQ80.
