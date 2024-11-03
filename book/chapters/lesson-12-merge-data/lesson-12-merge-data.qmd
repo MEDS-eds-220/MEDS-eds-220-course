@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 ```
 -->
 
-# 11 Choropleth maps
+# 11 Reprojecting
 
 In this section we will learn how to join dataframes and will apply this to creating a [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) with `geopandas`.
 
@@ -273,12 +273,40 @@ arctic_countries.plot(column='n_communities',
                       legend=True)
 ```
 
-To finish, we can use `matplotlib` to customize our map:
+## Reprojecting
+
+Remember that CRSs reflect cultural views and even biases. Any map projection involves choices about which areas to emphasize, minimize, or distort, and those choices can influence how viewers perceive different regions. In our map, using the EPSG:4326 CRS is, among other things, mapping the Arctic regions as far apart, while they are actually near each other.
+
+**Reprojecting** means changing the coordinate reference system of your geospatial data. Do
+In our case we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
+This CRS is a *projected* CRS, better suited for working with data from Arctic region:
+
+![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3413/) ](/book/images/lesson-12/epsg_3413.png)
+
+Changing CRSs in GeoPandas is very simple using the `to_crs()` method for `geopandas.GeoDataFrame`s. 
+The general syntax is:
+```python
+updated_geodf = geodf.to_crs(new_crs)
+```
+where:
+
+- `updated_geodf` is the output of the method, a new geodataframe (`to_crs()` does not work in place), 
+- `geodf` is the `geopandas.GeoDataFrame` we want to transform, 
+- `new_crs` the CRS we want to convert to, this is an object of type CRS or string representing the CRS (ex: `'epsg:3413'`). 
+
+In our case:
+
+```{python}
+# Reproject to CRS optimized for Arctic region
+arctic_countries = arctic_countries.to_crs('epsg:3413')
+```
+
+We can now use the reprojected data to update our map:
 
 ```{python}
 #| code-fold: true
 #| 
-fig, ax = plt.subplots(figsize=(10, 8))
+fig, ax = plt.subplots(figsize=(8, 6))
 
 # Remove the axis for a cleaner map
 ax.axis('off')
@@ -305,3 +333,5 @@ ax.set_title('Distribution of Arctic Communities', fontsize=18, weight='bold', p
 
 plt.show()
 ```
+
+Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the complete United States territory is in it, while we should only have Alaska. **In our next lesson we will review startegies to clip and subset vector data and return to this plot in our discussion section.**
