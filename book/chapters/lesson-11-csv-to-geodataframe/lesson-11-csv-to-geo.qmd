@@ -194,6 +194,7 @@ for column in code_cols:
 **Don't Repeat Yourself (DRY)** is a core programming principle that encourages  reducing redundancy and consolidating repeated logic. Try implementing it as much as possible! If you need to repeat the "same" code more than twice, you likely need a `for` loop.
 :::
 
+## `assert`
 Next, we update the data type of the code columns to be integers. This time, we check the data type of the column using the `is_numeric_dtype()` function inside an **`assert`** statement:
 
 ```{python}
@@ -348,7 +349,7 @@ for num, letter in zip(numbers, letters):
     print(num, letter)
 ```
 
-A common situation when code gets repeated is when creating subplots. For example:
+Let's see a practical application of `for` loops and `zip()` with `matplotlib` subplots. A common situation when code gets repeated is when creating subplots. For example:
 
 ```{python}
 fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(7, 3))
@@ -360,7 +361,7 @@ axes[2].set_title('This is axis 2')
 plt.show()
 ```
 
-In this example, notice that the `axes` variable returned by the `plt.subplots()` function is actually a list of axes we can iterate over. Remember that the figure and the axes are separete elements in a `matplotlib` plot.
+In this example, notice that the `axes` variable returned by the `plt.subplots()` function is actually an array of axes we can iterate over. Remember that the figure and the axes are separete elements in a `matplotlib` plot.
 
 ![Image source: [Getting Started with Matplotlib](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
 
@@ -436,12 +437,37 @@ We define a function using:
  2. After the docstring, you write the body of the function, this is the code that will be executed when the function is called. The wholek body of the function should be indentated to indicate the function's scope.
  3. The `return` keywork is used to allow the function to return values. Functions that do not return any values don't need to have a `return` keyword.
 
+ Let's see two simple examples just to get familiar with the syntax. In the first one we have a simple function with a one-line docstring, no parameters, and no return values. 
+
+ ```python
+ def greet():
+    """Print a greeting message."""
+    print("Hello, welcome to the class!")
+ ```
+
+ The second one has a single parameter and a more detailed docstring with information abou the arguments and return values. 
+
+ ```python
+ def calculate_area(radius):
+    """
+    Calculate the area of a circle given its radius.
+    
+    Args:
+        radius (float): The radius of the circle.
+        
+    Returns:
+        float: The area of the circle, calculated as π * radius^2.
+    """
+    area = 3.14159 * radius ** 2
+    return area
+ ```
+
 #### Example
 
-Let's create a function that will give us the top 3 primary energy sources for a given state:
+Going back to our power plants data frame, let's create a function that will give us the top 3 primary energy sources for a given state:
 
 ```{python}
-def top3_energy_sources(state, power_plants):
+def top3_sources(state, power_plants):
     """
     Find the top 3 electric primary sources of given state.
     
@@ -466,18 +492,17 @@ We may now reuse this function as much as we want!
 ```{python}
 print('Top 3 primary energy sources in Division 2 states:')
 for state in ['New Jersey', 'New York', 'Pennsylvania']:
-    print(state, ': ', top3_energy_sources(state, power_plants))
+    print(state, ': ', top3_sources(state, power_plants))
 ```
 
 Let's do one more example and create a function that will produce a plot given a list of primary sources and a state name:
 
 
 ```{python}
-def plot_top3_energy_sources(state, sources, power_plants):
+def plot_3_energy_sources(state, sources, power_plants):
     
-    if len(sources) != 3:
-        print('sources must have three elements to produce the plot')
-        return
+    # Raise error if there are more than three sources
+    assert len(sources) == 3, 'sources must have three elements to produce the plot'
 
     # Isolate the state boundary and power plants
     boundary = states[states.name==state]
@@ -500,9 +525,49 @@ def plot_top3_energy_sources(state, sources, power_plants):
     plt.show()
 ```
 
+We can now use our functions to produce plots for any state:
 
 ```{python}
-plot_top3_energy_sources('New Jersey', 
-                         top3_energy_sources('New Jersey', power_plants),
+plot_3_energy_sources('New Jersey', 
+                         top3_sources('New Jersey', power_plants),
                          power_plants)
 ```
+
+
+Writing functions can feel challenging at first, but with practice, they’ll start to come naturally whenever you find yourself reusing blocks of code. Keep experimenting and practicing—it gets easier with each function you write!
+
+<!--
+As you go forward, some tips that can help you write them are:
+
+- crate the code for a single 
+-->
+
+:::{.callout-tip}
+## Exercise
+
+Write a function `states_with_source` that takes a primary energy source (e.g., 'solar') and returns a _list_ of states that use that source. 
+
+<!--
+```python
+def states_with_source(source_type, power_plants):
+    """
+    Find the list of states that use a given primary energy source.
+    
+    Args:
+        source_type (str): The primary energy source (e.g., 'Coal').
+        power_plants (pd.DataFrame): DataFrame containing power plant data 
+                                     with 'state' and 'primsource' columns.
+    
+    Returns:
+        list: A list of unique states where the specified energy source is used.
+    """
+    # Filter the DataFrame for rows where 'primsource' matches the specified source_type
+    source_power_plants = power_plants[power_plants['primsource'] == source_type]
+    
+    # Get a list of unique states from the filtered DataFrame
+    states = source_power_plants['state'].unique().tolist()
+    
+    return states
+```
+-->
+:::

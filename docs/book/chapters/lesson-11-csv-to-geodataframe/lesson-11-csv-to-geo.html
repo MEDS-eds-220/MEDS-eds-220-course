@@ -188,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 <code>for</code> loops</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 Streamline your code</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -298,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">10 <code>for</code> loops</span></a>
+ <span class="menu-text">10 Streamline your code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -347,18 +347,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#f-strings" id="toc-f-strings" class="nav-link" data-scroll-target="#f-strings">f-strings</a></li>
   <li><a href="#import-shapefile" id="toc-import-shapefile" class="nav-link" data-scroll-target="#import-shapefile">Import shapefile</a></li>
   <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><code>for</code> loops</a></li>
+  <li><a href="#assert" id="toc-assert" class="nav-link" data-scroll-target="#assert"><code>assert</code></a></li>
   <li><a href="#data-selection" id="toc-data-selection" class="nav-link" data-scroll-target="#data-selection">Data selection</a></li>
   <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
   <li><a href="#for-with-zip" id="toc-for-with-zip" class="nav-link" data-scroll-target="#for-with-zip"><code>for</code> with <code>zip</code></a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 <code>for</code> loops</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 Streamline your code</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">10 <code>for</code> loops</h1>
+<h1 class="title">10 Streamline your code</h1>
 </div>
 
 
@@ -375,7 +377,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>In this lesson we will learn how to extract geospatial data from a CSV to create a <code>geopandas.GeoDataFrame</code> and go over some more customizations for maps and matplotlib figures.</p>
+<p>In this lesson we will learn how to extract geospatial data from a CSV to create a <code>geopandas.GeoDataFrame</code>, introduce more customizations for maps and matplotlib figures, and go over strategies to streamline our code.</p>
 <!--
 TODO: learning objectives
 -->
@@ -402,7 +404,7 @@ TODO: learning objectives
 <section id="csv-to-geopandas.geodataframe" class="level2">
 <h2 class="anchored" data-anchor-id="csv-to-geopandas.geodataframe">CSV to <code>geopandas.GeoDataFrame</code></h2>
 <p>Let’s start by importing packages and updating viewing options:</p>
-<div id="c5d0a1e8" class="cell" data-execution_count="1">
+<div id="722a9657" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -415,7 +417,7 @@ TODO: learning objectives
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we import the power plants dataset. In this lesson, we have downloaded the data into a <code>data/</code> folder in the same level as our notebook.</p>
-<div id="a37b88d5" class="cell" data-execution_count="2">
+<div id="3052db7b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import power plants data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/carmengg/eds-220-book/refs/heads/main/data/power_plants_epsg4269.csv'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>power_plants <span class="op">=</span> pd.read_csv(URL)</span>
@@ -427,7 +429,7 @@ TODO: learning objectives
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>power_plants <span class="op">=</span> power_plants.drop(columns<span class="op">=</span><span class="st">'unnamed: 0'</span>)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>power_plants.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="296">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -584,7 +586,7 @@ TODO: learning objectives
 <!--TO DO: Need to drop the unnamed column from file-->
 <p>The power plants file is a CSV. Unlike shapefiles or other geospatial file formats, <code>geopandas</code> doesn’t have a way to extract a geometry column from a CSV file, so we will need to create this geometry manually.</p>
 <p>To do so we will use the longitude and latitude columns in the CSV, these indicate the location of the power plants in the NAD83 CRS (EPSG:4269). We can use this information to create a new <code>geopandas.GeoDataFrame</code> from the <code>pandas.DataFrame</code> using the <code>geopandas</code> function <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.points_from_xy.html"><code>points_from_xy()</code></a>:</p>
-<div id="df10aa40" class="cell" data-execution_count="3">
+<div id="59144c11" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create points from latitude and longitude</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> gpd.points_from_xy(power_plants.longitude, </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                            power_plants.latitude)</span>
@@ -596,9 +598,9 @@ TODO: learning objectives
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                                )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s check that we now have a <code>geometry</code> column:</p>
-<div id="040061db" class="cell" data-execution_count="4">
+<div id="8bc74b26" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>power_plants[<span class="st">'geometry'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="298">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>0        POINT (-160.49722 55.33972)
 1         POINT (-87.35682 33.45867)
 2         POINT (-88.01030 31.00690)
@@ -614,7 +616,7 @@ Name: geometry, Length: 12009, dtype: geometry</code></pre>
 </div>
 </div>
 <p>With the <code>geometry</code> column and CRS, we can plot our dataset:</p>
-<div id="7f155b33" class="cell" data-execution_count="5">
+<div id="0c2ab781" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>power_plants.plot()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -628,7 +630,7 @@ Name: geometry, Length: 12009, dtype: geometry</code></pre>
 <section id="f-strings" class="level2">
 <h2 class="anchored" data-anchor-id="f-strings">f-strings</h2>
 <p>So far, we have printed variables using string concatenation inside the <code>print()</code> function. This means that we write commas between every string and variable we want to print, and then the <code>print()</code> function concatenates these into a single string. For example:</p>
-<div id="2d161b7c" class="cell" data-execution_count="6">
+<div id="01f1b30c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'CRS: '</span>, power_plants.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CRS:  EPSG:4269</code></pre>
@@ -637,7 +639,7 @@ Name: geometry, Length: 12009, dtype: geometry</code></pre>
 <p>Another popular way of mixing strings and variables in print statements is by creating an <strong>f-string</strong> which stands for “formatted string”. The simplest syntax for an f-string is:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f" some text </span><span class="sc">{</span>replace<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>where <code>replace</code> can be a variable, an expression, or a function or method call. For example:</p>
-<div id="7724fb36" class="cell" data-execution_count="7">
+<div id="0c2521e0" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore CRS</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ellipsoid: </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>ellipsoid<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"datum: </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>datum<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -648,7 +650,7 @@ datum: North American Datum 1983</code></pre>
 </div>
 <p>We just created a string replacing the value inside the curly brackets <code>{}</code>.</p>
 <p>One of the advantages of using f-strings is that they offer customization for formatting the output:</p>
-<div id="8952c175" class="cell" data-execution_count="8">
+<div id="a1b68883" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the label width to 25 characters, aligning the answers</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Is the CRS geographic?:'</span><span class="sc">:&lt;25}</span><span class="ss"> </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>is_geographic<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Is the CRS projected?:'</span><span class="sc">:&lt;25}</span><span class="ss"> </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>is_projected<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -679,7 +681,7 @@ Use f-strings or not?
 <section id="import-shapefile" class="level2">
 <h2 class="anchored" data-anchor-id="import-shapefile">Import shapefile</h2>
 <p>Let’s import the TIGER shapefile</p>
-<div id="a6929485" class="cell" data-execution_count="9">
+<div id="b85251a0" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import states data</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'tl_2022_us_state'</span>,<span class="st">'tl_2022_us_state.shp'</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> gpd.read_file(fp)</span>
@@ -688,7 +690,7 @@ Use f-strings or not?
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>states.columns <span class="op">=</span> states.columns.<span class="bu">str</span>.lower()</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>states.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="303">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -775,7 +777,7 @@ Use f-strings or not?
 </div>
 </div>
 <p>and obtain some preliminary geospatial information about the states geodataframe:</p>
-<div id="dfb498d8" class="cell" data-execution_count="10">
+<div id="73f6fbb2" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(states.crs)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>states.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -793,7 +795,7 @@ Use f-strings or not?
 <section id="for-loops" class="level2">
 <h2 class="anchored" data-anchor-id="for-loops"><code>for</code> loops</h2>
 <p>It can be easier to work with the codes as numbers instead of strings, so let’s update the corresponding columns in the states geo-dataframe. We start by checking the data type of the <code>region</code>, <code>division</code>, and <code>statefp</code> columns:</p>
-<div id="46fe6d10" class="cell" data-execution_count="11">
+<div id="f458197a" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a> code_cols <span class="op">=</span> [<span class="st">'region'</span>, <span class="st">'division'</span>, <span class="st">'statefp'</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether codes columns are strings</span></span>
@@ -828,15 +830,18 @@ DRY code
 <p><strong>Don’t Repeat Yourself (DRY)</strong> is a core programming principle that encourages reducing redundancy and consolidating repeated logic. Try implementing it as much as possible! If you need to repeat the “same” code more than twice, you likely need a <code>for</code> loop.</p>
 </div>
 </div>
+</section>
+<section id="assert" class="level2">
+<h2 class="anchored" data-anchor-id="assert"><code>assert</code></h2>
 <p>Next, we update the data type of the code columns to be integers. This time, we check the data type of the column using the <code>is_numeric_dtype()</code> function inside an <strong><code>assert</code></strong> statement:</p>
-<div id="d51d30ca" class="cell" data-execution_count="12">
+<div id="7271685c" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update code columns into integers</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> code_cols:</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    states[column] <span class="op">=</span> states[column].astype(<span class="st">'int'</span>)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> is_numeric_dtype(states[column])  <span class="co"># Check conversion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>assert</code> keyword does nothing if the expression next to it evaluates to <code>True</code> and raises an <code>AssertionError</code> exception and stops your code form running any further. For example,</p>
-<div id="b9ddeb4e" class="cell" data-execution_count="13">
+<div id="947b5070" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does nothing if statement is True</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span><span class="op">+</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">4</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -846,7 +851,7 @@ DRY code
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AssertionError</span>                            Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[307], line 5</span>
+Cell <span class="ansi-green-fg">In[13], line 5</span>
 <span class="ansi-green-fg ansi-bold">      2</span> <span style="font-weight:bold;color:rgb(0,135,0)">assert</span> <span style="color:rgb(98,98,98)">2</span><span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">2</span> <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">4</span>
 <span class="ansi-green-fg ansi-bold">      4</span> <span style="font-style:italic;color:rgb(95,135,135)"># Raises an error if statement is False</span>
 <span class="ansi-green-fg">----&gt; 5</span> <span style="font-weight:bold;color:rgb(0,135,0)">assert</span> <span style="color:rgb(98,98,98)">2</span><span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">2</span> <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">3</span>
@@ -889,7 +894,7 @@ Check-in
 </div>
 </div>
 <p>Let’s go ahead and select the data:</p>
-<div id="8945e7ba" class="cell" data-execution_count="14">
+<div id="6ed97eaa" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select contiguous US states</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>contiguous <span class="op">=</span> states[(states.region<span class="op">!=</span><span class="dv">9</span>) <span class="op">&amp;</span> (<span class="op">~</span>states.statefp.isin([<span class="dv">2</span>,<span class="dv">15</span>]))]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -908,7 +913,7 @@ Check-in
 <div class="callout-body-container callout-body">
 <p>Select the data in the <code>power_plants</code> data frame for the contiguous US states. <!--
 
-::: {#87c0121e .cell execution_count=15}
+::: {#d859c2bc .cell execution_count=15}
 ``` {.python .cell-code}
 power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Alaska'])]
 ```
@@ -922,13 +927,13 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 <section id="plotting" class="level2">
 <h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
 <p>Before we plot our data, let’s make sure they are in the same CRS:</p>
-<div id="48fd13d7" class="cell" data-execution_count="16">
+<div id="5a9bc981" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>contiguous.crs <span class="op">==</span> power_plants.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="310">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div id="4d1c8460" class="cell" data-execution_count="17">
+<div id="33ad2a8e" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>)) <span class="co"># Update figure size</span></span>
@@ -994,8 +999,8 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 </section>
 <section id="for-with-zip" class="level2">
 <h2 class="anchored" data-anchor-id="for-with-zip"><code>for</code> with <code>zip</code></h2>
-<p>Often, we need to iterate simultaneously over two iterables. The <code>zip()</code> function in Python allows you to combine two or more lists (or other iterables) so that you can iterate over their elements in pairs. When used with a <code>for</code> loop, it lets you process elements from each list together, like this example:</p>
-<div id="13dd7a36" class="cell" data-execution_count="18">
+<p>Often, we need to iterate simultaneously over two lists (or other iterables). The <code>zip()</code> function in Python allows you to combine two or more lists (or other iterables) so that you can iterate over their elements in pairs. When used with a <code>for</code> loop, it lets you process elements from each list together, like this example:</p>
+<div id="51d0bf60" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over a single list</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num <span class="kw">in</span> numbers:</span>
@@ -1018,8 +1023,8 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 3 c</code></pre>
 </div>
 </div>
-<p>A common situation when code gets repeated is when creating subplots. For example:</p>
-<div id="f9e4cc55" class="cell" data-execution_count="19">
+<p>Let’s see a practical application of <code>for</code> loops and <code>zip()</code> with <code>matplotlib</code> subplots. A common situation when code gets repeated is when creating subplots. For example:</p>
+<div id="38d15443" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">3</span>))</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'This is axis 0'</span>)</span>
@@ -1035,7 +1040,13 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 </div>
 </div>
 </div>
-<p>In this example, notice that the <code>axes</code> variable returned by the <code>plt.subplots()</code> function is actually a list of axes we can iterate over.</p>
+<p>In this example, notice that the <code>axes</code> variable returned by the <code>plt.subplots()</code> function is actually an array of axes we can iterate over. Remember that the figure and the axes are separete elements in a <code>matplotlib</code> plot.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../../book/images/lesson-10/matplotlib_figure_axes_axis.png" class="img-fluid figure-img"></p>
+<figcaption>Image source: <a href="https://www.skytowner.com/explore/getting_started_with_matplotlib">Getting Started with Matplotlib</a></figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1056,13 +1067,6 @@ plt.show()
 --></p>
 </div>
 </div>
-<p>Remember that the figure and the axes are separete elements in a <code>matplotlib</code> plot.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../../book/images/lesson-10/matplotlib_figure_axes_axis.png" class="img-fluid figure-img"></p>
-<figcaption>Image source: <a href="https://www.skytowner.com/explore/getting_started_with_matplotlib">Getting Started with Matplotlib</a></figcaption>
-</figure>
-</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1079,7 +1083,7 @@ Exercise
 <li><p>Isolate the California state boundary in a variable named <code>ca_boundary</code>.</p></li>
 <li><p>Recreate the following plot:</p></li>
 </ol>
-<div id="d95d730f" class="cell" data-execution_count="20">
+<div id="ed943058" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1090,9 +1094,158 @@ Exercise
 </div>
 </div>
 </div>
-<!--TODO: add functions here-->
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<p>Next, we want to keep exploring these maps of the top 3 electric primary sources for different states. This is a scenario where creating functions can be useful. In Python, <strong>functions</strong> are blocks of reusable code designed to perform specific tasks, helping to make your code more modular and organized. The general syntax for defining a function is the following:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> function_name(parameter_1, ..., parameter_n):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Docstring"""</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>body of the function<span class="op">&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value  <span class="co"># Depending on the function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We define a function using:</p>
+<ol type="1">
+<li>the <code>def</code> keyword, followed by the function name, parentheses (which can contain parameters), and a colon.</li>
+<li>The first line(s) of the function should be a <code>docstring</code>, this is a special kind of comment used to describe what the function will do. It must be indented and in between triple quotes <code>"""</code>.</li>
+<li>After the docstring, you write the body of the function, this is the code that will be executed when the function is called. The wholek body of the function should be indentated to indicate the function’s scope.</li>
+<li>The <code>return</code> keywork is used to allow the function to return values. Functions that do not return any values don’t need to have a <code>return</code> keyword.</li>
+</ol>
+<p>Let’s see two simple examples just to get familiar with the syntax. In the first one we have a simple function with a one-line docstring, no parameters, and no return values.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet():</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">"""Print a greeting message."""</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>   <span class="bu">print</span>(<span class="st">"Hello, welcome to the class!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The second one has a single parameter and a more detailed docstring with information abou the arguments and return values.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_area(radius):</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">"""</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">   Calculate the area of a circle given its radius.</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">   </span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">   Args:</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">       radius (float): The radius of the circle.</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co">   Returns:</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co">       float: The area of the circle, calculated as π * radius^2.</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co">   """</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>   area <span class="op">=</span> <span class="fl">3.14159</span> <span class="op">*</span> radius <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example</h4>
+<p>Going back to our power plants data frame, let’s create a function that will give us the top 3 primary energy sources for a given state:</p>
+<div id="eb7e3901" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> top3_sources(state, power_plants):</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Find the top 3 electric primary sources of given state.</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co">        state (str): The US state we want information about.</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">        power_plants (pd.DataFrame): DataFrame containing data </span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">        on power plants, with at least 'state' and 'primsource' columns.</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">        list: A list of the top 3 primary sources of the state within the power_plants data frame.</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    state_power_plants <span class="op">=</span> power_plants[power_plants[<span class="st">'state'</span>]<span class="op">==</span>state]</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    top_sources <span class="op">=</span> (state_power_plants[<span class="st">'primsource'</span>]</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>                                .value_counts()</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>                                .index[:<span class="dv">3</span>]</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>                                .tolist()</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>                                )</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> top_sources</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We may now reuse this function as much as we want!</p>
+<div id="b1cbe98e" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Top 3 primary energy sources in Division 2 states:'</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> state <span class="kw">in</span> [<span class="st">'New Jersey'</span>, <span class="st">'New York'</span>, <span class="st">'Pennsylvania'</span>]:</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(state, <span class="st">': '</span>, top3_sources(state, power_plants))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Top 3 primary energy sources in Division 2 states:
+New Jersey :  ['solar', 'natural gas', 'biomass']
+New York :  ['solar', 'hydroelectric', 'natural gas']
+Pennsylvania :  ['natural gas', 'solar', 'biomass']</code></pre>
+</div>
+</div>
+<p>Let’s do one more example and create a function that will produce a plot given a list of primary sources and a state name:</p>
+<div id="d9a18a1e" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_3_energy_sources(state, sources, power_plants):</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Raise error if there are more than three sources</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sources) <span class="op">==</span> <span class="dv">3</span>, <span class="st">'sources must have three elements to produce the plot'</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Isolate the state boundary and power plants</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    boundary <span class="op">=</span> states[states.name<span class="op">==</span>state]</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    state_power_plants <span class="op">=</span> power_plants[power_plants[<span class="st">'state'</span>]<span class="op">==</span>state]</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create plot</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">3</span>))</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax, source <span class="kw">in</span> <span class="bu">zip</span>(axes, sources):</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        boundary.plot(ax<span class="op">=</span>ax,                </span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>                      color<span class="op">=</span><span class="st">'none'</span>,</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>                      edgecolor<span class="op">=</span><span class="st">'#362312'</span>)</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> state_power_plants[state_power_plants[<span class="st">'primsource'</span>] <span class="op">==</span> source]</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>        subset.plot(ax<span class="op">=</span>ax, markersize<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>        ax.set_title(source)</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">'off'</span>)  <span class="co"># Remove axes for a cleaner look</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(<span class="ss">f"Top 3 energy sources for electric power plants in </span><span class="sc">{</span>state<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now use our functions to produce plots for any state:</p>
+<div id="8e154f62" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plot_3_energy_sources(<span class="st">'New Jersey'</span>, </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                         top3_sources(<span class="st">'New Jersey'</span>, power_plants),</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                         power_plants)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lesson-11-csv-to-geo_files/figure-html/cell-25-output-1.png" width="502" height="287" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Writing functions can feel challenging at first, but with practice, they’ll start to come naturally whenever you find yourself reusing blocks of code. Keep experimenting and practicing—it gets easier with each function you write!</p>
+<!--
+As you go forward, some tips that can help you write them are:
+
+- crate the code for a single 
+-->
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write a function <code>states_with_source</code> that takes a primary energy source (e.g., ‘solar’) and returns a <em>list</em> of states that use that source.</p>
+<!--
+```python
+def states_with_source(source_type, power_plants):
+    """
+    Find the list of states that use a given primary energy source.
+    
+    Args:
+        source_type (str): The primary energy source (e.g., 'Coal').
+        power_plants (pd.DataFrame): DataFrame containing power plant data 
+                                     with 'state' and 'primsource' columns.
+    
+    Returns:
+        list: A list of unique states where the specified energy source is used.
+    """
+    # Filter the DataFrame for rows where 'primsource' matches the specified source_type
+    source_power_plants = power_plants[power_plants['primsource'] == source_type]
+    
+    # Get a list of unique states from the filtered DataFrame
+    states = source_power_plants['state'].unique().tolist()
+    
+    return states
+```
+-->
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
