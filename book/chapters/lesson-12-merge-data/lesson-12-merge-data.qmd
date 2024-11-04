@@ -19,7 +19,7 @@ In this section we will learn how to join dataframes and will apply this to crea
 
 ## About the data
 
-The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comess in GeoJSON file with the following attributes:
+The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comes in GeoJSON file with the following attributes:
 
 - **name**: name of Arctic community, 
 - **population**: population of Arctic community, as of 2022
@@ -28,16 +28,13 @@ The first dataset we will use is a [list of Arctic communities and their locatio
 
 The second dataset is [Natural Earth's medium scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
 We can obtain this dataset by downloading the shapefile. 
-[Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with ready-to-use data for creating maps. 
+[Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with free, ready-to-use data for creating maps. 
+
+The third dataset we will use is a CSV file with the country codes and names of the Arctic countries in the Arctic communities dataset. This dataset was created for educational purposes for this lesson based on the metadata of the Arctic communities dataset and the country names in Natural Earth's dataset. It can be accessed [here]().
 
 ## Import data
 
 We will first import the countries shapefile and adapt it for wrangling purposes:
-
-<!--
-# will use this library to add a background to our map
-import contextily as ctx
--->
 
 ```{python}
 import os
@@ -78,18 +75,25 @@ The CRS of the `communitites` is EPSG:4326. Remember all GeoJSON files are given
 
 ```{python}
 print(countries.crs)
-
-# Verify CRSs match
-assert countries.crs == communities.crs
 ```
 
 Since the CRSs match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
 
 ```{python}
+# Verify CRSs match
+assert countries.crs == communities.crs
+
 fig, ax = plt.subplots()
 countries.plot(ax=ax)
 communities.plot(ax=ax, color='red')
 plt.show()
+```
+
+Finally, we import the country names and codes CSV:
+
+```{python}
+country_names = pd.read_csv(os.path.join('data','country_names.csv'))
+country_names
 ```
 
 ## Arctic communities by country
@@ -170,24 +174,7 @@ def check_common_columns(df1, df2):
 
 ## Merging data frames
 
-Based on the metadata of both datasets, we have created the following code with the complete names of the countries given the code in the Arctic communities data:
-
-```{python}
-# Text data as a dictionary
-dict = {
-    "RU": "Russia", "LV": "Latvia", "EE": "Estonia", "LT": "Lithuania",
-    "SE": "Sweden", "BY": "Belarus", "FI": "Finland", "NO": "Norway",
-    "DK": "Denmark", "FO": "Faroe Islands", "IS": "Iceland",
-    "GB": "United Kingdom",
-    "AX": "Aland Islands", "GL": "Greenland", "US": "United States of America", "CA": "Canada"
-}
-
-# Convert the dictionary to a DataFrame
-country_names = pd.DataFrame(list(dict.items()), columns=["country", "admin"])
-country_names
-```
-
-We can use this to add the names countries into the `n_comms` data which, in turn, will allow us to merge that data frame with the `country_names` data. To merge dataframes we can use the [`pandas.merge()` function](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge). 
+We can use the `country_names` data frame to add the names countries into the `n_comms` data which, in turn, will allow us to merge that data frame with the `country_names` data. To merge dataframes we can use the [`pandas.merge()` function](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge). 
 The basic syntax for it is:
 
 ```python
