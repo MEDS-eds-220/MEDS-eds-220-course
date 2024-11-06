@@ -19,14 +19,14 @@ In this section we will learn how to join dataframes and will apply this to crea
 
 ## About the data
 
-The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comes in GeoJSON file with the following attributes:
+The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comes in a GeoJSON file with the following attributes:
 
 - **name**: name of Arctic community, 
 - **population**: population of Arctic community, as of 2022
 - **country**: country that the Arctic community falls within (see dataset metadata for the codes)
 - **geoname-id**: numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data
 
-The second dataset is [Natural Earth's medium scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
+The second dataset is [Natural Earth's medium-scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
 We can obtain this dataset by downloading the shapefile. 
 [Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with free, ready-to-use data for creating maps. 
 
@@ -61,7 +61,7 @@ countries.plot()
 ```
 
 
-Next, we import the Arctic communitites data. In the same way as we previously used `pandas.read_csv()`, we can read in the Arctic communities GeoJSON data directly from the data repository using `geopandas.read_file()`:
+Next, we import the Arctic communities data. Similar to how we previously used `pandas.read_csv()`, we can read in the Arctic communities GeoJSON data directly from the data repository using `geopandas.read_file()`:
 
 ```{python}
 # Import Arctic communities data
@@ -71,7 +71,7 @@ communities = gpd.read_file(URL)
 communities.head()
 ```
 
-The CRS of the `communitites` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees. In this case, the `countries` and `communities` GeoDataFrames both have the same CRS:
+The CRS of the `communities` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees. In this case, the `countries` and `communities` GeoDataFrames both have the same CRS:
 
 ```{python}
 print(countries.crs)
@@ -107,10 +107,10 @@ n_comms = (communities.groupby('country')
                       .reset_index(name='n_communities'))
 ```
 
-Let's break this down a bit:
+Let's break this down:
 
-- We start with our `communities` dataframe and use `groupby('country')` to group by country code, 
-- then we use [`size()`](https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.size.html) as an aggregator function to calculate the size of each group.
+- We start with our `communities` dataframe and use `groupby('country')` to group by country code.
+- Then we use [`size()`](https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.size.html) as an aggregator function to calculate the size of each group.
 - The result of this operation is a `pandas.Series` indexed by the `country` values.
 - By resetting the index we transform the `pandas.Series` into a `pandas.DataFrame`, the index is now a column named `country` and the values of the series are named `n_communities`.
 
@@ -128,7 +128,7 @@ Currently our datasets do not have any columns in common:
 set(countries.columns).intersection(n_comms.columns)
 ```
 
-The output `set()` represents the empty set. This might be as informative, so let's write a different information statement:
+The output `set()` represents the empty set. This might not be as informative, so let's write a different information statement:
 
 ```{python}
 common_columns = set(countries.columns).intersection(n_comms.columns)
@@ -144,7 +144,7 @@ Remember that an `if-else` statement is a control structure that allows code to 
 
 :::{.callout-tip}
 ## Check-in
-Wrap up the previous code into a function called `check_common_columns` that prints a message depending of whether two data frames have common columns or not. Do not forget to include a docstring!
+Wrap up the previous code into a function called `check_common_columns` that prints a message depending of whether two data frames have common columns or not. Don't forget to include a docstring!
 <!--
 
 ```{python}
@@ -253,7 +253,7 @@ arctic_countries.at['Finland', 'n_communities'] += 1
 
 A [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) is an efficient way to visualize aggregate data per region. 
 
-Making a choropleth map from our polygons `GeoDataFrame` is easy, we just need to specify the `column` parameter in `plot()` and make it equal to the column with the values we want to plot in each country:
+Making a choropleth map from our polygons `GeoDataFrame` is easy; we just need to specify the `column` parameter in `plot()` and make it equal to the column with the values we want to plot in each country:
 
 ```{python}
 arctic_countries.plot(column='n_communities',
@@ -265,8 +265,8 @@ arctic_countries.plot(column='n_communities',
 Remember that CRSs reflect cultural views and even biases. Any map projection involves choices about which areas to emphasize, minimize, or distort, and those choices can influence how viewers perceive different regions. In our map, using the EPSG:4326 CRS is, among other things, mapping the Arctic regions as far apart, while they are actually near each other.
 
 **Reprojecting** means changing the coordinate reference system of your geospatial data. Do
-In our case we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
-This CRS is a *projected* CRS, better suited for working with data from Arctic region:
+In our case, we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
+This CRS is a *projected* CRS, better suited for working with data from the Arctic region:
 
 ![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3413/) ](/book/images/lesson-12/epsg_3413.png)
 
@@ -321,4 +321,4 @@ ax.set_title('Distribution of Arctic Communities', fontsize=18, weight='bold', p
 plt.show()
 ```
 
-Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the complete United States territory is in it, while we should only have Alaska. **In our next lesson we will review startegies to clip and subset vector data and return to this plot in our discussion section.**
+Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the entire United States territory is in it, when we should only have Alaska. **In our next lesson we will review startegies to clip and subset vector data and return to this plot in our discussion section.**
