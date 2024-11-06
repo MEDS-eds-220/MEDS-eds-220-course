@@ -71,13 +71,13 @@ communities = gpd.read_file(URL)
 communities.head()
 ```
 
-The CRS of the `communities` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees. In this case, the `countries` and `communities` GeoDataFrames both have the same CRS:
+The CRS of the `communities` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees.
 
 ```{python}
 print(countries.crs)
 ```
 
-Since the CRSs match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
+Since the CRSs of our geospatila data match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
 
 ```{python}
 # Verify CRSs match
@@ -211,7 +211,7 @@ check_common_columns(n_comms, countries)
 
 :::{.callout-tip}
 ## Check-in
-Perform an inner join between our `countries` and `n_comms` dataframes. This will merge the subset of rows that have matches in both the left table and the right table.
+Create a new variable named `arctic_countries` which is the result of an inner join between our `countries` and `n_comms` dataframes. The inner joun will merge the subset of rows that have matches in both the left table and the right table.
 
 ![Image source: Data Modeling Essentials, NCEAS Learning Hub @do-linh_open_2023](/book/images/merging_data/join-diagrams-inner.png)
 <!--
@@ -264,11 +264,10 @@ arctic_countries.plot(column='n_communities',
 
 Remember that CRSs reflect cultural views and even biases. Any map projection involves choices about which areas to emphasize, minimize, or distort, and those choices can influence how viewers perceive different regions. In our map, using the EPSG:4326 CRS is, among other things, mapping the Arctic regions as far apart, while they are actually near each other.
 
-**Reprojecting** means changing the coordinate reference system of your geospatial data. Do
-In our case, we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
+**Reprojecting** means changing the coordinate reference system of your geospatial data. In our case, we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
 This CRS is a *projected* CRS, better suited for working with data from the Arctic region:
 
-![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3413/) ](/book/images/lesson-12/epsg_3413.png)
+![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3413/)](/book/images/lesson-12/epsg_3413.png)
 
 Changing CRSs in GeoPandas is very simple using the `to_crs()` method for `geopandas.GeoDataFrame`s. 
 The general syntax is:
