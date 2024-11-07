@@ -66,21 +66,20 @@ places = gpd.read_file(os.path.join('data',
                                     )
 
 # Import ferry routes lines
-roads = gpd.read_file(os.path.join('data','ne_10m_roads','ne_10m_roads.shp'))
+roads = gpd.read_file(os.path.join('data',
+                                   'ne_10m_roads',
+                                   'ne_10m_roads.shp')
+                                   )
 ```
 
-## Prepare Alaska polygon
+## Prepare Alaska multipolygon
 
-### Exploration
-
-Let's start by taking taking a look at our stats geo-dataframe. 
+Let's start by taking taking a look at our `states` geo-dataframe. 
 Since this is a geospatial dataset, exploration should include *at least* checking the head of the dataset, plotting the data, and looking at its CRS.
 
 ```{python}
-# print the CRS
-print(states.crs)
+print(f"CRS: {states.crs}")
 
-# look at first five columns
 states.head(3)
 ```
 
@@ -88,63 +87,39 @@ states.head(3)
 states.plot()
 ```
 
-### Selection
-
-For this lesson, we are intersted in plotting data in Alaska. 
-Let's start by selecting this data:
+For this lesson, we are intersted in plotting data only Alaska, se let's select this data:
 
 ```{python}
-# select Alaska from states
 alaska = states[states.name =='Alaska']
 alaska.plot()
 ```
 
-### Reprojecting
-
-As in our previous lesson, we bump into the issue of Alaska's islands elongating the map. 
-To fix this, we will reproject the Alaska geo-dataframe. 
-**Reprojecting** means precisely this, changing the coordinate reference system of your geospatial data. 
-In our case we will reproject the Alaska geo-dataframe to the CRS EPSG:3338. 
+Notice that the way the Alaska multipolygon is plotted under the EPSG:4269 separates the islands and unnaturally elongates the map. 
+To fix this, we will reproject the Alaska geo-dataframe to the EPSG:3338 CRS. 
 This CRS is a *projected* CRS, better suited for working with data from Alaska:
 
 ![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/nad83-alaska-albers/) ](/images/epsg_3338.png)
 
-Changing CRSs in GeoPandas is very simple using the `to_crs()` method for `gpd.GeoDataFrame`s. 
-The general syntax is:
-```python
-updated_geodf = geodf.to_crs(new_crs)
-```
-where:
-
-- `updated_geodf` is the output of the method, a new geodataframe (`to_crs()` does not work in place), 
-- `geodf` is the `gpd.GeoDataFrame` we want to transform, 
-- `new_crs` an object of type CRS or string representing the CRS (ex: `'epsg:3338'`), the CRS we want to convert to. 
-
-In our case:
-
 ```{python}
-# change to projected CRS optimized for Alaska
+# Reproject to CRS optimized for Alaska
 alaska = alaska.to_crs('epsg:3338')
-alaska.plot()
-```
 
-```{python}
-# check new CRS
-print('is this CRS projected? ', alaska.crs.is_projected)
+# Inspect the new CRS
+print('Is this CRS projected? ', alaska.crs.is_projected)
 alaska.crs
 ```
 
-## Prepare populated places
+```{python}
+alaska.plot()
+```
 
-### Exploration 
+## Prepare populated places points
 
 Let's now explore the populated places data. 
 
 ```{python}
-# print the CRS
-print(places.crs)
+print(f"CRS: {places.crs}")
 
-# look at first five columns
 places.head(3)
 ```
 
@@ -152,8 +127,8 @@ places.head(3)
 places.plot()
 ```
 
-This dataset has CRS EPSG:4326, this is the EPSG code for the WGS84 CRS. 
-This is not surprise since this is a global dataset, and EPSG:4326/WGS84 is the most used CRS for such data.
+This dataset has the EPSG:4326 CRS. Remember this is the EPSG code for the WGS 84 CRS. 
+This is not a surprise since the places data is global and EPSG:4326/WGS84 is the most widely used CRS for such data.
 
 Let's see what happens when we try to plot this data on top of Alaska:
 
@@ -167,27 +142,30 @@ places.plot(ax=ax, color='red')
 plt.show()
 ```
 
-::: {.callout-important}
+::: {.callout-warning}
 ## Data in weird places? Check your CRSs
-This is a classic mistake in  analysis. 
-To plot, analyze, or integrate different geospatial datasets they must **have the same CRS**. 
+This is a classic slip in geospatial analysis. 
+To plot, analyze, or integrate different geospatial datasets they **must have the same CRS**. 
 
 Here, `alaska` and `places` have different CRSs, leading to unexpected results when plotting them together:
 ```{python}
-print(alaska.crs)
-print(places.crs)
+alaska.crs == places.crs
 ```
 :::
 
-### Reprojecting
+:::{.callout-tip}
+## Check-in
+Reproject the `places` geo-datafarme into `alaska`'s CRS and verify the CRSs match using `assert`.
 
-Reprojecting the `places` geo-datafarme into `alaska`'s CRS is simple using `to_crs()`:
-
+<!--
 ```{python}
-# update crs
+# Reproject to match Alaska CRS
 places = places.to_crs(alaska.crs)
-print(alaska.crs == places.crs)
+assert alaska.crs == places.crs
 ```
+-->
+:::
+
 
 Let's check that map again:
 
@@ -195,32 +173,34 @@ Let's check that map again:
 fig, ax = plt.subplots()
 
 alaska.plot(ax=ax)
-places.plot(ax=ax, color='red', markersize=2 )
+places.plot(ax=ax, color='red', markersize=2)
 
 plt.show()
 ```
 
-This is better: we can see there is the Alaska poygons and some points on top of it. 
+This is better: we can see there the Alaska poygons and some of the `places` points on top of it. 
 Our next step is to select these points. 
 
-### Clipping
+<!--TODO: add if-else here with reprojecting -->
+
+## Clipping
 
 **Clipping** means using a polygon (or polygons) to only select geospatial data within them. 
-Clipping a `gpd.GeoDataFrame` is easy using the geopandas [`clip()` function](https://geopandas.org/en/stable/docs/reference/api/geopandas.clip.html). 
+Clipping a `geopandas.GeoDataFrame` is simple using the geopandas [`clip()` function](https://geopandas.org/en/stable/docs/reference/api/geopandas.clip.html). 
 The general syntax is:
 ```python
-updated_geodf = gpd.clip(geodf, mask)
+updated_geodf = geopandas.clip(geodf, mask)
 ```
 where:
 
 - `updated_geodf` is the output of the method: the intersection of the geometries in `geodf` with `mask`,
-- `geodf` is the `gpd.GeoDataFrame` we want to clip, 
-- `mask` is a `gpd.GeoDataFrame` with the polygon(s) we want to use for clipping. This `mask` must be in the same CRS as `geodf`!
+- `geodf` is the `geopandas.GeoDataFrame` we want to clip, 
+- `mask` is a `geopandas.GeoDataFrame` with the polygon(s) we want to use for clipping. This `mask` must be in the same CRS as `geodf`!
 
 In our case:
 
 ```{python}
-# clip places to Alaska
+# Clip populated places to Alaska multipolygon
 ak_places = gpd.clip(places, alaska)
 print('Number of places in AK:', len(ak_places))
 ```
