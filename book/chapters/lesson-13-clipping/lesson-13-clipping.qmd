@@ -1,6 +1,6 @@
 
 <!--
-Ignore ShapelyDeprecationWarning warning in render
+Ignore specific warnings in render
 
 ```{python}
 import shapely
@@ -8,10 +8,11 @@ import warnings
 from shapely.errors import ShapelyDeprecationWarning
 
 warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning) 
+warnings.filterwarnings("ignore", message="is_categorical_dtype is deprecated")
 ```
 -->
 
-# Clipping
+# 12 Clipping
 
 In this lesson we will learn how to to clip different geometries.
 
@@ -28,14 +29,18 @@ The first dataset is a [TIGER shapefile of the US states from the United States 
 You can check the [metadata for all the TIGER shapefiles here](https://www.census.gov/programs-surveys/geography/technical-documentation/complete-technical-documentation/tiger-geo-line.html). 
 The columns for this shapefile are:
 
-![Source: TIGER/Line Shapefiles Technical Documentation](/book/images/lesson-11/tiger_shp_columns.png)
+![Source: TIGER/Line Shapefiles Technical Documentation](/book/images/lesson-11/tiger_shp_columns.png){width="70%"}
 
 The second dataset we'll use is [Natural Earth's simple medium scale populated places dataset](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). We can obtain this dataset by downloading the shapefile (choose the one that says "simple (less columns)").
 
 The third dataset we'll use is [Natural Earth's road dataset](https://www.naturalearthdata.com/downloads/10m-cultural-vectors/roads/). 
 We can obtain this dataset by downloading the shapefile 
 
-For the notes, all the data is inside a `data/` directory at the same level as the notebook. 
+We will combine these datasets to create the following map of infrastructure in Alaska:
+
+![](/book/images/lesson-13/alaska.png)
+
+For these notes, all the data is inside a `data/` directory at the same level as the notebook. 
 
 ## Import data
 
@@ -72,6 +77,7 @@ roads = gpd.read_file(os.path.join('data',
 -->
 
 ```python
+#| code-fold: true
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -87,7 +93,6 @@ states = gpd.read_file(os.path.join('data',
                                     'tl_2022_us_state',
                                     'tl_2022_us_state.shp')
                                     )
-states.columns = states.columns.str.lower()
 
 # Import Natural Earth populated places points
 places = gpd.read_file(os.path.join('data',
@@ -101,6 +106,18 @@ roads = gpd.read_file(os.path.join('data',
                                    'ne_10m_roads.shp')
                                    )
 ```
+
+:::{.callout-tip}
+Use a `for` loop to iterate over the three geo-dataframes we imported and change their column names to lower caps.
+
+<!--
+
+```{python}
+for df in [states, places, roads]:
+    df.columns = df.columns.str.lower()
+```
+-->
+:::
 
 ## Prepare Alaska multipolygon
 
@@ -335,7 +352,6 @@ ak_bbox
 We can now clip the roads using Alaska's bounding box:
 ```{python}
 ak_complete_roads = gpd.clip(usa_roads.to_crs(ak_bbox.crs), ak_bbox)
-ak_complete_roads.plot()
 ```
 
 Notice the difference between the two clipping methods:
@@ -357,19 +373,58 @@ plt.show()
 Finally, we can put all our data together in the same map:
 
 ```{python}
-# https://matplotlib.org/stable/api/markers_api.html
-# Trouble: not in the same CRS
-# this is cool! but now we are seeing all Arctic comms
-fig, ax = plt.subplots(figsize=(12,8))
-# --------------------------
+#| code-fold: true
+
+fig, ax = plt.subplots(figsize=(11,5))
 ax.axis('off')
 
-alaska.plot(ax=ax, color='none', edgecolor='0.7')
-ak_complete_roads.plot(ax=ax, column='type', legend=True)
-#ak_comms.plot(ax=ax, color='red')
-ak_places.plot(ax=ax, color='red', marker='s')
+alaska.plot(ax=ax, color='whitesmoke', edgecolor='0.7')
 
-# --------------------------
+ak_complete_roads.plot(ax=ax, 
+                       zorder=1,  # Specify layer plotting order
+                       column='type', 
+                       legend=True,
+                       legend_kwds={'title': "Road Types", 
+                                    'loc': 'upper left',
+                                    'bbox_to_anchor':(0,0.9),
+                                    'fontsize':'small'}
+                                    )
+
+ak_places.plot(ax=ax, 
+               zorder=2,  # Specify layer plotting order
+               color='red', 
+               marker='s'  # Square marker
+               )
+# Add city names as text annotations
+for x, y, name in zip(ak_places.geometry.x, ak_places.geometry.y, ak_places['name']):
+    ax.text(x-30000, y+20000, name, fontsize=8, ha='right')
+
+ax.set_title("Road Networks and Major Cities in Alaska", fontsize=14, fontweight='bold')
 
 plt.show()
 ```
+
+:::{.callout-tip}
+## Exercise
+Notice the overlaying labels for Anchorage and Valdez:
+
+![](/book/images/lesson-13/overlapping_points.png){width="50%" fig-align="center"}
+
+Update the map so these labels do not overlap. One way to do it is using an `if` when iterating over the Alaska populated places.
+
+<!--
+Update text labels to this:
+
+```python
+# Add city names as text annotations
+for x, y, name in zip(ak_places.geometry.x, ak_places.geometry.y, ak_places['name']):
+    if name != 'Valdez':
+        ax.text(x-30000, y+20000, name, fontsize=8, ha='right')
+
+# Add text label for Valdez
+valdez = ak_places[ak_places['name']=='Valdez']
+ax.text(valdez.geometry.x.iloc[0]+30000, valdez.geometry.y.iloc[0]+20000, 'Valdez', fontsize=8, ha='left')
+```
+-->
+:::
+

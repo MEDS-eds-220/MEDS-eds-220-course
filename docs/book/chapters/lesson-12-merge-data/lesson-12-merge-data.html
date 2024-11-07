@@ -327,6 +327,12 @@ div.csl-indent {
  <span class="menu-text">11 Reprojecting</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../book/chapters/lesson-13-clipping/lesson-13-clipping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12 Clipping</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +391,7 @@ div.csl-indent {
 <!--
 Ignore ShapelyDeprecationWarning warning in render
 
-::: {#b0fcba5c .cell execution_count=1}
+::: {#e2561179 .cell execution_count=1}
 ``` {.python .cell-code}
 import shapely
 import warnings
@@ -416,7 +422,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <section id="import-data" class="level2">
 <h2 class="anchored" data-anchor-id="import-data">Import data</h2>
 <p>We will first import the countries shapefile and adapt it for wrangling purposes:</p>
-<div id="eb7f027c" class="cell" data-execution_count="2">
+<div id="99765640" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -483,7 +489,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 </div>
 </div>
-<div id="9fcbf6cb" class="cell" data-execution_count="3">
+<div id="0710fc8d" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick view</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>countries.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -495,7 +501,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 </div>
 <p>Next, we import the Arctic communities data. Similar to how we previously used <code>pandas.read_csv()</code>, we can read in the Arctic communities GeoJSON data directly from the data repository using <code>geopandas.read_file()</code>:</p>
-<div id="28f97b8f" class="cell" data-execution_count="4">
+<div id="5a14e2bf" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Arctic communities data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3Aed7718ae-fb0d-43dd-9270-fbfe80bfc7a4'</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> gpd.read_file(URL)</span>
@@ -564,14 +570,14 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 </div>
 <p>The CRS of the <code>communities</code> is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees.</p>
-<div id="64a1a96c" class="cell" data-execution_count="5">
+<div id="557e03cb" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(countries.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:4326</code></pre>
 </div>
 </div>
 <p>Since the CRSs of our geospatila data match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:</p>
-<div id="9fbf2119" class="cell" data-execution_count="6">
+<div id="ccfbd4b3" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify CRSs match</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> countries.crs <span class="op">==</span> communities.crs</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,7 +594,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 </div>
 <p>Finally, we import the country names and codes CSV:</p>
-<div id="3978c881" class="cell" data-execution_count="7">
+<div id="69387998" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>country_names <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>,<span class="st">'country_names.csv'</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>country_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -694,7 +700,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <section id="arctic-communities-by-country" class="level2">
 <h2 class="anchored" data-anchor-id="arctic-communities-by-country">Arctic communities by country</h2>
 <p>Next, we want to calculate the number of Arctic communities by country.</p>
-<div id="b707cdae" class="cell" data-execution_count="8">
+<div id="3e6710a6" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frame with number of communities per country</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n_comms <span class="op">=</span> (communities.groupby(<span class="st">'country'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                      .size()</span>
@@ -707,7 +713,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <li>The result of this operation is a <code>pandas.Series</code> indexed by the <code>country</code> values.</li>
 <li>By resetting the index we transform the <code>pandas.Series</code> into a <code>pandas.DataFrame</code>, the index is now a column named <code>country</code> and the values of the series are named <code>n_communities</code>.</li>
 </ul>
-<div id="ecdb39b5" class="cell" data-execution_count="9">
+<div id="a6b45b00" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of Arctic communities per country</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n_comms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -813,14 +819,14 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <section id="if-else-statements" class="level2">
 <h2 class="anchored" data-anchor-id="if-else-statements"><code>if</code>-<code>else</code> statements</h2>
 <p>Our goal is to merge the <code>n_comms</code> and the <code>countries</code> data frames. To merge two data frames they need to have at least one column in common. Currently our datasets do not have any columns in common:</p>
-<div id="3fb0582d" class="cell" data-execution_count="10">
+<div id="26a19852" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>set()</code></pre>
 </div>
 </div>
 <p>The output <code>set()</code> represents the empty set. This might not be as informative, so let’s write a different information statement:</p>
-<div id="727d7e64" class="cell" data-execution_count="11">
+<div id="c92ff7e1" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>common_columns <span class="op">=</span> <span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if there are any common columns</span></span>
@@ -845,7 +851,7 @@ Check-in
 <div class="callout-body-container callout-body">
 <p>Wrap up the previous code into a function called <code>check_common_columns</code> that prints a message depending of whether two data frames have common columns or not. Don’t forget to include a docstring! <!--
 
-::: {#ad99f526 .cell execution_count=12}
+::: {#c26c9105 .cell execution_count=12}
 ``` {.python .cell-code}
 def check_common_columns(df1, df2):
     """
@@ -890,6 +896,7 @@ def check_common_columns(df1, df2):
 <li><code>how</code> specifies the type of join between the left and right dataframes, (<a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge">check the options here</a>), the default is to do an inner join,</li>
 <li><code>on</code> specifies the column to join on, this column must be present in both our dataframes.</li>
 </ul>
+<p>When merging a <code>geopandas.GeoDataFrame</code> with a <code>pandas.DataFrame</code>, the <code>geopandas.GeoDataFrame</code> must be “on the left” to retain the geospatial information. Otherwise, the output will be a <code>pandas.DataFrame</code>.</p>
 <p>So, we merge the <code>n_comms</code> and <code>country_names</code> data frames using a left join:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -897,7 +904,7 @@ def check_common_columns(df1, df2):
 <figcaption>Image source: Data Modeling Essentials, NCEAS Learning Hub <span class="citation" data-cites="do-linh_open_2023"><a href="#ref-do-linh_open_2023" role="doc-biblioref">[2]</a></span></figcaption>
 </figure>
 </div>
-<div id="4a34ae82" class="cell" data-execution_count="13">
+<div id="4bd1d49a" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n_comms <span class="op">=</span> pd.merge(n_comms,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   country_names,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                   how<span class="op">=</span><span class="st">'left'</span>,</span>
@@ -1020,7 +1027,7 @@ def check_common_columns(df1, df2):
 </div>
 </div>
 <p>We can reuse our function to check that <code>n_comms</code> and <code>countries</code> now have a common column on which we can merge them:</p>
-<div id="42979009" class="cell" data-execution_count="14">
+<div id="7a51cb44" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>check_common_columns(n_comms, countries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Common columns: {'admin'}</code></pre>
@@ -1039,7 +1046,7 @@ Check-in
 <p>Create a new variable named <code>arctic_countries</code> which is the result of an inner join between our <code>countries</code> and <code>n_comms</code> dataframes. The inner joun will merge the subset of rows that have matches in both the left table and the right table.</p>
 <p><img src="../../../book/images/merging_data/join-diagrams-inner.png" class="img-fluid" alt="Image source: Data Modeling Essentials, NCEAS Learning Hub [2]"> <!--
 
-::: {#d5cd4982 .cell execution_count=15}
+::: {#997ccc84 .cell execution_count=15}
 ``` {.python .cell-code}
 # Merge data frames 
 arctic_countries = pd.merge(countries,
@@ -1059,7 +1066,7 @@ arctic_countries = arctic_countries.set_index('admin')
 <section id="reviewing-results" class="level2">
 <h2 class="anchored" data-anchor-id="reviewing-results">Reviewing results</h2>
 <p>Notice that the row for Aland Islands is not present in the merged dataframe:</p>
-<div id="b9f24ed6" class="cell" data-execution_count="16">
+<div id="b9923e5e" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arctic_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
@@ -1195,7 +1202,7 @@ arctic_countries = arctic_countries.set_index('admin')
 </div>
 </div>
 <p>The <code>values</code> attribute of a data frame returns <em>all</em> the values in the data frame as an array. We can verify the value ‘Aland Islands’ was <em>nowhere</em> in our original countries dataframe like this:</p>
-<div id="1d8415ff" class="cell" data-execution_count="17">
+<div id="ae5a186e" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Aland Islands is nowhere in data frame</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">'Aland Islands'</span> <span class="kw">not</span> <span class="kw">in</span> countries.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
@@ -1203,7 +1210,7 @@ arctic_countries = arctic_countries.set_index('admin')
 </div>
 </div>
 <p>The Aland Islands is an autonomous region of Finland and there is one Arctic community registered in this region. We will directly add one to Finland to not lose this piece of data:</p>
-<div id="bf1cac2f" class="cell" data-execution_count="18">
+<div id="dac63a39" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.at[<span class="st">'Finland'</span>, <span class="st">'n_communities'</span>] <span class="op">+=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -1211,7 +1218,7 @@ arctic_countries = arctic_countries.set_index('admin')
 <h2 class="anchored" data-anchor-id="choropleth-map">Choropleth map</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Choropleth_map">choropleth map</a> is an efficient way to visualize aggregate data per region.</p>
 <p>Making a choropleth map from our polygons <code>GeoDataFrame</code> is easy; we just need to specify the <code>column</code> parameter in <code>plot()</code> and make it equal to the column with the values we want to plot in each country:</p>
-<div id="c2751bed" class="cell" data-execution_count="19">
+<div id="355d25d4" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.plot(column<span class="op">=</span><span class="st">'n_communities'</span>,</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                      legend<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1242,12 +1249,12 @@ arctic_countries = arctic_countries.set_index('admin')
 <li><code>new_crs</code> the CRS we want to convert to, this is an object of type CRS or string representing the CRS (ex: <code>'epsg:3413'</code>).</li>
 </ul>
 <p>In our case:</p>
-<div id="6dece207" class="cell" data-execution_count="20">
+<div id="2358c27a" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to CRS optimized for Arctic region</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>arctic_countries <span class="op">=</span> arctic_countries.to_crs(<span class="st">'epsg:3413'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now use the reprojected data to update our map:</p>
-<div id="1afae8ec" class="cell" data-execution_count="21">
+<div id="1fd3d04a" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
