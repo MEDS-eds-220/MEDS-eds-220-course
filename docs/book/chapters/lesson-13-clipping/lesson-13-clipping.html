@@ -357,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#clipping-1" id="toc-clipping-1" class="nav-link" data-scroll-target="#clipping-1">Clipping</a></li>
   <li><a href="#prepare-roads" id="toc-prepare-roads" class="nav-link" data-scroll-target="#prepare-roads">Prepare roads</a>
   <ul class="collapse">
-  <li><a href="#clipping-with-bounding-box" id="toc-clipping-with-bounding-box" class="nav-link" data-scroll-target="#clipping-with-bounding-box">Clipping with bounding box</a></li>
+  <li><a href="#clipping-with-a-bounding-box" id="toc-clipping-with-a-bounding-box" class="nav-link" data-scroll-target="#clipping-with-a-bounding-box">Clipping with a bounding box</a></li>
   </ul></li>
   <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot">Plot</a></li>
   </ul></li>
@@ -373,7 +373,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!--
 Ignore specific warnings in render
 
-::: {#251bad49 .cell execution_count=1}
+::: {#3f9ac0b2 .cell execution_count=1}
 ``` {.python .cell-code}
 import shapely
 import warnings
@@ -416,7 +416,7 @@ warnings.filterwarnings("ignore", message="is_categorical_dtype is deprecated")
 <p>Let’s start by loading our libraries and then importing the datasets we will use. <!--
 Reading in states shapefile from a different directory
 
-::: {#5c6ad533 .cell execution_count=2}
+::: {#928d3940 .cell execution_count=2}
 ``` {.python .cell-code}
 import os
 import pandas as pd
@@ -448,7 +448,7 @@ roads = gpd.read_file(os.path.join('data',
 
 
 --></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -482,14 +482,14 @@ roads = gpd.read_file(os.path.join('data',
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Use a <code>for</code> loop to iterate over the three geo-dataframes we imported and change their column names to lower caps.</p>
 <!--
 
-::: {#5ff95c65 .cell execution_count=3}
+::: {#5e845a48 .cell execution_count=3}
 ``` {.python .cell-code}
 for df in [states, places, roads]:
     df.columns = df.columns.str.lower()
@@ -504,7 +504,7 @@ for df in [states, places, roads]:
 <section id="prepare-alaska-multipolygon" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-alaska-multipolygon">Prepare Alaska multipolygon</h2>
 <p>Let’s start by taking taking a look at our <code>states</code> geo-dataframe. Since this is a geospatial dataset, exploration should include <em>at least</em> checking the head of the dataset, plotting the data, and looking at its CRS.</p>
-<div id="d01b172f" class="cell" data-execution_count="4">
+<div id="e8e41ceb" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"CRS: </span><span class="sc">{</span>states<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>states.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -597,7 +597,7 @@ for df in [states, places, roads]:
 </div>
 </div>
 </div>
-<div id="63d9edbf" class="cell" data-execution_count="5">
+<div id="224e78b9" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>states.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -608,7 +608,7 @@ for df in [states, places, roads]:
 </div>
 </div>
 <p>For this lesson, we are intersted in plotting data only Alaska, se let’s select this data:</p>
-<div id="8fb974e5" class="cell" data-execution_count="6">
+<div id="e8d5286d" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>alaska <span class="op">=</span> states[states.name <span class="op">==</span><span class="st">'Alaska'</span>]</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>alaska.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -619,14 +619,14 @@ for df in [states, places, roads]:
 </div>
 </div>
 </div>
-<p>Notice that the way the Alaska multipolygon is plotted under the EPSG:4269 separates the islands and unnaturally elongates the map. To fix this, we will reproject the Alaska geo-dataframe to the EPSG:3338 CRS. This CRS is a <em>projected</em> CRS, better suited for working with data from Alaska:</p>
+<p>Notice that the way the Alaska multipolygon is plotted under the NAD83/EPSG:4269 CRS separates the islands and unnaturally elongates the map. To fix this, we will reproject the Alaska geo-dataframe to the EPSG:3338 CRS. This CRS is a <em>projected</em> CRS, better suited for working with data from Alaska:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../../book/images/lesson-13/epsg_3338.png" class="img-fluid figure-img"></p>
-<figcaption>Source: <a href="https://spatialreference.org/ref/epsg/nad83-alaska-albers/">spatialreference.org</a></figcaption>
+<figcaption>Source: <a href="https://spatialreference.org/ref/epsg/3338/">spatialreference.org</a></figcaption>
 </figure>
 </div>
-<div id="56d2f5e2" class="cell" data-execution_count="7">
+<div id="4a7ea170" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to CRS optimized for Alaska</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>alaska <span class="op">=</span> alaska.to_crs(<span class="st">'epsg:3338'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -653,7 +653,7 @@ Datum: North American Datum 1983
 - Prime Meridian: Greenwich</code></pre>
 </div>
 </div>
-<div id="7dc44676" class="cell" data-execution_count="8">
+<div id="ef4389f4" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alaska.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -667,7 +667,7 @@ Datum: North American Datum 1983
 <section id="prepare-populated-places-points" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-populated-places-points">Prepare populated places points</h2>
 <p>Let’s now explore the populated places data.</p>
-<div id="afe5efb5" class="cell" data-execution_count="9">
+<div id="d904a2b7" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"CRS: </span><span class="sc">{</span>places<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>places.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1252,7 +1252,7 @@ Datum: North American Datum 1983
 </div>
 </div>
 </div>
-<div id="c32f6f06" class="cell" data-execution_count="10">
+<div id="a78e937b" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>places.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1264,7 +1264,7 @@ Datum: North American Datum 1983
 </div>
 <p>This dataset has the EPSG:4326 CRS. Remember this is the EPSG code for the WGS 84 CRS. This is not a surprise since the places data is global and EPSG:4326/WGS84 is the most widely used CRS for such data.</p>
 <p>Let’s see what happens when we try to plot this data on top of Alaska:</p>
-<div id="20eeddd8" class="cell" data-execution_count="11">
+<div id="d4d51846" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trouble</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1292,7 +1292,7 @@ Data in weird places? Check your CRSs
 <div class="callout-body-container callout-body">
 <p>This is a classic slip in geospatial analysis. To plot, analyze, or integrate different geospatial datasets they <strong>must have the same CRS</strong>.</p>
 <p>Here, <code>alaska</code> and <code>places</code> have different CRSs, leading to unexpected results when plotting them together:</p>
-<div id="0529c6db" class="cell" data-execution_count="12">
+<div id="6d076967" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>alaska.crs <span class="op">==</span> places.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>False</code></pre>
@@ -1313,7 +1313,7 @@ Check-in
 <p>Reproject the <code>places</code> geo-datafarme into <code>alaska</code>’s CRS and verify the CRSs match using <code>assert</code>.</p>
 <!--
 
-::: {#68ee2972 .cell execution_count=13}
+::: {#2c6ffccf .cell execution_count=13}
 ``` {.python .cell-code}
 # Reproject to match Alaska CRS
 places = places.to_crs(alaska.crs)
@@ -1326,7 +1326,7 @@ assert alaska.crs == places.crs
 </div>
 </div>
 <p>Let’s check that map again:</p>
-<div id="15f77985" class="cell" data-execution_count="14">
+<div id="6fcf68fb" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>alaska.plot(ax<span class="op">=</span>ax)</span>
@@ -1355,7 +1355,7 @@ assert alaska.crs == places.crs
 <li><code>mask</code> is a <code>geopandas.GeoDataFrame</code> with the polygon(s) we want to use for clipping. This <code>mask</code> must be in the same CRS as <code>geodf</code>!</li>
 </ul>
 <p>In our case:</p>
-<div id="ef2c0db2" class="cell" data-execution_count="15">
+<div id="2b6a1e53" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip populated places to Alaska multipolygon</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ak_places <span class="op">=</span> gpd.clip(places, alaska)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1375,7 +1375,7 @@ assert alaska.crs == places.crs
 <section id="prepare-roads" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-roads">Prepare roads</h2>
 <p>Now we move on to our roads dataset.</p>
-<div id="f678f7cb" class="cell" data-execution_count="16">
+<div id="8401f8f1" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roads.crs)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>roads.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1536,7 +1536,7 @@ assert alaska.crs == places.crs
 </div>
 </div>
 </div>
-<div id="fb3cfd30" class="cell" data-execution_count="17">
+<div id="25671c3f" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>roads.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1547,7 +1547,7 @@ assert alaska.crs == places.crs
 </div>
 </div>
 <p>You may have already noticed that the <code>roads</code> data is not in the same CRS as the <code>alaska</code> polygons, so these geo-datasets shound’t interact until they’re in the same CRS. Before jumping right into reprojecting and clipping, we will subset the data to select only US roads:</p>
-<div id="e09e9d6d" class="cell" data-execution_count="18">
+<div id="e1a7ae63" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>usa_roads <span class="op">=</span> roads[roads.sov_a3 <span class="op">==</span> <span class="st">'USA'</span>]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>usa_roads.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1575,7 +1575,7 @@ Reduce your tabular data before reducing via geometries
 YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
 -->
 <p>We will now compose functions to clip <code>usa_roads</code> using the <code>alaska</code> multipolygon. Notice we are using the ouput of <code>usa_roads.to_crs(alaska.crs)</code> directly and thus not changing the <code>usa_roads</code> geo-dataframe or creating new variables:</p>
-<div id="f266a7da" class="cell" data-execution_count="19">
+<div id="ffa4e2d1" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip usa_roads to alaska geometry</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>ak_roads <span class="op">=</span> gpd.clip(usa_roads.to_crs(alaska.crs), alaska)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1593,16 +1593,21 @@ YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
 </div>
 </div>
 <p>Notice how the lines break on the small islands? However, in the <code>usa_roads</code> there are no broken lines. This should make us suspect we are leaving data out and clipping <em>exactly</em> to the polygons in <code>alaska</code> is not quite what we want.</p>
-<section id="clipping-with-bounding-box" class="level3">
-<h3 class="anchored" data-anchor-id="clipping-with-bounding-box">Clipping with bounding box</h3>
+<section id="clipping-with-a-bounding-box" class="level3">
+<h3 class="anchored" data-anchor-id="clipping-with-a-bounding-box">Clipping with a bounding box</h3>
 <p>We will clip the <code>usa_roads</code> geo-dataframe with the <strong>bounding box</strong> of <code>alaska</code> instead of its polygons. To create a bounding box, we first use the <a href="https://shapely.readthedocs.io/en/stable/manual.html#shapely.geometry.box"><code>box()</code> function</a> we imported from <code>shapely.geometry</code>. The syntax for <code>box()</code> is:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>box(minx, miny, maxx, maxy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>the output is a polygon representing a box constructed like this:</p>
-<p><a href="../../../book/images/lesson-13/bounding-box.png">Image adapted from: National Ecological Observatory Network (NEON)</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../../book/images/lesson-13/bounding-box.png" class="img-fluid figure-img"></p>
+<figcaption>Image adapted from: National Ecological Observatory Network (NEON)</figcaption>
+</figure>
+</div>
 <p>If we want to create a <code>shapely</code> polygon from the bounds of a geo-dataframe <code>gdf</code>, a more straightforward syntax is:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>box(<span class="op">*</span>gdf.total_bounds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In our case:</p>
-<div id="eac09122" class="cell" data-execution_count="20">
+<div id="cc95a33b" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> box(<span class="op">*</span>alaska.total_bounds)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(bbox))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>bbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1627,12 +1632,12 @@ YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In the last syntax we used the asterisk <code>*</code> as an <strong>unpacking operator</strong> on the array <code>gdf.total_bounds</code>. Think about it as unpacking the elements of <code>gdf.total_bounds</code> and assigning them one-by-one to the paremeters <code>minx, miny, maxx, maxy</code> of the <code>box()</code> function.</p>
+<p>In the last syntax we used the asterisk <code>*</code> as an <strong>unpacking operator</strong> on the array <code>alaska.total_bounds</code>. Think about it as unpacking the elements of <code>alaska.total_bounds</code> and assigning them one-by-one to the paremeters <code>minx, miny, maxx, maxy</code> of the <code>box()</code> function.</p>
 <p>This is a good article explaining more about unpacking with <code>*</code> in Python: https://geekflare.com/python-unpacking-operators/</p>
 </div>
 </div>
 <p>Notice that the bounding box is not a geodataframe, it is a stand alone, abstract polygon without any geospatial information. To interpret this polygon as something on the Earth’s surface we need to wrap it into a geo-datfrane abd assign it a CRS:</p>
-<div id="a661bfa8" class="cell" data-execution_count="21">
+<div id="8fc8762e" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create geo-dataframe from bounding box</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ak_bbox <span class="op">=</span> gpd.GeoDataFrame(geometry <span class="op">=</span> [bbox],  <span class="co"># Assign geometry column</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                           crs <span class="op">=</span> alaska.crs)  <span class="co"># Assign CRS</span></span>
@@ -1664,11 +1669,11 @@ YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
 </div>
 </div>
 <p>We can now clip the roads using Alaska’s bounding box:</p>
-<div id="bba05c80" class="cell" data-execution_count="22">
+<div id="80b6d905" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ak_complete_roads <span class="op">=</span> gpd.clip(usa_roads.to_crs(ak_bbox.crs), ak_bbox)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice the difference between the two clipping methods:</p>
-<div id="c1cfe324" class="cell" data-execution_count="23">
+<div id="7c97d46e" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>))</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>ak_roads.plot(ax<span class="op">=</span>ax1)</span>
@@ -1691,7 +1696,7 @@ YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
 <section id="plot" class="level2">
 <h2 class="anchored" data-anchor-id="plot">Plot</h2>
 <p>Finally, we can put all our data together in the same map:</p>
-<div id="d5b0c9b1" class="cell" data-execution_count="24">
+<div id="32ad0444" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">5</span>))</span>
@@ -1743,7 +1748,7 @@ Exercise
 <p>Notice the overlaying labels for Anchorage and Valdez:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../../../book/images/lesson-13/overlapping_points.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="../../../book/images/lesson-13/overlapping_points.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:40.0%"></p>
 </figure>
 </div>
 <p>Update the map so these labels do not overlap. One way to do it is using an <code>if</code> when iterating over the Alaska populated places.</p>

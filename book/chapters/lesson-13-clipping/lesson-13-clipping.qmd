@@ -77,7 +77,7 @@ roads = gpd.read_file(os.path.join('data',
 -->
 
 ```python
-#| code-fold: true
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -108,6 +108,7 @@ roads = gpd.read_file(os.path.join('data',
 ```
 
 :::{.callout-tip}
+## Check-in
 Use a `for` loop to iterate over the three geo-dataframes we imported and change their column names to lower caps.
 
 <!--
@@ -141,11 +142,11 @@ alaska = states[states.name =='Alaska']
 alaska.plot()
 ```
 
-Notice that the way the Alaska multipolygon is plotted under the EPSG:4269 separates the islands and unnaturally elongates the map. 
+Notice that the way the Alaska multipolygon is plotted under the NAD83/EPSG:4269 CRS separates the islands and unnaturally elongates the map. 
 To fix this, we will reproject the Alaska geo-dataframe to the EPSG:3338 CRS. 
 This CRS is a *projected* CRS, better suited for working with data from Alaska:
 
-![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/nad83-alaska-albers/) ](/book/images/lesson-13/epsg_3338.png)
+![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3338/)](/book/images/lesson-13/epsg_3338.png)
 
 ```{python}
 # Reproject to CRS optimized for Alaska
@@ -307,7 +308,7 @@ Notice how the lines break on the small islands?
 However, in the `usa_roads` there are no broken lines. 
 This should make us suspect we are leaving data out and clipping *exactly* to the polygons in `alaska` is not quite what we want. 
 
-### Clipping with bounding box
+### Clipping with a bounding box
 We will clip the `usa_roads` geo-dataframe with the **bounding box** of `alaska` instead of its polygons. 
 To create a bounding box, we first use the [`box()` function](https://shapely.readthedocs.io/en/stable/manual.html#shapely.geometry.box) we imported from `shapely.geometry`. 
 The syntax for `box()` is:
@@ -316,7 +317,7 @@ box(minx, miny, maxx, maxy)
 ```
 the output is a polygon representing a box constructed like this:
 
-[Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-13/bounding-box.png)
+![Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-13/bounding-box.png)
 
 If we want to create a `shapely` polygon from the bounds of a geo-dataframe `gdf`, a more straightforward syntax is:
 ```python 
@@ -332,8 +333,8 @@ bbox
 
 ::: {.callout-tip}
 ## `*` = unpacking operator
-In the last syntax we used the asterisk `*` as an **unpacking operator** on the array `gdf.total_bounds`. 
-Think about it as unpacking the elements of `gdf.total_bounds` and assigning them one-by-one to the paremeters `minx, miny, maxx, maxy` of the `box()` function.
+In the last syntax we used the asterisk `*` as an **unpacking operator** on the array `alaska.total_bounds`. 
+Think about it as unpacking the elements of `alaska.total_bounds` and assigning them one-by-one to the paremeters `minx, miny, maxx, maxy` of the `box()` function.
 
 This is a good article explaining more about unpacking with `*` in Python:
 https://geekflare.com/python-unpacking-operators/
@@ -408,7 +409,7 @@ plt.show()
 ## Exercise
 Notice the overlaying labels for Anchorage and Valdez:
 
-![](/book/images/lesson-13/overlapping_points.png){width="50%" fig-align="center"}
+![](/book/images/lesson-13/overlapping_points.png){width="40%" fig-align="center"}
 
 Update the map so these labels do not overlap. One way to do it is using an `if` when iterating over the Alaska populated places.
 
