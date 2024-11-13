@@ -221,7 +221,6 @@ div.csl-indent {
 - Importing and plotting differnt types of geospatial data
 - Finding additional guidance online to carry out your data wrangling plans 
 --></p>
-<p>https://www.arcticwwf.org/our-priorities/arctic-communities/</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <div class="callout callout-style-simple callout-tip no-icon">
@@ -258,8 +257,14 @@ div.csl-indent {
 </section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For this section you will use a dataset derived from the <a href="https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80">list of Arctic communities and their location</a> <span class="citation" data-cites="brook_approximate_2023"><a href="#ref-brook_approximate_2023" role="doc-biblioref">[1]</a></span> created by the <a href="https://www.anthc.org">Alaska Native Tribal Health Consortium</a> and <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/">Natural Earth’s medium-scale cultural boundaries data for countries (1:50m)</a> following the procedure in the <a href="../book/chapters/lesson-12-merge-data/lesson-12-merge-data.html">Reprojecting notes</a>.</p>
-<p>Each geospatial feature in the data represents an Arctic country with the following attributes:</p>
+<p>Arctic communities hold immense value in traditional knowledge and environmental stewardship, offering unique insights into sustainable practices and ecosystem management in one of the planet’s most extreme environments. For this section you will use a dataset derived from the <a href="https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80">list of Arctic communities and their location</a> <span class="citation" data-cites="brook_approximate_2023"><a href="#ref-brook_approximate_2023" role="doc-biblioref">[1]</a></span> created by the <a href="https://www.anthc.org">Alaska Native Tribal Health Consortium</a> and <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/">Natural Earth’s medium-scale cultural boundaries data for countries (1:50m)</a> following the procedure in the <a href="../book/chapters/lesson-12-merge-data/lesson-12-merge-data.html">Reprojecting notes</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../discussion-sections/images/Medium_WW214867.webp" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Image Source: <a href="https://www.arcticwwf.org/our-priorities/arctic-communities/">Arctic Communities WWF.</a> ©Staffan Widstrand/WWF.</figcaption>
+</figure>
+</div>
+<p>The data is in the <code>arctic_communities.geojson</code> file located in the <code>data/</code> directory for the EDS 220 class within workbench-1. Each geospatial feature in the data represents an Arctic territory with the following attributes:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -282,7 +287,6 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>The data is in the <code>arctic_communities.geojson</code> file located in the <code>data/</code> directory for the EDS 220 class within workbench-1.</p>
 </section>
 <section id="data-loading-and-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-loading-and-exploration">1. Data loading and exploration</h2>
@@ -302,16 +306,18 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="check-geometry-types">2. Check geometry types</h2>
 <ol type="a">
 <li><p>Run <code>df.geom_type</code>. Write a brief explanation about the output in a markdown cell.</p></li>
-<li><p>Create an <code>if-else</code> statement that</p></li>
+<li><p>Create an <code>if-else</code> statement that:</p>
+<ol type="i">
 <li><p>prints “All features are polygons.” if all the features in the <code>df</code> are polygons and</p></li>
 <li><p>prints “Multiple feature types:” followed by the unique geometry types (no repetition) in the geodataframe if not all the features are polygons.</p></li>
+</ol></li>
 <li><p>Wrap up your code into a function named <code>check_polygons</code> that receives a single geodataframe as its parameter and prints out a message stating whether all the geometry types are polygons or not.</p></li>
 </ol>
 </section>
 <section id="explode-polygons" class="level2">
 <h2 class="anchored" data-anchor-id="explode-polygons">3. Explode polygons</h2>
 <ol type="a">
-<li><p>Overwrite the <code>df</code> geodataframe with the output from the <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html"><code>explode</code></a> method with the <code>index_parts</code> parameter set to false. Read the documentation for the method and use a markdown cell to write a brief explanation of what is being done.</p></li>
+<li><p>Overwrite the <code>df</code> geodataframe with the output from the <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html"><code>explode</code></a> method with the <code>index_parts</code> parameter set to <code>False</code>. Read the documentation for the method and use a markdown cell to write a brief explanation of what is being done.</p></li>
 <li><p>Reset the index of <code>df</code>.</p></li>
 <li><p>Use your <code>check_polygons</code> function to verify that <code>df</code> only has features of type polygon.</p></li>
 </ol>
@@ -326,16 +332,16 @@ div.csl-indent {
 <li><p>Select the first row of <code>df</code> using <code>iloc</code>. What kind of Python object is this?</p></li>
 <li><p>Select the geometry of the first row of <code>df</code>. What kind of Python object is this?</p></li>
 <li><p>Use the <a href="https://shapely.readthedocs.io/en/2.0.6/reference/shapely.bounds.html"><code>bounds</code></a> attribute for <code>shapely Polygons</code> to select the southern-most bound of the first polygon in <code>df</code>.</p></li>
-<li><p>Create a function <code>min_y_bound</code> that receives <strong>a single row</strong> of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box.</p></li>
-<li><p>Use the <code>min_y_bound</code> function and the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html"><code>apply</code></a> method for data frames to create a new column <code>miny</code> in <code>df</code> which has the minimum <code>y</code> coordinate.</p></li>
+<li><p>Create a function <code>min_y</code> that receives <strong>a single row</strong> of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box.</p></li>
+<li><p>Use the <code>min_y</code> function and the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html"><code>apply</code></a> method for data frames to create a new column <code>miny</code> in <code>df</code> which has the minimum <code>y</code> coordinate.</p></li>
 </ol>
 </section>
 <section id="filter-update-crs-and-reproduce-map" class="level2">
 <h2 class="anchored" data-anchor-id="filter-update-crs-and-reproduce-map">6. Filter, update CRS, and reproduce map</h2>
 <ol type="a">
-<li>Select the polygons with a bounding box above or below 40 degrees of latitude into a new variable named <code>arctic</code>.</li>
+<li><p>Select the polygons with a bounding box at or above 40 degrees of latitude into a new variable named <code>arctic</code>.</p></li>
+<li><p>Reproduce the Arctic communities map by updating the CRS to EPSG:3413.</p></li>
 </ol>
-<p>Reproduce the Arctic communities map by updating the CRS to EPSG:3413.</p>
 
 
 

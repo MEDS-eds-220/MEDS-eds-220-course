@@ -16,8 +16,6 @@ In this discussion section you will wrangle geospatial data about Arctic communi
 - Finding additional guidance online to carry out your data wrangling plans 
 -->
 
-https://www.arcticwwf.org/our-priorities/arctic-communities/
-
 ## Setup
 
 :::{.callout-tip appearance="minimal"}
@@ -36,19 +34,18 @@ https://www.arcticwwf.org/our-priorities/arctic-communities/
 :::
 
 ## About the data
+Arctic communities hold immense value in traditional knowledge and environmental stewardship, offering unique insights into sustainable practices and ecosystem management in one of the planet's most extreme environments. For this section you will use a dataset derived from the [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org) and [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/) following the procedure in the [Reprojecting notes](/book/chapters/lesson-12-merge-data/lesson-12-merge-data.qmd).
 
-For this section you will use a dataset derived from the [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org) and [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/) following the procedure in the [Reprojecting notes](/book/chapters/lesson-12-merge-data/lesson-12-merge-data.qmd).
+![Image Source: [Arctic Communities WWF.](https://www.arcticwwf.org/our-priorities/arctic-communities/) ©Staffan Widstrand/WWF.](/discussion-sections/images/Medium_WW214867.webp){width='90%'}
 
 
-Each geospatial feature in the data represents an Arctic country with the following attributes:
+The data is in the `arctic_communities.geojson` file located in the `data/` directory for the EDS 220 class within workbench-1. Each geospatial feature in the data represents an Arctic territory with the following attributes:
 
 | Attribute | Description |
 |------|-----|
 | admin |  name of the territory  |
 | country | two-letter code|
 | n_communities | number of Arctic communities in the territory | 
-
-The data is in the `arctic_communities.geojson` file located in the `data/` directory for the EDS 220 class within workbench-1.
 
 ## 1. Data loading and exploration
 Read in the data into a variable named `df` and examine it with your team.
@@ -67,16 +64,18 @@ The next exercises will guide you through selecting relevant Arctic regions. The
 ## 2. Check geometry types
 a. Run `df.geom_type`. Write a brief explanation about the output in a markdown cell.
 
-b. Create an `if-else` statement that 
- a. prints "All features are polygons." if all the features in the `df` are polygons and 
- b. prints "Multiple feature types: " followed by the unique geometry types (no repetition) in the geodataframe if not all the features are polygons.
+b. Create an `if-else` statement that: 
+
+    i. prints "All features are polygons." if all the features in the `df` are polygons and 
+
+    ii. prints "Multiple feature types: " followed by the unique geometry types (no repetition) in the geodataframe if not all the features are polygons.
 
 c. Wrap up your code into a function named `check_polygons` that receives a single geodataframe as its parameter and prints out a message stating whether all the geometry types are polygons or not.
 
 
 ## 3. Explode polygons
 
-a. Overwrite the `df` geodataframe with the output from the [`explode`](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html) method with the `index_parts` parameter set to false. 
+a. Overwrite the `df` geodataframe with the output from the [`explode`](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html) method with the `index_parts` parameter set to `False`. 
 Read the documentation for the method and use a markdown cell to write a brief explanation of what is being done.
 
 b. Reset the index of `df`.
@@ -97,13 +96,13 @@ b. Select the geometry of the first row of `df`. What kind of Python object is t
 
 c. Use the [`bounds`](https://shapely.readthedocs.io/en/2.0.6/reference/shapely.bounds.html) attribute for `shapely Polygons` to select the southern-most bound of the first polygon in `df`.
 
-d. Create a function `min_y_bound` that receives **a single row** of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box. 
+d. Create a function `min_y` that receives **a single row** of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box. 
 
 
-e. Use the `min_y_bound` function and the [`apply`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html) method for data frames to create a new column `miny` in `df` which has the minimum `y` coordinate.
+e. Use the `min_y` function and the [`apply`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html) method for data frames to create a new column `miny` in `df` which has the minimum `y` coordinate.
 
 ## 6. Filter, update CRS, and reproduce map
 
-a. Select the polygons with a bounding box above or below 40 degrees of latitude into a new variable named `arctic`. 
+a. Select the polygons with a bounding box at or above 40 degrees of latitude into a new variable named `arctic`. 
 
-Reproduce the Arctic communities map by updating the CRS to EPSG:3413.
+b. Reproduce the Arctic communities map by updating the CRS to EPSG:3413.
