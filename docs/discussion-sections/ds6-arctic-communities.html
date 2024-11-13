@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Discussion sections – EDS 220 - Working with Environmental Datasets</title>
+<title>Arctic regions geospatial wrangling – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +50,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -68,65 +86,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-week','listing-title',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -161,7 +121,7 @@ window.Quarto = {
 <span class="menu-text">notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../discussion-sections/discussion-sections-listing.html" aria-current="page"> 
+    <a class="nav-link" href="../discussion-sections/discussion-sections-listing.html"> 
 <span class="menu-text">discussion sections</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -214,15 +174,30 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#data-loading-and-exploration" id="toc-data-loading-and-exploration" class="nav-link" data-scroll-target="#data-loading-and-exploration">1. Data loading and exploration</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">2. Brainstorm</a></li>
+  <li><a href="#check-geometry-types" id="toc-check-geometry-types" class="nav-link" data-scroll-target="#check-geometry-types">2. Check geometry types</a></li>
+  <li><a href="#explode-polygons" id="toc-explode-polygons" class="nav-link" data-scroll-target="#explode-polygons">3. Explode polygons</a></li>
+  <li><a href="#compute-minimum-y-coordinate-for-polygons" id="toc-compute-minimum-y-coordinate-for-polygons" class="nav-link" data-scroll-target="#compute-minimum-y-coordinate-for-polygons">4. Compute minimum y-coordinate for polygons</a></li>
+  <li><a href="#filter-update-crs-and-reproduce-map" id="toc-filter-update-crs-and-reproduce-map" class="nav-link" data-scroll-target="#filter-update-crs-and-reproduce-map">6. Filter, update CRS, and reproduce map</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Discussion sections</h1>
+<h1 class="title">Arctic regions geospatial wrangling</h1>
+<p class="subtitle lead">Week 7 - Discussion section</p>
 </div>
 
 
@@ -239,114 +214,138 @@ window.Quarto = {
 </header>
 
 
+<p>In this discussion section you will wrangle geospatial data about Arctic communities <!--
+ and:
 
-
-
-
-<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
-<div class="listing-actions-group">
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
+- Breaking down a question into accessible data wrangling steps
+- Importing and plotting differnt types of geospatial data
+- Finding additional guidance online to carry out your data wrangling plans 
+--></p>
+<p>https://www.arcticwwf.org/our-priorities/arctic-communities/</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<table class="quarto-listing-table table">
+<div class="callout-body-container">
+<ol type="1">
+<li><p>Access the workbench-1 server.</p></li>
+<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-7-arctic-communities.ipynb</code>.</p></li>
+<li><p>Use the terminal to push this file to your remote repository.</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="general-directions" class="level2">
+<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<ul>
+<li>Add comments as appropriate along your code following the course commenting standards.</li>
+<li>Include markdown cells in between your code cells to add titles and information to each exercise</li>
+<li>Commit every time you finish a major step. <strong>Remember to write informative commits in the imperative mood.</strong></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="about-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
+<p>For this section you will use a dataset derived from the <a href="https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80">list of Arctic communities and their location</a> <span class="citation" data-cites="brook_approximate_2023"><a href="#ref-brook_approximate_2023" role="doc-biblioref">[1]</a></span> created by the <a href="https://www.anthc.org">Alaska Native Tribal Health Consortium</a> and <a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/">Natural Earth’s medium-scale cultural boundaries data for countries (1:50m)</a> following the procedure in the <a href="../book/chapters/lesson-12-merge-data/lesson-12-merge-data.html">Reprojecting notes</a>.</p>
+<p>Each geospatial feature in the data represents an Arctic country with the following attributes:</p>
+<table class="caption-top table">
 <thead>
-<tr>
-<th>
-</th>
-<th>
-week
-</th>
-<th>
-topic
-</th>
+<tr class="header">
+<th>Attribute</th>
+<th>Description</th>
 </tr>
 </thead>
-<tbody class="list">
-<tr data-index="0" data-listing-file-modified-sort="1729699188623" data-listing-reading-time-sort="4" data-listing-word-count-sort="717" data-listing-title-sort="Repository setup" data-listing-filename-sort="ds0-sections-setup.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/ds0-manufacturetocat.png" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">&nbsp;</span>
-</td>
-<td>
-<a href="../discussion-sections/ds0-sections-setup.html" class="title listing-title">Repository setup</a>
-</td>
+<tbody>
+<tr class="odd">
+<td>admin</td>
+<td>name of the territory</td>
 </tr>
-<tr data-index="1" data-listing-file-modified-sort="1729699188623" data-listing-reading-time-sort="6" data-listing-word-count-sort="1048" data-listing-title-sort="Prey species in the California drylands" data-listing-filename-sort="ds1-prelim-data-exploration.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/Tecopa_site2.JPG" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">1</span>
-</td>
-<td>
-<a href="../discussion-sections/ds1-prelim-data-exploration.html" class="title listing-title">Prey species in the California drylands</a>
-</td>
+<tr class="even">
+<td>country</td>
+<td>two-letter code</td>
 </tr>
-<tr data-index="2" data-listing-file-modified-sort="1729699188622" data-listing-reading-time-sort="9" data-listing-word-count-sort="1641" data-listing-title-sort="Water conflicts in the Colorado River Basin" data-listing-filename-sort="ds-2-water-crisis-exploration.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/free-photo-of-colorado-river-in-usa.jpeg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">2</span>
-</td>
-<td>
-<a href="../discussion-sections/ds-2-water-crisis-exploration.html" class="title listing-title">Water conflicts in the Colorado River Basin</a>
-</td>
-</tr>
-<tr data-index="3" data-listing-file-modified-sort="1729719758711" data-listing-reading-time-sort="7" data-listing-word-count-sort="1257" data-listing-title-sort="Snowshoe hares at Bonanza Creek Experimental Forest" data-listing-filename-sort="ds3-hares.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/hare.jpg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">3</span>
-</td>
-<td>
-<a href="../discussion-sections/ds3-hares.html" class="title listing-title">Snowshoe hares at Bonanza Creek Experimental Forest</a>
-</td>
-</tr>
-<tr data-index="4" data-listing-file-modified-sort="1729789509799" data-listing-reading-time-sort="5" data-listing-word-count-sort="968" data-listing-title-sort="Yucatan Peninsula Hurricanes" data-listing-filename-sort="ds4-yucatan-hurricanes.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/hurricane-mitch.jpg" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">4</span>
-</td>
-<td>
-<a href="../discussion-sections/ds4-yucatan-hurricanes.html" class="title listing-title">Yucatan Peninsula Hurricanes</a>
-</td>
-</tr>
-<tr data-index="5" data-listing-file-modified-sort="1730325409160" data-listing-reading-time-sort="4" data-listing-word-count-sort="774" data-listing-title-sort="Plotting geospatial data" data-listing-filename-sort="ds5-earthquakes.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/earthquakes_map.png" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">5</span>
-</td>
-<td>
-<a href="../discussion-sections/ds5-earthquakes.html" class="title listing-title">Plotting geospatial data</a>
-</td>
-</tr>
-<tr data-index="6" data-listing-file-modified-sort="1731477839001" data-listing-reading-time-sort="4" data-listing-word-count-sort="691" data-listing-title-sort="Arctic regions geospatial wrangling" data-listing-filename-sort="ds6-arctic-communities.qmd">
-<td>
-<span class="listing-image"><img loading="lazy" src="../discussion-sections/images/Medium_WW214867.webp" style="height: 150px;"></span>
-</td>
-<td>
-<span class="listing-week">7</span>
-</td>
-<td>
-<a href="../discussion-sections/ds6-arctic-communities.html" class="title listing-title">Arctic regions geospatial wrangling</a>
-</td>
+<tr class="odd">
+<td>n_communities</td>
+<td>number of Arctic communities in the territory</td>
 </tr>
 </tbody>
 </table>
-<div class="listing-no-matching d-none">
-No matching items
+<p>The data is in the <code>arctic_communities.geojson</code> file located in the <code>data/</code> directory for the EDS 220 class within workbench-1.</p>
+</section>
+<section id="data-loading-and-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading-and-exploration">1. Data loading and exploration</h2>
+<p>Read in the data into a variable named <code>df</code> and examine it with your team.</p>
+</section>
+<section id="brainstorm" class="level2">
+<h2 class="anchored" data-anchor-id="brainstorm">2. Brainstorm</h2>
+<p>The goal of these exercises is to refine the Arctic communities choropleth map created in the <a href="../book/chapters/lesson-12-merge-data/lesson-12-merge-data.html">Reprojecting lesson</a> to restrict the plotting to the Arctic relevant regions:</p>
+<p><img src="../discussion-sections/images/update_arctic_maps.png" class="img-fluid"></p>
+<ol type="a">
+<li><p>Individually, write down high-level steps on how you would explore and wrangle the data to produce the updated map. Do not code anything yet.</p></li>
+<li><p>Discuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?</p></li>
+</ol>
+<p>The next exercises will guide you through selecting relevant Arctic regions. There are <em>many</em> ways of doing this. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice creating functions.</p>
+</section>
+<section id="check-geometry-types" class="level2">
+<h2 class="anchored" data-anchor-id="check-geometry-types">2. Check geometry types</h2>
+<ol type="a">
+<li><p>Run <code>df.geom_type</code>. Write a brief explanation about the output in a markdown cell.</p></li>
+<li><p>Create an <code>if-else</code> statement that</p></li>
+<li><p>prints “All features are polygons.” if all the features in the <code>df</code> are polygons and</p></li>
+<li><p>prints “Multiple feature types:” followed by the unique geometry types (no repetition) in the geodataframe if not all the features are polygons.</p></li>
+<li><p>Wrap up your code into a function named <code>check_polygons</code> that receives a single geodataframe as its parameter and prints out a message stating whether all the geometry types are polygons or not.</p></li>
+</ol>
+</section>
+<section id="explode-polygons" class="level2">
+<h2 class="anchored" data-anchor-id="explode-polygons">3. Explode polygons</h2>
+<ol type="a">
+<li><p>Overwrite the <code>df</code> geodataframe with the output from the <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html"><code>explode</code></a> method with the <code>index_parts</code> parameter set to false. Read the documentation for the method and use a markdown cell to write a brief explanation of what is being done.</p></li>
+<li><p>Reset the index of <code>df</code>.</p></li>
+<li><p>Use your <code>check_polygons</code> function to verify that <code>df</code> only has features of type polygon.</p></li>
+</ol>
+<p style="text-align: center;">
+<strong>Don’t forget to write informative commits in the imperative every time you finish a major step.</strong>
+</p>
+</section>
+<section id="compute-minimum-y-coordinate-for-polygons" class="level2">
+<h2 class="anchored" data-anchor-id="compute-minimum-y-coordinate-for-polygons">4. Compute minimum y-coordinate for polygons</h2>
+<p>At this point, every row in your <code>df</code> should be a single polygon.</p>
+<ol type="a">
+<li><p>Select the first row of <code>df</code> using <code>iloc</code>. What kind of Python object is this?</p></li>
+<li><p>Select the geometry of the first row of <code>df</code>. What kind of Python object is this?</p></li>
+<li><p>Use the <a href="https://shapely.readthedocs.io/en/2.0.6/reference/shapely.bounds.html"><code>bounds</code></a> attribute for <code>shapely Polygons</code> to select the southern-most bound of the first polygon in <code>df</code>.</p></li>
+<li><p>Create a function <code>min_y_bound</code> that receives <strong>a single row</strong> of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box.</p></li>
+<li><p>Use the <code>min_y_bound</code> function and the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html"><code>apply</code></a> method for data frames to create a new column <code>miny</code> in <code>df</code> which has the minimum <code>y</code> coordinate.</p></li>
+</ol>
+</section>
+<section id="filter-update-crs-and-reproduce-map" class="level2">
+<h2 class="anchored" data-anchor-id="filter-update-crs-and-reproduce-map">6. Filter, update CRS, and reproduce map</h2>
+<ol type="a">
+<li>Select the polygons with a bounding box above or below 40 degrees of latitude into a new variable named <code>arctic</code>.</li>
+</ol>
+<p>Reproduce the Arctic communities map by updating the CRS to EPSG:3413.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-brook_approximate_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. Brook, <span>“Approximate <span>Arctic</span> <span>Communities</span> and <span>Populations</span>, (latitude <span>&gt;</span>= 55, 2022).”</span> Arctic Data Center, 2023. doi: <a href="https://doi.org/10.18739/A28S4JQ80">10.18739/A28S4JQ80</a>. Available: <a href="https://arcticdata.io/catalog/view/doi:10.18739/A28S4JQ80">https://arcticdata.io/catalog/view/doi:10.18739/A28S4JQ80</a>. [Accessed: Nov. 03, 2024]</div>
 </div>
-</div></main> <!-- /main -->
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
