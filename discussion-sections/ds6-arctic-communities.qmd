@@ -1,0 +1,109 @@
+---
+title: Arctic regions geospatial wrangling
+subtitle: Week 7 - Discussion section
+week: 7
+image: images/Medium_WW214867.webp
+sidebar: false
+jupyter: mpc-env-kernel
+---
+
+In this discussion section you will wrangle geospatial data about Arctic communities
+<!--
+ and:
+
+- Breaking down a question into accessible data wrangling steps
+- Importing and plotting differnt types of geospatial data
+- Finding additional guidance online to carry out your data wrangling plans 
+-->
+
+https://www.arcticwwf.org/our-priorities/arctic-communities/
+
+## Setup
+
+:::{.callout-tip appearance="minimal"}
+1. Access the workbench-1 server.
+
+2. Create a new Python notebook inside your `eds-220-sections` directory and rename it to `section-7-arctic-communities.ipynb`. 
+
+3. Use the terminal to push this file to your remote repository. 
+:::
+
+## General directions
+:::{.callout-tip appearance="minimal"}
+- Add comments as appropriate along your code following the course commenting standards.
+- Include markdown cells in between your code cells to add titles and information to each exercise
+- Commit every time you finish a major step. **Remember to write informative commits in the imperative mood.**
+:::
+
+## About the data
+
+For this section you will use a dataset derived from the [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org) and [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/) following the procedure in the [Reprojecting notes](/book/chapters/lesson-12-merge-data/lesson-12-merge-data.qmd).
+
+
+Each geospatial feature in the data represents an Arctic country with the following attributes:
+
+| Attribute | Description |
+|------|-----|
+| admin |  name of the territory  |
+| country | two-letter code|
+| n_communities | number of Arctic communities in the territory | 
+
+The data is in the `arctic_communities.geojson` file located in the `data/` directory for the EDS 220 class within workbench-1.
+
+## 1. Data loading and exploration
+Read in the data into a variable named `df` and examine it with your team.
+
+## 2. Brainstorm
+The goal of these exercises is to refine the Arctic communities choropleth map created in the [Reprojecting lesson](/book/chapters/lesson-12-merge-data/lesson-12-merge-data.qmd) to restrict the plotting to the Arctic relevant regions:
+
+![](/discussion-sections/images/update_arctic_maps.png)
+
+a. Individually, write down high-level steps on how you would explore and wrangle the data to produce the updated map. Do not code anything yet. 
+
+b. Discuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?
+
+The next exercises will guide you through selecting relevant Arctic regions. There are *many* ways of doing this. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice creating functions.
+
+## 2. Check geometry types
+a. Run `df.geom_type`. Write a brief explanation about the output in a markdown cell.
+
+b. Create an `if-else` statement that 
+ a. prints "All features are polygons." if all the features in the `df` are polygons and 
+ b. prints "Multiple feature types: " followed by the unique geometry types (no repetition) in the geodataframe if not all the features are polygons.
+
+c. Wrap up your code into a function named `check_polygons` that receives a single geodataframe as its parameter and prints out a message stating whether all the geometry types are polygons or not.
+
+
+## 3. Explode polygons
+
+a. Overwrite the `df` geodataframe with the output from the [`explode`](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explode.html) method with the `index_parts` parameter set to false. 
+Read the documentation for the method and use a markdown cell to write a brief explanation of what is being done.
+
+b. Reset the index of `df`.
+
+c. Use your `check_polygons` function to verify that `df` only has features of type polygon.
+
+<p style="text-align: center;">
+**Don't forget to write informative commits in the imperative every time you finish a major step.**
+</p>
+
+## 4. Compute minimum y-coordinate for polygons
+
+At this point, every row in your `df` should be a single polygon. 
+
+a. Select the first row of `df` using `iloc`. What kind of Python object is this? 
+
+b. Select the geometry of the first row of `df`. What kind of Python object is this?
+
+c. Use the [`bounds`](https://shapely.readthedocs.io/en/2.0.6/reference/shapely.bounds.html) attribute for `shapely Polygons` to select the southern-most bound of the first polygon in `df`.
+
+d. Create a function `min_y_bound` that receives **a single row** of a geodataframe as its parameter and returns the minimum y-coordinate of its bounding box. 
+
+
+e. Use the `min_y_bound` function and the [`apply`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html) method for data frames to create a new column `miny` in `df` which has the minimum `y` coordinate.
+
+## 6. Filter, update CRS, and reproduce map
+
+a. Select the polygons with a bounding box above or below 40 degrees of latitude into a new variable named `arctic`. 
+
+Reproduce the Arctic communities map by updating the CRS to EPSG:3413.
