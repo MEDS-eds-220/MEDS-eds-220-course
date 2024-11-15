@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
+<title>homework-draft – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,27 +54,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -215,181 +195,29 @@ div.csl-indent {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
-  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
-  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
-  <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
-  <li><a href="#location-column-descriptions" id="toc-location-column-descriptions" class="nav-link" data-scroll-target="#location-column-descriptions">4. Location column descriptions</a></li>
-  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></a></li>
-  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">6. Examine state codes</a></li>
-  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">7. Brainstorm</a></li>
-  <li><a href="#exploratory-wrangling" id="toc-exploratory-wrangling" class="nav-link" data-scroll-target="#exploratory-wrangling">8. Exploratory wrangling</a></li>
-  <li><a href="#find-unique-state-codes" id="toc-find-unique-state-codes" class="nav-link" data-scroll-target="#find-unique-state-codes">9. Find unique state codes</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Water conflicts in the Colorado River Basin</h1>
-<p class="subtitle lead">Week 2 - Discussion section</p>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
-<ul>
-<li>Practice version control using git via the terminal</li>
-<li>Use methods to work with <code>pandas.Series</code> of strings using the <code>.str</code> accessor</li>
-<li>Practice method chaining</li>
-</ul>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<ol type="1">
-<li><p>In the workbench-1 server, start a new JupyterLab session or access an active one.</p></li>
-<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
-<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-2-co-basin-water-conflicts.ipynb</code>.</p></li>
-<li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
-<ol type="1">
-<li><code>git status</code> : check git status</li>
-<li><code>git add FILE-NAME</code> : stage updated file</li>
-<li><code>git status</code> : check git status again to confirm</li>
-<li><code>git commit -m "Commit message"</code> : commit with message</li>
-<li><code>git pull</code> : check local repo is up to date (best practice)</li>
-<li><code>git push</code> : push changes to upstream repository</li>
-</ol></li>
-</ol>
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING</strong>
-</p>
-</div>
-</div>
-</div>
-</section>
-<section id="general-directions" class="level2">
-<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<ul>
-<li>Add comments in each one of your code cells.</li>
-<li>Include markdown cells in between your code cells to add titles and information.</li>
-<li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="about-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
-<p>The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../discussion-sections/images/co-river-basin.png" class="img-fluid figure-img"></p>
-<figcaption>Colorado River Basin. U.S. Bureau of Reclamation.</figcaption>
-</figure>
-</div>
-</section>
-<section id="archive-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
-<ol type="a">
-<li><p>Look through the dataset’s description in the ScienceBase repository. Find the following information:</p>
-<ol type="i">
-<li>Where was the data collected from?? <!-- 
-articles from newspapers describing water-related events in geographic areas in the Basin
---></li>
-<li>During what time frame were the observations in the dataset collected? <!--
-2005-2021
---></li>
-<li>What was the author’s perceived value of this dataset? <!--
- examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
---></li>
-</ol></li>
-<li><p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.</p></li>
-<li><p>Take a look at the data’s metadata by clicking on the “View” icon of the <code>Coded Events Colorado River Basin Water Conflict Table Metadata.xml</code> file.</p></li>
-</ol>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-<!-- 3 minutes -->
-</section>
-<section id="data-loading" class="level2">
-<h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
-<!--
-a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
--->
-<ol type="a">
-<li><p>Create a new directory <code>data/</code> inside your <code>eds-220-sections</code> directory.</p></li>
-<li><p>Download the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> and upload it into the <code>data/</code> folder.</p></li>
-<li><p>Update the <code>.gitignore</code> file of your <code>eds-220-sections</code> so it ignores the <code>data/</code> folder. Push the changes to this file. Verify that git is ignoring the data file. <strong>Note:</strong> If you update the <code>.gitignore</code> file via GitHub, you need to run <code>git pull</code> when you go back to the server.</p></li>
-<li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
-</ol>
-<!--
-
-::: {#12044908 .cell execution_count=1}
-``` {.python .cell-code}
-import pandas as pd
-pd.set_option("display.max.columns", None)
-
-df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
-df.head(5)
-```
-
-::: {.cell-output .cell-output-display execution_count=1}
-
-```{=html}
+<div id="cell-0" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/Colorado River Basin Water Conflict Table.csv'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
-<tr class="header" style="text-align: right;">
+<tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">Event</th>
 <th data-quarto-table-cell-role="th">Search Source</th>
@@ -701,351 +529,20 @@ df.head(5)
 </table>
 
 </div>
-```
-
-:::
-:::
-
-
--->
-</section>
-<section id="preliminary-data-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
-<ol type="a">
-<li><p>Set <code>pandas</code> to display all columns in the data frame.</p></li>
-<li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
-</ol>
-<!--
-
-::: {#c8fa5b6d .cell execution_count=2}
-``` {.python .cell-code}
-# df.head()
-# df.shape
-# df.columns
-# df.Stakeholders.unique()
-```
-:::
-
-
--->
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM 🙌</strong>
-</p>
-<p style="text-align: center;">
-<strong>YOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING</strong>
-</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="location-column-descriptions" class="level2">
-<h2 class="anchored" data-anchor-id="location-column-descriptions">4. Location column descriptions</h2>
-<p>In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Column</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Place</td>
-<td>Where the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.</td>
-</tr>
-<tr class="even">
-<td>State</td>
-<td>State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="string-accessor-for-pandas.series" class="level2">
-<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></h2>
-<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
-<ol type="a">
-<li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
-</ol>
-<div id="298fbbba" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>0    California; Nevada
-1               Arizona
-2                   NaN
-3          Nevada; Utah
-dtype: object</code></pre>
 </div>
 </div>
-<div id="05805c59" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x10ad43d90&gt;</code></pre>
+<div id="cell-1" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify column names</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<div id="c990c3a4" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">0</th>
-<th data-quarto-table-cell-role="th">1</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>California</td>
-<td>Nevada</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Arizona</td>
-<td>None</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Nevada</td>
-<td>Utah</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<div id="185fa455" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>0  0    California
-   1        Nevada
-1  0       Arizona
-3  0        Nevada
-   1          Utah
-dtype: object</code></pre>
-</div>
-</div>
-</section>
-<section id="examine-state-codes" class="level2">
-<h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
-<p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflicts</strong>.</p>
-<ol type="a">
-<li>What are the unique values in the <code>States</code> column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
-</ol>
-<!--
-
-::: {#98f7697b .cell execution_count=7}
-``` {.python .cell-code}
-print(df['State'].unique())
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
- 'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'
- 'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'
- 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']
-```
-:::
-:::
-
-
-::: {#bd34f434 .cell execution_count=8}
-``` {.python .cell-code}
-for x in df['State'].unique():
-    print(x)
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-CO
-UT
-nan
-AZ
-OH; UT
-AZ; CO; NM; UT
-CA
-AZ; UT
-AZ; NV
-CO; UT; WY; NM
-AZ; CA
-UT; AZ
-CO; WY
-NV; AZ
-CO; AZ
-AZ; CA; CO; NV; NM; UT; WY
-AZ; CA; NV
-NV
-NM
-UT; CO; WY
-CA; NV; AZ
-AZ; NM
-WY; UT; CO
-TX
-```
-:::
-:::
-
-
--->
-</section>
-<section id="brainstorm" class="level2">
-<h2 class="anchored" data-anchor-id="brainstorm">7. Brainstorm</h2>
-<ol type="a">
-<li><p>Individually, write step-by-step instructions on how you would wrangle the data frame <code>df</code> to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.</p></li>
-<li><p>Discuss your step-by-step instructions with your team.</p></li>
-</ol>
-<p>The next exercises will guide you through finding the unique state codes in the dataset. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
-<!--
-## X. Drop NAs
-
-Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
-
-::: {#1159e2bf .cell execution_count=9}
-``` {.python .cell-code}
-states = df['State'].dropna()
-states
-```
-
-::: {.cell-output .cell-output-display execution_count=9}
-```
-0          CO
-1          CO
-2          UT
-5          AZ
-11     OH; UT
-        ...  
-263        CO
-264        CO
-265    AZ; CA
-266        AZ
-267        AZ
-Name: State, Length: 178, dtype: object
-```
-:::
-:::
-
-
-::: {#e01d9b55 .cell execution_count=10}
-``` {.python .cell-code}
-states.hasnans
-```
-
-::: {.cell-output .cell-output-display execution_count=10}
-```
-False
-```
-:::
-:::
-
-
--->
-</section>
-<section id="exploratory-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="exploratory-wrangling">8. Exploratory wrangling</h2>
-<ol type="a">
-<li>Perform the following wrangling:
-<ol type="i">
-<li>select the State column from the <code>df</code> data frame</li>
-<li>split the strings in the column by the delimeter <code>;</code> into different columns</li>
-<li>stack the results of the resulting data frame into a single <code>pandas.Series</code></li>
-<li>find the unique string values in the resulting series</li>
-</ol></li>
-</ol>
-<p>Your final answer should use method chaining without creating new variables.</p>
-<!--
-
-::: {#066f73f1 .cell execution_count=11}
-``` {.python .cell-code}
-df['State'].str.split(';', expand=True).stack().unique()
-```
-
-::: {.cell-output .cell-output-display execution_count=11}
-```
-array(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',
-       ' CA', ' AZ', 'NV', 'NM', 'WY', 'TX'], dtype=object)
-```
-:::
-:::
-
-
--->
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?</strong>
-</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="find-unique-state-codes" class="level2">
-<h2 class="anchored" data-anchor-id="find-unique-state-codes">9. Find unique state codes</h2>
-<ol type="a">
-<li><p>Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?</p></li>
-<li><p>Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
-</ol>
-<!--
-
-::: {#56475c7e .cell execution_count=12}
-``` {.python .cell-code}
-(df['State'].str.split(';', expand=True)
-            .stack()
-            .str.strip()
-            .unique()
-            )
-```
-
-::: {.cell-output .cell-output-display execution_count=12}
-```
-array(['CO', 'UT', 'AZ', 'OH', 'NM', 'CA', 'NV', 'WY', 'TX'], dtype=object)
-```
-:::
-:::
-
-
--->
-<ol start="3" type="a">
-<li>Bonus: How many articles mention each state?</li>
-</ol>
-<!--
-
-::: {#b7310299 .cell execution_count=13}
-``` {.python .cell-code}
-(df['State'].str.split(';', expand=True)
-            .stack()
-            .str.strip()
-            .value_counts()
-            )
-```
-
-::: {.cell-output .cell-output-display execution_count=13}
-```
-AZ    87
+<div id="cell-2" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(df[<span class="st">'state'</span>].dropna()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            .stack()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.strip()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            .value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>AZ    87
 CO    45
 UT    40
 NV    19
@@ -1054,26 +551,1084 @@ NM    13
 WY     8
 OH     1
 TX     1
-Name: count, dtype: int64
-```
-:::
-:::
-
-
--->
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-holloman_coded_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. V. Holloman, M. K. Hines, and D. K. Zoanni, <span>“Coded <span>Water</span> <span>Conflict</span> and <span>Crisis</span> <span>Events</span> in the <span>Colorado</span> <span>River</span> <span>Basin</span>, <span>Derived</span> from <span>LexisNexis</span> search 2005-2021.”</span> U.S. Geological Survey, 2023. doi: <a href="https://doi.org/10.5066/P9X6WR7J">10.5066/P9X6WR7J</a>. Available: <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480</a>. [Accessed: Sep. 27, 2024]</div>
+Name: count, dtype: int64</code></pre>
 </div>
-</div></section></div></main> <!-- /main -->
+</div>
+<div id="cell-3" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is probably a mistake in the dataset</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>oh_row <span class="op">=</span> df[df[<span class="st">'state'</span>].<span class="bu">str</span>.contains(<span class="st">'OH'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(oh_row[<span class="st">'state'</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>oh_row.iat[<span class="dv">0</span>,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11    OH; UT
+Name: state, dtype: object</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>'Environmentalists secure water rights for Great Salt Lake'</code></pre>
+</div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.urban_or_rural.unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>array(['Both', 'Rural', 'Urban  ', nan, 'Urban ', 'Urban', 'Both '],
+      dtype=object)</code></pre>
+</div>
+</div>
+<div id="cell-5" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df.urban_or_rural <span class="op">=</span> df.urban_or_rural.<span class="bu">str</span>.strip()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.urban_or_rural.value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>urban_or_rural
+Both     190
+Rural     45
+Urban     19
+NaN       14
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="cell-6" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>urban <span class="op">=</span> df[df.urban_or_rural <span class="op">==</span> <span class="st">'Urban'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>urban</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">event</th>
+<th data-quarto-table-cell-role="th">search_source</th>
+<th data-quarto-table-cell-role="th">newspaper</th>
+<th data-quarto-table-cell-role="th">article_title</th>
+<th data-quarto-table-cell-role="th">duplicate</th>
+<th data-quarto-table-cell-role="th">report_date</th>
+<th data-quarto-table-cell-role="th">report_year</th>
+<th data-quarto-table-cell-role="th">event_date</th>
+<th data-quarto-table-cell-role="th">event_day</th>
+<th data-quarto-table-cell-role="th">event_month</th>
+<th data-quarto-table-cell-role="th">event_year</th>
+<th data-quarto-table-cell-role="th">conflict_present</th>
+<th data-quarto-table-cell-role="th">crisis_present</th>
+<th data-quarto-table-cell-role="th">basin</th>
+<th data-quarto-table-cell-role="th">huc6</th>
+<th data-quarto-table-cell-role="th">huc2</th>
+<th data-quarto-table-cell-role="th">place</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">county_fips</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">state_fips</th>
+<th data-quarto-table-cell-role="th">urban_or_rural</th>
+<th data-quarto-table-cell-role="th">issue_type</th>
+<th data-quarto-table-cell-role="th">event_summary</th>
+<th data-quarto-table-cell-role="th">stakeholders</th>
+<th data-quarto-table-cell-role="th">intensity_value</th>
+<th data-quarto-table-cell-role="th">comments</th>
+<th data-quarto-table-cell-role="th">related_observation_themes</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_water_quality</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_invasive_species</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_conservation</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_drought</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_flood</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_ground_water_depletion</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_depletion</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_infrastructure</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_fish_passage</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_instream_water_rights</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_water_rights</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_intergovernmental</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_water_transfers</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_navigation</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_fish</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_invasive</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_diversion</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_water_diversion</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_instream</th>
+<th data-quarto-table-cell-role="th">article_text_search_-_aquatic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>16</td>
+<td>USGS1-50.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>The Latest: Arizona governor Colorado River dr...</td>
+<td>False</td>
+<td>1-Feb-19</td>
+<td>2019.0</td>
+<td>2019</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2019.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Entire Lower Colorado Basin</td>
+<td>NaN</td>
+<td>15</td>
+<td>Phoenix, AZ</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>AZ</td>
+<td>4</td>
+<td>Urban</td>
+<td>Intergovernmental issues</td>
+<td>Gov. Doug Ducey has signed a measure letting A...</td>
+<td>State Government, Federal Government, All Wate...</td>
+<td>5.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>18</td>
+<td>USGS1-50.docx</td>
+<td>Journal, The (Cortez, Dolores, Mancos, CO)</td>
+<td>The tiny plant that shapes the Colorado River</td>
+<td>False</td>
+<td>26-Jan-18</td>
+<td>2018.0</td>
+<td>2018</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2018.0</td>
+<td>N</td>
+<td>N</td>
+<td>South Platte</td>
+<td>101900</td>
+<td>10</td>
+<td>Denver, CO; Shoshone power plant</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Infrastructure issues</td>
+<td>That facility, the Shoshone power plant, still...</td>
+<td>Federal Government, Water Managers</td>
+<td>0.0</td>
+<td>More informative - fact piece</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>21</td>
+<td>USGS1-50.docx</td>
+<td>Mohave Valley Daily News (Bullhead City, Arizona)</td>
+<td>Coalition calls for moratorium on new Colorado...</td>
+<td>False</td>
+<td>28-Jul-21</td>
+<td>2021.0</td>
+<td>2021</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2021.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>14, 15</td>
+<td>Laughlin, AZ</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>AZ</td>
+<td>4</td>
+<td>Urban</td>
+<td>Intergovernmental issues: Water transfers</td>
+<td>Committee chairwoman Brea Chiodini and committ...</td>
+<td>State Government, Federal Government</td>
+<td>-2.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">22</td>
+<td>23</td>
+<td>USGS1-50.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>California water agencies resolve Colorado Riv...</td>
+<td>False</td>
+<td>20-Sep-21</td>
+<td>2021.0</td>
+<td>21-Sep</td>
+<td>NaN</td>
+<td>9.0</td>
+<td>2021.0</td>
+<td>N</td>
+<td>N</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>14, 15</td>
+<td>CA - Imperial Irrigation District</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CA</td>
+<td>6</td>
+<td>Urban</td>
+<td>Infrastructure issues</td>
+<td>Two major California water agencies have settl...</td>
+<td>State Government, Water Managers</td>
+<td>3.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33</td>
+<td>34</td>
+<td>USGS1-50.docx</td>
+<td>Colorado Daily (Boulder, Colorado)</td>
+<td>Opinion: Steve Pomerance: Climate change and B...</td>
+<td>False</td>
+<td>13-May-22</td>
+<td>2022.0</td>
+<td>ongoing</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2022.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>Entire Upper Colorado Basin</td>
+<td>NaN</td>
+<td>14</td>
+<td>Boulder, CO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Drought</td>
+<td>Drought in the Colorado River Basin has negati...</td>
+<td>All Water Users, Federal Government, State Gov...</td>
+<td>0.0</td>
+<td>Fact piece</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">40</td>
+<td>41</td>
+<td>USGS1-50.docx</td>
+<td>Post Independent (Glenwood Springs, Colorado)</td>
+<td>Glenwood Springs receives $300,000 grant for w...</td>
+<td>False</td>
+<td>25-Aug-21</td>
+<td>2021.0</td>
+<td>2021</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2021.0</td>
+<td>N</td>
+<td>N</td>
+<td>Colorado Headwaters</td>
+<td>140100</td>
+<td>14</td>
+<td>Glenwod Springs</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Infrastructure issues</td>
+<td>Glenwood Springs has been awarded a $300,000 g...</td>
+<td>State Government, Conservation District</td>
+<td>0.0</td>
+<td>Fact piece; an announcement of a grant award</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">44</td>
+<td>45</td>
+<td>USGS1-50.docx</td>
+<td>Ag Journal (La Junta, Colorado)</td>
+<td>Colorado River crisis could have huge impact o...</td>
+<td>False</td>
+<td>6-Dec-19</td>
+<td>2019.0</td>
+<td>2019</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2019.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>14, 15</td>
+<td>The Front Range, CO/WY</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO; WY</td>
+<td>08; 56</td>
+<td>Urban</td>
+<td>Drought</td>
+<td>Water sufficient for more than 1 million homes...</td>
+<td>Water Users, Agriculture, State Government</td>
+<td>-1.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">47</td>
+<td>48</td>
+<td>USGS1-50.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>The Latest: Vegas-area water managers advance ...</td>
+<td>False</td>
+<td>16-Nov-18</td>
+<td>2018.0</td>
+<td>2018</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2018.0</td>
+<td>Y</td>
+<td>N</td>
+<td>Entire Upper Colorado Basin</td>
+<td>NaN</td>
+<td>14</td>
+<td>Las Vegas, Flagstaff, AZ</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NV; AZ</td>
+<td>04; 32</td>
+<td>Urban</td>
+<td>Intergovernmental issues: Conservation</td>
+<td>Las Vegas-area water managers have become the ...</td>
+<td>Water Managers, State Government, Federal Gove...</td>
+<td>3.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">55</td>
+<td>56</td>
+<td>USGS101-150.docx</td>
+<td>The Arizona Republic (Phoenix)</td>
+<td>Why cities say they won't impose water restric...</td>
+<td>False</td>
+<td>8-May-22</td>
+<td>2022.0</td>
+<td>2022</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2022.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>14, 15</td>
+<td>Scottsdale, Tucson, Phoenix, AZ</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>AZ</td>
+<td>4</td>
+<td>Urban</td>
+<td>Intergovernmental issues</td>
+<td>Arizona's cities should consider imposing unpr...</td>
+<td>State Government, Local Government, All Water ...</td>
+<td>-1.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>9</td>
+<td>10</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">68</td>
+<td>69</td>
+<td>USGS101-150.docx</td>
+<td>The Glendale Star (Arizona)</td>
+<td>Drought contingency plan coming to council</td>
+<td>False</td>
+<td>28-Mar-19</td>
+<td>2019.0</td>
+<td>3</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>2019.0</td>
+<td>N</td>
+<td>N</td>
+<td>Lower Gila-Agua Fria</td>
+<td>150701</td>
+<td>15</td>
+<td>Glendale</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>AZ</td>
+<td>4</td>
+<td>Urban</td>
+<td>Conservation</td>
+<td>New city drought contingency plan to be heard ...</td>
+<td>Local Government</td>
+<td>0.0</td>
+<td>Interaction is just within local government.</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">83</td>
+<td>84</td>
+<td>USGS101-150.docx</td>
+<td>Mohave Valley Daily News (Bullhead City, Arizona)</td>
+<td>Free water available for areas of Needles with...</td>
+<td>False</td>
+<td>22-Sep-19</td>
+<td>2019.0</td>
+<td>9</td>
+<td>NaN</td>
+<td>9.0</td>
+<td>2019.0</td>
+<td>N</td>
+<td>N</td>
+<td>Lower Colorado</td>
+<td>150301</td>
+<td>15</td>
+<td>Needles, CA</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CA</td>
+<td>6</td>
+<td>Urban</td>
+<td>Water rights more generally</td>
+<td>Needles, CA residents are the first to sign a ...</td>
+<td>Federal Government, Citizens</td>
+<td>4.0</td>
+<td>Negotiations and approval between BoR and citi...</td>
+<td>Lower level of participation</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">99</td>
+<td>100</td>
+<td>USGS101-150.docx</td>
+<td>The Arizona Republic (Phoenix)</td>
+<td>Reservoirs almost full after wet winter</td>
+<td>False</td>
+<td>6-Apr-20</td>
+<td>2020.0</td>
+<td>4</td>
+<td>NaN</td>
+<td>4.0</td>
+<td>2020.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Salt</td>
+<td>150601</td>
+<td>15</td>
+<td>Pheonix, AZ</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>AZ</td>
+<td>4</td>
+<td>Urban</td>
+<td>Drought</td>
+<td>After a couple of wet winters, runoff from rai...</td>
+<td>All Water Users, Private Utility, Recreation</td>
+<td>0.0</td>
+<td>Event has no major effects on stakeholder inte...</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">120</td>
+<td>121</td>
+<td>USGS151-200.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>Colorado Editorial Roundup</td>
+<td>False</td>
+<td>26-Jun-19</td>
+<td>2019.0</td>
+<td>6</td>
+<td>NaN</td>
+<td>6.0</td>
+<td>2019.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>South Platte</td>
+<td>101900</td>
+<td>10</td>
+<td>Denver, CO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Drought</td>
+<td>The event is an editorial suggesting that Denv...</td>
+<td>Local Government, Environmentalists, Private C...</td>
+<td>-1.0</td>
+<td>Scored -1 because while there is some talk of ...</td>
+<td>Exclusionary public comment</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">193</td>
+<td>194</td>
+<td>USGS201-250.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>The Latest: Irrigation district opposes draft ...</td>
+<td>False</td>
+<td>27-Mar-19</td>
+<td>2019.0</td>
+<td>3</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>2019.0</td>
+<td>Y</td>
+<td>Y</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>14, 15</td>
+<td>Entire Colorado River Basin</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Urban</td>
+<td>Water rights more generally</td>
+<td>A California irrigation district that has the ...</td>
+<td>State Government</td>
+<td>-2.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">194</td>
+<td>195</td>
+<td>USGS201-250.docx</td>
+<td>Brush News Tribune (Colorado)</td>
+<td>Water shortage worsening along northwest Color...</td>
+<td>False</td>
+<td>18-Oct-21</td>
+<td>2021.0</td>
+<td>8</td>
+<td>NaN</td>
+<td>8.0</td>
+<td>2021.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Colorado Headwaters</td>
+<td>140100</td>
+<td>14</td>
+<td>State of Colorado</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Conservation</td>
+<td>Facing severe droughts along Colorado's Wester...</td>
+<td>State Government, Federal Government, All Wate...</td>
+<td>-1.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">198</td>
+<td>199</td>
+<td>USGS201-250.docx</td>
+<td>La Junta Tribune-Democrat (Colorado)</td>
+<td>Lower Arkansas Valley Water Conservancy Distri...</td>
+<td>False</td>
+<td>12-Dec-13</td>
+<td>2013.0</td>
+<td>12</td>
+<td>NaN</td>
+<td>12.0</td>
+<td>2013.0</td>
+<td>N</td>
+<td>N</td>
+<td>Entire Lower Colorado Basin</td>
+<td>NaN</td>
+<td>15</td>
+<td>Lower Arkansas Valley Water Conservancy District</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CO</td>
+<td>8</td>
+<td>Urban</td>
+<td>Intergovernmental issues</td>
+<td>The budget for Lower Arkansas Valley Water Con...</td>
+<td>Conservancy District, State Government, Federa...</td>
+<td>0.0</td>
+<td>The article is focused on the budgetary and wa...</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">220</td>
+<td>221</td>
+<td>USGS251-300.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>Austin water supply long-term plans appear to ...</td>
+<td>False</td>
+<td>5-Mar-15</td>
+<td>2015.0</td>
+<td>3</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>2015.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Austin, TX</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>TX</td>
+<td>48</td>
+<td>Urban</td>
+<td>NaN</td>
+<td>A deal struck between Austin, TX and the Lower...</td>
+<td>City Government, All Water Users</td>
+<td>1.0</td>
+<td>This article actually deals with the CO River ...</td>
+<td>NaN</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">224</td>
+<td>225</td>
+<td>USGS251-300.docx</td>
+<td>Mohave Valley Daily News (Bullhead City, Arizona)</td>
+<td>Water supplies, drought, and the need to conserve</td>
+<td>False</td>
+<td>12-Jan-15</td>
+<td>2015.0</td>
+<td>1</td>
+<td>NaN</td>
+<td>1.0</td>
+<td>2015.0</td>
+<td>N</td>
+<td>Y</td>
+<td>Lower Colorado</td>
+<td>150301</td>
+<td>15</td>
+<td>Needles, CA</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>CA</td>
+<td>6</td>
+<td>Urban</td>
+<td>Conservation</td>
+<td>2014 shows a water use reduction of 8 percent ...</td>
+<td>Local Government, State Government, All Water ...</td>
+<td>1.0</td>
+<td>Event is between city council and water author...</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>5</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">225</td>
+<td>226</td>
+<td>USGS251-300.docx</td>
+<td>Roswell Daily Record (New Mexico)</td>
+<td>Mayor: Mistake made with marijuana farm</td>
+<td>False</td>
+<td>30-May-15</td>
+<td>2015.0</td>
+<td>5</td>
+<td>NaN</td>
+<td>5.0</td>
+<td>2015.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Urban</td>
+<td>Water quality</td>
+<td>Roswell, NM mayor answers questions about Rosw...</td>
+<td>Local Government, Irrigation Districts, Conser...</td>
+<td>-1.0</td>
+<td>Event is outside of the CRB.</td>
+<td>NaN</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

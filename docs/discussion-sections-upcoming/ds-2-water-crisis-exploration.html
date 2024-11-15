@@ -178,6 +178,10 @@ div.csl-indent {
     <a class="dropdown-item" href="../assignments/assignment3.html">
  <span class="dropdown-text">assignment 3</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../assignments/assignment4.html">
+ <span class="dropdown-text">assignment 4</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -430,12 +434,12 @@ articles from newspapers describing water-related events in geographic areas in 
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
-<div id="cell-4" class="cell" data-execution_count="28">
+<div id="cell-4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/Colorado River Basin Water Conflict Table.csv'</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
 
@@ -604,13 +608,13 @@ articles from newspapers describing water-related events in geographic areas in 
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df.columns</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># df.Stakeholders.unique()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-7" class="cell" data-execution_count="55">
+<div id="cell-7" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(df[<span class="st">'State'</span>].dropna()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            .stack()</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">str</span>.strip()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            .value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="55">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>AZ    87
 CO    45
 UT    40
@@ -623,6 +627,85 @@ TX     1
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
+<div id="cell-8" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>oh_row <span class="op">=</span> df[df[<span class="st">'State'</span>].<span class="bu">str</span>.contains(<span class="st">'OH'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>oh_row.iat[<span class="dv">0</span>,<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>'Environmentalists secure water rights for Great Salt Lake'</code></pre>
+</div>
+</div>
+<div id="cell-9" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>oh_row[<span class="st">'State'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>11    OH; UT
+Name: State, dtype: object</code></pre>
+</div>
+</div>
+<div id="cell-10" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[df[<span class="st">'State'</span>].<span class="bu">str</span>.contains(<span class="st">'TX'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Event</th>
+<th data-quarto-table-cell-role="th">Search Source</th>
+<th data-quarto-table-cell-role="th">Newspaper</th>
+<th data-quarto-table-cell-role="th">Article Title</th>
+<th data-quarto-table-cell-role="th">Duplicate</th>
+<th data-quarto-table-cell-role="th">Report Date</th>
+<th data-quarto-table-cell-role="th">Report Year</th>
+<th data-quarto-table-cell-role="th">Event Date</th>
+<th data-quarto-table-cell-role="th">Event Day</th>
+<th data-quarto-table-cell-role="th">Event Month</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water rights</th>
+<th data-quarto-table-cell-role="th">Article Text Search - intergovernmental</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water transfers</th>
+<th data-quarto-table-cell-role="th">Article Text Search - navigation</th>
+<th data-quarto-table-cell-role="th">Article Text Search - fish</th>
+<th data-quarto-table-cell-role="th">Article Text Search - invasive</th>
+<th data-quarto-table-cell-role="th">Article Text Search - diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - water diversion</th>
+<th data-quarto-table-cell-role="th">Article Text Search - instream</th>
+<th data-quarto-table-cell-role="th">Article Text Search - aquatic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">220</td>
+<td>221</td>
+<td>USGS251-300.docx</td>
+<td>Associated Press State &amp; Local</td>
+<td>Austin water supply long-term plans appear to ...</td>
+<td>False</td>
+<td>5-Mar-15</td>
+<td>2015.0</td>
+<td>3</td>
+<td>NaN</td>
+<td>3.0</td>
+<td>...</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>1 rows × 48 columns</p>
+</div>
+</div>
+</div>
 </section>
 <section id="examine-state-codes" class="level2">
 <h2 class="anchored" data-anchor-id="examine-state-codes">Examine state codes</h2>
@@ -630,8 +713,8 @@ Name: count, dtype: int64</code></pre>
 <ol type="1">
 <li>Examine the unique values in the <code>States</code> column. What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
 </ol>
-<div id="cell-9" class="cell" data-execution_count="60">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'State'</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">'State'</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
  'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'
@@ -639,9 +722,9 @@ Name: count, dtype: int64</code></pre>
  'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']</code></pre>
 </div>
 </div>
-<div id="cell-10" class="cell" data-execution_count="62">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> df[<span class="st">'State'</span>].unique():</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-13" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> df[<span class="st">'State'</span>].unique():</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CO
 UT
@@ -681,9 +764,9 @@ TX</code></pre>
 <section id="drop-nas" class="level2">
 <h2 class="anchored" data-anchor-id="drop-nas">Drop NAs</h2>
 <p>Use the <code>dropna()</code> method for <code>pandas.Series</code> on the State column to create a new <code>pandas.Series</code> <code>states</code> without NAs. Check there are no NAs in the new <code>states</code> series.</p>
-<div id="cell-13" class="cell" data-execution_count="64">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> df[<span class="st">'State'</span>].dropna()</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-16" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> df[<span class="st">'State'</span>].dropna()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>states</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="64">
 <pre><code>0          CO
 1          CO
@@ -699,8 +782,8 @@ TX</code></pre>
 Name: State, Length: 178, dtype: object</code></pre>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>states.hasnans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-17" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>states.hasnans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="66">
 <pre><code>False</code></pre>
 </div>
@@ -720,15 +803,15 @@ Name: State, Length: 178, dtype: object</code></pre>
 </section>
 <section id="method-chaining" class="level2">
 <h2 class="anchored" data-anchor-id="method-chaining">Method chaining</h2>
-<div id="cell-20" class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = (df['Stakeholders'].dropna()</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .str.split(',', expand=True)</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .apply(lambda x: x.str.strip())</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .values</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .ravel())</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = pd.unique(stakeholders)</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># print(stakeholders)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = (df['Stakeholders'].dropna()</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .str.split(',', expand=True)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .apply(lambda x: x.str.strip())</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .values</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                      .ravel())</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># stakeholders = pd.unique(stakeholders)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># print(stakeholders)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

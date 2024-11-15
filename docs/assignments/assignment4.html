@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Plotting geospatial data – EDS 220 - Working with Environmental Datasets</title>
+<title>assignment4 – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -163,209 +217,282 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
+  <li><a href="#assignment-4" id="toc-assignment-4" class="nav-link active" data-scroll-target="#assignment-4">Assignment 4</a>
+  <ul class="collapse">
+  <li><a href="#submission-instructions" id="toc-submission-instructions" class="nav-link" data-scroll-target="#submission-instructions">Submission instructions</a></li>
+  <li><a href="#task-1-the-politics-of-pixels-reading" id="toc-task-1-the-politics-of-pixels-reading" class="nav-link" data-scroll-target="#task-1-the-politics-of-pixels-reading">Task 1: The politics of pixels reading</a></li>
+  <li><a href="#task-2-visualizing-fire-scars-through-false-color" id="toc-task-2-visualizing-fire-scars-through-false-color" class="nav-link" data-scroll-target="#task-2-visualizing-fire-scars-through-false-color">Task 2: Visualizing fire scars through false color</a>
+  <ul class="collapse">
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">1. Brainstorm</a></li>
-  <li><a href="#create-the-plot" id="toc-create-the-plot" class="nav-link" data-scroll-target="#create-the-plot">2. Create the plot</a></li>
-  <li><a href="#update-your-notebook" id="toc-update-your-notebook" class="nav-link" data-scroll-target="#update-your-notebook">3. Update your notebook</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Plotting geospatial data</h1>
-<p class="subtitle lead">Week 5 - Discussion section</p>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>In this discussion section you will wrangle data about earthquakes and practice:</p>
+<section id="assignment-4" class="level1">
+<h1>Assignment 4</h1>
+<p>The total grade of the assignment will be divided in this way:</p>
 <ul>
-<li>Breaking down a question into accessible data wrangling steps</li>
-<li>Importing and plotting differnt types of geospatial data</li>
-<li>Finding additional guidance online to carry out your data wrangling plans</li>
+<li>20% - Task 1</li>
+<li>60% - Task 2, sections 2-5</li>
+<li>10% - Task 2, section 6</li>
+<li>10% - Task 2, section 7</li>
 </ul>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="submission-instructions" class="level2">
+<h2 class="anchored" data-anchor-id="submission-instructions">Submission instructions</h2>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This assignment is due by <strong>11:59 pm on Saturday, November 23</strong>. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in these checklists:</p>
+<ul>
+<li>File formatting and uploading:
+<ul class="task-list">
+<li><label><input type="checkbox">Answer for task 1 must be submitted as a PDF file.</label></li>
+<li><label><input type="checkbox">Answers for task 2 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, <em>not</em> a PDF, html or other format.</label></li>
+<li><label><input type="checkbox">Double-check that each notebook or PDF is uploaded to the correct task on Gradescope.</label></li>
+<li><label><input type="checkbox">Before you upload your finished notebook to Gradescope, please rename your notebook so they are called</label>
+<ul>
+<li><code>hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</code> and</li>
+<li><code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code></li>
+</ul></li>
+</ul></li>
+<li>Notebook content checklists:
+<ul class="task-list">
+<li><label><input type="checkbox">Ensure your notebooks include a link to your assignment’s GitHub repository in the designated section.</label></li>
+<li><label><input type="checkbox">The notebooks you submit must have your solutions to the exercises, They <em>should not be the blank template notebooks</em>.</label></li>
+<li><label><input type="checkbox">The notebooks you submit must include your code <em>and</em> all required rendered plots, graphs, and printed output. Run all cells before submitting your .ipynb file and make sure all the outputs are visible.</label></li>
+</ul></li>
+</ul>
+<p><strong>Resubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course’s 50%-regrade resubmission policy (see syllabus).</strong></p>
+<p>If you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, November 22.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-1-the-politics-of-pixels-reading" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-the-politics-of-pixels-reading">Task 1: The politics of pixels reading</h2>
+<p>When working with satellite data, it’s easy to assume that it is inherently objective and equally accessible to everyone. However, Bennett et al., in their paper <em>The Politics of Pixels: A Review and Agenda for Critical Remote Sensing</em> (2022 <span class="citation" data-cites="bennett_politics_2022"><a href="#ref-bennett_politics_2022" role="doc-biblioref">[1]</a></span>), challenge this assumption, arguing that remote sensing needs a critical lens. They emphasize that various sociopolitical factors influence who collects remotely sensed data, how it’s collected, and ultimately, who benefits from its insights. This reading will encourage you to explore the biases and inequalities that can be embedded in remote sensing technologies and practices.</p>
+<p><img src="../assignments/images/spacex-VBNb52J8Trk-unsplash.jpg" class="img-fluid"></p>
+<p><strong>Read the paper and write a one-paragraph (between 100 and 150 words) reflection about it.</strong> This paper is a bit denser than the others we’ve read, section V is worth special attention. <strong>Review the <a href="https://docs.google.com/document/d/1GQ8C0APsoIG1R9UQL-QGOtENYi413_Fv/edit?usp=sharing&amp;ouid=111507336322611936333&amp;rtpof=true&amp;sd=true">rubric for this assignment here</a>.</strong> Answer at least one of the following questions for your reflection:</p>
+<ol type="1">
+<li><p>Reflecting on your personal or professional background, how might sociopolitical factors shape the availability and interpretation of satellite and other remotely sensed data for communities or organizations you’re familiar with?</p></li>
+<li><p>What potential ethical responsibilities arise for environmental data scientists when working with remote sensing data that may carry biases or limitations?</p></li>
+<li><p>If you were tasked with implementing remote sensing for a project, what steps might you take to ensure the data collected is fair, accessible, and unbiased?</p></li>
+</ol>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Ready to submit your answer? Make sure your submission follows the checklist at the top of the assginment!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-2-visualizing-fire-scars-through-false-color" class="level2">
+<h2 class="anchored" data-anchor-id="task-2-visualizing-fire-scars-through-false-color">Task 2: Visualizing fire scars through false color</h2>
+<p>The Thomas Fire, which burned over 280,000 acres in Ventura and Santa Barbara counties in December 2017, was one of California’s largest wildfires at the time. It caused widespread ecological damage, displaced communities, and left lasting environmental impacts.</p>
+<p>False color imagery, created using satellite data from instruments like Landsat, is a useful tool for monitoring wildfire impacts. By assigning infrared bands to visible colors, these images highlight vegetation health, burn severity, and the extent of fire scars. This approach helps researchers and land managers assess recovery efforts, identify high-risk areas, and plan restoration strategies.</p>
+<p>In this task, you will create a false color image of the Thomas Fire using remote sensing data, highlighting the fire scar and exploring how coding and data visualization support environmental monitoring.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assignments/images/thomas_fire.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>A Kern County firefighter stands watch as the Thomas Fire starts to spread over ridge lines in Toro Canyon.</figcaption>
+</figure>
+</div>
+<section id="about-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="about-the-data">About the data</h3>
+<p>In this task you will use two datsets. The first is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmosperically corrected surface reflectance data, collected by the Landsat 8 satellite.</p>
+<p>The data was retrieved from the <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">Microsof Planetary Computer data catalogue</a> and pre-processed to remove data outside land and coarsen the spatial resolution. This data should be used for visualization and educational purposes only and can be accessed at this path within workbench-1:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>/courses/EDS220/data/hwk4_landsat_data landsat8-2018-01-26-sb-simplified.nc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The second dataset will be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimeter of the Thomas Fire during 2017.</p>
+</section>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <div class="callout callout-style-simple callout-tip no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<ol type="1">
-<li><p>Access the workbench-1 server.</p></li>
-<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-5-earthquakes.ipynb</code>.</p></li>
-<li><p>Use the terminal to push this file to your remote repository.</p></li>
-</ol>
+<p>Create a new GitHub repository named <code>eds220-hwk4</code>. You will need to create two notebooks named:</p>
+<ul>
+<li><code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code> and</li>
+<li><code>hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</code>.</li>
+</ul>
+<p>Your repository should have the following structure:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eds220-hwk4</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>│   README.md</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>|   hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>│   hwk4-task2-false-color-YOURLASTNAME.ipynb</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>|   .gitignore</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>└───data</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    │   thomas-fire-boundary-file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="general-directions" class="level2">
-<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout callout-style-simple callout-warning no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
+<p>📋 Don’t forget to read the <a href="https://docs.google.com/document/d/1-Zm731BLVCs1MXHT5R1H9rr6uvcwHnMZQ2q8xkQ_fWM/edit?usp=sharing">rubric for this task</a> before you start working on it.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="instructions" class="level3">
+<h3 class="anchored" data-anchor-id="instructions">Instructions</h3>
+<section id="reading" class="level4">
+<h4 class="anchored" data-anchor-id="reading">1. Reading</h4>
+<p>Read the following resources about false color images and Landsat imagery:</p>
 <ul>
-<li>Add comments as appropriate along your code following the course commenting standards.</li>
-<li>Include markdown cells in between your code cells to add titles and information to each exercise</li>
-<li>Commit every time you finish a major step. <strong>Remember to write informative commits in the imperative mood.</strong></li>
+<li><p><a href="https://earthobservatory.nasa.gov/features/FalseColor">NASA Earth Observatory - Why is that Forest Red and that Cloud Blue? How to Interpret a False-Color Satellite Image</a></p></li>
+<li><p><a href="https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites">What are the band designations for the Landsat satellites?</a></p></li>
+<li><p><a href="https://www.usgs.gov/media/images/common-landsat-band-combinations">Common Landsat Band Combinations</a></p></li>
 </ul>
-</div>
-</div>
-</div>
-</section>
-<section id="about-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For this task you will use two datasets.</p>
-<p>The first dataset is simplified data from the <a href="https://earthquake.usgs.gov/earthquakes/search/">USGS Earthquakes Database</a>. This data is in tabular format and has the following columns:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Column</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>time</td>
-<td>date and time of event (all events from 2014)</td>
-</tr>
-<tr class="even">
-<td>latitude</td>
-<td>decimal degrees [-90,90]</td>
-</tr>
-<tr class="odd">
-<td>longitude</td>
-<td>decimal degrees [-360,360]</td>
-</tr>
-<tr class="even">
-<td>depth</td>
-<td>depth of the event (km)</td>
-</tr>
-<tr class="odd">
-<td>mag</td>
-<td>magnitude of event</td>
-</tr>
-<tr class="even">
-<td>id</td>
-<td>event identifier</td>
-</tr>
-<tr class="odd">
-<td>place</td>
-<td>where the event took place</td>
-</tr>
-<tr class="even">
-<td>type</td>
-<td>type of event</td>
-</tr>
-</tbody>
-</table>
-<p>This is the same dataset you used in assginment 1. You can access the data through <a href="https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv">this link</a>.</p>
-<p>Further information about the dataset can be accessed in the <a href="https://earthquake.usgs.gov/data/comcat/">ANSS Comprehensive Earthquake Catalog (ComCat) Documentation</a>.</p>
-<p>The second dataset is <a href="https://www.naturalearthdata.com">Natural Earth</a>’s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis. You can access the “Admin 0 – Countries” dataset available in <a href="https://www.naturalearthdata.com/downloads/110m-cultural-vectors/">this link</a>.</p>
-</section>
-<section id="brainstorm" class="level2">
-<h2 class="anchored" data-anchor-id="brainstorm">1. Brainstorm</h2>
-<p>In this session you will recreate the following map:</p>
-<p><img src="../discussion-sections/images/earthquakes_map.png" class="img-fluid"></p>
-<ol type="1">
-<li><p>Individually, write down high-level steps on how you would explore and wrangle the data to produce this map. Do not code anything yet.</p></li>
-<li><p>Discuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?</p></li>
-<li><p>As a team, select an initial plan for recreating this plot.</p></li>
-</ol>
-</section>
-<section id="create-the-plot" class="level2">
-<h2 class="anchored" data-anchor-id="create-the-plot">2. Create the plot</h2>
-<p>Use your plan as a starting point to recreate the plot.</p>
-<ul>
-<li><p>You may (or not) need to look online to carry out some of the steps in your plan. It is completely fine to seek help online! Resourceful troubleshooting is a key skill in data science.</p></li>
-<li><p>It’s ok if your initial plan changes as you work with the data and discuss challenges with your team! This brainstorm is to create a shared starting point.</p></li>
-</ul>
-<p style="text-align: center;">
-<strong>Don’t forget to write informative commits in the imperative every time you finish a major step.</strong>
-</p>
-</section>
-<section id="update-your-notebook" class="level2">
-<h2 class="anchored" data-anchor-id="update-your-notebook">3. Update your notebook</h2>
-<ol type="a">
-<li><p>nclude any takeaways from the map in a markdown cell after your plot.</p></li>
-<li><p>Go over your notebook and add markdown cells with appropriate titles and subtitles to guide the reader through the different steps in your workflow.</p></li>
-<li><p>Include a markdown cell at the top with a title for your notebook and a description of what it is about.</p></li>
-</ol>
 <!--
-```python
-
-import os
-import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-
-# Read in data
-raw_eqk = pd.read_csv('https://raw.githubusercontent.com/carmengg/eds220-hwk-1/main/data/earthquake_data.csv')
-
-fp = os.path.join('data','ne_110m_admin_0_countries','ne_110m_admin_0_countries.shp')
-worldmap = gpd.read_file(fp)
-
-# Select only earthquakes of magnitude geq 6.5
-eqk = raw_eqk[(raw_eqk.type == 'earthquake') & (raw_eqk.mag >= 6.5)]
-
-# Convert earthquake data into geo-df
-eqk = gpd.GeoDataFrame(eqk, 
-                       geometry = gpd.points_from_xy(eqk.longitude, eqk.latitude),
-                       crs='EPSG:4326'
-                       )
-
-# Create plot
-fig, ax = plt.subplots(figsize=(10,8))
-ax.axis('off')
-
-worldmap.plot(ax=ax,
-           color='lightgrey')
-eqk.plot(ax=ax,
-        column='mag',
-        cmap='Oranges',
-        edgecolor='brown',
-        legend=True,
-        legend_kwds={'shrink':.6,
-                    'label':'moment magnitude'})
-
-ax.set_title('Earthquakes of magnitude at least 6.5 in 2014')
-
-ax.annotate('Data: USGS Earthquakes Database',
-             xy=(0.085,0.15),
-             xycoords='figure fraction',
-             fontsize=9,
-             color='0.7')
-
-plt.show()
-```
+- [How do I use a scale factor with Landsat Level-2 science products?](https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products)
 -->
+<div class="callout callout-style-simple callout-caution no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Section 2 must be completed in the <code>hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</code> notebook.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="fire-perimeter-data-retrieval-and-selection" class="level4">
+<h4 class="anchored" data-anchor-id="fire-perimeter-data-retrieval-and-selection">2. Fire perimeter data retrieval and selection</h4>
+<ol type="a">
+<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the CRS of the data and whether this is projected or geographic.</p></li>
+<li><p>From your fire perimeter data, select the Thomas Fire boundary. The fire occurred in 2017.</p></li>
+<li><p>Save <em>only</em> the 2017 Thomas Fire boundary as a geospatial file in the format of your choosing. The file should go into the <code>data/</code> directory in your repository.</p></li>
+<li><p>In a markdown cell, briefly explain your reasoning for selecting that specific file format.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-caution no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Sections 3, 4, and 5 must be completed in the <code>hwk4-task2-fire-scar-YOURLASTNAME.ipynb</code> notebook. In this notebook you will be using both your fire perimeter data and the simplified Landsat data <code>landsat8-2018-01-26-sb-simplified.nc</code>. You may need to complete data wrangling steps beyond the ones described to create the requested outputs.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="true-color-image" class="level4">
+<h4 class="anchored" data-anchor-id="true-color-image">3. True color image</h4>
+<ol type="a">
+<li><p>Construct a file path to the Landsat data using <code>os</code> and import it using <code>rioxr.open_rasterio()</code>.</p></li>
+<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data’s variables and dimensions.</p></li>
+<li><p>Drop the <code>band</code> dimension of the data. HINT: <a href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html"><code>squeeze()</code></a> and <a href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.drop_vars.html"><code>drop_vars()</code></a>.</p></li>
+<li><p>Without creating any new variables:</p></li>
+</ol>
+<ul>
+<li>select the red, green, and blue variables (in that order) of the <code>xarray.Dataset</code> holding the Landsat data,</li>
+<li>convert it to a <code>numpy.array</code> using the <code>to_array()</code> method, and then</li>
+<li>use <code>.plot.imshow()</code> to create an RGB image with the data. There will be a warning, that’s ok.</li>
+</ul>
+<ol start="5" type="a">
+<li><p>Adjust the scale used for plotting the bands to get a true color image. HINT: <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html">Check the <code>robust</code> parameter</a>. The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting.</p></li>
+<li><p>In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (b).</p></li>
+</ol>
+</section>
+<section id="false-color-image" class="level4">
+<h4 class="anchored" data-anchor-id="false-color-image">4. False color image</h4>
+<p>Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).</p>
+</section>
+<section id="map" class="level4">
+<h4 class="anchored" data-anchor-id="map">5. Map</h4>
+<ol type="a">
+<li><p>Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire <em>perimeter</em>. Customize it appropriately including, at least, an informative title and legend.</p></li>
+<li><p>Write a figure description for the map including a brief explanation of how false color imagery is being used.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-caution no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The rest of the sections are about updating and cleaning your notebooks and repository. <strong>This is hugely important!</strong> By maintaining clean, well-structured repositories and notebooks, you’re not only showcasing your technical skills but also building a portfolio that reflects your professionalism, attention to detail, and ability to collaborate effectively with others.</p>
+<p>Here is an <a href="https://github.com/carmengg/eds220-oil-spills-sample-repo">example of an organized repository and notebook</a> based on the oil spills task from homework 3.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="clean-your-notebooks" class="level4">
+<h4 class="anchored" data-anchor-id="clean-your-notebooks">6. Clean your notebooks</h4>
+<p>The target audience for your notebooks is a fellow EDS 220 student who is just learning about wrangling raster data using Python.</p>
+<ul>
+<li>Add enough and appropriate comments to explain your code.</li>
+<li>Add enough and appropriate markdown cells to explain the procedures you are using and their output.</li>
+<li>First cell in the notebook must be a markdown cell including:
+<ul class="task-list">
+<li><label><input type="checkbox">Title</label></li>
+<li><label><input type="checkbox">Author</label></li>
+<li><label><input type="checkbox">Link to GitHub repository containing the notebook(for grading purposes)</label></li>
+</ul></li>
+<li>Each notebook must include an “About” section with the following subsections:
+<ul class="task-list">
+<li><label><input type="checkbox">Purpose</label></li>
+<li><label><input type="checkbox">List of highlights of analysis. What do you consider to be the most important aspects of this coding exercise?</label></li>
+<li><label><input type="checkbox">Dataset description</label></li>
+<li><label><input type="checkbox">References to datasets</label></li>
+</ul></li>
+</ul>
+<p>The rest of your notebook should be organized into logical subsections (indicated through markdown headers) for the analysis and visualization you are performing. The subsections should easily guide the reader through the analysis.</p>
+</section>
+<section id="update-your-repository" class="level4">
+<h4 class="anchored" data-anchor-id="update-your-repository">7. Update your repository</h4>
+<p>Update your repository’s README with the following elements (based on <a href="https://ucsb-meds.github.io/README-guidelines/">EDS 296</a>):</p>
+<ul class="task-list">
+<li><label><input type="checkbox"><strong>A short, but descriptive title.</strong></label></li>
+<li><label><input type="checkbox"><strong>A brief explanation of the repository’s purpose.</strong> Paragraphs or a bulleted list are both acceptable options You may include an image or logo that represents the project.</label></li>
+<li><label><input type="checkbox"><strong>A concise description of what’s housed in the repository.</strong> This includes information about the repository structure or file organization.</label></li>
+<li><label><input type="checkbox"><strong>Details regarding data access.</strong> Any necessary information on where data lives (e.g.&nbsp;is it housed in the repo, on a server, in a library / package etc.) and how to access it in order to run the code.</label></li>
+<li><label><input type="checkbox"><strong>References or acknowledgements.</strong> In an appropriate, consistent format, including links. Provide a reference to the course and any other sources that supported the development of the repository. Add references for data sets too.</label></li>
+</ul>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Ready to submit your answers? Make sure your submission follows the checklist at the top of the assginment!</p>
+</div>
+</div>
+</div>
+
 
 
 </section>
+</section>
+</section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-bennett_politics_2022" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. M. Bennett, J. K. Chen, L. F. Alvarez León, and C. J. Gleason, <span>“The politics of pixels: <span>A</span> review and agenda for critical remote sensing,”</span> <em>Progress in Human Geography</em>, vol. 46, no. 3, pp. 729–752, Jun. 2022, doi: <a href="https://doi.org/10.1177/03091325221074691">10.1177/03091325221074691</a>. Available: <a href="https://journals.sagepub.com/doi/10.1177/03091325221074691">https://journals.sagepub.com/doi/10.1177/03091325221074691</a>. [Accessed: Nov. 14, 2024]</div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
