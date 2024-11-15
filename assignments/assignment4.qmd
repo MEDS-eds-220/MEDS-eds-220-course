@@ -12,7 +12,8 @@ This assignment is due by **11:59 pm on Saturday, November 23**. All tasks for t
   - [ ] Answers for task 2 must be submitted as .ipynb files (Jupyter Notebooks) to Gradescope, *not* a PDF, html or other format.
   - [ ] Double-check that each notebook or PDF is uploaded to the correct task on Gradescope. 
   - [ ] Before you upload your finished notebook to Gradescope, please rename your notebook so they are called
-    - `hwk4-task2-fire-scar-YOURLASTNAME.ipynb` and 
+    - `hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb` and 
+    - `hwk4-task2-false-color-YOURLASTNAME.ipynb`
 
 - Notebook content checklists:
   - [ ] Ensure your notebooks include a link to your assignment's GitHub repository in the designated section.
@@ -48,10 +49,31 @@ This paper is a bit denser than the others we’ve read, section V is worth spec
 Ready to submit your answer? Make sure your submission follows the checklist at the top of the assginment! 
 :::
 
-## Setup for task 2
+## Task 2:  Visualizing fire scars through false color
+
+The Thomas Fire, which burned over 280,000 acres in Ventura and Santa Barbara counties in December 2017, was one of California's largest wildfires at the time. It caused widespread ecological damage, displaced communities, and left lasting environmental impacts.
+
+False color imagery, created using satellite data from instruments like Landsat, is a useful tool for monitoring wildfire impacts. By assigning infrared bands to visible colors, these images highlight vegetation health, burn severity, and the extent of fire scars. This approach helps researchers and land managers assess recovery efforts, identify high-risk areas, and plan restoration strategies.
+
+In this task, you will create a false color image of the Thomas Fire using remote sensing data, highlighting the fire scar and exploring how coding and data visualization support environmental monitoring.
+
+![A Kern County firefighter stands watch as the Thomas Fire starts to spread over ridge lines in Toro Canyon.](/assignments/images/thomas_fire.png){width="70%"}
+
+### About the data
+
+In this task you will use two datsets. The first is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmosperically corrected surface reflectance data, collected by the Landsat 8 satellite. 
+
+The data was retrieved from the [Microsof Planetary Computer data catalogue](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) and pre-processed to remove data outside land and coarsen the spatial resolution. This data should be used for visualization and educational purposes only and can be accessed at this path within workbench-1:
+```default
+/courses/EDS220/data/hwk4_landsat_data landsat8-2018-01-26-sb-simplified.nc
+```
+
+The second dataset will be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimeter of the Thomas Fire during 2017.
+
+### Setup
 
 :::{.callout-tip appearance="minimal"}
-Create a new GitHub repository named `eds220-hwk4`. Within it, create a two notebooks named `hwk4-task2-fire-scar-YOURLASTNAME.ipynb` and `hwk4-task2-fire-perimeter.ipynb`. All your analysis and data wrangling should be contained in this notebook.
+Create a new GitHub repository named `eds220-hwk4`. Within it, create a two notebooks named `hwk4-task2-false-color-YOURLASTNAME.ipynb` and `hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb`. 
 
 Your repository should have the following structure:
 ```default
@@ -62,73 +84,70 @@ eds220-hwk4
 |   .gitignore
 │
 └───data
-    │   landsat8-2018-01-26-sb-simplified.nc
     │   thomas-fire-boundary-file
 ```
 :::
-
-## Task 2:  Visualizing fire scars through false color
-
-Inf this task you will create a false color image showing the fire scar of the Thomas Fire in 2017. 
-
-### About the data
-
-In this task you will use two datsets. The first one is given and it is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmosperically corrected surface reflectance data, collected by the Landsat 8 satellite. 
-
-The data was retrieved from the [Microsof Planetary Computer data catalogue](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) and pre-processed to remove data outside land and coarsen the spatial resolution. This data should be used for visualization and educational purposes only and can be accessed in the `/courses/EDS220/data/` directory within workbench-1. 
-
-The second dataset will be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimeter of the Thomas Fire during 2017.
 
 ### Instructions
 
 #### 1. Reading
 Read the following resources about false color images and Landsat imagery: 
 
-- [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue?
-How to Interpret a False-Color Satellite Image](https://earthobservatory.nasa.gov/features/FalseColor)
+- [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue? How to Interpret a False-Color Satellite Image](https://earthobservatory.nasa.gov/features/FalseColor)
 
 - [What are the band designations for the Landsat satellites?](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites)
 
-- Common Landsat Band Combinations](https://www.usgs.gov/media/images/common-landsat-band-combinations)
+- [Common Landsat Band Combinations](https://www.usgs.gov/media/images/common-landsat-band-combinations)
 
+<!--
 - [How do I use a scale factor with Landsat Level-2 science products?](https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products)
+-->
 
-#### 2. Data retrieval and selection
+#### 2. Fire perimeter data retrieval and selection
 
-The following steps must be completed in the `hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb` notebook. 
+This section must be completed in the `hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb` notebook. 
 
-a. Write a brief description of the fire perimeter data you will use, indicating its source and date of access. 
+a. Write a brief description of the fire perimeter data you will use, indicate its source and date of access. 
 
-b. Explore your data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the CRS of the data and whether this is projected or geographic.
+b. Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the CRS of the data and whether this is projected or geographic.
 
 b. From your fire perimeter data, select the Thomas Fire boundary. The fire occurred in 2017.
 
-c. Save *only* the Thomas Fire boundary as a geospatial file in the format of your choosing. The file should go into the `data/` directory in your repository.
+c. Save *only* the 2017 Thomas Fire boundary as a geospatial file in the format of your choosing. The file should go into the `data/` directory in your repository.
 
 d. In a markdown cell, briefly explain your reasoning for selecting that specific file format. 
- 
 
-#### 2. True color image
+:::{.callout-caution appearance="minimal"}
+The rest of the sections must be completed in the `hwk4-task2-fire-scar-YOURLASTNAME.ipynb` notebook. In this notebook you will be using both your fire perimeter data and the simplified Landsat data `landsat8-2018-01-26-sb-simplified.nc`. 
+:::
 
-a. Without creating any new variables: 
-- select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
-- convert it to a `numpy.array` using the `to_array()` method, and then 
-- use `.plot.imshow()` to create an RGB image with the data. 
+#### 3. True color image
 
-b. Adjust the scale used for plotting the bands to get a true color image. 
+a. Construct a file path to the Landsat data using `os` and import it using `rioxr.open_rasterio()`.
+
+b. Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data's variables and dimensions.
+
+c. Drop the `band` dimension of the data. HINT: [`squeeze()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html) and [`drop_vars()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.drop_vars.html).
+
+d. Without creating any new variables: 
+  - select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
+  - convert it to a `numpy.array` using the `to_array()` method, and then 
+  - use `.plot.imshow()` to create an RGB image with the data. 
+There will be a warning, that's ok.
+
+e. Adjust the scale used for plotting the bands to get a true color image. 
 HINT: [Check the `robust` parameter](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting. 
 
-c. In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (b) and how these relate to the distribution of 
+f. In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (b). 
 
 #### 3. False color image
 Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).
 
 #### 4. Map
+a. Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire _perimeter_.  Customize it appropriately.
 
-Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire perimeter. Customize it appropriately.
+b. Write a figure description for the map including a brief explanation of how false color imagery is being used.
 
-
-Both notebooks should include clear sections about data exploration and...
 
 <!--
 :::{.callout-warning appearance="minimal"}
