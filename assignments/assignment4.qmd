@@ -51,18 +51,19 @@ Ready to submit your answer? Make sure your submission follows the checklist at 
 ## Setup for task 2
 
 :::{.callout-tip appearance="minimal"}
-Create a new GitHub repository named `eds220-hwk4`. Within it, create a single notebook named `hwk4-task2-fire-scar-YOURLASTNAME.ipynb`. All your analysis and data wrangling should be contained in this notebook.
+Create a new GitHub repository named `eds220-hwk4`. Within it, create a two notebooks named `hwk4-task2-fire-scar-YOURLASTNAME.ipynb` and `hwk4-task2-fire-perimeter.ipynb`. All your analysis and data wrangling should be contained in this notebook.
 
 Your repository should have the following structure:
 ```default
-EDS223-HW3
+eds220-hwk4
 │   README.md
-│   hwk4-task2-fire-scar-YOURLASTNAME.ipynb
+|   hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb
+│   hwk4-task2-false-color-YOURLASTNAME.ipynb
 |   .gitignore
 │
 └───data
     │   landsat8-2018-01-26-sb-simplified.nc
-    │   fire-perimeters-data
+    │   thomas-fire-boundary-file
 ```
 :::
 
@@ -76,29 +77,58 @@ In this task you will use two datsets. The first one is given and it is a simpli
 
 The data was retrieved from the [Microsof Planetary Computer data catalogue](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) and pre-processed to remove data outside land and coarsen the spatial resolution. This data should be used for visualization and educational purposes only and can be accessed in the `/courses/EDS220/data/` directory within workbench-1. 
 
-The second dataset must be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimter of the Thomas Fire during 2017.
+The second dataset will be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimeter of the Thomas Fire during 2017.
 
 ### Instructions
 
-1. Read the following resources about false color images and Landsat imagery: 
+#### 1. Reading
+Read the following resources about false color images and Landsat imagery: 
 
 - [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue?
 How to Interpret a False-Color Satellite Image](https://earthobservatory.nasa.gov/features/FalseColor)
 
 - [What are the band designations for the Landsat satellites?](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites)
 
--[Common Landsat Band Combinations](https://www.usgs.gov/media/images/common-landsat-band-combinations)
+- Common Landsat Band Combinations](https://www.usgs.gov/media/images/common-landsat-band-combinations)
 
--[How do I use a scale factor with Landsat Level-2 science products?](https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products)
+- [How do I use a scale factor with Landsat Level-2 science products?](https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products)
+
+#### 2. Data retrieval and selection
+
+The following steps must be completed in the `hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb` notebook. 
+
+a. Write a brief description of the fire perimeter data you will use, indicating its source and date of access. 
+
+b. Explore your data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the CRS of the data and whether this is projected or geographic.
+
+b. From your fire perimeter data, select the Thomas Fire boundary. The fire occurred in 2017.
+
+c. Save *only* the Thomas Fire boundary as a geospatial file in the format of your choosing. The file should go into the `data/` directory in your repository.
+
+d. In a markdown cell, briefly explain your reasoning for selecting that specific file format. 
+ 
+
+#### 2. True color image
+
+a. Without creating any new variables: 
+- select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
+- convert it to a `numpy.array` using the `to_array()` method, and then 
+- use `.plot.imshow()` to create an RGB image with the data. 
+
+b. Adjust the scale used for plotting the bands to get a true color image. 
+HINT: [Check the `robust` parameter](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting. 
+
+c. In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (b) and how these relate to the distribution of 
+
+#### 3. False color image
+Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).
+
+#### 4. Map
+
+Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire perimeter. Customize it appropriately.
 
 
-**Follow the instructions in the notebook `hwk3-task2-oil-spills.ipynb` to complete this task. Review the [rubric for this assignment here](https://docs.google.com/document/d/1Ce4EO3MEHW5uLks4x8BECWlkim2bcmxB4f8Qo4z26z8/edit?usp=share_link).** 
-
-2. Find historical open-access data about fire perimeters in California. Select a dataset from a reputable source that includes the fire perimter of the Thomas Fire during 2017.
-
-
-
-
+Both notebooks should include clear sections about data exploration and...
 
 <!--
 :::{.callout-warning appearance="minimal"}
