@@ -337,9 +337,29 @@ nir16 = nir_small.astype('int16')
 print('RED: original dtype:', rgb_small.dtype, '.... converted dtype:', red16.dtype)
 print('NIR: original dtype:', nir.dtype, '.... converted dtype:', nir16.dtype)
 
-# Calculate and plot NDVI
+# Calculate NDVI
 ndvi = (nir16 - red16)/(nir16+red16)
-ndvi.plot()
+
+# Plot
+fig, ax = plt.subplots()  # Adjust figure size
+ndvi.plot(
+    ax=ax,
+    cmap="RdYlGn",  # Colormap for NDVI
+    vmin=-1,  # Minimum value
+    vmax=1,   # Maximum value
+    cbar_kwargs={"label": "NDVI"}  # Label for color bar
+)
+ax.set_title("Normalized Difference Vegetation Index\nnear Santa Barbara Courthouse")  # Add title
+
+# Remove axes ticks
+ax.set_xticks([])  
+ax.set_yticks([])  
+
+# Remove axes labels
+ax.set_xlabel("")  
+ax.set_ylabel("")  
+
+plt.show()
 ```
 
 Remember that plants will always have positive NDVI values between 0.2 and 1. Can you spot the Santa Barbara Courthouse?
