@@ -15,47 +15,47 @@ The data was accessed through [Microsoft's Planetary Computer NAIP data reposito
 
 ## Import a TIF file
 
-Let's start by loading the libraries we'll use: 
+Let's start by loading the libraries we will use: 
 
 ```{python}
 import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-import rioxarray as rioxr
-
 import geopandas as gpd
 from shapely.geometry import Polygon
+
+import rioxarray as rioxr
 ```
 
-There are [multiple ways of opening a '.tif' file using `xarray` or `rioxarray`](https://corteva.github.io/rioxarray/html/getting_started/getting_started.html). 
-Using the `rioxarray.open_rasterio()` function to open the '.tif' file is a simple way to make sure all our geospatial data gets loaded correctly:
+There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://corteva.github.io/rioxarray/html/getting_started/getting_started.html). 
+Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to make sure all our geospatial data gets loaded correctly:
 
 ```{python}
-# load NIR tif file
-nir_fp = os.path.join(os.getcwd(),'data','naip','nir.tif')
-nir = rioxr.open_rasterio(nir_fp)
+# Import NIR tif file
+fp = os.path.join('data','NAIP_SB_nir.tif')
+nir = rioxr.open_rasterio(fp)
 nir
 ```
 
-## `xr.DataArray` exploration
+## `xarray.DataArray` exploration
 
 First, let's verify the raster we loaded is an `xarray.DataArray`:
 
 ```{python}
 type(nir)
+nir
 ```
 
-Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordiantes for each dimension, and some attributes. 
-We can also directly access some of these attribues:
+Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordiantes for each dimension, and some attributes. We can also directly access some of these attribues:
 
 ```{python}
-# print shape and data type
-print('shape: ', nir.shape)
-print('data type: ', nir.dtype, '\n')
+print('Shape: ', nir.shape)
+print('Data type: ', nir.dtype, '\n')
 ```
 
-Using the `.values` attribute we can get a quick view at the values at the corners in our data array. 
+Using the `.values` attribute we can retrieve the underlying `numpy.array` holding the values of the variable:
 
 ```{python}
 print(type(nir.values))
@@ -68,84 +68,98 @@ We can also plot our data:
 nir.plot()
 ```
 
-Notice the coordinates on the x and y axes. 
+Notice the coordinates on the x and y axes.
+
 This map shows the light captured in the near-infrared spectrum by a sensor on a plane. 
 **Can you guess where this?** 
 If you guessed Santa Barbara downtown, you guessed right! 
 
-## `rio` accessor
+## Drop a dimension
 
-An **accessor** in Python let's us access a different set of properties of an object.
-In our case, we use the `.rio` accessor for `xarray.DataArray`s to access its raster properties. 
-For example, its number of bands, height, width, spatial bounding box, and CRS:
+Notice that our raster has an unnecessary extra dimension: band.
 
 ```{python}
-# check geospatial attributes
-print('# bands: ', nir.rio.count)
-print('height: ', nir.rio.height)
-print('width: ', nir.rio.width, '\n')
+print("Sizes of dimensions:", nir.sizes)
+```
 
-print('spatial bounding box: ')
+This is making this `xarray.DataArray` three-dimensional when it is not needed. 
+We can "squeeze this dimension" of length 1 by:
+
+1. using the [`squeeze()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html).
+If we don't pass any parameters, then `squeeze()` gets rid of all dimensions with length one, and then
+
+2. getting rid of the associated coordinates for this dimension. 
+We can do this using the `xarray.DataArray` `drop()` method and specifying the name of the coordinates we want to remove, in this case 'band'.
+
+Let's do this:
+```{python}
+# Original dimensions and coordinates
+print(nir.dims, nir.coords,'\n')
+
+# Remove length 1 dimension (band)
+nir = nir.squeeze()
+print(nir.dims, nir.coords,'\n')
+
+# Remove coordinates associated to band
+nir = nir.drop('band')
+print(nir.dims, nir.coords)
+```
+
+## `rio` accessor
+
+Remember an **accessor** in Python let's us access a different set of properties of an object. We have previously used accesors like `.str` and `.dt` in `pandas` to work with strings and dates. In this lesson, we will use the `.rio` accessor for an `xarray.DataArray` to access its raster properties. 
+For example, we can access the number of bands, height, width, spatial bounding box, and CRS:
+
+```{python}
+# Examine raster attributes using rio accessor
+print('Number of bands: ', nir.rio.count)
+print('Height: ', nir.rio.height)
+print('Width: ', nir.rio.width, '\n')
+
+print('Spatial bounding box: ')
 print(nir.rio.bounds(), '\n')
 
 print('CRS: ', nir.rio.crs)
 ```
- 
-
-:::{.callout-note}
-# Other accessors
-We have used accessors before, for example the `.str` and `.dt` accessors in `pandas`.
-:::
-
-## Multi-band raster
-
-Let's now import the RGB raster:
-```{python}
-# open RGB raster
-rgb_fp = os.path.join(os.getcwd(),'data','naip','rgb.tif')
-rgb = rioxr.open_rasterio(rgb_fp)
-rgb
-```
-
-Notice this raster has three bands, instead of one. 
-This makes sense because we know these bands correspond tothe Red, Green and Blue bands of the image. 
-We can also check this information by looking directly at the attributes:
-
-```{python}
-print('rgb shape: ', rgb.shape)
-print('rgb # bands: ', rgb.rio.count)
-```
-
-Let's check the geospatial data too:
-
-```{python}
-# check geospatial attributes
-print('shape: ', rgb.shape)
-print('data type: ', rgb.dtype)
-print('# bands: ', rgb.rio.count)
-print('CRS: ', rgb.rio.crs)
-
-# check if the CRSs of the rasters match
-print( rgb.rio.crs == nir.rio.crs)
-```
-
-On the last line we checked the nir and rgb rasters have the same ESPG:26911 CRS. 
-This is a projected CRS.
 
 <!--
 ![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/26911/)]()
 -->
 
+## Multi-band raster
+
+Let's now import the RGB raster
+```{python}
+# Import RGB raster
+fp = os.path.join('data','NAIP_SB_rgb.tif')
+rgb = rioxr.open_rasterio(fp)
+rgb
+```
+
+Notice this raster has three bands, instead of one. 
+This makes sense because we know these bands correspond to the red, green and blue bands of the image. 
+
+:::{.callout-tip}
+Obtain the following information about the RGB raster: shape, number of bands, data type of its values and CRS.
+
+<!--
+```python
+print('rgb shape: ', rgb.shape)
+print('data type: ', rgb.dtype)
+print('# bands: ', rgb.rio.count)
+print('CRS: ', rgb.rio.crs)
+```
+-->
+:::
+
 Finally, let's plot this raster.
 Since it has three bands, we can plot it as an image using the `.plot.imshow()` method, which will interpret the three bands of the object as RGB.
 
 ```{python}
-# parameters for plotting rasters
-size = 6 # height in in of plot height
-aspect = rgb.rio.width / rgb.rio.height # ratio of widht/height
-
-# plot three bands as RGB image
-rgb.plot.imshow(size=size, aspect=aspect)
+# Plot three bands as RGB image
+rgb.plot.imshow(size=6,  # Plot's height in inches
+                aspect=rgb.rio.aspect  # Ratio of width/height
+                )
 ```
 
 ## Box for clipping
