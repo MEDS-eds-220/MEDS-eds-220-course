@@ -30,21 +30,12 @@ import rioxarray as rioxr
 ```
 
 There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://corteva.github.io/rioxarray/html/getting_started/getting_started.html). 
-Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to make sure all our geospatial data gets loaded correctly:
+Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to import the raster file as an `xarray.DataArray` and make sure all our geospatial data gets loaded correctly:
 
 ```{python}
-# Import NIR tif file
+# Import NIR TIF file
 fp = os.path.join('data','NAIP_SB_nir.tif')
 nir = rioxr.open_rasterio(fp)
-nir
-```
-
-## `xarray.DataArray` exploration
-
-First, let's verify the raster we loaded is an `xarray.DataArray`:
-
-```{python}
-type(nir)
 nir
 ```
 
@@ -79,7 +70,7 @@ If you guessed Santa Barbara downtown, you guessed right!
 Notice that our raster has an unnecessary extra dimension: band.
 
 ```{python}
-print("Sizes of dimensions:", nir.sizes)
+print("Sizes of dimensions:", dict(nir.sizes))
 ```
 
 This is making this `xarray.DataArray` three-dimensional when it is not needed. 
@@ -128,7 +119,7 @@ print('CRS: ', nir.rio.crs)
 
 ## Multi-band raster
 
-Let's now import the RGB raster
+Let's now import the RGB raster:
 ```{python}
 # Import RGB raster
 fp = os.path.join('data','NAIP_SB_rgb.tif')
@@ -140,6 +131,7 @@ Notice this raster has three bands, instead of one.
 This makes sense because we know these bands correspond to the red, green and blue bands of the image. 
 
 :::{.callout-tip}
+## Check-in
 Obtain the following information about the RGB raster: shape, number of bands, data type of its values and CRS.
 
 <!--
@@ -157,8 +149,9 @@ Since it has three bands, we can plot it as an image using the `.plot.imshow()` 
 
 ```{python}
 # Plot three bands as RGB image
+rgb_aspect_ratio = rgb.rio.width / rgb.rio.height  # Raster's aspect ratio
 rgb.plot.imshow(size=6,  # Plot's height in inches
-                aspect=rgb.rio.aspect  # Ratio of width/height
+                aspect=rgb_aspect_ratio  # Ratio of width/height
                 )
 ```
 
@@ -170,6 +163,7 @@ This is outlined in a GeoJSON file:
 ```{python}
 fp = os.path.join('data', 'aoi.geojson')
 aoi = gpd.read_file(fp)
+aoi.plot()
 ```
 
 <!--
@@ -210,11 +204,10 @@ Let's break this down a bit:
 -->
 
 
-Remember: **if two geospatial sets will interact they need to be in the same CRS**.  
-In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
+Remember: **if two geospatial sets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
 
 ```{python}
-# check CRss
+# Examine CRss
 print('aoi CRS: ', aoi.crs)
 print('nir CRS: ', nir.rio.crs)
 print('rgb CRS: ', rgb.rio.crs)
@@ -231,7 +224,7 @@ And plot them together:
 
 ```{python}
 # Plot of RGB raster with AOI overlay
-fig, ax = plt.subplots(figsize=(6, 6 * rgb.rio.aspect))  # Directly set size and aspect
+fig, ax = plt.subplots(figsize=(6, 6 * rgb_aspect_ratio))  # Directly set size and aspect
 rgb.plot.imshow(ax=ax)
 aoi.plot(ax=ax, alpha=0.6)
 plt.show()
@@ -271,8 +264,9 @@ print('Original shape: ', rgb.shape)
 print('Clipped shape: ', rgb_small.shape)
 
 # plot with correct sizes
+ratio = rgb_small.rio.width / rgb_small.rio.height  # Raster's aspect ratio
 rgb_small.plot.imshow(size=4, 
-                      aspect=rgb_small.rio.aspect
+                      aspect=ratio
                       )
 ```
 -->
@@ -348,7 +342,5 @@ ndvi = (nir16 - red16)/(nir16+red16)
 ndvi.plot()
 ```
 
-Remember that plants will always have positive NDVI values between 0.2 and 1. 
-
-Can you spot the Courthouse?
+Remember that plants will always have positive NDVI values between 0.2 and 1. Can you spot the Santa Barbara Courthouse?
 
