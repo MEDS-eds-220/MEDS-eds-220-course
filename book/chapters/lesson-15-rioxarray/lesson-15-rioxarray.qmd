@@ -162,9 +162,17 @@ rgb.plot.imshow(size=6,  # Plot's height in inches
                 )
 ```
 
-## Box for clipping
+## Clip a raster
 
-Our area of interest (aoi) for this lesson is a smaller region that includes only a few blocks around the NCEAS building. 
+Our area of interest (AOI) for this lesson is a smaller region that includes only a few blocks around the NCEAS building. 
+This is outlined in a GeoJSON file:
+
+```{python}
+fp = os.path.join('data', 'aoi.geojson')
+aoi = gpd.read_file(fp)
+```
+
+<!--
 An easy way to obtain coordinates for such a region:
 
 ![Screenshot from geojson.io](/images/geojsonio-sb.png)
@@ -199,11 +207,11 @@ Let's break this down a bit:
 - first, we use the `shapely`'s `Polygon()` function to create a polygon from our `points` list. 
 - in `[Polygon(points)]` we put this polygon inside a list so we can form the geometry column of our new `gpd.GeoDataFrame`
 - we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.
+-->
 
-## Clip raster
 
 Remember: **if two geospatial sets will interact they need to be in the same CRS**.  
-In our case, the aoi `gpd.GeoDataFrame` does not have the same CRS as the rasters:
+In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
 
 ```{python}
 # check CRss
@@ -214,62 +222,72 @@ print('rgb CRS: ', rgb.rio.crs)
 
 So let's reproject:
 ```{python}
-# reproject aoi to rgb crs
+# Reproject AOI to RGB CRS
 aoi = aoi.to_crs(rgb.rio.crs)
-print('matched crs?',  aoi.crs == rgb.rio.crs)
-aoi.crs
+print('Matched CRS?',  aoi.crs == rgb.rio.crs)
 ```
 
 And plot them together:
 
 ```{python}
-# plot aoi outline and RGB raster together
-fig, ax = plt.subplots()
-fig.set_size_inches((size, size*aspect)) # reuse size and aspect
+# Plot of RGB raster with AOI overlay
+fig, ax = plt.subplots(figsize=(6, 6 * rgb.rio.aspect))  # Directly set size and aspect
 rgb.plot.imshow(ax=ax)
 aoi.plot(ax=ax, alpha=0.6)
+plt.show()
 ```
 
-To clip the raster using the aoi polygon we use the `.rio.clip_box()` method:
+To clip the raster using the AOI polygon we use the `.rio.clip_box()` method:
 
 ```{python}
-# clip rasters to aoi
+# Clip rasters to AOI
 rgb_small = rgb.rio.clip_box(*aoi.total_bounds)
 nir_small = nir.rio.clip_box(*aoi.total_bounds)
 ```
 
 Notice a few things:
+
 - we had to use the `.rio` accessor to access the `clip_box()` method 
-- similarly to the `shapely.box()` function [we've used previously](https://carmengg.github.io/eds-220-book/lectures/lesson-13-standin.html#clipping-with-bounding-box), [`.rio.clip_box()` usual parameters](https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box) are minx, miny, maxx, maxy. We are using the `*` asterisk as an unpacking operator to get these from the list `aoi.total_bounds`.
+- similarly to the `shapely.box()` function [we've used previously](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd), [`.rio.clip_box()` usual parameters](https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box) are `minx`, `miny`, `maxx`, `maxy`. We are using the `*` asterisk as an unpacking operator to get these from the list `aoi.total_bounds`.
 
 Let's check our clipped data:
 
-```{python}
-# check shape updates
-print('original shape: ', rgb.shape)
-print('reduced shape: ', rgb_small.shape)
-
-# plot with correct sizes
-size = 4
-aspect = rgb_small.rio.width/ rgb_small.rio.height
-rgb_small.plot.imshow(size=size, aspect=aspect)
-```
 
 ```{python}
-# check shape updates
-print('original shape: ', nir.shape)
-print('reduced shape: ', nir_small.shape)
+# Examine clipped data 
+print('Original shape: ', nir.shape)
+print('Clipped shape: ', nir_small.shape)
 
 nir_small.plot()
 ```
 
-## Compute NDVI
+:::{.callout-tip}
+## Check-in
+Examine the same updates for the RGB data.
+<!--
+```python
+# Examine shape updates
+print('Original shape: ', rgb.shape)
+print('Clipped shape: ', rgb_small.shape)
 
-We often want to combine values of and perform calculations on rasters to create a new output raster. 
-In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our area of interest. 
+# plot with correct sizes
+rgb_small.plot.imshow(size=4, 
+                      aspect=rgb_small.rio.aspect
+                      )
+```
+-->
+:::
+
+## Raster math
+
+We often want perform calculations on rasters to create a new output raster, commonly known as "raster math". 
+<!--TODO: add diagrams-->
+
+In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our AOI. 
 The NDVI is an index commonly used to check if an area has live green vegetation or not.
 
 According to the [Earth Observing System](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/)
+
 > The results of the NDVI calculation range from -1 to 1. Negative values correspond to areas with water surfaces, manmade structures, rocks, clouds, snow; bare soil usually falls within 0.1-0.2 range; and plants will always have positive values between 0.2 and 1. Healthy, dense vegetation canopy should be above 0.5, and sparse vegetation will most likely fall within 0.2 to 0.5. 
 
 The NDVI is calculated using the NIR and red bands. 
@@ -277,36 +295,25 @@ The formula is
 
 $NDVI = \frac{NIR - Red}{NIR + Red}.$
 
-First, we need to select the red band:
+First, let's select the red band:
 
 ```{python}
+# Select dimension by name and coordinate by label
 red = rgb_small.sel(band=1)
 red
 ```
 
-To be able to perform the calculation successfully, we will need to udpate the data type of our rasters:
-
-```{python}
-red16 = red.astype('int16')
-nir16 = nir_small.astype('int16')
-print('RED: original dtype:', rgb_small.dtype, '.... converted dtype:', red16.dtype)
-print('NIR: original dtype:', nir.dtype, '.... converted dtype:', nir16.dtype)
-```
-
-We can perform raster calculations using the same arithmetic we use for `np.array`s (because, underneath it all, they are). 
+We can perform raster calculations using the same arithmetic we use for `numpy.array`s (because, underneath it all, that's what they are). 
 So our NDVI calculation is as follows:
 
 ```{python}
-# calculate and plot NDVI
-ndvi = (nir16 - red16)/(nir16+red16)
+ndvi = (nir - red)/(nir + red)
 ndvi.plot()
 ```
 
-Remember that plants will always have positive NDVI values between 0.2 and 1. 
-Can you spot the Courthouse?
+Do these results look as expected?
 
-::: {.callout-warning}
-# Why change the data type?
+### Data type issues
 The `uint8` (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. 
 In particular, calculations don't return what what we are used to when working with intgers ([they're done module 256](https://en.wikipedia.org/wiki/Modular_arithmetic)):
 
@@ -315,15 +322,33 @@ np.uint8(150) + np.uint8(150)
 ```
 
 In the NDVI formula we have to add NIR + Red. 
-If both NIR and Red are very close to 255, when we add them, the calculation overflows the `uint8` data type and we don't get the expected results:
+If both NIR and Red are very close to 255, when we add them, the calculation overflows the `uint8` data type and we don't get the expected results.
+
+:::{.callout-warning}
+## Avoid silent failures: ALWAYS verify your results!
+Notice that when we performed the NDVI calculation we did not get any warning, although we were overflowing the computation at every cell of our array. 
+This is can be an example of what is referred as *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. 
+**That's why it's so important to double-check our results!**
+:::
+
+### Updating data types
+
+To be able to perform the calculation successfully, we will need to udpate the data type of our rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations:
+
 ```{python}
-x = (nir - red)/(nir + red)
-x.plot()
+# Update data type to int16 to perform NDVI calculation
+red16 = red.astype('int16')
+nir16 = nir_small.astype('int16')
+
+print('RED: original dtype:', rgb_small.dtype, '.... converted dtype:', red16.dtype)
+print('NIR: original dtype:', nir.dtype, '.... converted dtype:', nir16.dtype)
+
+# Calculate and plot NDVI
+ndvi = (nir16 - red16)/(nir16+red16)
+ndvi.plot()
 ```
 
-This is why we need to manually convert both rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations.
+Remember that plants will always have positive NDVI values between 0.2 and 1. 
 
-Notice too, that when we performed the NDVI calculation we did not get any warning, although we were overflowing the computation at every cell of our array. 
-This is can be an example of *failing silently*, where we don't get any warnings about the errors in our computation. 
-That's why it's so important to double-check our results!
-:::
+Can you spot the Courthouse?
+
