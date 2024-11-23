@@ -1,0 +1,136 @@
+# Final project
+
+The project consists of two tasks:
+
+- Task 1: add a blog post to your personal website based on one of your previous assignments and discussion sections. This task is 35% of the final grade.
+- Task 2: create a presentation-ready GitHub repository featuring geospatial analysis in Python. This task is 65% of the final grade.
+
+
+## Submission instructions
+:::{.callout-warning appearance="minimal"}
+**Both a submission and a revised submission addressing all the feedback from the first revision will be needed to get a final grade for these two tasks.** An assignment without a resubmission will get a 0 grade. 
+
+- Task 1 (blog post) is due by 11:59 pm on Wednesday, December 4.
+
+- Task 2 (GitHub repo) is due by  by 11:59 pm on Saturday, December 7.
+
+Feedback for both tasks will be given to students by Tuesday December 10 and the final resubmission for both tasks is Friday, December 13 (last day of the quarter).
+
+If you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm on the day before the due dates.
+:::
+
+## Task 2: Biodiversity Intactness Index change in Phoenix, AZ
+
+In 2021, Maricopa County —home to the Phoenix metropolitan area— was identified as the U.S. county with the most significant increase in developed land since 2001 @levitt_where_2021. This rapid urban sprawl has profound implications for biodiversity and the health of surrounding natural ecosystems.
+
+In this assignment, you will investigate the impacts of urban expansion by analyzing a dataset that captures values for the Biodiversity Intactness Index (BII) @gassert_global_2022. Your task is to examine changes in BII in the Phoenix county subdivision area between 2017 and 2020, shedding light on how urban growth affects biodiversity over time.
+
+### About the data
+
+In this task you will use two datasets. 
+
+
+You will work with two datasets for this task:
+
+1. **Biodiversity Intactness Index (BII) Time Series**
+Access the `io-biodiversity` collection from the [Microsoft Planetary Computer STAC catalog](https://planetarycomputer.microsoft.com/dataset/io-biodiversity). Use the 2017 and 2020 rasters covering the Phoenix subdivision. For the bounding box, use the following coordinates:
+```default
+[-112.826843, 32.974108, -111.184387, 33.863574]
+```
+
+2. **Phoenix Subdivision Shapefile**
+Download the Phoenix subdivision polygon from the Census County Subdivision shapefiles for Arizona.
+
+To enhance your data exploration, you may use additional shapefiles or rasters to create a map situating the Phoenix subdivision within its broader geographic context.
+
+### Setup
+
+:::{.callout-tip appearance="minimal"}
+First, read all the instructions and rubric for this task. Then, create a new GitHub repository to house the work for this task. Choose an adequate, informative title for your repository (not `EDS220-final-project`). Your repository should have the following structure:
+
+```default
+repo-name
+│   README.md
+|   notebooks
+|   .gitignore
+│
+└── data  # If needed
+    │   data-files  
+```
+:::
+
+:::{.callout-warning appearance="minimal"}
+📋 Don't forget to read the [rubric for this task](https://docs.google.com/document/d/1-Zm731BLVCs1MXHT5R1H9rr6uvcwHnMZQ2q8xkQ_fWM/edit?usp=sharing) before you start working on it.
+:::
+
+## Instructions
+
+### 1. Data analysis
+
+1. Explore the data and write a brief summary of the information you obtained from the preliminary information. 
+
+2. Create a map showing the Phoenix subdivision within its broader geographic context. You may use any vector or raster datasets to create your map. Be sure to include citations or descriptions for these datasets at the top of your notebook too. You can may also want to check out the `contextily` package to add a base map.
+
+3. Calculate the *percentage* of area of the Phoenix subdivision with a BII of at least 0.75 in 2017. Obtain the same calculation for 2020. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
+
+::: {.callout-note collapse="true"}
+## HINTS (useful or not depending on your workflow)
+
+- Let `x` be an `xarray.DataArray`. We can select all the values greater than `n` by simply doing `x>n`. 
+- To calculate the percentage area: (pixels with BII>=0.75)/(total pixels in Phoenix subdivision) * 100. 
+:::
+
+4. Create a visualization showing the area with BII>=0.75 in 2017 that was lost by 2020. Here’s an example:
+
+<p align="center">
+![](/assignments/images/bii_phoenix.png){width="60%"}
+</p>
+
+::: {.callout-note collapse="true"}
+## HINTS (useful or not depending on your workflow)
+
+- To find which pixels changed value from 2017 to 2020 think about the following example. Which values in R3 represent areas that had BII>=0.75 in 2017 but not in 2020?
+
+<p align="center">
+![](/assignments/images/bii_raster_math.png){width="70%"}
+</p>
+
+- You can plot multiple rasters in the same figure. NaN values will be transparent.
+:::
+
+5. Under your BII visualization write a brief description of the results you obtianed in this task. 
+
+### 2. Clean notebook
+
+The target audience for your notebook is a fellow EDS 220 student who is just learning geospatial wrangling using Python. 
+
+- Add enough and appropriate comments to explain your code.
+- First cell in the notebook must be a markdown cell including: 
+  - [ ] Title
+  - [ ] Author
+  - [ ] Link to GitHub repository containing the notebook (for grading purposes)
+- At the top of the notebook, include an "About" section with the following subsections: 
+    - [ ] Purpose: what is this notebook about?
+    - [ ] Highlights: List of highlights of analysis (3 or 4 highlights). What do you consider to be the most important aspects of this coding exercise?
+    - [ ] About the data: Datasets description
+    - [ ] References: Formal references to datasets. You can use the APA style as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
+- The rest of your notebook should have:
+    - [ ] Logical subsections (indicated through markdown headers) for the data exploration, analysis, and visualization you are performing. The subsections should easily guide the reader through the analysis.
+    - [ ] Enough and appropriate markdown cells to explain the procedures you are using and their output. If your code comment is getting too long, you should probably move it to markdown cell as text.
+
+### 3. Clean repository 
+
+Same as the instructions for assignment 4. Update your repository's README with (at least) the following (based on [EDS 296](https://ucsb-meds.github.io/README-guidelines/)):
+
+- [ ] **Title.** Short, but descriptive title.
+- [ ] **"About" section.** A brief explanation of the repository’s purpose.
+  Paragraphs or a bulleted list are both acceptable options. 
+  You may include an image or logo that represents the project.
+- [ ] **"Repository Structure" section.** A concise description of what’s housed in the repository.
+  This includes information about the repository structure or file organization.
+- [ ] **"Data" section.** Details regarding data access. Any necessary information on where data lives (e.g. is it housed in the repo, on a server, in a library / package etc.) and how to access it in order to run the code. 
+- [ ] **"References" section.** In an appropriate, consistent format, including links, provide a reference to the course and any other sources that supported the development of the repository. **Include formal references to the datasets.** You can use the APA style to cite data sources as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
+
+:::{.callout-warning appearance="minimal"}
+Ready to submit your answers? Make sure your submission follows the checklist at the top of the assginment! 
+:::
