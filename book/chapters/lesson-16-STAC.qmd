@@ -1,4 +1,4 @@
-# STAC specification
+# 15 STAC specification
 
 So far in our course we have obtained data in two ways: by downloading it directly from the data provider or by obtaining a URL from a data repository. 
 This can be a convenient way to access targeted datasets, often usign graphical user interfaces (GUIs) for data discovery and filtering.
@@ -229,16 +229,20 @@ aspect = sb.rio.width / sb.rio.height
 sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)
 ```
 
-![](/book/images/lesson-16/sb-from-stac-item.png){width="50%"}
+![](/book/images/lesson-16/sb-from-stac-item.png){width="70%"}
 
+:::{.callout-tip}
 ## Exercise
-
-The `'cop-dem-glo-90'` collection contains the Copernicus DEM at 90m resolution data (the data we previously used for the Grand Canyon). 
+The `'cop-dem-glo-90'` collection contains the Copernicus Digital Elevation Model (DEM) at 90m resolution data. 
 
 1) Reuse the `bbox` for Santa Barbara to look for items in this collection. 
-2) Get the first item in the search and check its assets.
+2) Get the first item in the search and examine its assets.
 3) Check the item's rendered preview asset by clicking on it's URL.
-4) Open the item's data using rioxarray.
+4) Open and plot the item's data using `rioxarray`.
+5) Obtain the maximum and minimum elevation on the scene as *numbers*. 
+6) Print the maximum and minimum elevation [rounded to two decimal points using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). 
+:::
+
 
 <!--
 ## Exercise
@@ -295,4 +299,41 @@ Idea for homework:
 
 https://planetarycomputer.microsoft.com/dataset/io-biodiversity#Example-Notebook
 
+-->
+
+<!--
+An easy way to obtain coordinates for such a region:
+
+![Screenshot from geojson.io](/images/geojsonio-sb.png)
+
+1. go to  [https://geojson.io/](https://geojson.io/) website,
+2. zoom in until you find the NCEAS building in Santa Barbara, it might help to change to 'Satellite Streets' view on the bottom left corner, 
+3. click on the rectangle icon on the right-side toolbar and draw a small region around the NCEAS buildng,
+4. the geoJSON code representing this area will appear in the code box,
+5. one option is two copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
+6. instead, we will create our region of index by just *copy-pasting the list of points* and storing it as a variable:
+
+```{python}
+# vertices of our aoi box
+points = [[-119.70608227128903, 34.426300194372274],
+          [-119.70608227128903, 34.42041139020533],
+          [-119.6967885126002, 34.42041139020533],
+          [-119.6967885126002, 34.426300194372274],
+          [-119.70608227128903, 34.426300194372274]]
+```
+
+We can then create a new `geopandas.GeoDataFrame`:
+
+```{python}
+# create geodataframe with aoi 
+aoi = gpd.GeoDataFrame(geometry=[Polygon(points)],
+                           crs='epsg:4326')
+aoi
+```
+
+Let's break this down a bit:
+
+- first, we use the `shapely`'s `Polygon()` function to create a polygon from our `points` list. 
+- in `[Polygon(points)]` we put this polygon inside a list so we can form the geometry column of our new `gpd.GeoDataFrame`
+- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.
 -->

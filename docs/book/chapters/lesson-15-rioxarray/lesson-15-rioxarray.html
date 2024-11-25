@@ -221,7 +221,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">Raster data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html"><code>rioxarray</code></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">Raster data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">14 <code>rioxarray</code></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -377,7 +377,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><code>rioxarray</code></span></a>
+ <span class="menu-text">14 <code>rioxarray</code></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../book/chapters/lesson-16-STAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">15 STAC specification</span></a>
   </div>
 </li>
       </ul>
@@ -432,9 +438,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">Raster data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html"><code>rioxarray</code></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">Raster data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.html">14 <code>rioxarray</code></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><code>rioxarray</code></h1>
+<h1 class="title">14 <code>rioxarray</code></h1>
 </div>
 
 
@@ -461,24 +467,23 @@ window.Quarto = {
 <section id="import-a-tif-file" class="level2">
 <h2 class="anchored" data-anchor-id="import-a-tif-file">Import a TIF file</h2>
 <p>Let’s start by loading the libraries we will use:</p>
-<div id="6849d31a" class="cell" data-execution_count="1">
+<div id="1120c330" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> Polygon</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are <a href="https://corteva.github.io/rioxarray/html/getting_started/getting_started.html">multiple ways of opening a TIF file using <code>xarray</code> or <code>rioxarray</code></a>. Using the <code>rioxarray.open_rasterio()</code> function to open the TIF file is a simple way to import the raster file as an <code>xarray.DataArray</code> and make sure all our geospatial data gets loaded correctly:</p>
-<div id="d83858a2" class="cell" data-execution_count="2">
+<div id="1a0b9a67" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import NIR TIF file</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'NAIP_SB_nir.tif'</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nir <span class="op">=</span> rioxr.open_rasterio(fp)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>nir</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<div class="cell-output cell-output-display" data-execution_count="66">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
 <symbol id="icon-database" viewbox="0 0 32 32">
@@ -852,7 +857,7 @@ Coordinates:
 Attributes:
     AREA_OR_POINT:  Area
     scale_factor:   1.0
-    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 1</li><li><span class="xr-has-index">y</span>: 3208</li><li><span class="xr-has-index">x</span>: 2419</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-b5905ee1-b454-468d-8f9a-9935098fef4e" class="xr-array-in" type="checkbox" checked=""><label for="section-b5905ee1-b454-468d-8f9a-9935098fef4e" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[7760152 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-a68953a1-04b7-4261-bc39-5bf832c3e814" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-a68953a1-04b7-4261-bc39-5bf832c3e814" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-2f87aed3-ff28-4cbe-9377-f9774f2c1a4c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2f87aed3-ff28-4cbe-9377-f9774f2c1a4c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-538e1bf3-af87-493c-866e-b393f997d159" class="xr-var-data-in" type="checkbox"><label for="data-538e1bf3-af87-493c-866e-b393f997d159" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.512e+05 2.512e+05 ... 2.527e+05</div><input id="attrs-5ebc7354-f853-459c-8807-29a29153114c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-5ebc7354-f853-459c-8807-29a29153114c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-738527f9-f3e7-4ba4-aacd-ad1ea2b7cf9c" class="xr-var-data-in" type="checkbox"><label for="data-738527f9-f3e7-4ba4-aacd-ad1ea2b7cf9c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([251219.1, 251219.7, 251220.3, ..., 252668.7, 252669.3, 252669.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.811e+06</div><input id="attrs-b09afb1a-2adc-4f76-a567-7a4e0d05d710" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b09afb1a-2adc-4f76-a567-7a4e0d05d710" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1d817e87-06a1-4594-b0a4-c4abf8956c08" class="xr-var-data-in" type="checkbox"><label for="data-1d817e87-06a1-4594-b0a4-c4abf8956c08" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3812951.7, 3812951.1, 3812950.5, ..., 3811028.7, 3811028.1, 3811027.5])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-801926b5-0199-4601-aca5-3ee5333eab5b" class="xr-var-attrs-in" type="checkbox"><label for="attrs-801926b5-0199-4601-aca5-3ee5333eab5b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e8262c4d-f2f3-4b88-8022-c54e2b75035f" class="xr-var-data-in" type="checkbox"><label for="data-e8262c4d-f2f3-4b88-8022-c54e2b75035f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251218.8 0.6000000000000072 0.0 3812952.0 0.0 -0.600000000000058</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-816039a4-350e-4b3c-bf87-6d8269cc9385" class="xr-section-summary-in" type="checkbox"><label for="section-816039a4-350e-4b3c-bf87-6d8269cc9385" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-cc0c0bb2-6543-4cde-9beb-2541a2cd0f8a" class="xr-index-data-in" type="checkbox"><label for="index-cc0c0bb2-6543-4cde-9beb-2541a2cd0f8a" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-c8d860aa-b3a0-420c-a4f2-5cd666eda339" class="xr-index-data-in" type="checkbox"><label for="index-c8d860aa-b3a0-420c-a4f2-5cd666eda339" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251219.09999999998, 251219.69999999998,           251220.3,
+    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 1</li><li><span class="xr-has-index">y</span>: 3208</li><li><span class="xr-has-index">x</span>: 2419</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-23b4393d-ad6b-4f6f-8940-314535cc67d3" class="xr-array-in" type="checkbox" checked=""><label for="section-23b4393d-ad6b-4f6f-8940-314535cc67d3" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[7760152 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-586b577a-263a-41ce-b190-fb159f8cb846" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-586b577a-263a-41ce-b190-fb159f8cb846" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-07c441ad-b286-4360-b050-fc9f8e9aa996" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-07c441ad-b286-4360-b050-fc9f8e9aa996" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fe65c96d-0b49-4b91-bb71-de76fedf26c5" class="xr-var-data-in" type="checkbox"><label for="data-fe65c96d-0b49-4b91-bb71-de76fedf26c5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.512e+05 2.512e+05 ... 2.527e+05</div><input id="attrs-8a4874d9-e845-4afe-92fc-5119d0bdfbe0" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8a4874d9-e845-4afe-92fc-5119d0bdfbe0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0b444525-bbc1-4f4f-b6b9-41d0dc70fff6" class="xr-var-data-in" type="checkbox"><label for="data-0b444525-bbc1-4f4f-b6b9-41d0dc70fff6" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([251219.1, 251219.7, 251220.3, ..., 252668.7, 252669.3, 252669.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.811e+06</div><input id="attrs-7fdf3d05-3d6c-4e66-9232-9b18cdf83ea7" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-7fdf3d05-3d6c-4e66-9232-9b18cdf83ea7" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-805992dd-9e46-41a9-a2a8-fbf3fe9144c7" class="xr-var-data-in" type="checkbox"><label for="data-805992dd-9e46-41a9-a2a8-fbf3fe9144c7" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3812951.7, 3812951.1, 3812950.5, ..., 3811028.7, 3811028.1, 3811027.5])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-3f28d4d3-30d6-4d00-bb10-7af7883d362b" class="xr-var-attrs-in" type="checkbox"><label for="attrs-3f28d4d3-30d6-4d00-bb10-7af7883d362b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e3c11b71-f347-417b-8f0b-57c70ecc53a2" class="xr-var-data-in" type="checkbox"><label for="data-e3c11b71-f347-417b-8f0b-57c70ecc53a2" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251218.8 0.6000000000000072 0.0 3812952.0 0.0 -0.600000000000058</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-ea0af3e2-b45f-43d6-b811-c49cc7c931fa" class="xr-section-summary-in" type="checkbox"><label for="section-ea0af3e2-b45f-43d6-b811-c49cc7c931fa" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-270b34d4-27f1-45d2-b438-6d22bded168e" class="xr-index-data-in" type="checkbox"><label for="index-270b34d4-27f1-45d2-b438-6d22bded168e" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-5dce5224-4665-4266-bbbf-c8192f831629" class="xr-index-data-in" type="checkbox"><label for="index-5dce5224-4665-4266-bbbf-c8192f831629" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251219.09999999998, 251219.69999999998,           251220.3,
        251220.89999999997, 251221.49999999997, 251222.09999999998,
        251222.69999999998,           251223.3, 251223.89999999997,
        251224.49999999997,
@@ -861,7 +866,7 @@ Attributes:
                  252666.3,           252666.9,           252667.5,
                  252668.1, 252668.69999999998,           252669.3,
                  252669.9],
-      dtype='float64', name='x', length=2419))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-00953c60-3fc1-48ad-aaee-d03a9d00c47d" class="xr-index-data-in" type="checkbox"><label for="index-00953c60-3fc1-48ad-aaee-d03a9d00c47d" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3812951.7,          3812951.1,          3812950.5,
+      dtype='float64', name='x', length=2419))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-04a360d8-ff0b-4477-8199-fbc0eabab263" class="xr-index-data-in" type="checkbox"><label for="index-04a360d8-ff0b-4477-8199-fbc0eabab263" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3812951.7,          3812951.1,          3812950.5,
        3812949.9000000004, 3812949.3000000003,          3812948.7,
                 3812948.1,          3812947.5, 3812946.9000000004,
        3812946.3000000003,
@@ -870,11 +875,11 @@ Attributes:
                 3811031.1,          3811030.5,          3811029.9,
                 3811029.3,          3811028.7,          3811028.1,
                 3811027.5],
-      dtype='float64', name='y', length=3208))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-bb5f3b13-9d89-4984-9dbf-ac850814cafd" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-bb5f3b13-9d89-4984-9dbf-ac850814cafd" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
+      dtype='float64', name='y', length=3208))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-870e4509-0ecb-49f3-873b-82ea2c1383c1" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-870e4509-0ecb-49f3-873b-82ea2c1383c1" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>Notice we see all the components of an <code>xarray.DataArray</code>: its dimensions (band, y, x), the coordiantes for each dimension, and some attributes. We can also directly access some of these attribues:</p>
-<div id="51f56d50" class="cell" data-execution_count="3">
+<div id="2779b17a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Shape: '</span>, nir.shape)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Data type: '</span>, nir.dtype, <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -884,13 +889,13 @@ Data type:  uint8
 </div>
 </div>
 <p>Using the <code>.values</code> attribute we can retrieve the underlying <code>numpy.array</code> holding the values of the variable:</p>
-<div id="5a9e7a7c" class="cell" data-execution_count="4">
+<div id="de7393c5" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(nir.values))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nir.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'numpy.ndarray'&gt;</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="71">
+<div class="cell-output cell-output-display" data-execution_count="68">
 <pre><code>array([[[167, 164, 161, ..., 147, 152, 151],
         [170, 170, 168, ..., 151, 149, 154],
         [176, 177, 177, ..., 151, 151, 151],
@@ -901,7 +906,7 @@ Data type:  uint8
 </div>
 </div>
 <p>We can also plot our data:</p>
-<div id="168f42b2" class="cell" data-execution_count="5">
+<div id="34dbfbba" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nir.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -917,7 +922,7 @@ Data type:  uint8
 <section id="drop-a-dimension" class="level2">
 <h2 class="anchored" data-anchor-id="drop-a-dimension">Drop a dimension</h2>
 <p>Notice that our raster has an unnecessary extra dimension: band.</p>
-<div id="36017cb2" class="cell" data-execution_count="6">
+<div id="8e8536f9" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sizes of dimensions:"</span>, <span class="bu">dict</span>(nir.sizes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sizes of dimensions: {'band': 1, 'y': 3208, 'x': 2419}</code></pre>
@@ -929,7 +934,7 @@ Data type:  uint8
 <li><p>getting rid of the associated coordinates for this dimension. We can do this using the <code>xarray.DataArray</code> <code>drop()</code> method and specifying the name of the coordinates we want to remove, in this case ‘band’.</p></li>
 </ol>
 <p>Let’s do this:</p>
-<div id="d4e3526e" class="cell" data-execution_count="7">
+<div id="25525a95" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original dimensions and coordinates</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nir.dims, nir.coords,<span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -963,7 +968,7 @@ Data type:  uint8
 <section id="rio-accessor" class="level2">
 <h2 class="anchored" data-anchor-id="rio-accessor"><code>rio</code> accessor</h2>
 <p>Remember an <strong>accessor</strong> in Python let’s us access a different set of properties of an object. We have previously used accesors like <code>.str</code> and <code>.dt</code> in <code>pandas</code> to work with strings and dates. In this lesson, we will use the <code>.rio</code> accessor for an <code>xarray.DataArray</code> to access its raster properties. For example, we can access the number of bands, height, width, spatial bounding box, and CRS:</p>
-<div id="16074320" class="cell" data-execution_count="8">
+<div id="dd35d510" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine raster attributes using rio accessor</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of bands: '</span>, nir.rio.count)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Height: '</span>, nir.rio.height)</span>
@@ -991,12 +996,12 @@ CRS:  EPSG:26911</code></pre>
 <section id="multi-band-raster" class="level2">
 <h2 class="anchored" data-anchor-id="multi-band-raster">Multi-band raster</h2>
 <p>Let’s now import the RGB raster:</p>
-<div id="14815c9f" class="cell" data-execution_count="9">
+<div id="95575de6" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import RGB raster</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'NAIP_SB_rgb.tif'</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>rgb <span class="op">=</span> rioxr.open_rasterio(fp)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>rgb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="76">
+<div class="cell-output cell-output-display" data-execution_count="73">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
 <symbol id="icon-database" viewbox="0 0 32 32">
@@ -1370,7 +1375,7 @@ Coordinates:
 Attributes:
     AREA_OR_POINT:  Area
     scale_factor:   1.0
-    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 3</li><li><span class="xr-has-index">y</span>: 3208</li><li><span class="xr-has-index">x</span>: 2419</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-185a75d9-2016-430c-9b15-bfb3059c1b1a" class="xr-array-in" type="checkbox" checked=""><label for="section-185a75d9-2016-430c-9b15-bfb3059c1b1a" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[23280456 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-d09eb5b0-e4c1-4bff-b746-8e4cd2ea5311" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-d09eb5b0-e4c1-4bff-b746-8e4cd2ea5311" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3</div><input id="attrs-422399f5-ed9f-499a-86d4-9a3dc5ed9a16" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-422399f5-ed9f-499a-86d4-9a3dc5ed9a16" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-eaf1d387-b513-4d65-b7cc-e879eacd1e1a" class="xr-var-data-in" type="checkbox"><label for="data-eaf1d387-b513-4d65-b7cc-e879eacd1e1a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2, 3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.512e+05 2.512e+05 ... 2.527e+05</div><input id="attrs-dfa438f3-1af1-4466-893b-234b18ac7529" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-dfa438f3-1af1-4466-893b-234b18ac7529" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ef88bf31-9777-449e-8b4a-9e75d2064ee9" class="xr-var-data-in" type="checkbox"><label for="data-ef88bf31-9777-449e-8b4a-9e75d2064ee9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([251219.1, 251219.7, 251220.3, ..., 252668.7, 252669.3, 252669.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.811e+06</div><input id="attrs-d3591a5d-c71c-44d2-81f5-ba16f738ec6e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d3591a5d-c71c-44d2-81f5-ba16f738ec6e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-c240660b-84a3-4dcf-be4b-013911b8f30a" class="xr-var-data-in" type="checkbox"><label for="data-c240660b-84a3-4dcf-be4b-013911b8f30a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3812951.7, 3812951.1, 3812950.5, ..., 3811028.7, 3811028.1, 3811027.5])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-1c1804eb-9f05-415d-9533-a008cacb745e" class="xr-var-attrs-in" type="checkbox"><label for="attrs-1c1804eb-9f05-415d-9533-a008cacb745e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-39fccb58-0676-4f36-9de8-fc38ca4dd0e1" class="xr-var-data-in" type="checkbox"><label for="data-39fccb58-0676-4f36-9de8-fc38ca4dd0e1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251218.8 0.6000000000000072 0.0 3812952.0 0.0 -0.600000000000058</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-5ebeb4f8-0406-4730-a12e-242f582c4a19" class="xr-section-summary-in" type="checkbox"><label for="section-5ebeb4f8-0406-4730-a12e-242f582c4a19" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-11abe3a5-fe22-48ce-aaef-302e2be0f512" class="xr-index-data-in" type="checkbox"><label for="index-11abe3a5-fe22-48ce-aaef-302e2be0f512" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-50bba6d7-9701-49b5-9cce-4e6e0261a886" class="xr-index-data-in" type="checkbox"><label for="index-50bba6d7-9701-49b5-9cce-4e6e0261a886" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251219.09999999998, 251219.69999999998,           251220.3,
+    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 3</li><li><span class="xr-has-index">y</span>: 3208</li><li><span class="xr-has-index">x</span>: 2419</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-14ee62b4-242d-4d99-bb42-7f46209b98ca" class="xr-array-in" type="checkbox" checked=""><label for="section-14ee62b4-242d-4d99-bb42-7f46209b98ca" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[23280456 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-10944475-494a-490f-858e-7ad436aea0de" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-10944475-494a-490f-858e-7ad436aea0de" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3</div><input id="attrs-e85bbbd6-f10c-4826-868e-5c9dcf6045ef" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e85bbbd6-f10c-4826-868e-5c9dcf6045ef" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1024bd9d-a2cd-4a65-8932-477deff9d4ee" class="xr-var-data-in" type="checkbox"><label for="data-1024bd9d-a2cd-4a65-8932-477deff9d4ee" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2, 3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.512e+05 2.512e+05 ... 2.527e+05</div><input id="attrs-da002cdf-01d2-4750-9a4a-3bf8fe048d92" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-da002cdf-01d2-4750-9a4a-3bf8fe048d92" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d33ee2ac-9831-4402-9f9c-89c43c2cb951" class="xr-var-data-in" type="checkbox"><label for="data-d33ee2ac-9831-4402-9f9c-89c43c2cb951" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([251219.1, 251219.7, 251220.3, ..., 252668.7, 252669.3, 252669.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.811e+06</div><input id="attrs-e78517e3-8782-414e-b347-53fe4fb5028a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e78517e3-8782-414e-b347-53fe4fb5028a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-acbc2ed2-9028-4276-8af2-a9db9576a240" class="xr-var-data-in" type="checkbox"><label for="data-acbc2ed2-9028-4276-8af2-a9db9576a240" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3812951.7, 3812951.1, 3812950.5, ..., 3811028.7, 3811028.1, 3811027.5])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-bd1159de-bf26-4969-8c92-88ab89fb2cbd" class="xr-var-attrs-in" type="checkbox"><label for="attrs-bd1159de-bf26-4969-8c92-88ab89fb2cbd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-683fa24f-0ef3-4888-9852-65525e09d5b2" class="xr-var-data-in" type="checkbox"><label for="data-683fa24f-0ef3-4888-9852-65525e09d5b2" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251218.8 0.6000000000000072 0.0 3812952.0 0.0 -0.600000000000058</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-0b83f261-7879-4834-9949-b34d11fbb542" class="xr-section-summary-in" type="checkbox"><label for="section-0b83f261-7879-4834-9949-b34d11fbb542" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-17390f2c-7eea-423b-b224-16c8600c5d61" class="xr-index-data-in" type="checkbox"><label for="index-17390f2c-7eea-423b-b224-16c8600c5d61" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-c1659444-5918-47ef-bba0-2a63fdcbceb1" class="xr-index-data-in" type="checkbox"><label for="index-c1659444-5918-47ef-bba0-2a63fdcbceb1" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251219.09999999998, 251219.69999999998,           251220.3,
        251220.89999999997, 251221.49999999997, 251222.09999999998,
        251222.69999999998,           251223.3, 251223.89999999997,
        251224.49999999997,
@@ -1379,7 +1384,7 @@ Attributes:
                  252666.3,           252666.9,           252667.5,
                  252668.1, 252668.69999999998,           252669.3,
                  252669.9],
-      dtype='float64', name='x', length=2419))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-2f0d397b-cfb9-414b-8be1-7482a8e60097" class="xr-index-data-in" type="checkbox"><label for="index-2f0d397b-cfb9-414b-8be1-7482a8e60097" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3812951.7,          3812951.1,          3812950.5,
+      dtype='float64', name='x', length=2419))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-1b2c6013-c95c-4156-943f-71b24bffef21" class="xr-index-data-in" type="checkbox"><label for="index-1b2c6013-c95c-4156-943f-71b24bffef21" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3812951.7,          3812951.1,          3812950.5,
        3812949.9000000004, 3812949.3000000003,          3812948.7,
                 3812948.1,          3812947.5, 3812946.9000000004,
        3812946.3000000003,
@@ -1388,7 +1393,7 @@ Attributes:
                 3811031.1,          3811030.5,          3811029.9,
                 3811029.3,          3811028.7,          3811028.1,
                 3811027.5],
-      dtype='float64', name='y', length=3208))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-972ca7ff-b6a2-42ad-9661-186394083c8a" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-972ca7ff-b6a2-42ad-9661-186394083c8a" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
+      dtype='float64', name='y', length=3208))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-a6637a89-e951-4946-9f9b-28927a0a7f7b" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-a6637a89-e951-4946-9f9b-28927a0a7f7b" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>Notice this raster has three bands, instead of one. This makes sense because we know these bands correspond to the red, green and blue bands of the image.</p>
@@ -1414,7 +1419,7 @@ print('CRS: ', rgb.rio.crs)
 </div>
 </div>
 <p>Finally, let’s plot this raster. Since it has three bands, we can plot it as an image using the <code>.plot.imshow()</code> method, which will interpret the three bands of the object as RGB.</p>
-<div id="0c44373a" class="cell" data-execution_count="10">
+<div id="8dd706b7" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot three bands as RGB image</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>rgb_aspect_ratio <span class="op">=</span> rgb.rio.width <span class="op">/</span> rgb.rio.height  <span class="co"># Raster's aspect ratio</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>rgb.plot.imshow(size<span class="op">=</span><span class="dv">6</span>,  <span class="co"># Plot's height in inches</span></span>
@@ -1432,8 +1437,8 @@ print('CRS: ', rgb.rio.crs)
 <section id="clip-a-raster" class="level2">
 <h2 class="anchored" data-anchor-id="clip-a-raster">Clip a raster</h2>
 <p>Our area of interest (AOI) for this lesson is a smaller region that includes only a few blocks around the NCEAS building. This is outlined in a GeoJSON file:</p>
-<div id="b05992b3" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>, <span class="st">'aoi.geojson'</span>)</span>
+<div id="e690313e" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>, <span class="st">'SB_aoi.geojson'</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> gpd.read_file(fp)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>aoi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1444,100 +1449,20 @@ print('CRS: ', rgb.rio.crs)
 </div>
 </div>
 </div>
-<!--
-An easy way to obtain coordinates for such a region:
-
-![Screenshot from geojson.io](/images/geojsonio-sb.png)
-
-1. go to  [https://geojson.io/](https://geojson.io/) website,
-2. zoom in until you find the NCEAS building in Santa Barbara, it might help to change to 'Satellite Streets' view on the bottom left corner, 
-3. click on the rectangle icon on the right-side toolbar and draw a small region around the NCEAS buildng,
-4. the geoJSON code representing this area will appear in the code box,
-5. one option is two copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
-6. instead, we will create our region of index by just *copy-pasting the list of points* and storing it as a variable:
-
-::: {#730d671a .cell execution_count=12}
-``` {.python .cell-code}
-# vertices of our aoi box
-points = [[-119.70608227128903, 34.426300194372274],
-          [-119.70608227128903, 34.42041139020533],
-          [-119.6967885126002, 34.42041139020533],
-          [-119.6967885126002, 34.426300194372274],
-          [-119.70608227128903, 34.426300194372274]]
-```
-:::
-
-
-We can then create a new `geopandas.GeoDataFrame`:
-
-::: {#00757294 .cell execution_count=13}
-``` {.python .cell-code}
-# create geodataframe with aoi 
-aoi = gpd.GeoDataFrame(geometry=[Polygon(points)],
-                           crs='epsg:4326')
-aoi
-```
-
-::: {.cell-output .cell-output-display execution_count=80}
-
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">geometry</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>POLYGON ((-119.70608 34.42630, -119.70608 34.4...</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-```
-
-:::
-:::
-
-
-Let's break this down a bit:
-
-- first, we use the `shapely`'s `Polygon()` function to create a polygon from our `points` list. 
-- in `[Polygon(points)]` we put this polygon inside a list so we can form the geometry column of our new `gpd.GeoDataFrame`
-- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.
--->
 <p>Remember: <strong>if two geospatial sets will interact they need to be in the same CRS</strong>. In our case, the AOI <code>geopandas.GeoDataFrame</code> does not have the same CRS as the rasters:</p>
-<div id="53694e94" class="cell" data-execution_count="14">
+<div id="bb409d23" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine CRss</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'aoi CRS: '</span>, aoi.crs)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'nir CRS: '</span>, nir.rio.crs)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'rgb CRS: '</span>, rgb.rio.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>aoi CRS:  epsg:4326
+<pre><code>aoi CRS:  EPSG:4326
 nir CRS:  EPSG:26911
 rgb CRS:  EPSG:26911</code></pre>
 </div>
 </div>
 <p>So let’s reproject:</p>
-<div id="fd9e9d1a" class="cell" data-execution_count="15">
+<div id="bfde1b83" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject AOI to RGB CRS</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> aoi.to_crs(rgb.rio.crs)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Matched CRS?'</span>,  aoi.crs <span class="op">==</span> rgb.rio.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1546,7 +1471,7 @@ rgb CRS:  EPSG:26911</code></pre>
 </div>
 </div>
 <p>And plot them together:</p>
-<div id="5f0cbe6b" class="cell" data-execution_count="16">
+<div id="b3512a72" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot of RGB raster with AOI overlay</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span> <span class="op">*</span> rgb_aspect_ratio))  <span class="co"># Directly set size and aspect</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>rgb.plot.imshow(ax<span class="op">=</span>ax)</span>
@@ -1555,13 +1480,13 @@ rgb CRS:  EPSG:26911</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-15-rioxarray_files/figure-html/cell-17-output-1.png" width="354" height="414" class="figure-img"></p>
+<p><img src="lesson-15-rioxarray_files/figure-html/cell-15-output-1.png" width="354" height="414" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>To clip the raster using the AOI polygon we use the <code>.rio.clip_box()</code> method:</p>
-<div id="592e6e17" class="cell" data-execution_count="17">
+<div id="d1b98933" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip rasters to AOI</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rgb_small <span class="op">=</span> rgb.rio.clip_box(<span class="op">*</span>aoi.total_bounds)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>nir_small <span class="op">=</span> nir.rio.clip_box(<span class="op">*</span>aoi.total_bounds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1572,7 +1497,7 @@ rgb CRS:  EPSG:26911</code></pre>
 <li>similarly to the <code>shapely.box()</code> function <a href="../../../book/chapters/lesson-13-clipping/lesson-13-clipping.html">we’ve used previously</a>, <a href="https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box"><code>.rio.clip_box()</code> usual parameters</a> are <code>minx</code>, <code>miny</code>, <code>maxx</code>, <code>maxy</code>. We are using the <code>*</code> asterisk as an unpacking operator to get these from the list <code>aoi.total_bounds</code>.</li>
 </ul>
 <p>Let’s check our clipped data:</p>
-<div id="b72418a3" class="cell" data-execution_count="18">
+<div id="2e312ecd" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine clipped data </span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Original shape: '</span>, nir.shape)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Clipped shape: '</span>, nir_small.shape)</span>
@@ -1580,12 +1505,12 @@ rgb CRS:  EPSG:26911</code></pre>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>nir_small.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Original shape:  (3208, 2419)
-Clipped shape:  (1128, 1454)</code></pre>
+Clipped shape:  (1710, 1995)</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-15-rioxarray_files/figure-html/cell-19-output-2.png" width="583" height="464" class="figure-img"></p>
+<p><img src="lesson-15-rioxarray_files/figure-html/cell-17-output-2.png" width="605" height="464" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1627,11 +1552,11 @@ rgb_small.plot.imshow(size=4,
 <p>The NDVI is calculated using the NIR and red bands. The formula is</p>
 <p><span class="math inline">\(NDVI = \frac{NIR - Red}{NIR + Red}.\)</span></p>
 <p>First, let’s select the red band:</p>
-<div id="cda745c6" class="cell" data-execution_count="19">
+<div id="65ebff9a" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select dimension by name and coordinate by label</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> rgb_small.sel(band<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>red</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="86">
+<div class="cell-output cell-output-display" data-execution_count="81">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
 <symbol id="icon-database" viewbox="0 0 32 32">
@@ -1995,45 +1920,45 @@ dl.xr-attrs {
   stroke: currentColor;
   fill: currentColor;
 }
-</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray (y: 1128, x: 1454)&gt;
-[1640112 values with dtype=uint8]
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray (y: 1710, x: 1995)&gt;
+[3411450 values with dtype=uint8]
 Coordinates:
     band         int64 1
-  * x            (x) float64 2.513e+05 2.513e+05 ... 2.522e+05 2.522e+05
+  * x            (x) float64 2.513e+05 2.513e+05 ... 2.525e+05 2.525e+05
   * y            (y) float64 3.813e+06 3.813e+06 ... 3.812e+06 3.812e+06
     spatial_ref  int64 0
 Attributes:
     AREA_OR_POINT:  Area
     scale_factor:   1.0
-    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1128</li><li><span class="xr-has-index">x</span>: 1454</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-051e1bc9-7eb0-4d4b-a4f3-5558d7b198fc" class="xr-array-in" type="checkbox" checked=""><label for="section-051e1bc9-7eb0-4d4b-a4f3-5558d7b198fc" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[1640112 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-328e7b6e-60f9-4e49-a09f-7ae76bf2a73a" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-328e7b6e-60f9-4e49-a09f-7ae76bf2a73a" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>band</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-b12de3fd-bc55-4c9c-96bf-9dfe7f33ae6d" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b12de3fd-bc55-4c9c-96bf-9dfe7f33ae6d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4c47955a-9135-4e09-9a39-e7a86d1bff2c" class="xr-var-data-in" type="checkbox"><label for="data-4c47955a-9135-4e09-9a39-e7a86d1bff2c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(1)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.513e+05 2.513e+05 ... 2.522e+05</div><input id="attrs-baf63158-6026-47a4-8fa6-145fadb8411a" class="xr-var-attrs-in" type="checkbox"><label for="attrs-baf63158-6026-47a4-8fa6-145fadb8411a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b7eeba97-8549-4c01-b248-7376397f8c2c" class="xr-var-data-in" type="checkbox"><label for="data-b7eeba97-8549-4c01-b248-7376397f8c2c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([251303.1, 251303.7, 251304.3, ..., 252173.7, 252174.3, 252174.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.812e+06</div><input id="attrs-9dbed115-9bf6-4bb2-976e-c6051e7adf62" class="xr-var-attrs-in" type="checkbox"><label for="attrs-9dbed115-9bf6-4bb2-976e-c6051e7adf62" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0e3a9844-9c9a-4b32-9503-fb83533013ee" class="xr-var-data-in" type="checkbox"><label for="data-0e3a9844-9c9a-4b32-9503-fb83533013ee" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([3812746.5, 3812745.9, 3812745.3, ..., 3812071.5, 3812070.9, 3812070.3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-6f077816-a384-4c39-8253-c24bf7a2b340" class="xr-var-attrs-in" type="checkbox"><label for="attrs-6f077816-a384-4c39-8253-c24bf7a2b340" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fda04b0b-623f-4065-84f6-48df9ccf546a" class="xr-var-data-in" type="checkbox"><label for="data-fda04b0b-623f-4065-84f6-48df9ccf546a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251302.8 0.600000000000012 0.0 3812746.8 0.0 -0.5999999999997521</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-a5116e70-812c-4d6d-b982-709547fb550f" class="xr-section-summary-in" type="checkbox"><label for="section-a5116e70-812c-4d6d-b982-709547fb550f" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-882d8827-e036-4926-8ef3-a6933d37be9b" class="xr-index-data-in" type="checkbox"><label for="index-882d8827-e036-4926-8ef3-a6933d37be9b" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251303.09999999998, 251303.69999999998,           251304.3,
-       251304.89999999997, 251305.49999999997, 251306.09999999998,
-       251306.69999999998,           251307.3, 251307.89999999997,
-       251308.49999999997,
+    add_offset:     0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1710</li><li><span class="xr-has-index">x</span>: 1995</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-761459fa-b6a6-4c54-8566-e5204aa04b32" class="xr-array-in" type="checkbox" checked=""><label for="section-761459fa-b6a6-4c54-8566-e5204aa04b32" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[3411450 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-d69828d9-e85a-454c-9a90-b1832fa2f34e" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-d69828d9-e85a-454c-9a90-b1832fa2f34e" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>band</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1</div><input id="attrs-049bda4c-851e-416e-abb7-8ddd362644bd" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-049bda4c-851e-416e-abb7-8ddd362644bd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a209ebea-c747-4518-a904-bcc97a39eeae" class="xr-var-data-in" type="checkbox"><label for="data-a209ebea-c747-4518-a904-bcc97a39eeae" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(1)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.513e+05 2.513e+05 ... 2.525e+05</div><input id="attrs-b3aa5ca3-f4c1-4c30-a760-b8b63c6e1e4d" class="xr-var-attrs-in" type="checkbox"><label for="attrs-b3aa5ca3-f4c1-4c30-a760-b8b63c6e1e4d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-c58c6b87-cc17-402e-9d3f-a5fc85051f7a" class="xr-var-data-in" type="checkbox"><label for="data-c58c6b87-cc17-402e-9d3f-a5fc85051f7a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([251294.1, 251294.7, 251295.3, ..., 252489.3, 252489.9, 252490.5])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.813e+06 3.813e+06 ... 3.812e+06</div><input id="attrs-1f91295e-2cc6-43f2-b85d-15683f57fb44" class="xr-var-attrs-in" type="checkbox"><label for="attrs-1f91295e-2cc6-43f2-b85d-15683f57fb44" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b35f776a-b199-458d-9e09-c613ba65f4ff" class="xr-var-data-in" type="checkbox"><label for="data-b35f776a-b199-458d-9e09-c613ba65f4ff" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd><dt><span>units :</span></dt><dd>metre</dd></dl></div><div class="xr-var-data"><pre>array([3812760.3, 3812759.7, 3812759.1, ..., 3811736.1, 3811735.5, 3811734.9])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-e4f65a21-ea48-496f-b204-f619b1d62956" class="xr-var-attrs-in" type="checkbox"><label for="attrs-e4f65a21-ea48-496f-b204-f619b1d62956" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-9bd25029-df53-4ebd-829b-33aa3c69ed60" class="xr-var-data-in" type="checkbox"><label for="data-9bd25029-df53-4ebd-829b-33aa3c69ed60" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>251293.8 0.6000000000000116 0.0 3812760.6 0.0 -0.600000000000218</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-bd8ede93-d928-42d6-a75b-39bd861f872e" class="xr-section-summary-in" type="checkbox"><label for="section-bd8ede93-d928-42d6-a75b-39bd861f872e" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-263ba512-80db-4754-bcb2-0e15e4300c5e" class="xr-index-data-in" type="checkbox"><label for="index-263ba512-80db-4754-bcb2-0e15e4300c5e" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([251294.09999999998, 251294.69999999998,           251295.3,
+       251295.89999999997, 251296.49999999997, 251297.09999999998,
+       251297.69999999998,           251298.3, 251298.89999999997,
+       251299.49999999997,
        ...
-                 252169.5, 252170.09999999998, 252170.69999999998,
-                 252171.3,           252171.9,           252172.5,
-       252173.09999999998, 252173.69999999998,           252174.3,
-                 252174.9],
-      dtype='float64', name='x', length=1454))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-9083045a-94c1-42d2-8b91-3168bf19b639" class="xr-index-data-in" type="checkbox"><label for="index-9083045a-94c1-42d2-8b91-3168bf19b639" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3812746.5, 3812745.9000000004, 3812745.3000000003,
-                3812744.7,          3812744.1,          3812743.5,
-       3812742.9000000004, 3812742.3000000003,          3812741.7,
-                3812741.1,
+                 252485.1, 252485.69999999998,           252486.3,
+                 252486.9,           252487.5,           252488.1,
+       252488.69999999998,           252489.3,           252489.9,
+                 252490.5],
+      dtype='float64', name='x', length=1995))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-66326752-c719-457b-a16a-906c9fa09761" class="xr-index-data-in" type="checkbox"><label for="index-66326752-c719-457b-a16a-906c9fa09761" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([3812760.3000000003,          3812759.7,          3812759.1,
+                3812758.5, 3812757.9000000004, 3812757.3000000003,
+                3812756.7,          3812756.1,          3812755.5,
+       3812754.9000000004,
        ...
-                3812075.7,          3812075.1,          3812074.5,
-                3812073.9, 3812073.3000000003,          3812072.7,
-                3812072.1,          3812071.5,          3812070.9,
-       3812070.3000000003],
-      dtype='float64', name='y', length=1128))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-e7d52c54-a66e-45b6-b158-ac6d4c8c9442" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-e7d52c54-a66e-45b6-b158-ac6d4c8c9442" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
+       3811740.3000000003,          3811739.7,          3811739.1,
+                3811738.5,          3811737.9, 3811737.3000000003,
+                3811736.7,          3811736.1,          3811735.5,
+                3811734.9],
+      dtype='float64', name='y', length=1710))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-5dafa4b7-b205-4464-a547-48066e691fc0" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-5dafa4b7-b205-4464-a547-48066e691fc0" class="xr-section-summary">Attributes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>We can perform raster calculations using the same arithmetic we use for <code>numpy.array</code>s (because, underneath it all, that’s what they are). So our NDVI calculation is as follows:</p>
-<div id="5e7a3a4a" class="cell" data-execution_count="20">
+<div id="a3b6bd9a" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ndvi <span class="op">=</span> (nir <span class="op">-</span> red)<span class="op">/</span>(nir <span class="op">+</span> red)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ndvi.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-15-rioxarray_files/figure-html/cell-21-output-1.png" width="568" height="449" class="figure-img"></p>
+<p><img src="lesson-15-rioxarray_files/figure-html/cell-19-output-1.png" width="590" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -2042,13 +1967,13 @@ Attributes:
 <section id="data-type-issues" class="level3">
 <h3 class="anchored" data-anchor-id="data-type-issues">Data type issues</h3>
 <p>The <code>uint8</code> (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. In particular, calculations don’t return what what we are used to when working with intgers (<a href="https://en.wikipedia.org/wiki/Modular_arithmetic">they’re done module 256</a>):</p>
-<div id="fa8ad6ef" class="cell" data-execution_count="21">
+<div id="2eb7825e" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>np.uint8(<span class="dv">150</span>) <span class="op">+</span> np.uint8(<span class="dv">150</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/gm/chd1kps96_g7xdxyfw150wm80000gp/T/ipykernel_14928/1890984988.py:1: RuntimeWarning: overflow encountered in scalar add
+<pre><code>/var/folders/gm/chd1kps96_g7xdxyfw150wm80000gp/T/ipykernel_2983/1890984988.py:1: RuntimeWarning: overflow encountered in scalar add
   np.uint8(150) + np.uint8(150)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="88">
+<div class="cell-output cell-output-display" data-execution_count="83">
 <pre><code>44</code></pre>
 </div>
 </div>
@@ -2070,7 +1995,7 @@ Avoid silent failures: ALWAYS verify your results!
 <section id="updating-data-types" class="level3">
 <h3 class="anchored" data-anchor-id="updating-data-types">Updating data types</h3>
 <p>To be able to perform the calculation successfully, we will need to udpate the data type of our rasters into <code>int16</code>, which will be big enough to hold all the numbers that appear in the calculations:</p>
-<div id="e0c0c77a" class="cell" data-execution_count="22">
+<div id="b50137e2" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update data type to int16 to perform NDVI calculation</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>red16 <span class="op">=</span> red.astype(<span class="st">'int16'</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>nir16 <span class="op">=</span> nir_small.astype(<span class="st">'int16'</span>)</span>
@@ -2108,7 +2033,7 @@ NIR: original dtype: uint8 .... converted dtype: int16</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-15-rioxarray_files/figure-html/cell-23-output-2.png" width="549" height="435" class="figure-img"></p>
+<p><img src="lesson-15-rioxarray_files/figure-html/cell-21-output-2.png" width="549" height="435" class="figure-img"></p>
 </figure>
 </div>
 </div>

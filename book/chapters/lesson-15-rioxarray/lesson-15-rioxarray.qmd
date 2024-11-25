@@ -1,4 +1,4 @@
-# `rioxarray`
+# 14 `rioxarray`
 
 In this lesson we will introduce [`rioxarray`](https://corteva.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. 
 The name `rioxarray` stands for *raster input/output + xarray*. 
@@ -24,7 +24,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import geopandas as gpd
-from shapely.geometry import Polygon
 
 import rioxarray as rioxr
 ```
@@ -161,47 +160,10 @@ Our area of interest (AOI) for this lesson is a smaller region that includes onl
 This is outlined in a GeoJSON file:
 
 ```{python}
-fp = os.path.join('data', 'aoi.geojson')
+fp = os.path.join('data', 'SB_aoi.geojson')
 aoi = gpd.read_file(fp)
 aoi.plot()
 ```
-
-<!--
-An easy way to obtain coordinates for such a region:
-
-![Screenshot from geojson.io](/images/geojsonio-sb.png)
-
-1. go to  [https://geojson.io/](https://geojson.io/) website,
-2. zoom in until you find the NCEAS building in Santa Barbara, it might help to change to 'Satellite Streets' view on the bottom left corner, 
-3. click on the rectangle icon on the right-side toolbar and draw a small region around the NCEAS buildng,
-4. the geoJSON code representing this area will appear in the code box,
-5. one option is two copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
-6. instead, we will create our region of index by just *copy-pasting the list of points* and storing it as a variable:
-
-```{python}
-# vertices of our aoi box
-points = [[-119.70608227128903, 34.426300194372274],
-          [-119.70608227128903, 34.42041139020533],
-          [-119.6967885126002, 34.42041139020533],
-          [-119.6967885126002, 34.426300194372274],
-          [-119.70608227128903, 34.426300194372274]]
-```
-
-We can then create a new `geopandas.GeoDataFrame`:
-
-```{python}
-# create geodataframe with aoi 
-aoi = gpd.GeoDataFrame(geometry=[Polygon(points)],
-                           crs='epsg:4326')
-aoi
-```
-
-Let's break this down a bit:
-
-- first, we use the `shapely`'s `Polygon()` function to create a polygon from our `points` list. 
-- in `[Polygon(points)]` we put this polygon inside a list so we can form the geometry column of our new `gpd.GeoDataFrame`
-- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.
--->
 
 
 Remember: **if two geospatial sets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
