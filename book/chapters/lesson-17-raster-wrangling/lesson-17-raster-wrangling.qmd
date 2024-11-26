@@ -1,0 +1,87 @@
+# 16 Land cover statistics
+
+## About the data
+
+In this lesson we will use two datasets.
+
+The first one is [GAP/LANDFIRE National Terrestrial Ecosystems data for 2011 @davidson_gaplandfire_2016](https://www.sciencebase.gov/catalog/item/573cc51be4b0dae0d5e4b0c5), from the [US Geological Survey (USGS)](https://www.usgs.gov). This is a categorical raster with a 30 m x 30 m pixel resolution representing highly thematically detailed land cover map of the U.S. We will access this data through the [Microsoft Planetary Computer (MPC) data catalog](https://planetarycomputer.microsoft.com/dataset/gap). The class names and corresponding codes have been saved to a separete CSV to simplify access in this lesson. Further information on how to access the classes directly from the data are available in the [MPC catalog](https://planetarycomputer.microsoft.com/dataset/gap#Example-Notebook).
+
+
+The second dataset is a shapefile with the perimeters for 2017 California fires. This data was extracted from the CALFIRE's [Historical Wildland Fire Perimeters](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all/about).
+
+## Fire perimeter preparation
+
+Let's start by importing the necessary libraries:
+
+```{python}
+import os
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import geopandas as gpd
+import rioxarray as rioxr
+from shapely import box
+
+import pystac_client
+import planetary_computer
+
+from IPython.display import Image 
+```
+
+Then import and select the Thomas Fire within the fire perimeters data:
+
+```{python}
+fire_perimeters = gpd.read_file(os.path.join('data',
+                                             'California_Fire_Perimeters_2017',
+                                             'California_Fire_Perimeters_2017.shp')
+                                             )
+thomas_fire = fire_perimeters[fire_perimeters['FIRE_NAME']=='THOMAS']
+
+# Examin fire perimeter data
+thomas_fire.crs
+thomas_fire.plot()
+```
+
+## Catalog search
+
+Our goal is to retrieve the National Terrestrial Ecosystems data over the fire perimeter. In the [last lesson](/book/chapters/lesson-16-STAC.qmd) we used GeoJSON-type dictionary to do the catalog search. Here we will use a list `[xmin, ymin, xmax, ymax]` with the coordinate values defining the four corners of the region we want to search data over. Just as the GeoJSON, these coordinates have to be in the EPSG:4326 CRS. 
+
+Our bounding box will come from the Thomas Fire perimeter. Notice we use method chaining to reproject and extract the bounds.
+
+```{python}
+# Create bounding box for search
+thomas_fire_bbox = list(thomas_fire.to_crs('epsg:4326') # Reproject for search
+                                   .total_bounds
+                                    )
+thomas_fire_bbox
+```
+
+Next, we connect to the Microsoft Planetary Computer data catalog and perform the search. The collection ID for the National Terrestrial Ecosystems data is `gap`:
+
+```{python}
+# Open MPC data catalog
+catalog = pystac_client.Client.open(
+    "https://planetarycomputer.microsoft.com/api/stac/v1",
+    modifier=planetary_computer.sign_inplace,
+)
+
+# Search MPC catalog 
+search = catalog.search(collections=['gap'], 
+                        bbox=thomas_fire_bbox)
+
+# Retrieve search items
+items = search.item_collection()
+print(f"Returned {len(items)} Items")
+items
+```
+
+There is a single item in the search, so let's go ahead and select it:
+
+```{python}
+# Select unique search item
+item = items[0]  
+```
+
+## 
