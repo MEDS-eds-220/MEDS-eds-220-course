@@ -2,8 +2,8 @@
 
 The project consists of two tasks:
 
-- Task 1: add a blog post to your personal website based on one of your previous assignments and discussion sections. This task is 35% of the final grade.
-- Task 2: create a presentation-ready GitHub repository featuring geospatial analysis in Python. This task is 65% of the final grade.
+- Task 1: add a blog post to your personal website based on one of your previous assignments and discussion sections. This task is 35% of the final project grade.
+- Task 2: create a presentation-ready GitHub repository featuring geospatial analysis in Python. This task is 65% of the final project grade.
 
 
 ## Submission instructions
@@ -16,7 +16,62 @@ The project consists of two tasks:
 
 Feedback for both tasks will be given to students by Tuesday December 10 and the final resubmission for both tasks is Friday, December 13 (last day of the quarter).
 
+All tasks for this assignment should be submitted via Gradescope. File formatting and uploading:
+
+- [ ] Your blog post (task 1) must be submitted as a PDF file.
+- [ ] Your notebook with solutions for task 2 must be submitted as a .ipynb file (Jupyter Notebook).
+
 If you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm on the day before the due dates.
+:::
+
+## Task 1: Thomas Fire analysis blog post
+
+In this task, you will transform your presentation-ready repository from homework 4 into a blog post in your personal website. You can choose one of the following combinations related to the Thomas Fire data wrangling:
+
+- (November 27 exercises: Land cover statistics) + (Hwk 4-Task 2: False color image), or
+- (November 27 exercises: Land cover statistics) + (Hwk 2-Task 3: Air Quality Index Data), or
+- (Hwk 4-Task 2: False color image) + (Hwk 2-Task 3: Air Quality Index Data)
+
+Your target audience is a fellow Python programmer who is learning about geospatial wrangling through a real-life current event. The following is a nice example of a nice text-to-code ratio: [https://julietcohen.github.io/posts/2021-12-24-sstsicpython/](https://julietcohen.github.io/posts/2021-12-24-sstsicpython/).
+
+The blog post should showcase your data-wrangling skills in a *streamlined* way. As such, it will have a more concise analysis than the notebooks. You should omit lengthy print checks and intermediate results in favor of longer code chunks that show multiple lines of code related to a single step in the analysis (similar to our final output cells). 
+
+Your post should include (at least) the following:
+
+- About section: information providing context for the data analysis. Include an image related to the analysis.
+- Highlights of analysis.
+- Dataset descriptions + Datasets references
+- Link to GitHub repository containing the more detailed analysis associated with the post (at the top of your post). 
+- Organized sections for the key steps in the data analysis. Each section includes only the most relevant code.
+- Final visualizations with descriptions after them. 
+
+### Setup
+
+:::{.callout-tip appearance="minimal"}
+You will be expanding the GitHub repository you created for homework 4 for this task by moving the notebook with the other Thomas Fire data analysis into it. Your repository should have the following structure:
+
+```default
+repo-name  # You may want to update this
+│   README.md
+|   notebooks (one per analysis)
+|   .gitignore
+│
+└── data  # If needed
+    │   data-files  
+```
+
+In particular, there should be **no .DS_Store or .ipynb_checkpoints** files in your repository.
+
+**IMPORTANT: All notebooks in this repository should be streamlined and follow the "notebooks organization" rubric.**
+
+The blog post itself will be located as a file within your personal website repository. 
+<!-- TODO: add instructions about how to add python to blog -->
+:::
+
+:::{.callout-warning appearance="minimal"}
+📋 Don't forget to read the [rubric for this task](https://docs.google.com/document/d/14_F9ez858bV0EFGoqDwd2_wfj8hwyxuz_cRoms73_M4/edit?usp=sharing) before you start working on it. 
+
+While this rubric is comprehensive, it is not exhaustive. Additional revisions might be requested after the first submission and these should be addressed for the final submission. These will be a public documents and we want them to be as good as possible!
 :::
 
 ## Task 2: Biodiversity Intactness Index change in Phoenix, AZ
@@ -57,10 +112,12 @@ repo-name
 └── data  # If needed
     │   data-files  
 ```
+
+In particular, there should be **no .DS_Store or .ipynb_checkpoints** files in your repository.
 :::
 
 :::{.callout-warning appearance="minimal"}
-📋 Don't forget to read the [rubric for this task](https://docs.google.com/document/d/1-Zm731BLVCs1MXHT5R1H9rr6uvcwHnMZQ2q8xkQ_fWM/edit?usp=sharing) before you start working on it.
+📋 Don't forget to read the [rubric for this task](https://docs.google.com/document/d/14_F9ez858bV0EFGoqDwd2_wfj8hwyxuz_cRoms73_M4/edit?usp=sharing) before you start working on it.
 :::
 
 ## Instructions
@@ -69,7 +126,7 @@ repo-name
 
 1. Explore the data and write a brief summary of the information you obtained from the preliminary information. 
 
-2. Create a map showing the Phoenix subdivision within its broader geographic context. You may use any vector or raster datasets to create your map. Be sure to include citations or descriptions for these datasets at the top of your notebook too. You can may also want to check out the `contextily` package to add a base map.
+2. Create a map showing the Phoenix subdivision within its broader geographic context. You may use any vector or raster datasets to create your map. Be sure to include citations or descriptions for these datasets at the top of your notebook too. You may also want to check out the `contextily` package to add a base map.
 
 3. Calculate the *percentage* of area of the Phoenix subdivision with a BII of at least 0.75 in 2017. Obtain the same calculation for 2020. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
 
@@ -77,7 +134,7 @@ repo-name
 ## HINTS (useful or not depending on your workflow)
 
 - Let `x` be an `xarray.DataArray`. We can select all the values greater than `n` by simply doing `x>n`. 
-- To calculate the percentage area: (pixels with BII>=0.75)/(total pixels in Phoenix subdivision) * 100. 
+- Make sure you are calculating the percentage over the Phoenix area, and not the complete raster extent.
 :::
 
 4. Create a visualization showing the area with BII>=0.75 in 2017 that was lost by 2020. Here’s an example:
@@ -116,7 +173,7 @@ The target audience for your notebook is a fellow EDS 220 student who is just le
     - [ ] References: Formal references to datasets. You can use the APA style as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
 - The rest of your notebook should have:
     - [ ] Logical subsections (indicated through markdown headers) for the data exploration, analysis, and visualization you are performing. The subsections should easily guide the reader through the analysis.
-    - [ ] Enough and appropriate markdown cells to explain the procedures you are using and their output. If your code comment is getting too long, you should probably move it to markdown cell as text.
+    - [ ] Enough and appropriate **markdown cells to explain the procedures you are using and their output**. Copy-pasting the instructions in markdown cells is not appropriate. If your code comment is getting too long, you should probably move it to markdown cell as text. 
 
 ### 3. Clean repository 
 
