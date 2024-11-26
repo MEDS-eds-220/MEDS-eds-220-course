@@ -77,11 +77,94 @@ print(f"Returned {len(items)} Items")
 items
 ```
 
-There is a single item in the search, so let's go ahead and select it:
+There is a single item in the search, so let's go ahead and select it and view its pre-rendered image:
 
 ```{python}
 # Select unique search item
 item = items[0]  
+
+# Display pre-rendered image
+Image(url=item.assets['rendered_preview'].href, width=600)
 ```
 
-## 
+We can see this is a big raster! 
+
+## Explore raster
+
+Next, we can go ahead an open the raster:
+
+```{python}
+# Access raster data from item
+lulc = rioxr.open_rasterio(item.assets['data'].href)
+lulc
+```
+
+Notice that `band` is a dimension of length 1. We can go ahead and "squeeze" the raster to simplify it:
+
+```{python}
+# Remove length 1 dimension (band)
+lulc = lulc.squeeze().drop_vars('band')
+print("Sizes of dimensions:", dict(lulc.sizes))
+```
+
+Next, let's look at how the raster is locatd with respect to the Thomas Fire perimeter and the CA state boundary:
+
+```{python}
+# Create GeoDataFrame from raster bounding box
+lulc_bbox = gpd.GeoDataFrame(geometry = [box(*lulc.rio.bounds())],
+                             crs = lulc.rio.crs)
+
+ca = gpd.read_file(os.path.join('data',
+                                'ca_state_boundary',   
+                                'ca_state_boundary.shp'))
+
+# ------------------------------------------------------------------
+# Plot raster boundary, fire perimeter, and CA boundary
+fig, ax = plt.subplots()
+ca.plot(ax=ax, color='white', edgecolor ='black')
+
+# Reproject lulc_bbox and fire perimeter to match CA crs
+lulc_bbox.to_crs(ca.crs).plot(ax=ax, alpha=0.3)  
+thomas_fire.to_crs(ca.crs).plot(ax=ax, color='red')
+
+plt.show()
+```
+
+We can see the raster covers a big area relative to the fire perimeter. Since we want to calculate the land coverage statistics within the fire perimeter, we will have to clip the raster to this area. 
+
+## Clip raster
+
+In our [first lesson about rasters](/book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.qmd) we saw how to clip a raster to a rectangular region using the `rio.clip_box()` method. In our case, we want to clip the raster exactly to the fire perimeter. Clipping can be a costly operation for such a big raster relative to a detailed geometry. So we will do clipping in two steps:
+
+1. Clip raster using the fire perimeter bounding box and then
+2. Clip the simplified raster to the fire perimeter. 
+
+```{python}
+# Match CRSs and verify update
+thomas_fire = thomas_fire.to_crs(lulc.rio.crs)
+assert thomas_fire.crs == lulc.rio.crs
+
+# Clip in two steps for efficiency
+lulc_clip = (lulc.rio.clip_box(*thomas_fire.total_bounds)
+                 .rio.clip(thomas_fire.geometry)
+                 )
+
+# Examine results
+lulc_clip.plot()                 
+```
+
+Notice the clipped areas were assigned the 0 value (instead of NA).
+
+```{python}
+lulc_clip.rio.nodata
+```
+
+## Reproject raster
+
+```{python}
+lulc_clip.rio.Reproject('epsg:4326').plot()
+```
+
+## Save raster
+
+## Land cover statistics
