@@ -89,6 +89,17 @@ Image(url=item.assets['rendered_preview'].href, width=600)
 
 We can see this is a big raster! 
 
+At this point, we can also import the CSV file with the class labels:
+
+```{python}
+labels = pd.read_csv(os.path.join('data',
+                                  'GAP_National_Terrestrial_Ecosystems.csv')
+                                  )
+labels.head()
+```
+
+Noitce that 0 is used as the no-data value for this raster. This will be relevant in a moment.
+
 ## Explore raster
 
 Next, we can go ahead an open the raster:
@@ -141,26 +152,53 @@ In our [first lesson about rasters](/book/chapters/lesson-15-rioxarray/lesson-15
 
 ```{python}
 # Match CRSs and verify update
-thomas_fire = thomas_fire.to_crs(lulc.rio.crs)
-assert thomas_fire.crs == lulc.rio.crs
+thomas_fire_match = thomas_fire.to_crs(lulc.rio.crs)
+assert thomas_fire_match.crs == lulc.rio.crs
 
-# Clip in two steps for efficiency
-lulc_clip = (lulc.rio.clip_box(*thomas_fire.total_bounds)
-                 .rio.clip(thomas_fire.geometry)
+# Clip large raster to detailed geometry in two steps
+lulc_step1 = lulc.rio.clip_box(*thomas_fire_match.total_bounds)
+lulc_step2 = lulc_step1.rio.clip(thomas_fire_match.geometry)  # Produces RuntimeWarning
+
+# ------------------------------------------------------
+fig, ax = plt.subplots(1, 2, figsize=(8, 4))
+
+# Plot the first clipped raster
+lulc_step1.plot(ax=ax[0], cmap="viridis")
+ax[0].set_title("Step 1: Clip to Bounding Box")
+ax[0].axis("off")
+
+# Plot the second clipped raster
+lulc_step2.plot(ax=ax[1], cmap="viridis")
+ax[1].set_title("Step 2: Clip to Detailed Geometry")
+ax[1].axis("off")
+
+# Adjust layout
+plt.show()
+```
+
+<!--
+TODO: finish this
+## No data values
+
+Notice a warning appeared when we clipped the raster. After some investigation, we would have found that this `RuntimeWarning` occurs because the `rio.clip` function cannot fill in the region clipped regions with To make sure the clipping operator fills in any pixels with the adequate 
+
+```{python}
+(lulc.rio.clip_box(*thomas_fire_match.total_bounds)
+    .rio.clip(thomas_fire_match.geometry)
+)
+
+lulc_clip = (lulc.rio.clip_box(*thomas_fire_match.total_bounds)
+                 .rio.clip(thomas_fire_match.geometry)
                  )
 
 # Examine results
-lulc_clip.plot()                 
+lulc_clip.plot()                                  
 ```
+-->
 
-Notice the clipped areas were assigned the 0 value (instead of NA).
-
-```{python}
-lulc_clip.rio.nodata
-```
-
+<!--
 ## Reproject raster
-
+-->
 
 ## Save raster
 
