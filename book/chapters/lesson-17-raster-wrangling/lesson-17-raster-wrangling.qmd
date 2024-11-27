@@ -143,12 +143,12 @@ plt.show()
 
 We can see the raster covers a big area relative to the fire perimeter. Since we want to calculate the land coverage statistics within the fire perimeter, we will have to clip the raster to this area. 
 
-## Clip raster
+## Clip raster to geometry
 
-In our [first lesson about rasters](/book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.qmd) we saw how to clip a raster to a rectangular region using the `rio.clip_box()` method. In our case, we want to clip the raster exactly to the fire perimeter. Clipping can be a costly operation for such a big raster relative to a detailed geometry. So we will do clipping in two steps:
+In our [first lesson about rasters](/book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.qmd) we saw how to clip a raster to a rectangular region. In our case, we want to clip the raster exactly to the fire perimeter. Clipping can be a costly operation for such a big raster relative to a detailed geometry. So we will perform the clipping in two steps:
 
-1. Clip raster using the fire perimeter bounding box and then
-2. Clip the simplified raster to the fire perimeter. 
+1. Clip the raster using the fire perimeter bounding box using [`rio.clip_box()`](https://corteva.github.io/rioxarray/html/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) and then
+2. Clip the simplified raster to the fire perimeter using [`rio.clip()`](https://corteva.github.io/rioxarray/html/rioxarray.html#rioxarray.raster_array.RasterArray.clip). 
 
 ```{python}
 # Match CRSs and verify update
@@ -172,21 +172,24 @@ lulc_step2.plot(ax=ax[1], cmap="viridis")
 ax[1].set_title("Step 2: Clip to Detailed Geometry")
 ax[1].axis("off")
 
-# Adjust layout
 plt.show()
 ```
 
-<!--
-TODO: finish this
-## No data values
+## Raster no-data values
 
-Notice a warning appeared when we clipped the raster. After some investigation, we would have found that this `RuntimeWarning` occurs because the `rio.clip` function cannot fill in the region clipped regions with To make sure the clipping operator fills in any pixels with the adequate 
+Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However -as we previously saw- our raster's data type os `uint16`, 16 bits unsigned integer. The cast issue appears since `np.nan` is a float it cannot be casted as a `uint16`. To make sure the clipping operator fills in any pixels with the adequate no-data value, let's manually set it:
 
 ```{python}
-(lulc.rio.clip_box(*thomas_fire_match.total_bounds)
-    .rio.clip(thomas_fire_match.geometry)
-)
+print('Original no-data value: ', lulc.rio.nodata)
 
+# Update raster's no-data value
+lulc = lulc.rio.write_nodata(0)
+print('Updated no-data value: ', lulc.rio.nodata)
+```
+
+This way, the `rio.clip()` function will know what values to assign to pixels outside the fire perimeter. Let's try clipping again, this time using method chaining:
+
+```{python}
 lulc_clip = (lulc.rio.clip_box(*thomas_fire_match.total_bounds)
                  .rio.clip(thomas_fire_match.geometry)
                  )
@@ -194,13 +197,26 @@ lulc_clip = (lulc.rio.clip_box(*thomas_fire_match.total_bounds)
 # Examine results
 lulc_clip.plot()                                  
 ```
--->
+
+Notice no warning came up during the clipping.
+
+:::{.callout-warning}
+## Always pay attention to warnings!
+
+Warnings are your program's way of saying, "Something might go wrong here, take a look!" They may indicate silent failures, package compatibility issues, or potential bugs, amont other issues. Do not ignore warnings! **Addressing warnings is part of writing clean, maintainable code and reflects a professional approach.**
+
+These are some steps to handling warnings effectively:
+
+- **Read and understand them**: Don’t dismiss warnings without understanding their cause.
+- **Fix or address them**: Modify your code to resolve the warning if possible.
+- **Suppress only when necessary**: Use tools to suppress warnings only when you're sure they are irrelevant or benign.
+:::
 
 <!--
-## Reproject raster
--->
-
 ## Save raster
+
+This would be a natural point where we'd like to save our raster for future use. That way, we wouldn't need to perform 
+-->
 
 ## Land cover statistics
 
