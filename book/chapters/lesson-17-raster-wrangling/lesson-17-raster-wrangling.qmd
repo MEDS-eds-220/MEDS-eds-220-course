@@ -177,7 +177,7 @@ plt.show()
 
 ## Raster no-data values
 
-Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However -as we previously saw- our raster's data type os `uint16`, 16 bits unsigned integer. The cast issue appears since `np.nan` is a float it cannot be casted as a `uint16`. To make sure the clipping operator fills in any pixels with the adequate no-data value, let's manually set it:
+Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However, as we previously saw, our raster's data type is `uint16` (16 bits unsigned integer). The cast issue appears since `np.nan` is a float (decimal number) and it cannot be casted as a `uint16`. To make sure the clipping operator fills in any pixels with the adequate no-data value, let's manually set it:
 
 ```{python}
 print('Original no-data value: ', lulc.rio.nodata)
@@ -198,7 +198,7 @@ lulc_clip = (lulc.rio.clip_box(*thomas_fire_match.total_bounds)
 lulc_clip.plot()                                  
 ```
 
-Notice no warning came up during the clipping.
+Notice no warning came up during the clipping!
 
 :::{.callout-warning}
 ## Always pay attention to warnings!
@@ -229,17 +229,102 @@ In the rest of this lesson we will compute land cover statistics within the Thom
 
 2. Create a data frame `pix_counts` with two columns: column one must be the code numbers for the pixels in `lulc_clip` and column two must be the number of pixels corresponding to each code. HINT: [check our class notes on `pandas.DataFrame`s](/book/chapters/lesson-2-series-dataframes.qmd)
 
-3. Import the class names CSV file as `class_names`. The file's name is `GAP_National_Terrestrial_Ecosystems.csv` and it is located in the EDS220 data folder in workbench 1.
+<!--
+```{python}
+unique_counts = np.unique(lulc_clip, return_counts=True)
 
-4. Use the `class_names` data frame to add the class names to the codes in the `pix_counts` data frame. 
-Store the resulting data frame as `classes`. 
+pix_counts = pd.DataFrame({'code':unique_counts[0], 
+                           'n_pixels':unique_counts[1]})
 
-5. What *area* within the fire perimeter was estimated to be developed? HINT: what is the raster's resolution? 
+pix_counts = pix_counts[pix_counts['code']!=0]  # Remove no-data pixels
+```
+-->
+
+3. Use the `class_names` data frame to add the class names to the codes in the `pix_counts` data frame. Store the resulting data frame as `classes`. 
+
+<!--
+
+```{python}
+classes = pd.merge(left=labels, 
+                   right=pix_counts, 
+                   on='code')
+```
+-->
+
+5. What *area* within the fire perimeter (in km^2) was estimated to be developed? HINT: what is the raster's resolution? 
+
+<!--
+```{python}
+area_per_pixel = 30**2  # In meters^2
+classes.iloc[43:47].n_pixels.sum() * area_per_pixel / 1000**2
+```
+-->
 
 6. Store the total number of pixels within the fire perimeter as a variable `total_pixels`.
 
-7. Add the percentage of area covered by each class as a new column `percentage` to the `classes` data frame. 
+7. Add the percentage of area covered by each class as a new column `percentage` to the `classes` data frame. Sort the data frame by percentage coverage in descending order.
 
-8. Create a horizontal bar plot showing the classes with more than 1% land cover in decreasing order (longest bar should be at the top). 
-The names of the classes should be the tick labels of the vertical axis. 
+<!--
+```{python}
+total_pixels = classes.n_pixels.sum()
+
+classes['percentage'] = classes.n_pixels/total_pixels * 100
+classes = classes.sort_values(by='percentage', ascending=False)
+```
+-->
+
+8. Create a horizontal bar plot showing the classes with more than 1% land cover in decreasing order. For example:
+
+<!--
+```python
+classes[classes['percentage']>1].set_index('class_label').percentage.plot(kind='barh')
+```
+-->
+
+```{python}
+#| echo: false
+
+# Filter and set index
+filtered_classes = classes[classes['percentage']>1].set_index('class_label').sort_values(by='percentage', ascending=True)
+
+# Create the horizontal bar plot
+fig, ax = plt.subplots(figsize=(6, 4))  # Adjusted figure size for better proportions
+
+# Plot with improved style
+filtered_classes.percentage.plot(
+    kind='barh',
+    ax=ax,
+    color='skyblue',
+    edgecolor='black'
+)
+
+# Add an improved title and center it relative to the entire figure
+fig.suptitle(
+    'Distribution of Land Cover Within the Thomas Fire Perimeter\n(Classes > 1% from USGS National Terrestrial Ecosystems Data)',
+    fontsize=11,
+    y=0.98  # Adjust position slightly for spacing
+)
+
+# Add axis labels
+ax.set_xlabel('Percentage (%)', fontsize=10)
+ax.set_ylabel('')  # No label for y-axis
+
+# Add gridlines for easier interpretation
+ax.grid(axis='x', linestyle='--', alpha=0.7)
+
+# Add percentage values to the bars
+for i, v in enumerate(filtered_classes.percentage):
+    ax.text(v + 0.5, i, f"{v:.1f}%", va='center', fontsize=10)
+
+# Remove top and right edges of the plot
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+# Make the axis box wider relative to the figure area
+fig.subplots_adjust(left=0.25, right=0.95, top=0.85)  # Adjust spacing for the centered title
+
+# Show the plot
+plt.show()
+```
+
 :::
