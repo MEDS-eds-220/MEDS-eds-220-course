@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Prey species in the California drylands – EDS 220 - Working with Environmental Datasets</title>
+<title>Creating a GIF of water level change at Lake Cachuma – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,27 +55,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -223,15 +203,10 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
-  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
-  <li><a href="#metadata-exploration" id="toc-metadata-exploration" class="nav-link" data-scroll-target="#metadata-exploration">2. Metadata exploration</a></li>
-  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">3. Data loading</a></li>
-  <li><a href="#look-at-your-data" id="toc-look-at-your-data" class="nav-link" data-scroll-target="#look-at-your-data">4. Look at your data</a></li>
-  <li><a href="#pd.dataframe-preliminary-exploration" id="toc-pd.dataframe-preliminary-exploration" class="nav-link" data-scroll-target="#pd.dataframe-preliminary-exploration">5. <code>pd.DataFrame</code> preliminary exploration</a></li>
-  <li><a href="#update-column-names" id="toc-update-column-names" class="nav-link" data-scroll-target="#update-column-names">6. Update column names</a></li>
+  <li><a href="#about" id="toc-about" class="nav-link active" data-scroll-target="#about">About</a></li>
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose">Purpose</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data:</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -240,8 +215,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Prey species in the California drylands</h1>
-<p class="subtitle lead">Week 1 - Discussion section</p>
+<h1 class="title">Creating a GIF of water level change at Lake Cachuma</h1>
 </div>
 
 
@@ -258,189 +232,180 @@ div.csl-indent {
 </header>
 
 
-<p>This discussion section will guide you through preliminary data exploration for a real world dataset about animal observations in the California drylands. In this discussion section, you will:</p>
-<ul>
-<li>Collaborate with your new team!</li>
-<li>Practice version control using git via the terminal</li>
-<li>Obtain information about a dataset from an online data repository</li>
-<li>Use the <code>pandas.read_csv()</code> function for loading files directly from a URL</li>
-<li>Use <code>pandas.DataFrame</code> methods to do preliminary analysis</li>
-</ul>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<section id="about" class="level3">
+<h3 class="anchored" data-anchor-id="about">About</h3>
+<p>Lake Cachuma was once a primary water source for Santa Barbara County, but the California drought has made it an unreliable resevoir. In 2017, the reservoir was part of the 2.13% of California that was considered to be in an “exceptional drought”. Given that this resevoir is the majority water source for over 200,000 Santa Barbara residents, the water levels in the Cachuma have a major impact on its residents. While the drought is not over, heavy rains in 2022 - 2023 helped Lake Cachuma reach it’s capacity for the first time in 11 years.</p>
+<p><img src="images/lake_cachuma_levels.jpeg" class="img-fluid"></p>
+</section>
+<section id="purpose" class="level3">
+<h3 class="anchored" data-anchor-id="purpose">Purpose</h3>
+<p>We will use satelittle imagery to see if we can notice changes in water levels when the reservoir was at an all time low versus the following years. We will be specifically looking at the water levels in Harvey Bay. In order to show the water level change in this 6 year time span, we will create a gif.</p>
+<p><img src="images/lake_cachuma_map.png" class="img-fluid"></p>
+</section>
+<section id="about-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="about-the-data">About the data:</h3>
+<p>To carry out this task, we will use the Microsoft Planetary Computer Catalog. We will be using NAIP imagery from the catalog in the years 2016 to 2022.</p>
+<section id="load-libraries-and-data" class="level4">
+<h4 class="anchored" data-anchor-id="load-libraries-and-data">Load libraries and data</h4>
+<p>First, lets load our libraries. To create the GIF we’ll be using the <a href="https://geogif.readthedocs.io/en/latest/">geogif</a> library, which makes it simple to create gifs from <code>xarray.DataArrays</code>.</p>
+<div id="1aaa57c0-eb66-49fd-94cc-8c1e976f1902" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pystac_client <span class="im">import</span> Client  <span class="co"># To access STAC catalogs</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> planetary_computer  <span class="co"># To sign items from the MPC STAC catalog </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image  <span class="co"># To nicely display images</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> geogif <span class="im">import</span> gif</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> box</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-body-container">
-<ol type="1">
-<li><p>In the workbench-1 server, start a new JupyterLab session or access an active one.</p></li>
-<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
-<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-1-data-selection-drylands.ipynb</code>.</p></li>
-<li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
-<ol type="1">
-<li><code>git status</code> : check git status</li>
-<li><code>git add FILE-NAME</code> : stage updated file</li>
-<li><code>git status</code> : check git status again to confirm</li>
-<li><code>git commit -m "Commit message"</code> : commit with message</li>
-<li><code>git pull</code> : check local repo is up to date (best practice)</li>
-<li><code>git push</code> : push changes to upstream repository</li>
-</ol></li>
-</ol>
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING</strong>
-</p>
+<p>Next we will access our data via the MPC catalog. Access the naip collection and store the collection in <code>naip_collection</code>.</p>
+<div id="56670268-e1cf-4b98-9b24-3d06f6d1daaf" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access MPC catalog</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> Client.<span class="bu">open</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://planetarycomputer.microsoft.com/api/stac/v1"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    modifier<span class="op">=</span>planetary_computer.sign_inplace,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>catalog.get_collections()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>collections <span class="op">=</span> ...  <span class="co"># Turn generator into list</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the number of collections</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of collections:'</span>, <span class="bu">len</span>(collections))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull out the NAIP collection</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>naip_collection <span class="op">=</span> ...</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>naip_collection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Now that we have our data, we need to specify the temporal and spatial information we are interested in. Specify the range of interest in the <code>time_range</code> variable. We are intersted at the time when Lake Cachuma was at its lowest (01/01/2016) until the heavy rain storms (01/01/2024).</p>
+<div id="507cb3d1-dce3-4730-8134-475c84a422e8" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temporal range of interest during drought</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The following bounding box coordinates are around Harvey’s Cove at lake cachuma.</p>
+<div id="e1c5f237-821b-408c-a36a-03cf790d8dc3" class="cell" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> [<span class="op">-</span><span class="fl">119.96541203059391</span>,<span class="fl">34.57264927127669</span> ,<span class="op">-</span><span class="fl">119.96035687994136</span>,  <span class="fl">34.57849481511495</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we specificed our bounding box and time range, lets do a catalog search to get our data. Be sure to include your <code>bbox</code> and <code>time_range</code> in your search. After completing your search, retrieve your search items and assign the first item in your catalog search to the variable <code>item</code>.</p>
+<div id="9e848419-8bd1-4bfc-bad6-e961ebca5b1b" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Catalog search</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> ...</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get items from search</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> ...</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine number of items in search</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'There are </span><span class="sc">{</span><span class="bu">len</span>(items)<span class="sc">}</span><span class="ss"> items in the search.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="306ef74d-e99b-431a-ae91-f6f3035c843a" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get first item in the catalog search</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> ...</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(item)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="general-directions" class="level2">
-<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<section id="lets-look-at-a-single-raster." class="level4">
+<h4 class="anchored" data-anchor-id="lets-look-at-a-single-raster.">Let’s look at a single raster.</h4>
+<p>The NAIP data is available at the item’s ‘image’ asset. Use <code>rioxr.open_rasterio</code> to open the image asset. We want to open <code>item.assets['image'].href</code> to get the xarray.</p>
+<div id="0ad79138-a19f-40ba-9cc2-dd68c2ff7fd1" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lake_levels <span class="op">=</span> ...</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lake_levels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout-body-container">
-<ul>
-<li>Add comments in each one of your code cells.</li>
-<li>On each exercise, include markdown cells in between your code cells to add titles and information.</li>
-<li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
-<li>You won’t need to upload any data.</li>
-</ul>
+<p>This rater is way bigger than our area of interest. To verify this and then clip the raster, let’s make a gpd.GeoDataFrame from the bbox coordinates:</p>
+<p>Run the cell below. What is the <code>box()</code> function doing?</p>
+<div id="cc9b1f37-5050-462a-901f-54d1eb49f2eb" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding box as geodataframe</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>box_df <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[box(<span class="op">*</span>bbox)],</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 crs<span class="op">=</span><span class="st">'epsg:4326'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div id="268cbfab-db17-4794-8d66-e55d3a475eec" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip raster to bounding box, ensuring the crs' are the same</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lake_levels <span class="op">=</span> lake_levels.rio.clip_box(<span class="op">*</span>box_df.to_crs(lake_levels.rio.crs).total_bounds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</section>
-<section id="about-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For these exercises we will use data about <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">prey items for endangered terrestrial vertebrate species within central California drylands</a><span class="citation" data-cites="king_compiled_2023"><a href="#ref-king_compiled_2023" role="doc-biblioref">[1]</a></span> <span class="citation" data-cites="lortie_importance_2023"><a href="#ref-lortie_importance_2023" role="doc-biblioref">[2]</a></span>.</p>
-<p>This dataset is stored in the <a href="https://knb.ecoinformatics.org">Knowledge Network for Biocomplexity (KNB)</a> data repository. This is an international repository intended to facilitate ecological and environmental research. It has thousands of open datasets and is hosted by the <a href="http://NCEAS.ucsb.edu">National Center for Ecological Analysis and Synthesis (NCEAS)</a>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../discussion-sections/images/Tecopa_site2.JPG" class="img-fluid figure-img"></p>
-<figcaption>Data collection plot at Mojave Desert near Tecopa. Photo courtesy of Dr.&nbsp;Rachel King.</figcaption>
-</figure>
+<p>NAIP data has four bands, Red, Green, Blue, and Near-Infrared. To make it easier to plot RGB images, select only the first three bands, and then plot the selected data.</p>
+<div id="47743e3b-0d61-4752-8213-44d7edb5f6c9" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the the first three bands of the NAIP data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lake_levels <span class="op">=</span> ...</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the first three bands</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="archive-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
-<p>When possible, data exploration should start at the data repository. Take some time to look through the dataset’s description in the KNB data repository. Discuss the following questions with your team:</p>
-<ol type="a">
-<li>What is this data about?</li>
-<li>Is this data collected in-situ by the authors or is it a synthesis of multiple datasets?</li>
-<li>During what time frame were the observations in the dataset collected?</li>
-<li>Does this dataset come with an associated metadata file?</li>
-<li>Does the dataset contain sensitive data?</li>
-</ol>
-<p>In your notebook: use a markdown cell to add a brief description of the dataset, including a citation, date of access, and a link to the archive.</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
+<section id="stack-rasters" class="level4">
+<h4 class="anchored" data-anchor-id="stack-rasters">Stack Rasters</h4>
+<p>Our goal is to use the gif function to create a gif with the four NAIP images over Lake Cachuma.</p>
+<p>The gif documentation indicates that to do so we will need to put our images/rasters in a single <code>xarray.DataArray</code> with dimensions (time, band, y, x). Check your raster to see what the dimmensions are. Do they match the dimensions that the gif function requires?</p>
+<div id="e43829ba-6334-46d6-b22f-d2787b6501a6" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check raster dimensions</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>lake_levels.dims</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the shape of the raster</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>lake_levels.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To create a single xarray.DataArray with a time dimensions we will stack the four rasters we obtained in our search. We use a for loop to repeat the previous steps for each item in the search (access the item’s image asset, clip, and select bands) and store each processed raster in a list <code>rasters</code>.</p>
+<div id="195d24c4-60fb-48d0-8fad-7fb474e4610b" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rasters <span class="op">=</span> []</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items: </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Access the image asset</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    ... </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clip the raster</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select the first three bands</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    rasters.append(lake_levels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next lets use the <code>xarray.concat()</code> function to concatenate these rasters along a new dimensions we will call <code>time</code>.</p>
+<div id="7bf14b9c-a9f8-48c7-8b11-33aaa430c099" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate rasters into single xarray.DataArray</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>stack <span class="op">=</span> xr.concat(rasters, dim<span class="op">=</span><span class="st">'time'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>stack</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice our new dimension <code>time</code> does not have any coordinates associated to it. To add coordinates to this dimensions we use the <code>assign_coords()</code> method for <code>xarray.DataArray</code>.</p>
+<p>It would be reasonable to use the year of collection of each raster (as a timestamp) as its coordinate on the time dimension. We can see this year in the item’s properties:</p>
+<div id="2059de40-0573-4aec-abc8-84ce034e5f41" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># year of collection of an item </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> items[<span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>item.properties[<span class="st">'naip:year'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="1a284a09-8d32-440f-a1c2-0f739d849930" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert strings to datetime</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To get this timestamp for each year we can create a list using list comprehension:</p>
+<p><strong>List comprehension format reminder:</strong> <code>[expression for item in items if condition]</code></p>
+<div id="80f76515-8d57-4a51-8189-9231bb14bf25" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> ...</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>times</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And finally we assign these times as the coordinates (using <code>assign_coords()</code>) and sort by the vlaues of time dimension:</p>
+<div id="a0ba5469-5424-4a26-bd22-9f4a48bb6015" class="cell" data-tags="[]">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>stack <span class="op">=</span> stack.assign_coords(time<span class="op">=</span>times).sortby(<span class="st">"time"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>stack</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="metadata-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="metadata-exploration">2. Metadata exploration</h2>
-<p>You may have noticed there are two metadata files: <code>Compiled_occurrence_records_for_prey_items_of.xml</code> and <code>metadata_arth_occurrences.csv</code>. The <code>.xml</code> document file type is <code>EML</code> which stands for <a href="https://eml.ecoinformatics.org">EML: Ecological Metadata Language</a>. This is a machine-readable file that has metadata about the whole dataset. In this section we will only use the metadata in the CSV file.</p>
-<p>Back in your notebook, import the <code>pandas</code> package using standard abbreviation in a code cell. Then follow these steps to read in the metadata CSV using the <code>pandas.read_csv()</code> function:</p>
-<ol type="a">
-<li>Navigate to the <a href="https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1VM49RH">data package site</a> and copy the URL to access the <code>metadata_arth_occurrences</code> CSV file. To copy the URL:</li>
-</ol>
-<ul>
-<li>hover over the Download button –&gt; right click –&gt; “Copy Link”.</li>
-</ul>
-<ol start="2" type="a">
-<li><p>Read in the data from the URL using the <code>pd.read_csv()</code> function like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access metadata from repository</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Take a minute to look at the descriptions for the columns.</p></li>
-</ol>
-<p><strong>Note:</strong> Not all datasets have column descriptions in a CSV file. Often they come with a <code>.doc</code> or <code>.txt</code> file with information.</p>
+<section id="now-its-time-to-make-a-gif" class="level4">
+<h4 class="anchored" data-anchor-id="now-its-time-to-make-a-gif">Now its time to make a GIF!</h4>
+<p>Use the gif function to create a gif of our stacked raster. Look at the documentation for <code>gif()</code>. What does the <code>fps</code> argument stand for?</p>
+<div id="9a6774bc-f192-4753-bdd9-629c07a40ee0" class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create gif</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># adding to="lake_cachuma.gif" will save GIF</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="data-loading" class="level2">
-<h2 class="anchored" data-anchor-id="data-loading">3. Data loading</h2>
-<ol type="a">
-<li>Follow steps (a) and (b) from the previous exercise to read in the drylands prey data file <code>arth_occurrences_with_env.csv</code> using <code>pd.read_csv()</code>. Store the dataframe to a variable called <code>prey</code> like this:</li>
-</ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prey <span class="op">=</span> pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="2" type="a">
-<li>What is the type of the <code>prey</code> variable? Use a Python function get this information.</li>
-</ol>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING</strong>
-</p>
 </section>
-<section id="look-at-your-data" class="level2">
-<h2 class="anchored" data-anchor-id="look-at-your-data">4. Look at your data</h2>
-<ol type="a">
-<li><p>Run <code>prey</code> in a cell. What do you notice in the columns section?</p></li>
-<li><p>To see all the column names in the same display we need to set a <code>pandas</code> option. Run the following command and then look at the <code>prey</code> data again:</p></li>
-</ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="3" type="a">
-<li>Add a comment explaining what <code>pd.set_option("display.max.columns", None)</code> does.</li>
-</ol>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="pd.dataframe-preliminary-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="pd.dataframe-preliminary-exploration">5. <code>pd.DataFrame</code> preliminary exploration</h2>
-<p>Run each of the following methods for <code>prey</code> in a different cell and write a brief description of what they do as a comment:</p>
-<ol type="a">
-<li><code>head()</code></li>
-<li><code>tail()</code></li>
-<li><code>info()</code></li>
-<li><code>nunique()</code></li>
-</ol>
-<p>For example:</p>
-<pre><code># head()
-# returns the first five rows of the data frame
-prey.head()</code></pre>
-<p>If you’re not sure about what the method does, try looking it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>.</p>
-<ol start="5" type="a">
-<li>Check the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head">documentation for <code>head()</code></a>. If this function has any optional parameters, change the default value to get a different output.</li>
-</ol>
-<p>Print each of the following attributes of <code>prey</code> in a different cell and write a brief explanation of what they are as a comment:</p>
-<ol start="6" type="a">
-<li><code>shape</code></li>
-<li><code>columns</code></li>
-<li><code>dtypes</code></li>
-</ol>
-<p>If you’re not sure about what information is the attribute showing, look it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>.</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="update-column-names" class="level2">
-<h2 class="anchored" data-anchor-id="update-column-names">6. Update column names</h2>
-<p>Change the column names of <code>institutionCode</code> and <code>datasetKey</code> to <code>institution_code</code> and <code>dataset_key</code>, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the <code>rename</code> method for <code>pandas.DataFrames</code>.</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p>Santa Maria Times. “Cachuma Lake Among the Last of State’s Reservoirs in Exceptional Drought.” Santa Maria Times. January 26, 2017. https://santamariatimes.com/news/local/cachuma-lake-among-the-last-of-states-reservoirs-in-exceptional-drought/article_e358ca8e-654d-5ff7-9b58-857914a4ccd4.html.</p>
+<p>The Santa Barbara Independent. “Cachuma Fills and Flood Gates to Open.” The Santa Barbara Independent, January 14, 2023. https://www.independent.com/2023/01/14/cachuma-fills-and-flood-gates-to-open/.</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-king_compiled_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">R. King, J. Braun, M. Westphal, and C. Lortie, <span>“Compiled occurrence records for prey items of listed species found in <span>California</span> drylands with associated environmental data.”</span> KNB Data Repository, 2023. doi: <a href="https://doi.org/10.5063/F1VM49RH">10.5063/F1VM49RH</a>. Available: <a href="https://knb.ecoinformatics.org/view/doi:10.5063/F1VM49RH">https://knb.ecoinformatics.org/view/doi:10.5063/F1VM49RH</a>. [Accessed: Aug. 26, 2024]</div>
-</div>
-<div id="ref-lortie_importance_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">C. J. Lortie, J. Braun, R. King, and M. Westphal, <span>“The importance of open data describing prey item species lists for endangered species,”</span> <em>Ecological Solutions and Evidence</em>, vol. 4, no. 2, p. e12251, Apr. 2023, doi: <a href="https://doi.org/10.1002/2688-8319.12251">10.1002/2688-8319.12251</a>. Available: <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1002/2688-8319.12251">https://besjournals.onlinelibrary.wiley.com/doi/10.1002/2688-8319.12251</a>. [Accessed: Aug. 26, 2024]</div>
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
