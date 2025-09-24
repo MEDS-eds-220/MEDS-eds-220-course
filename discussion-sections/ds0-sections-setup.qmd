@@ -6,7 +6,6 @@ image: images/ds0-manufacturetocat.png
 sidebar: false
 ---
 
-
 This discussion section will guide you through setting up a repository where you will collect your notebooks for the course's discussion sections. In this session, you will:
 
 - Practice creating a new repository and updating it's README
@@ -26,14 +25,18 @@ a. Create a new repository on GitHub. Use the following settings:
 
     - Description: Discussion sections work for the EDS 220 MEDS course.
 
-    - Keep the repository public.
+    - Visibility: Keep the repository public.
+
+    - Don't select any template to start.
 
     - Add a README file.
 
     - Add a Python .gitignore template.
 
+    - Add the MIT License.
+
 b. In GitHub, update your repository's README by:
-    1. Deleting the text that was automatically generated when you created the repo.
+    1. Deleting all the text that was automatically generated when you created the repo.
     2. Copy-pasting the markdown text below, do not update `[YOUR NAME HERE]` yet.
 
 ```default
@@ -54,6 +57,8 @@ Teaching Team:
 
 Complete materials for the discussion sections and additional resources can be found on the [course website](https://meds-eds-220.github.io/MEDS-eds-220-course/discussion-sections/discussion-sections-listing.html).
 ```
+    3. Commit the changes.
+
 c. Add the URL to your GitHub repository to [this spreadhseet](https://docs.google.com/spreadsheets/d/1mUpKg-gzte_gupG6slF-yaJ1WcK0Goh1GKy9GZBP-K8/edit?usp=sharing).
 
 <p style="text-align: center;">
@@ -66,34 +71,89 @@ a. At [Bren's workbench 1 server](https://workbench-1.bren.ucsb.edu/), start a n
 
 b. Inside your `MEDS/` directory, create a new directory called `EDS-220`. We'll use this directory to collect all the repositories used in the course. *If you do not have a MEDS directory, go ahead and create one.*
 
-c. In the terminal, navigate to the `EDS-220` directory by using `cd NAME-OF-DIRECTORY`.
+c. In **the terminal**, navigate into the `EDS-220` directory by using 
+
+```default
+cd NAME-OF-DIRECTORY
+````
 
 c. Using the terminal, **clone the repository** into your `EDS-220` directory. To do this:
 
     1. In your repository's landing page on GitHub, click on the green button that says `< > Code`. In the HTTPS tab option, copy the URL that appears there.
 
-    2. Go back to the server. In the terminal, run `pwd` (print working directory) to make sure you're cloning into the desired location (this hsould be inside the EDS-220 directory). After you run `pwd` you should get a file path that looks like this:
+    2. Go back to the server. In the terminal, run 
+    
+    ```default 
+    pwd
+    ```
+    to make sure you're cloning into the desired location (this should be inside the EDS-220 directory). The command `pwd` stands for *print working directory*, it lets you know where you're at within your files.   
+    
+    After you run `pwd` you should get a file path that looks like this:
+
     ```default
     /Users/c_galazgarcia/MEDS/EDS-220/
     ```
+    3. In the terminal, run 
+    
+    ```default 
+    git clone YOUR-REPOS-URL
+    ```
+    
+    The repository directory should appear in the folder navigation bar to the left.
 
-    3. Run `git clone URL`. The directory should appear in the folder navigation bar to the left.
+    4. Navigate into the cloned repository in the terminal: 
+    ```default 
+    cd eds220-2025-sections
+    ```
 
-    4. Navigate into the cloned repo in the terminal: `cd eds220-2024-sections`.
+    The `eds220-2025-sections` is your **local repository**, the copy of your repo that lives in your computer and from which you will send updates to GitHub. The **remote repository** is the copy of your repo that lives in GitHub.
 
 
-## 3. Update your name and push changes
+## 3. Configure `git pull.rebase`
 
-a. Open the `README.md` file and update the `[YOUR NAME HERE]` with your name. Save your changes.
+When you do `git pull`, git combines the changes from your remote repo with your local repo. There are two main ways: merge and rebase. We will want to **merge** changes, not rebase. This can be the easier way to handle merges when starting out with git. 
 
-b. Push your changes to your **remote repository** (in this case, this is how we call the copy of your repo that lives in GitHub). 
+a. Configure the way git handles `git pull` by running in the terminal
+
+```default
+git config pull.rebase false
+```
+
+b. Verify that your configuration was succesful by running 
+```default
+git config --list
+```
+
+This command shows you all the settings git is using at the moment. Your ouput should look something like this:
+```default
+user.name=carmengg
+user.email=c_galazgarcia@ucsb.edu
+credential.helper=cache --timeout=10000000
+[...]
+pull.rebase=false
+```
+If you see `pull.rebase=false` it means the configuration was successful.
+
+## 4. Update your name and push changes
+
+a. In the workbench (not on GitHub!) open the `README.md` file and update the `[YOUR NAME HERE]` with your name. Save your changes.
+
+b. Push your changes to your remote repository (remember, this is how we call the copy of your repo that lives in GitHub). 
 To do this, remember the basic git routine:
     1. `git status` : check git status, shows which files are staged, modified, or untracked
     2. `git add FILE-NAME` : stage files that have been updated, these files will be added to your next commit
     3. `git status` : check git status again to confirm you have staged the right files
-    4. `git commit -m "Commit message"` : create a commit with message 
+    4. `git commit -m "YOUR COMMIT MESSAGE"` : create a commit with message 
     5. `git pull` : pull latest changes before pushing to ensure your local repo is up-to-date
-    6. `git push` : push your changes to upstream repo
+    6. `git push` : push your changes to remote repo
+
+## 5. Update GitHub credentials (if needed)
+
+c. There is a chance you might be prompted to provide your GitHub username when you do `git push`:
+
+```default
+Username for 'https://github.com':   
+```
 
 c. You should have previously configured your personal access token (PAT) during summer session, but it might be possible that it is not cached anymore and you are prompted to create a new one when doing `git push`. If this is the case:
     1. Follow the instructions in the [MEDS setup guide](https://ucsb-meds.github.io/MEDS-installation-guide/#GitHub-PAT) to create a new PAT. 
