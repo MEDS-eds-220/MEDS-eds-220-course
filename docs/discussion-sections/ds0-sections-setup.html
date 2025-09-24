@@ -206,7 +206,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#create-repository" id="toc-create-repository" class="nav-link" data-scroll-target="#create-repository">1. Create repository</a></li>
   <li><a href="#clone-the-repository" id="toc-clone-the-repository" class="nav-link" data-scroll-target="#clone-the-repository">2. Clone the repository</a></li>
-  <li><a href="#update-your-name-and-push-changes" id="toc-update-your-name-and-push-changes" class="nav-link" data-scroll-target="#update-your-name-and-push-changes">3. Update your name and push changes</a></li>
+  <li><a href="#configure-git-pull.rebase" id="toc-configure-git-pull.rebase" class="nav-link" data-scroll-target="#configure-git-pull.rebase">3. Configure <code>git pull.rebase</code></a></li>
+  <li><a href="#update-your-name-and-push-changes" id="toc-update-your-name-and-push-changes" class="nav-link" data-scroll-target="#update-your-name-and-push-changes">4. Update your name and push changes</a></li>
+  <li><a href="#configure-github-credentials-if-needed" id="toc-configure-github-credentials-if-needed" class="nav-link" data-scroll-target="#configure-github-credentials-if-needed">5. Configure GitHub credentials (if needed)</a></li>
   </ul>
 </nav>
     </div>
@@ -258,13 +260,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>Repository name: <code>eds220-2025-sections</code>.</p></li>
 <li><p>Description: Discussion sections work for the EDS 220 MEDS course.</p></li>
-<li><p>Keep the repository public.</p></li>
+<li><p>Visibility: Keep the repository public.</p></li>
+<li><p>Don’t select any template to start.</p></li>
 <li><p>Add a README file.</p></li>
 <li><p>Add a Python .gitignore template.</p></li>
+<li><p>Add the MIT License.</p></li>
 </ul></li>
 <li><p>In GitHub, update your repository’s README by:</p>
 <ol type="1">
-<li>Deleting the text that was automatically generated when you created the repo.</li>
+<li>Deleting all the text that was automatically generated when you created the repo.</li>
 <li>Copy-pasting the markdown text below, do not update <code>[YOUR NAME HERE]</code> yet.</li>
 </ol></li>
 </ol>
@@ -284,6 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>- **Co-Instructor:** [Annie Adams](https://github.com/annieradams) </span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>Complete materials for the discussion sections and additional resources can be found on the [course website](https://meds-eds-220.github.io/MEDS-eds-220-course/discussion-sections/discussion-sections-listing.html).</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>3. Commit the changes.</code></pre>
 <ol start="3" type="a">
 <li>Add the URL to your GitHub repository to <a href="https://docs.google.com/spreadsheets/d/1mUpKg-gzte_gupG6slF-yaJ1WcK0Goh1GKy9GZBP-K8/edit?usp=sharing">this spreadhseet</a>.</li>
 </ol>
@@ -296,37 +301,86 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>At <a href="https://workbench-1.bren.ucsb.edu/">Bren’s workbench 1 server</a>, start a new JupyterLab session or access an active one.</p></li>
 <li><p>Inside your <code>MEDS/</code> directory, create a new directory called <code>EDS-220</code>. We’ll use this directory to collect all the repositories used in the course. <em>If you do not have a MEDS directory, go ahead and create one.</em></p></li>
-<li><p>In the terminal, navigate to the <code>EDS-220</code> directory by using <code>cd NAME-OF-DIRECTORY</code>.</p></li>
+<li><p>In <strong>the terminal</strong>, navigate into the <code>EDS-220</code> directory by using</p></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cd NAME-OF-DIRECTORY</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="a">
 <li><p>Using the terminal, <strong>clone the repository</strong> into your <code>EDS-220</code> directory. To do this:</p>
 <ol type="1">
 <li><p>In your repository’s landing page on GitHub, click on the green button that says <code>&lt; &gt; Code</code>. In the HTTPS tab option, copy the URL that appears there.</p></li>
-<li><p>Go back to the server. In the terminal, run <code>pwd</code> (print working directory) to make sure you’re cloning into the desired location (this hsould be inside the EDS-220 directory). After you run <code>pwd</code> you should get a file path that looks like this:</p></li>
+<li><p>Go back to the server. In the terminal, run</p></li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>/Users/c_galazgarcia/MEDS/EDS-220/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>to make sure you’re cloning into the desired location (this should be inside the EDS-220 directory). The command <code>pwd</code> stands for <em>print working directory</em>, it lets you know where you’re at within your files.</p>
+<p>After you run <code>pwd</code> you should get a file path that looks like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>/Users/c_galazgarcia/MEDS/EDS-220/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
-<li><p>Run <code>git clone URL</code>. The directory should appear in the folder navigation bar to the left.</p></li>
-<li><p>Navigate into the cloned repo in the terminal: <code>cd eds220-2024-sections</code>.</p></li>
-</ol></li>
+<li>In the terminal, run</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>git clone YOUR-REPOS-URL</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The repository directory should appear in the folder navigation bar to the left.</p>
+<ol start="4" type="1">
+<li>Navigate into the cloned repository in the terminal:</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cd eds220-2025-sections</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>eds220-2025-sections</code> is your <strong>local repository</strong>, the copy of your repo that lives in your computer and from which you will send updates to GitHub. The <strong>remote repository</strong> is the copy of your repo that lives in GitHub.</p></li>
 </ol>
 </section>
-<section id="update-your-name-and-push-changes" class="level2">
-<h2 class="anchored" data-anchor-id="update-your-name-and-push-changes">3. Update your name and push changes</h2>
+<section id="configure-git-pull.rebase" class="level2">
+<h2 class="anchored" data-anchor-id="configure-git-pull.rebase">3. Configure <code>git pull.rebase</code></h2>
+<p>When you do <code>git pull</code>, git combines the changes from your remote repo with your local repo. There are two main ways: merge and rebase. We will want to <strong>merge</strong> changes, not rebase. This can be the easier way to handle merges when starting out with git.</p>
 <ol type="a">
-<li><p>Open the <code>README.md</code> file and update the <code>[YOUR NAME HERE]</code> with your name. Save your changes.</p></li>
-<li><p>Push your changes to your <strong>remote repository</strong> (in this case, this is how we call the copy of your repo that lives in GitHub). To do this, remember the basic git routine:</p>
+<li>Configure the way git handles <code>git pull</code> by running in the terminal</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>git config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="a">
+<li>Verify that your configuration was succesful by running</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>git config --list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This command shows you all the settings git is using at the moment. Your ouput should look something like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>user.name=carmengg</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>user.email=c_galazgarcia@ucsb.edu</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>credential.helper=cache --timeout=10000000</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>[...]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>pull.rebase=false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you see <code>pull.rebase=false</code> it means the configuration was successful.</p>
+</section>
+<section id="update-your-name-and-push-changes" class="level2">
+<h2 class="anchored" data-anchor-id="update-your-name-and-push-changes">4. Update your name and push changes</h2>
+<ol type="a">
+<li><p>In the workbench (not on GitHub!) open the <code>README.md</code> file and update the <code>[YOUR NAME HERE]</code> with your name. Save your changes.</p></li>
+<li><p>Push your changes to your remote repository (remember, this is how we call the copy of your repo that lives in GitHub). To do this, remember the basic git routine:</p>
 <ol type="1">
 <li><code>git status</code> : check git status, shows which files are staged, modified, or untracked</li>
 <li><code>git add FILE-NAME</code> : stage files that have been updated, these files will be added to your next commit</li>
 <li><code>git status</code> : check git status again to confirm you have staged the right files</li>
-<li><code>git commit -m "Commit message"</code> : create a commit with message</li>
+<li><code>git commit -m "YOUR COMMIT MESSAGE"</code> : create a commit with message</li>
 <li><code>git pull</code> : pull latest changes before pushing to ensure your local repo is up-to-date</li>
-<li><code>git push</code> : push your changes to upstream repo</li>
+<li><code>git push</code> : push your changes to remote repo</li>
 </ol></li>
-<li><p>You should have previously configured your personal access token (PAT) during summer session, but it might be possible that it is not cached anymore and you are prompted to create a new one when doing <code>git push</code>. If this is the case:</p>
-<ol type="1">
-<li>Follow the instructions in the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#GitHub-PAT">MEDS setup guide</a> to create a new PAT.</li>
-<li>Once you have created your PAT, do <code>git push</code> again to push your changes.</li>
-</ol></li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Prompted for your username? Abort the push!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is a chance you might be prompted to provide your GitHub username when you do <code>git push</code> by getting this message on the terminal:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Username for 'https://github.com':   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>If this happens, abort the push by pressing <code>Ctrl+C</code>.</strong> You will need to set up your credentials on the server in the next step to be able to push your changes.</p>
+</div>
+</div>
+</section>
+<section id="configure-github-credentials-if-needed" class="level2">
+<h2 class="anchored" data-anchor-id="configure-github-credentials-if-needed">5. Configure GitHub credentials (if needed)</h2>
+<p>In this step you will need to create a personal access token (PAT) and configure your GitHub credentials before trying to push your changes.</p>
+<ol type="a">
+<li><p>Follow steps 6 and 7 in the [MEDS setup guide]https://ucsb-meds.github.io/MEDS-installation-guide/#configure-git) to create a new PAT.</p></li>
+<li><p>Once you have created your PAT, do <code>git push</code> again, enter your credentials (the PAT will be your password), and push your changes.</p></li>
 </ol>
 <p style="text-align: center;">
 <strong>MAKE SURE YOU’VE SUCCESSFULLY PUSHED YOUR UPDATES BEFORE ENDING</strong>
