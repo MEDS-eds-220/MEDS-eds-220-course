@@ -28,14 +28,13 @@ format:
 
 This course focuses on hands-on exploration of widely-used environmental data formats and Python libraries. Together, we'll work with real-world datasets, giving you the skills to analyze and understand the environment around us.
 
-```{r}
-#| eval: true 
-#| echo: false
-#| fig-align: "center"
-#| out-width: "45%" 
-#| fig-alt: ""
-knitr::include_graphics("images/data.png")
-```
+
+::: {.cell layout-align="center"}
+::: {.cell-output-display}
+![](images/data.png){fig-align='center' width=45%}
+:::
+:::
+
 
 :::{.gray-text .body-text-s .center-text}
 *Banner by [NASA's Your Name in Landsat](dsat.gsfc.nasa.gov/apps/YourNameInLandsat-main/)*
@@ -109,13 +108,13 @@ Before that:
 :::
 
 ::: {.column width="50%"}
-```{r}
-#| eval: true
-#| echo: false
-#| fig-align: "center"
-#| out-width: "100%"
-knitr::include_graphics("images/hex-stickers.png")
-```
+
+::: {.cell layout-align="center"}
+::: {.cell-output-display}
+![](images/hex-stickers.png){fig-align='center' width=100%}
+:::
+:::
+
 :::
 ::::
 
@@ -459,3 +458,4 @@ If understanding is clearly lacking and this is the first time this happens, you
 - 💙 **Campus Advocacy, Resources, & Education (CARE):** <http://wgse.sa.ucsb.edu/care/home> 
 - 🏠 **Financial Crisis Response Team:** <financialcrisis@sa.ucsb.edu> (contact)
 - 🌱 **Health and Wellness:** <https://wellbeing.ucsb.edu/>
+
