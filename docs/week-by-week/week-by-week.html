@@ -342,33 +342,34 @@ Storing your PAT in the server
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To store your personal access token (PAT) in the server:</p>
-<section id="create-a-pat" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-pat">1. Create a PAT</h2>
-<p>If you already have a PAT that you can copy paste, you can skip to step 2. Otherwise, create one. You can follow the instructions in the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#GitHub-PAT">MEDS installation guide</a> or create one directly through GitHub.</p>
+<section id="have-a-pat-ready" class="level2">
+<h2 class="anchored" data-anchor-id="have-a-pat-ready">1. Have a PAT ready</h2>
+<p>If you already have a PAT that you can copy paste, you can skip to step 2. Otherwise, create or regenerate one. You can follow the instructions in the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#GitHub-PAT">MEDS installation guide</a> or create or regernerate one directly through GitHub.</p>
 </section>
 <section id="set-up-the-git-credential-helper" class="level2">
 <h2 class="anchored" data-anchor-id="set-up-the-git-credential-helper">2. Set up the git credential helper</h2>
 <ol type="a">
-<li><p>Using the terminal, navigate to the directory from where you want to push your updates. Make sure you are on that directroy (for example, the <code>eds-2025-in-class</code> by running <code>pwd</code> on the terminal.</p></li>
+<li><p>Using the terminal, navigate to the directory from where you want to push your updates. Make sure you are on that directroy (for example, verify you are on the <code>eds-2025-in-class</code> by running <code>pwd</code> on the terminal).</p></li>
 <li><p>Run the following command on the terminal:</p></li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>git config --global credential.helper store</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This indicates to git that you want to store the PAT instead of caching it.</p>
 <ol start="3" type="a">
-<li>Run <code>more .gitconfig</code> on the terminal. You should see something like this as the output:</li>
+<li>Run <code>git config --global --list</code> on the terminal. You should see something like this as the output:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[user]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        name = carmengg</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        email = c_galazgarcia@ucsb.edu</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>[credential]</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        helper = store</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>user.name=carmengg</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>user.email=c_galazgarcia@ucsb.edu</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>credential.helper=store</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>That last line indicates that the credential helper is now <code>store</code>.</p>
-<section id="initiate-a-push" class="level3">
-<h3 class="anchored" data-anchor-id="initiate-a-push">3. Initiate a push</h3>
+<section id="complete-a-push" class="level3">
+<h3 class="anchored" data-anchor-id="complete-a-push">3. Complete a push</h3>
+<p>Go through the steps to make a push. Git will prompt you for your credentials, use your GitHub username and use the PAT as the password. Press enter and finalize the push!</p>
+</section>
+<section id="verify-credentials" class="level3">
+<h3 class="anchored" data-anchor-id="verify-credentials">4. Verify credentials</h3>
 <ol type="a">
-<li><p>Make a small update to one of your notebooks and save the file.</p></li>
-<li><p>Go through the steps to make a push. Git will prompt you for your credentials, use your GitHub username and use the PAT as the password. Press enter and finalize the push!</p></li>
-<li><p>Run <code>more. git-credentials</code> on the terminal. You should see something like this as the output:</p></li>
+<li><p>Go to your user’s home directory by running <code>cd ~</code>.</p></li>
+<li><p>Run <code>more .git-credentials</code>. You should see something like this as the output:</p></li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>https://carmengg:ghp_XTWwWrEtGfL45iIgU6PPDFd990ceIYydqY@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This means your PAT is now stored (<em>the PAT here is an example</em>).</p>
@@ -395,6 +396,8 @@ Preparation for Thursday class (October 2)
 </ol>
 </div>
 </div>
+<p><br></p>
+<hr>
 <!-- 
 ### Class 3 (Thursday)
 
