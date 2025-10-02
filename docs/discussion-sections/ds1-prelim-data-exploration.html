@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -87,14 +87,15 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -134,6 +135,8 @@ div.csl-indent {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">EDS 220 - Working with Environmental Datasets</span>
     </a>
@@ -205,6 +208,7 @@ div.csl-indent {
   <li><a href="#look-at-your-data" id="toc-look-at-your-data" class="nav-link" data-scroll-target="#look-at-your-data">4. Look at your data</a></li>
   <li><a href="#pd.dataframe-preliminary-exploration" id="toc-pd.dataframe-preliminary-exploration" class="nav-link" data-scroll-target="#pd.dataframe-preliminary-exploration">5. <code>pd.DataFrame</code> preliminary exploration</a></li>
   <li><a href="#update-column-names" id="toc-update-column-names" class="nav-link" data-scroll-target="#update-column-names">6. Update column names</a></li>
+  <li><a href="#subsetting" id="toc-subsetting" class="nav-link" data-scroll-target="#subsetting">7. Subsetting</a></li>
   </ul>
 </nav>
     </div>
@@ -280,7 +284,16 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ul>
-<li>Add comments in each one of your code cells.</li>
+<li>To helps everyone talk through ideas, catch errors early, and learn multiple ways to solve a problem, we will be working in our teams each week. There are two different roles you might have during discussion section: the driver or the navigator. There will be one driver and three navigators each week. The driver will plug their computer into the tv at your table and be responsible for writing the code that your team comes up with (note: you all must write the code individually as well, but the person coding on the tv will be typing on the notebook that the whole group works on together). The rest of the team, the navigators, will read the prompts, spots errors, asks “what if” questions. Navigators should be asking questions such as the following:</li>
+</ul>
+<ol type="1">
+<li>“Can you narrate what you’re typing so I can follow?”</li>
+<li>“I’m thinking the next step is … because …”</li>
+<li>“Let’s pause and predict the output before we run it.”</li>
+<li>“I’m not sure—can we check the documentation together?”</li>
+<li>“What evidence do we have that this worked?”</li>
+</ol>
+<ul>
 <li>On each exercise, include markdown cells in between your code cells to add titles and information.</li>
 <li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
 <li>You won’t need to upload any data.</li>
@@ -327,8 +340,8 @@ div.csl-indent {
 </ul>
 <ol start="2" type="a">
 <li><p>Read in the data from the URL using the <code>pd.read_csv()</code> function like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access metadata from repository</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access metadata from repository</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Take a minute to look at the descriptions for the columns.</p></li>
 </ol>
 <p><strong>Note:</strong> Not all datasets have column descriptions in a CSV file. Often they come with a <code>.doc</code> or <code>.txt</code> file with information.</p>
@@ -338,8 +351,8 @@ div.csl-indent {
 <ol type="a">
 <li>Follow steps (a) and (b) from the previous exercise to read in the drylands prey data file <code>arth_occurrences_with_env.csv</code> using <code>pd.read_csv()</code>. Store the dataframe to a variable called <code>prey</code> like this:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prey <span class="op">=</span> pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>prey <span class="op">=</span> pd.read_csv(<span class="st">'the URL goes here'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="a">
 <li>What is the type of the <code>prey</code> variable? Use a Python function get this information.</li>
 </ol>
@@ -359,7 +372,7 @@ div.csl-indent {
 <li><p>Run <code>prey</code> in a cell. What do you notice in the columns section?</p></li>
 <li><p>To see all the column names in the same display we need to set a <code>pandas</code> option. Run the following command and then look at the <code>prey</code> data again:</p></li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="a">
 <li>Add a comment explaining what <code>pd.set_option("display.max.columns", None)</code> does.</li>
 </ol>
@@ -390,7 +403,7 @@ prey.head()</code></pre>
 <li><code>columns</code></li>
 <li><code>dtypes</code></li>
 </ol>
-<p>If you’re not sure about what information is the attribute showing, look it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>.</p>
+<p>If you’re not sure about what information is the attribute showing, look it up in the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html"><code>pandas.DataFrame</code> documentation</a>!</p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
@@ -398,6 +411,16 @@ prey.head()</code></pre>
 <section id="update-column-names" class="level2">
 <h2 class="anchored" data-anchor-id="update-column-names">6. Update column names</h2>
 <p>Change the column names of <code>institutionCode</code> and <code>datasetKey</code> to <code>institution_code</code> and <code>dataset_key</code>, respectively. Make sure you’re actually updating the dataframe. HINT: look for the documentation on the <code>rename</code> method for <code>pandas.DataFrames</code>.</p>
+</section>
+<section id="subsetting" class="level2">
+<h2 class="anchored" data-anchor-id="subsetting">7. Subsetting</h2>
+<p>Complete the following subsetting tasks.</p>
+<ol type="1">
+<li>Select only the preservered specimes from <code>prey</code>.</li>
+<li>Select observations between 1992 and 2000</li>
+<li>Select rows 5, 15, 25, and 35</li>
+<li>Select all rows for columns <code>species</code> and <code>eventDate</code>.</li>
+</ol>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
@@ -465,13 +488,14 @@ prey.head()</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
