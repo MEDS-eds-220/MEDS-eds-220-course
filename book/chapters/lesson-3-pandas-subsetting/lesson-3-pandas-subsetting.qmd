@@ -262,6 +262,7 @@ Let's break down this code:
 
 5. when we put `df['year'].between(2012, 2015)` inside the selection brackets `[]` we obtain the rows of the data frame with year equal to 2012, ..., 2015.
 
+<!--
 :::{.callout-warning}
 ## Avoid using `loc` for selecting only rows
 It is equivalent to write
@@ -285,6 +286,7 @@ In the second one:
 
 We prefer the first syntax when we are selecting rows and not columns since it is simpler.
 :::
+-->
 
 ### ... using multiple conditions
 We can combine multipe conditions to select rows by surrounding each one in parenthesis `()` and using the or operator `|` and the and operator `&`.
@@ -340,7 +342,7 @@ When we want to select rows and columns simultaneously by labels (including usin
 df.loc[ row-selection , column-selection]
 ```
 
-specifying both paratmers: `row-selection` and `column-selection`. These parameters can be a condition or a subset of labels from the index or the column names. 
+specifying both parameters: `row-selection` and `column-selection`. These parameters can be a condition or a subset of labels from the index or the column names. 
 
 #### Example
 
@@ -395,8 +397,8 @@ And, as always, the documentation will provide you with more information:
 
 
 :::{.callout-warning}
-## `iloc` for column selection? Avoid it!
-We can also access columns by position using `iloc` - but it is best not to if possible.
+## `iloc` for column selection? Think about it. 
+We can also access columns by position using `iloc` - but consider carefully if this is the best approach.
 
 Suppose we want to access the 9th column in the data frame - then we want to select a column *by position*. In this case, the 9th column is the data at San Dieguito Wetland during spring and the 9th position corresponds to the index 8. We can select this column by position using the `iloc` selection:
 
@@ -408,7 +410,7 @@ sdw_spring = df.iloc[:,8]
 sdw_spring.head()
 ```
 
-Unless you are *really* looking for information about the 9th column, **do not access a column by position**. This is bound to break in many ways:
+Unless you are *really* looking for information about the 9th column, **consider whether it is the best approach to access a column by position**. This can break in several ways:
 
 - it relies on a person correctly counting the position of a column. Even with a small dataset this can be prone to error.
 
@@ -416,7 +418,9 @@ Unless you are *really* looking for information about the 9th column, **do not a
 
 - datastets can get updated. Maybe a new column was added before `SDW_spring`, this would change the position of the column, which would make any code depending on `df.iloc[:,8]` invalid. 
 
-**Accessing columns by labels helps reproducibility!**
+Using `iloc` for accessing can still be the best option when working with very large, static datasets. As always, consider what will make your code both understandable and efficient. 
+
+Generally. **accessing columns by labels can help reproducibility!**
 :::
 
 
