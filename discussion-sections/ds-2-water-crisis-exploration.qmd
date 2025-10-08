@@ -96,7 +96,7 @@ c. Update the `.gitignore` file of your `eds-220-sections` so it ignores the `da
 d. Load the data into your `section-2-co-basin-water-conflicts.ipynb` notebook. Name your data frame variable `df`.
 
 <!--
-```{python}
+```python
 import pandas as pd
 pd.set_option("display.max.columns", None)
 
@@ -112,7 +112,7 @@ a. Set `pandas` to display all columns in the data frame.
 b. Using `pandas` methods, obtain preliminary information and explore this data frame in at least four different ways.
 
 <!--
-```{python}
+```python
 # df.head()
 # df.shape
 # df.columns
@@ -184,11 +184,11 @@ Our goal today is to **find which states are reported in the dataset as having a
 a. What are the unique values in the `States` column once filtering the dataset for states that have a water conflict? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in markdown cells, not as comments.
 
 <!--
-```{python}
+```python
 print(df['State'].unique())
 ```
 
-```{python}
+```python
 for x in df['State'].unique():
     print(x)
 ```
@@ -207,12 +207,12 @@ The next exercises will guide you through finding the unique state codes in the 
 
 Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
 
-```{python}
+```python
 states = df['State'].dropna()
 states
 ```
 
-```{python}
+```python
 states.hasnans
 ```
 -->
@@ -227,7 +227,7 @@ a. Perform the following wrangling:
 Your final answer should use method chaining without creating new variables.
 
 <!--
-```{python}
+```python
 df['State'].str.split(';', expand=True).stack().unique()
 ```
 -->
@@ -246,7 +246,7 @@ a. Discuss with your team: Why do some state codes seem to be repeated? What wou
 b. Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. **Hint:** [str.strip().](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html)
 
 <!--
-```{python}
+```python
 (df['State'].str.split(';', expand=True)
             .stack()
             .str.strip()
@@ -258,7 +258,7 @@ b. Update your code to obtain a list of codes (without repetition) of the states
 c. Bonus: How many articles mention each state? 
 
 <!--
-```{python}
+```python
 (df['State'].str.split(';', expand=True)
             .stack()
             .str.strip()

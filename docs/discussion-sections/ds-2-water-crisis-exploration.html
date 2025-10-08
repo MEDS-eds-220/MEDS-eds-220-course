@@ -347,354 +347,13 @@ a. In class we have (so far) loaded data into our workspace either by downloadin
 <li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
 </ol>
 <!--
-
-::: {#12044908 .cell execution_count=1}
-``` {.python .cell-code}
+```python
 import pandas as pd
 pd.set_option("display.max.columns", None)
 
 df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
 df.head(5)
 ```
-
-::: {.cell-output .cell-output-display execution_count=1}
-
-```{=html}
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Event</th>
-<th data-quarto-table-cell-role="th">Search Source</th>
-<th data-quarto-table-cell-role="th">Newspaper</th>
-<th data-quarto-table-cell-role="th">Article Title</th>
-<th data-quarto-table-cell-role="th">Duplicate</th>
-<th data-quarto-table-cell-role="th">Report Date</th>
-<th data-quarto-table-cell-role="th">Report Year</th>
-<th data-quarto-table-cell-role="th">Event Date</th>
-<th data-quarto-table-cell-role="th">Event Day</th>
-<th data-quarto-table-cell-role="th">Event Month</th>
-<th data-quarto-table-cell-role="th">Event Year</th>
-<th data-quarto-table-cell-role="th">Conflict Present</th>
-<th data-quarto-table-cell-role="th">Crisis Present</th>
-<th data-quarto-table-cell-role="th">Basin</th>
-<th data-quarto-table-cell-role="th">HUC6</th>
-<th data-quarto-table-cell-role="th">HUC2</th>
-<th data-quarto-table-cell-role="th">Place</th>
-<th data-quarto-table-cell-role="th">County</th>
-<th data-quarto-table-cell-role="th">County FIPS</th>
-<th data-quarto-table-cell-role="th">State</th>
-<th data-quarto-table-cell-role="th">State FIPS</th>
-<th data-quarto-table-cell-role="th">Urban or Rural</th>
-<th data-quarto-table-cell-role="th">Issue Type</th>
-<th data-quarto-table-cell-role="th">Event Summary</th>
-<th data-quarto-table-cell-role="th">Stakeholders</th>
-<th data-quarto-table-cell-role="th">Intensity Value</th>
-<th data-quarto-table-cell-role="th">Comments</th>
-<th data-quarto-table-cell-role="th">Related Observation Themes</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water quality</th>
-<th data-quarto-table-cell-role="th">Article Text Search - invasive species</th>
-<th data-quarto-table-cell-role="th">Article Text Search - conservation</th>
-<th data-quarto-table-cell-role="th">Article Text Search - drought</th>
-<th data-quarto-table-cell-role="th">Article Text Search - flood</th>
-<th data-quarto-table-cell-role="th">Article Text Search - ground water depletion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - depletion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - infrastructure</th>
-<th data-quarto-table-cell-role="th">Article Text Search - fish passage</th>
-<th data-quarto-table-cell-role="th">Article Text Search - instream water rights</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water rights</th>
-<th data-quarto-table-cell-role="th">Article Text Search - intergovernmental</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water transfers</th>
-<th data-quarto-table-cell-role="th">Article Text Search - navigation</th>
-<th data-quarto-table-cell-role="th">Article Text Search - fish</th>
-<th data-quarto-table-cell-role="th">Article Text Search - invasive</th>
-<th data-quarto-table-cell-role="th">Article Text Search - diversion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - water diversion</th>
-<th data-quarto-table-cell-role="th">Article Text Search - instream</th>
-<th data-quarto-table-cell-role="th">Article Text Search - aquatic</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1</td>
-<td>USGS1-50.docx</td>
-<td>The Durango Herald (Colorado)</td>
-<td>Tribes assert water rights on Colorado River B...</td>
-<td>False</td>
-<td>7-Apr-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>4.0</td>
-<td>2022.0</td>
-<td>Y</td>
-<td>N</td>
-<td>Upper San Juan</td>
-<td>140801</td>
-<td>14</td>
-<td>Durango, CO</td>
-<td>La Plata</td>
-<td>8067.0</td>
-<td>CO</td>
-<td>8</td>
-<td>Both</td>
-<td>Water rights more generally</td>
-<td>Ute Mountain and Southern Ute representatives ...</td>
-<td>Tribal Nations, State Government, Federal Gove...</td>
-<td>2.0</td>
-<td>The article highlights calls for negotiation b...</td>
-<td>Lack of tribal representation</td>
-<td>0</td>
-<td>0</td>
-<td>3</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2</td>
-<td>USGS1-50.docx</td>
-<td>Journal, The (Cortez, Dolores, Mancos, CO)</td>
-<td>Native American tribes assert water rights on ...</td>
-<td>False</td>
-<td>7-Apr-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>4.0</td>
-<td>2022.0</td>
-<td>Y</td>
-<td>N</td>
-<td>Upper San Juan</td>
-<td>140801</td>
-<td>14</td>
-<td>Durango, CO</td>
-<td>La Plata</td>
-<td>8067.0</td>
-<td>CO</td>
-<td>8</td>
-<td>Both</td>
-<td>Water rights more generally</td>
-<td>Ute Mountain and Southern Ute representatives ...</td>
-<td>Southern Ute Indian Tribe, Ute Mountain Tribe,...</td>
-<td>2.0</td>
-<td>The article highlights calls for negotiation b...</td>
-<td>Lack of tribal representation</td>
-<td>0</td>
-<td>0</td>
-<td>2</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>17</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>3</td>
-<td>USGS1-50.docx</td>
-<td>The Salt Lake Tribune</td>
-<td>'Very positive change.' New Utah law will be a...</td>
-<td>False</td>
-<td>17-Mar-22</td>
-<td>2022.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>3.0</td>
-<td>2022.0</td>
-<td>N</td>
-<td>Y</td>
-<td>Great Salt Lake</td>
-<td>160203</td>
-<td>16</td>
-<td>Great Salt Lake</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>UT</td>
-<td>49</td>
-<td>Both</td>
-<td>Instream water rights</td>
-<td>A bill is proposed in Utah that would expand t...</td>
-<td>State Government, Any Water Rights Holder, Agr...</td>
-<td>3.0</td>
-<td>The event is the proposal of the bill at the s...</td>
-<td>Dishonoring the absent</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>12</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>12</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>4</td>
-<td>USGS1-50.docx</td>
-<td>Casa Grande Dispatch (AZ)</td>
-<td>Legislation would let an Arizona tribe lease C...</td>
-<td>False</td>
-<td>11-Dec-21</td>
-<td>2021.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>12.0</td>
-<td>2021.0</td>
-<td>N</td>
-<td>Y</td>
-<td>Lower Colorado</td>
-<td>150301</td>
-<td>15</td>
-<td>Colorado River Indian Reservation</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>Rural</td>
-<td>Water rights more generally</td>
-<td>The Colorado River Indian Tribes Water Resilie...</td>
-<td>Colorado River Indian Tribes, State Government...</td>
-<td>3.0</td>
-<td>Event is proposal of the bill, preliminary agr...</td>
-<td>NaN</td>
-<td>0</td>
-<td>0</td>
-<td>2</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>5</td>
-<td>USGS1-50.docx</td>
-<td>The Aspen Times (Colorado)</td>
-<td>Historically excluded from Colorado River poli...</td>
-<td>False</td>
-<td>19-Dec-21</td>
-<td>2021.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>11.0</td>
-<td>2021.0</td>
-<td>Y</td>
-<td>Y</td>
-<td>Upper San Juan</td>
-<td>140801</td>
-<td>14</td>
-<td>Southern Ute Indian Reservation</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>Rural</td>
-<td>Intergovernmental issues</td>
-<td>State and federal officials say that Tribal Na...</td>
-<td>Sothern Ute Indian Tribe, Ute Mountain Tribe, ...</td>
-<td>-1.0</td>
-<td>Interaction between tribal nations and state/f...</td>
-<td>Lack of tribal representation</td>
-<td>0</td>
-<td>0</td>
-<td>2</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>18</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-```
-
-:::
-:::
-
-
 -->
 </section>
 <section id="preliminary-data-exploration" class="level2">
@@ -704,16 +363,12 @@ df.head(5)
 <li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
 </ol>
 <!--
-
-::: {#c8fa5b6d .cell execution_count=2}
-``` {.python .cell-code}
+```python
 # df.head()
 # df.shape
 # df.columns
 # df.Stakeholders.unique()
 ```
-:::
-
 
 -->
 <p style="text-align: center;">
@@ -761,14 +416,14 @@ df.head(5)
 <ol type="a">
 <li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
 </ol>
-<div id="298fbbba" class="cell" data-execution_count="3">
+<div id="48615eaf" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>0    California; Nevada
 1               Arizona
 2                   NaN
@@ -776,18 +431,18 @@ df.head(5)
 dtype: object</code></pre>
 </div>
 </div>
-<div id="05805c59" class="cell" data-execution_count="4">
+<div id="4039747b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x10ad43d90&gt;</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x1102bd510&gt;</code></pre>
 </div>
 </div>
-<div id="c990c3a4" class="cell" data-execution_count="5">
+<div id="7d1efd9d" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -826,11 +481,11 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="185fa455" class="cell" data-execution_count="6">
+<div id="9a6e9719" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>0  0    California
    1        Nevada
 1  0       Arizona
@@ -844,63 +499,17 @@ dtype: object</code></pre>
 <h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
 <p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflicts</strong>.</p>
 <ol type="a">
-<li>What are the unique values in the <code>States</code> column? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in mardown cells, not as comments.</li>
+<li>What are the unique values in the <code>States</code> column once filtering the dataset for states that have a water conflict? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in markdown cells, not as comments.</li>
 </ol>
 <!--
-
-::: {#98f7697b .cell execution_count=7}
-``` {.python .cell-code}
+```python
 print(df['State'].unique())
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-['CO' 'UT' nan 'AZ' 'OH; UT' 'AZ; CO; NM; UT' 'CA' 'AZ; UT' 'AZ; NV'
- 'CO; UT; WY; NM' 'AZ; CA' 'UT; AZ' 'CO; WY' 'NV; AZ' 'CO; AZ'
- 'AZ; CA; CO; NV; NM; UT; WY' 'AZ; CA; NV' 'NV' 'NM' 'UT; CO; WY'
- 'CA; NV; AZ' 'AZ; NM' 'WY; UT; CO' 'TX']
-```
-:::
-:::
-
-
-::: {#bd34f434 .cell execution_count=8}
-``` {.python .cell-code}
+```python
 for x in df['State'].unique():
     print(x)
 ```
-
-::: {.cell-output .cell-output-stdout}
-```
-CO
-UT
-nan
-AZ
-OH; UT
-AZ; CO; NM; UT
-CA
-AZ; UT
-AZ; NV
-CO; UT; WY; NM
-AZ; CA
-UT; AZ
-CO; WY
-NV; AZ
-CO; AZ
-AZ; CA; CO; NV; NM; UT; WY
-AZ; CA; NV
-NV
-NM
-UT; CO; WY
-CA; NV; AZ
-AZ; NM
-WY; UT; CO
-TX
-```
-:::
-:::
-
-
 -->
 </section>
 <section id="brainstorm" class="level2">
@@ -915,44 +524,14 @@ TX
 
 Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
 
-::: {#1159e2bf .cell execution_count=9}
-``` {.python .cell-code}
+```python
 states = df['State'].dropna()
 states
 ```
 
-::: {.cell-output .cell-output-display execution_count=9}
-```
-0          CO
-1          CO
-2          UT
-5          AZ
-11     OH; UT
-        ...  
-263        CO
-264        CO
-265    AZ; CA
-266        AZ
-267        AZ
-Name: State, Length: 178, dtype: object
-```
-:::
-:::
-
-
-::: {#e01d9b55 .cell execution_count=10}
-``` {.python .cell-code}
+```python
 states.hasnans
 ```
-
-::: {.cell-output .cell-output-display execution_count=10}
-```
-False
-```
-:::
-:::
-
-
 -->
 </section>
 <section id="exploratory-wrangling" class="level2">
@@ -968,21 +547,9 @@ False
 </ol>
 <p>Your final answer should use method chaining without creating new variables.</p>
 <!--
-
-::: {#066f73f1 .cell execution_count=11}
-``` {.python .cell-code}
+```python
 df['State'].str.split(';', expand=True).stack().unique()
 ```
-
-::: {.cell-output .cell-output-display execution_count=11}
-```
-array(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',
-       ' CA', ' AZ', 'NV', 'NM', 'WY', 'TX'], dtype=object)
-```
-:::
-:::
-
-
 -->
 <p style="text-align: center;">
 <strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?</strong>
@@ -998,56 +565,25 @@ array(['CO', 'UT', 'AZ', 'OH', ' UT', ' CO', ' NM', 'CA', ' NV', ' WY',
 <li><p>Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
 </ol>
 <!--
-
-::: {#56475c7e .cell execution_count=12}
-``` {.python .cell-code}
+```python
 (df['State'].str.split(';', expand=True)
             .stack()
             .str.strip()
             .unique()
             )
 ```
-
-::: {.cell-output .cell-output-display execution_count=12}
-```
-array(['CO', 'UT', 'AZ', 'OH', 'NM', 'CA', 'NV', 'WY', 'TX'], dtype=object)
-```
-:::
-:::
-
-
 -->
 <ol start="3" type="a">
 <li>Bonus: How many articles mention each state?</li>
 </ol>
 <!--
-
-::: {#b7310299 .cell execution_count=13}
-``` {.python .cell-code}
+```python
 (df['State'].str.split(';', expand=True)
             .stack()
             .str.strip()
             .value_counts()
             )
 ```
-
-::: {.cell-output .cell-output-display execution_count=13}
-```
-AZ    87
-CO    45
-UT    40
-NV    19
-CA    16
-NM    13
-WY     8
-OH     1
-TX     1
-Name: count, dtype: int64
-```
-:::
-:::
-
-
 -->
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
