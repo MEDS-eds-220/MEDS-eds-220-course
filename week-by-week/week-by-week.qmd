@@ -327,21 +327,21 @@ git commit --amend -m "NEW MESSAGE"
 
 ::: {.callout-tip collapse="true" icon=false}
 ## VSCode set-up
-a. Create a `MEDS/EDS-220` directory in your personal computer.
+1. Create a `MEDS/EDS-220` directory in your personal computer.
 
-b. Open VSCode.
+2. Open VSCode.
   
-c. Add a new **bash terminal** in it. 
+3. Add a new **bash terminal** in it. 
 
-d. Confirm git installation by running `git version` in the terminal. If git is installed you will get something similar to
+4. Confirm git installation by running `git version` in the terminal. If git is installed you will get something similar to
 
 ```bash
 git version 2.33.1
 ```
 
-e. *If you don't get a similar output, install git by following the [MEDS installation guide](https://ucsb-meds.github.io/MEDS-installation-guide/#check-git).*
+5. *If you don't get a similar output, install git by following the [MEDS installation guide](https://ucsb-meds.github.io/MEDS-installation-guide/#check-git).*
   
-f. Clone your `eds-220-in-class` repository inside the `MEDS/EDS-220` directory. You can do this using the terminal or using the VSCode interface:
+6. Clone your `eds-220-in-class` repository inside the `MEDS/EDS-220` directory. You can do this using the terminal or using the VSCode interface:
 
 ![](images/clone-1.png){width=70%}
 
@@ -351,8 +351,7 @@ f. Clone your `eds-220-in-class` repository inside the `MEDS/EDS-220` directory.
 
 ![](images/clone-4.png){width=70%}
   
-
-g. Confirm your conda installation by running `conda info` in the terminal. If conda is active you will get something similar to
+7. Confirm your conda installation by running `conda info` in the terminal. If conda is active you will get something similar to
 
 ```bash
 active environment : base
@@ -366,9 +365,9 @@ netrc file : None
 offline mode : False
 ```
 
-h. *If conda needs to be added to the shell profile,  follow the [troubleshooting steps](https://ucsb-meds.github.io/MEDS-installation-guide/#install-Anaconda) in the MEDS installation guide within a **bash terminal** (not Powershell if you are on Windows).*
+8. *If conda needs to be added to the shell profile,  follow the [troubleshooting steps](https://ucsb-meds.github.io/MEDS-installation-guide/#install-Anaconda) in the MEDS installation guide within a **bash terminal** (not Powershell if you are on Windows).*
   
-i. Install Python extension to VSCode:
+9. Install Python extension to VSCode:
 
 ![](images/extensions-1.png){width=70%}
 
@@ -387,18 +386,15 @@ i. Install Python extension to VSCode:
 2. Covered [time series notes](/book/chapters/lesson-7-time-series.qmd) @ workbench.
 3. Reviewed git workflow with personal computer and workbench.
 
-
 ::: {.callout-tip icon=false collapse="true" }
-## Building conda environment for the course
+## Build conda environment for the course
 *Make sure you have completed the VSCode set-up before creating the environment.*
 
-  1. Open VSCode on your computer.
+1. Open VSCode on your computer.
 
-  2. Download the following YAML file and move it into your `eds220-in-class`  directory:
-    [https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds-220-env.yml](https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds220-env.yml)
+2. Download the following YAML file and move it into your `eds220-in-class`  directory: [https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds220-env.yml](https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds220-env.yml)
 
-  4. Open a bash terminal inside VSCode and in it:
-
+4. Open a bash terminal inside VSCode and in it:
   a. Verify you are in the `eds220-in-class` directory. 
   b. Verify that the `eds220-env.yml` file is in the directory.
   c. Run the following conda command to build the environment used for the course:
@@ -406,8 +402,54 @@ i. Install Python extension to VSCode:
   conda env create --name eds220-env --file eds220-env.yml
   ```
     
-It will take about 10 minutes to build the environment. Once conda has finished, verify that the environment is listed. Inside VSCode, you'll be able to select the `eds220-env` kernel to run your notebooks.  
+It will take about 15 minutes to build the environment. Once conda has finished, verify that the environment was created by running `conda env list`. 
 :::
+
+::: {.callout-tip icon=false collapse="true" }
+## Add Jupyter kernel for course environment
+*Make sure you have built the eds220-env before creating the kernel.*
+
+1. Open VSCode on your computer.
+
+2. Add a new bash terminal in it. 
+
+3. Verify you have the `eds220-env` conda environment available by running
+```bash
+conda env list
+```
+
+4. Activate the `eds220-env` by running
+```bash
+conda activate eds220-env
+```
+
+5. Verify the environment has been activated. Then run
+```bash
+python -m ipykernel install --user --name eds220-env --display-name "EDS-220 env"
+```
+6. Verify that the kernel has been created by running
+```bash
+jupyter kernelspec list
+```
+The output should look similar to this:
+```bash
+Available kernels:
+  eds220-env        /Users/galaz-garcia/Library/Jupyter/kernels/eds220-env
+  python3           /Users/galaz-garcia/opt/anaconda3/share/jupyter/kernels/python3
+```
+
+7. Restart VSCode. 
+
+8. To use the new kernel, open a Jupyter notebook on VSCode and...
+
+![](images/kernel-1.png){width=90%}
+
+![](images/kernel-2.png){width=90%}
+
+![](images/kernel-3.png){width=90%}
+
+:::
+
 
 ::: {.callout-warning icon=false}
 ## Preparation for next class
@@ -430,7 +472,6 @@ Read the notes on [coordinate reference systems](/book/chapters/lesson-8-crs.qmd
 :::
 
 :::
-
 
 
 <!--
