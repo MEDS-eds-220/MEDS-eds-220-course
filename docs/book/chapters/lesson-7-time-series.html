@@ -459,7 +459,7 @@ window.Quarto = {
 <section id="time-series" class="level1 page-columns page-full">
 <h1>6 Time series</h1>
 <p>In this section we will learn some basic handling of time series.</p>
-<p>This lesson was adapted from <a href="https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb">Dr.&nbsp;Sam Stevenson’s lecture on Data quality control and outliers: 1D time series</a> and <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/">Earth Lab’s Le”sson 1. Work With Datetime Format in Python - Time Series Data</a> <span class="citation" data-cites="wasser_earthlabearth_textbook_2024"><a href="#ref-wasser_earthlabearth_textbook_2024" role="doc-biblioref">[1]</a></span>.</p>
+<p>This lesson was adapted from <a href="https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb">Dr.&nbsp;Sam Stevenson’s lecture on Data quality control and outliers: 1D time series</a> and <a href="https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/">Earth Lab’s Lesson 1. Work With Datetime Format in Python - Time Series Data</a> <span class="citation" data-cites="wasser_earthlabearth_textbook_2024"><a href="#ref-wasser_earthlabearth_textbook_2024" role="doc-biblioref">[1]</a></span>.</p>
 <!--
 TODO
 ## Learning objectives
@@ -509,7 +509,7 @@ TODO
 <section id="timestamps" class="level2">
 <h2 class="anchored" data-anchor-id="timestamps">Timestamps</h2>
 <p>The <code>pandas</code> library represents an instant in time using the <code>pandas.Timestamp</code> class. For example:</p>
-<div id="40eb20c1" class="cell" data-execution_count="1">
+<div id="317cdc91" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a timestamp</span></span>
@@ -524,7 +524,7 @@ TODO
 </div>
 </div>
 <p>When we store multiple <code>pandas.Timestamps</code> in a <code>pandas.Series</code> the data type of the column is set to <code>datetime64[ns]</code>:</p>
-<div id="7caf4a25" class="cell" data-execution_count="2">
+<div id="2a79d0ca" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Notice the data type of the column is datetime64</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pd.Series([pd.Timestamp(<span class="dv">2020</span>,<span class="dv">10</span>,<span class="dv">18</span>), </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           pd.Timestamp(<span class="dv">2020</span>,<span class="dv">10</span>,<span class="dv">17</span>),</span>
@@ -543,7 +543,7 @@ dtype: datetime64[ns]</code></pre>
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration">Data exploration</h2>
 <p>Let’s start by reading in the data and taking a look at it:</p>
-<div id="9510796e" class="cell" data-execution_count="3">
+<div id="5f171ae2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data </span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> pd.read_csv(URL)</span>
@@ -617,7 +617,7 @@ dtype: datetime64[ns]</code></pre>
 </div>
 </div>
 </div>
-<div id="417247a6" class="cell" data-execution_count="4">
+<div id="5b18c76a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot hourly precipitation in Boulder CO </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -639,7 +639,7 @@ dtype: datetime64[ns]</code></pre>
 <section id="reading-in-missing-data-values" class="level2">
 <h2 class="anchored" data-anchor-id="reading-in-missing-data-values">Reading in missing data values</h2>
 <p>The metadata states the missing values are indicated by the number 999.99. We can use this information to reload the dataframe indicating 999.99 is the missing value. To do this, we add the <code>na_values</code> parameter to the <code>pandas.read_csv()</code> function to indicitate additional values that should be recognized as <code>NA</code>:</p>
-<div id="08b6c844" class="cell" data-execution_count="5">
+<div id="19c80d36" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in CSV indicating NA values based on metadata</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> pd.read_csv(URL, na_values<span class="op">=</span>[<span class="fl">999.99</span>])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -714,7 +714,7 @@ dtype: datetime64[ns]</code></pre>
 </div>
 <p>Notice that the first hourly precipitation value used to be 999.99 and it is now set to a <code>NaN</code>. Check the <code>na_values</code> parameter in the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html"><code>pd.read_csv()</code> documentation</a> to learn more about which values are identified as <code>NA</code> by default.</p>
 <p>We can try making our plot again:</p>
-<div id="4cd94d6f" class="cell" data-execution_count="6">
+<div id="9939b0ea" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -729,7 +729,7 @@ dtype: datetime64[ns]</code></pre>
 <section id="casting-strings-into-dates" class="level2">
 <h2 class="anchored" data-anchor-id="casting-strings-into-dates">Casting strings into dates</h2>
 <p>Notice that the <code>DATE</code> column in our dataframe is not of type <code>datetime</code>. We can check this using the <code>dtypes</code> attribute for dataframes:</p>
-<div id="e0b61f08" class="cell" data-execution_count="7">
+<div id="e5307f0d" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether DATE column is of type datetime</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>precip.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -751,7 +751,7 @@ precip.DATE.apply(type).unique()
 <li><code>pandas.to_datetime()</code> output: a <code>pandas.Series</code> with the strings converted to <code>datetime</code> objects</li>
 </ul>
 <p>#### Example</p>
-<div id="3d3757b4" class="cell" data-execution_count="8">
+<div id="54d223f8" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert DATE column to timestamps</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pd.to_datetime(precip.DATE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -770,7 +770,7 @@ Name: DATE, Length: 9006, dtype: datetime64[ns]</code></pre>
 </div>
 </div>
 <p>We can overwrite the <code>DATE</code> column with this output:</p>
-<div id="c512671c" class="cell" data-execution_count="9">
+<div id="d2859e93" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert DATE column to timestamps</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>precip.DATE <span class="op">=</span> pd.to_datetime(precip.DATE)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -798,7 +798,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 </div>
 <p>We can make another attempt at plotting our precipitation data:</p>
-<div id="2d21cfb2" class="cell" data-execution_count="10">
+<div id="575e44ca" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>precip.plot(x<span class="op">=</span><span class="st">'DATE'</span>, y<span class="op">=</span><span class="st">'HPCP'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -810,7 +810,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 <p>Notice the <span class="math inline">\(x\)</span>-axis is now neatly organized into years.</p>
 <p>Next, using our <code>DATE</code> column as the index will allows to perform operations with respect to time, including subsetting and resampling.</p>
-<div id="fe11b57c" class="cell" data-execution_count="11">
+<div id="49bdfde8" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set DATE coumn as index</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> precip.set_index(<span class="st">'DATE'</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -887,7 +887,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 </div>
 <p>Since we know the default behaviour of <code>plot()</code> is to use the index as the <span class="math inline">\(x\)</span>-axis and make a line plot for each numeric column, we can simplify our plot making like this:</p>
-<div id="0aad6515" class="cell" data-execution_count="12">
+<div id="3e4d22dd" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -920,7 +920,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>We can use <code>.loc[year-month]</code> to select data from a specific year and month:</p>
-<div id="d86a272e" class="cell" data-execution_count="13">
+<div id="0b622ca1" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select precipitation data from September 2013</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013-09'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
@@ -1043,7 +1043,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 </div>
 </div>
 <p>Or simply select data from a given year using <code>.loc[year]</code>:</p>
-<div id="c53bff97" class="cell" data-execution_count="14">
+<div id="3f418d1a" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select 2013 precipitation data</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -1166,7 +1166,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 </div>
 </div>
 <p>We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data:</p>
-<div id="4070bca4" class="cell" data-execution_count="15">
+<div id="745c9b6b" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>].plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1182,20 +1182,24 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 <h2 class="anchored" data-anchor-id="resample">Resample</h2>
 <p>Resampling a time series means converting a time series from one frequency to another. For example, monthly to yearly (downsampling) or weekly to daily (upsampling). We can resample with the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html"><code>resample()</code></a> method. The simplest use is to call</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.resample(new_frequency).aggregator_function()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>where: - <code>new_frequency</code> is a string representing the new frequence to resample the data, for example <code>'D'</code> for day, <code>w</code> for week, <code>M</code> for month, <code>Y</code> for year, and - <code>aggregator_function()</code> is the function we will use to aggregate the data into the new frequency. For example, <code>max()</code>, <code>min()</code>, <code>sum()</code>, or <code>average()</code>.</p>
+<p>where:</p>
+<ul>
+<li><code>new_frequency</code> is a string representing the new frequence to resample the data, for example <code>'D'</code> for day, <code>w</code> for week, <code>M</code> for month, <code>Y</code> for year, and</li>
+<li><code>aggregator_function()</code> is the function we will use to aggregate the data into the new frequency. For example, <code>max()</code>, <code>min()</code>, <code>sum()</code>, or <code>average()</code>.</li>
+</ul>
 <p>The <code>resample()</code> method works similarly to <code>groupby()</code> in the sense that you need to specify a way to aggregate the data to get any output.</p>
 <section id="example-1" class="level4">
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>Our 2013 precipitation data has hourly frequency, we want to resample it to daily frequency.</p>
-<div id="7e0c73d5" class="cell" data-execution_count="16">
+<div id="9ac243d9" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample 2013 hourly data to daily frequency: no output</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>].resample(<span class="st">'D'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>&lt;pandas.core.resample.DatetimeIndexResampler object at 0x14b7c2990&gt;</code></pre>
+<pre><code>&lt;pandas.core.resample.DatetimeIndexResampler object at 0x16449c8d0&gt;</code></pre>
 </div>
 </div>
 <p>To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggreagate it using <code>sum()</code>:</p>
-<div id="52f70df0" class="cell" data-execution_count="17">
+<div id="fcc1aef3" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Total daily precipitation in 2013</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>daily_precip_2013 <span class="op">=</span> precip.loc[<span class="st">'2013'</span>].resample(<span class="st">'D'</span>).<span class="bu">sum</span>()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1255,7 +1259,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 </div>
 </div>
 <p>Notice the index has now changed to be days in 2013. We should also rename the <code>HPCP</code> column since it is not longer hourly precipitation:</p>
-<div id="b74453ea" class="cell" data-execution_count="18">
+<div id="1cbce515" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename hourly precipitation column to match resample</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>daily_precip_2013 <span class="op">=</span> daily_precip_2013.rename(columns<span class="op">=</span>{<span class="st">'HPCP'</span>:<span class="st">'daily_precipitation'</span>})</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1266,7 +1270,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 </div>
 </div>
 <p>Finally, we can plot our data:</p>
-<div id="fb872065" class="cell" data-execution_count="19">
+<div id="1b0ac42e" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.plot(ylabel<span class="op">=</span><span class="st">'daily precipitation (in)'</span>, </span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                       xlabel<span class="op">=</span><span class="st">' '</span>,</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                       title<span class="op">=</span><span class="st">'Precipitation in Boulder, CO during 2013'</span>,</span>
@@ -1284,7 +1288,7 @@ Leverage <code>pandas.read_csv()</code> to set a known index
 <section id="complete-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="complete-workflow">Complete workflow</h2>
 <p>The previous code includes a lot of exploratory functions and trials. While it is important to keep our data exploration documented, once we are certain of our data wrangling, we can streamline our analyses to only include the code that directly contributes to the output. Moving on, we will start to collect all our relevant code to create such complete workflows. For this lesson, the code below will produce the final graph:</p>
-<div id="891b0933" class="cell" data-execution_count="20">
+<div id="d870e960" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
