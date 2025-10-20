@@ -22,9 +22,23 @@ In this activity we will:
 
 1. Log in to GitHub.
 
-2. Create a new repository called `merge_test_YOURLASTNAME`, include a README.
+2.  Create a new repository on GitHub. Use the following settings:
 
-3. Clone your repository to your personal computer and open it on VSCode.
+    - Repository name: `merge_test_YOURLASTNAME`.
+
+    - Description: Repo to practice resolving git merge conflicts (delete later).
+
+    - Visibility: Keep the repository public.
+
+    - Don't select any template to start.
+
+    - Add a README file.
+
+    - Add a Python .gitignore template.
+
+    - No license.
+
+3. On your personal computer and using VSCode, clone your repository.
 
 4. Update the default method for pulling into repository by running this line of code in the terminal: 
 ```bash
@@ -39,7 +53,14 @@ This establishes that the default strategy for pulling is that git will first tr
 
 1. Create a new Quarto document called `merge_test_YOURLASTNAME.qmd`.
 
-2. Copy the following code into a Python code chunk in your Quarto file:
+2. Add this YAML header to specify which jupyter kernel will be used to render the file:
+```yml
+---
+jupyter: eds220-env
+---
+```
+
+3. Copy the following code into a Python code chunk in your Quarto file:
 
 ```python
 import pandas as pd
@@ -49,20 +70,25 @@ import numpy as np
 df = pd.DataFrame({
     "A": np.arange(1, 11),
     "B": np.random.randint(10, 100, size=10),
-    "C": np.random.choice(["x", "y", "z"], size=10)
+    "C": np.random.choice(["w", "x", "y", "z"], size=10)
 })
 
 print(df)
 
-# Select rows with letter = x
-subset = df[df['C'] == 'x']
+# Select rows subset
+subset = df[df['C'] == 'w']
 
 print("Subset has ", len(subset), "rows.")
 ```
 
-3. Examine the code, make sure you understanding what it is doing!
+4. Examine the code, make sure you understanding what it is doing! Preview the output by running 
+```bash
+quarto preview merge_test_YOURLASTNAME.qmd
+```
 
-4. Save your file, pull, commit, and push your updates to GitHub. 
+5. Save your file, pull, commit, and push your updates to GitHub. 
+
+6. Go over to GitHub and look at your repository. Your Quarto file is now upstream!
 
 ### Step 2 (@ workbench): Clone repo and update code
 
@@ -73,19 +99,26 @@ print("Subset has ", len(subset), "rows.")
 git config pull.rebase false
 ```
 
-3. Open the Quarto file and update the selection to any other subset of your liking. 
+3. Open the Quarto file and update the selection code to *select a different letter*.
 
-4. Save and try to pull. What does it tell you and why?
+4. Preview the output by running 
+```bash
+quarto preview merge_test_YOURLASTNAME.qmd
+```
 
-5. Commit, pull, and push your changes. Do your changes go through? Why or why not?
+5. Save and try to pull. What does it tell you and why?
+
+6. Commit, pull, and push your changes. Do your changes go through? Why or why not?
+
+7. Go over to GitHub and look at your repository. Your updated Quarto file is now upstream!
 
 ### Step 3  (@ personal computer): Update code without pulling changes
 
-Let's go back to the repo `merge_test_YOURLASTNAME` your personal computer. 
+**Let's go back to the repo `merge_test_YOURLASTNAME` in your personal computer.**
 
-1. **Do not pull.** This is a bad practice! But we need to do it in order to create the merge conflict. 
+1. **Do not pull.** Not pulling when you re-engage with your work is a bad practice! But we need to do it in order to create the merge conflict. 😈
 
-2. Make some other update to the code, perhaps how the dataset is crated, what information is printed, or how the subset is selected. 
+2. Update the selection again to be a different letter. You may preview the ouput if you want. 
 
 3. Save and commit your work, then try to pull again.  What does it tell you?  Read the message carefully!
 
@@ -123,3 +156,9 @@ Or you can also manually edit the file by deleting the boundary lines around the
 **NOTE: sometimes, multiple conflicts may have occurred in different places in the same script, or in separate scripts.**  You must resolve them all before you can wrap up the merge conflict.
 
 6. Celebrate!
+
+::: {.callout-tip}
+## Always pull before starting to update your code!
+
+
+:::

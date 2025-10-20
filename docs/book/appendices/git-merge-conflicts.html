@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>lesson-8-crs – EDS 220 - Working with Environmental Datasets</title>
+<title>git-merge-conflicts – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -67,35 +101,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -176,7 +181,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">7 Coordinate reference systems</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/appendices/comments-guidelines.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../book/appendices/git-merge-conflicts.html">git merge conflicts</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -267,7 +272,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/chapters/lesson-8-crs.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../book/chapters/lesson-8-crs.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7 Coordinate reference systems</span></a>
   </div>
 </li>
@@ -372,7 +377,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/appendices/git-merge-conflicts.html" class="sidebar-item-text sidebar-link">
+  <a href="../../book/appendices/git-merge-conflicts.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">git merge conflicts</span></a>
   </div>
 </li>
@@ -388,15 +393,15 @@ window.Quarto = {
     <h2 id="toc-title">In this lesson</h2>
    
   <ul>
-  <li><a href="#coordinate-reference-systems" id="toc-coordinate-reference-systems" class="nav-link active" data-scroll-target="#coordinate-reference-systems">7 Coordinate reference systems</a>
+  <li><a href="#git-merge-conflicts" id="toc-git-merge-conflicts" class="nav-link active" data-scroll-target="#git-merge-conflicts">git merge conflicts</a>
   <ul class="collapse">
-  <li><a href="#how-to-create-a-crs" id="toc-how-to-create-a-crs" class="nav-link" data-scroll-target="#how-to-create-a-crs">How to create a CRS</a>
+  <li><a href="#setup-everyone-individual" id="toc-setup-everyone-individual" class="nav-link" data-scroll-target="#setup-everyone-individual">Setup (everyone, individual)</a></li>
+  <li><a href="#activity-1-quarto-merge-conflict" id="toc-activity-1-quarto-merge-conflict" class="nav-link" data-scroll-target="#activity-1-quarto-merge-conflict">Activity 1: Quarto merge conflict</a>
   <ul class="collapse">
-  <li><a href="#step-1.-pick-an-ellipsoid" id="toc-step-1.-pick-an-ellipsoid" class="nav-link" data-scroll-target="#step-1.-pick-an-ellipsoid">Step 1. Pick an ellipsoid</a></li>
-  <li><a href="#step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum" id="toc-step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum" class="nav-link" data-scroll-target="#step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum">Step 2. Align the ellipsoid with Earth’s locations to obtain a datum</a></li>
-  <li><a href="#step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth" id="toc-step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth" class="nav-link" data-scroll-target="#step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth">Step 3. Obtain a geographic CRS with lat/lon coordinates for all the Earth</a></li>
-  <li><a href="#step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map" id="toc-step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map" class="nav-link" data-scroll-target="#step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map">Step 4. Select a projection to flatten a portion of your ellipsoid and make a map</a></li>
-  <li><a href="#step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region" id="toc-step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region" class="nav-link" data-scroll-target="#step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region">Step 5. Obtain a projected CRS with <span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span> coordinates for a specific region</a></li>
+  <li><a href="#step-1-personal-computer-write-some-code" id="toc-step-1-personal-computer-write-some-code" class="nav-link" data-scroll-target="#step-1-personal-computer-write-some-code">Step 1 (@ personal computer): Write some code</a></li>
+  <li><a href="#step-2-workbench-clone-repo-and-update-code" id="toc-step-2-workbench-clone-repo-and-update-code" class="nav-link" data-scroll-target="#step-2-workbench-clone-repo-and-update-code">Step 2 (@ workbench): Clone repo and update code</a></li>
+  <li><a href="#step-3-personal-computer-update-code-without-pulling-changes" id="toc-step-3-personal-computer-update-code-without-pulling-changes" class="nav-link" data-scroll-target="#step-3-personal-computer-update-code-without-pulling-changes">Step 3 (@ personal computer): Update code without pulling changes</a></li>
+  <li><a href="#step-4-personal-computer-resolve-merge-conflict" id="toc-step-4-personal-computer-resolve-merge-conflict" class="nav-link" data-scroll-target="#step-4-personal-computer-resolve-merge-conflict">Step 4 (@ personal computer): Resolve merge conflict</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -408,135 +413,134 @@ window.Quarto = {
 
 
 
-<section id="coordinate-reference-systems" class="level1">
-<h1>7 Coordinate reference systems</h1>
-<p>In this section we review what is a coordinate reference system (CRS). The materials here are meant to act as a refresher of the lesson on coordinate reference systems in <a href="https://eds-223-geospatial.github.io/course-materials/week2.html">week 2 of the EDS 223 - Geospatial Analysis &amp; Remote Sensing MEDS course</a>.</p>
-<!--TODO: add learning objectives -->
-<section id="how-to-create-a-crs" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-create-a-crs">How to create a CRS</h2>
-<p>Since the Earth does not have lines and numbers etched on it, us humans need to create a system to locate places on its surface. A way to solve this is to create a <strong>coordinate reference system (CRS)</strong>. A CRS is, at its core, a way to represent places on the Earth as coordinates.</p>
-<p>To understand what are the components of a CRS it can be useful to think of the process we would undergo to match places on the Earth to coordinates that represent them.</p>
-<section id="step-1.-pick-an-ellipsoid" class="level3">
-<h3 class="anchored" data-anchor-id="step-1.-pick-an-ellipsoid">Step 1. Pick an ellipsoid</h3>
-<p>Think of the Earth. Our planet is not a perfect sphere. Besides its rugged surface with high mountains and deep ocean trenches, the shape of the Earth is not round. Due to the Earth’s rotation, the planet is slightly wider at the Equator. Thus, a sphere is not the best way to model the shape of the Earth. Instead, we use an <strong>ellipsoid</strong>. Think of an <a href="https://en.wikipedia.org/wiki/Ellipsoid">ellipsoid</a> as a sphere that has been flattened a bit, thus making it wider across one axis. This is the first step for creating a CRS: picking an ellipsoid, a.k.a picking a shape for the Earth. The ellipsoid used to represent the Earth’s shape has changed across time and it may also change depending on the application.</p>
-<!--
-THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
--->
-</section>
-<section id="step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum" class="level3">
-<h3 class="anchored" data-anchor-id="step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum">Step 2. Align the ellipsoid with Earth’s locations to obtain a datum</h3>
-<p>The ellipsoid is an abstract mathematical object on which we can locate points on it by using angles. The coordinate system on the ellipsoid is (angles from <span class="math inline">\(x\)</span>, angles from <span class="math inline">\(y\)</span>).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../book/images/lesson-8/lat_lon_ellipsoid.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Latitude and longtide as angular coordinates on the ellipsoid. <a href="https://ltb.itc.utwente.nl/498/learningoutcome/show/59273">Image source: Coordinate systems and map projections - University of Twente</a></figcaption>
-</figure>
-</div>
-<p>The next step to create a CRS is thus to make a decision on how to align the ellipsoid so that it’s surface corresponds to actual places on the Earth. We could think, for example, of:</p>
+<section id="git-merge-conflicts" class="level1">
+<h1>git merge conflicts</h1>
+<!-- *This activity has been adapted to quarto and Jupyter notebooks from [Casey O’Hara’s git activity for EDS 211](https://docs.google.com/document/d/1ZLD7CQXCgCp2B1xXGlwoJHOB_dzWe088lOVsJmqA3eY/edit?usp=sharing) with information from [NCEAS Learning Hub 10  Collaborating using Git and GitHub & Merge Conflicts](https://learning.nceas.ucsb.edu/2023-10-coreR/session_10.html).* -->
+<p>Git tracks changes by noting which lines of code have changed - you can only add, delete, or change (delete then add) a line at a time. When collaborating with others on coding tasks, occasionally two people try to change the same line at the same time. This results in a merge conflict!</p>
+<p>In this activity we will:</p>
+<ol type="1">
+<li><p>Create and resolve a merge conflict individually on a Quarto file.</p></li>
+<li><p>Create and resolve a merge conflict in pairs on a Quarto file.</p></li>
+<li><p>Create and resolve a merge conflict individually on a Jupyter notebook using VSCode.</p></li>
+</ol>
+<section id="setup-everyone-individual" class="level2">
+<h2 class="anchored" data-anchor-id="setup-everyone-individual">Setup (everyone, individual)</h2>
+<ol type="1">
+<li><p>Log in to GitHub.</p></li>
+<li><p>Create a new repository on GitHub. Use the following settings:</p>
 <ul>
-<li>how to place the ellipsoid’s center relative to Earth’s mass center (is it the same or is it off?) or</li>
-<li>how to align the ellipsoid’s axes with the Earth (which meridian will be our prime meridian?).</li>
-</ul>
-<p>Generally speaking, a <strong>geodetic datum</strong>, or just a <strong>datum</strong>, is how we are aligning our abstract ellipsoid to match the Earth’s surface.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../book/images/lesson-8/European_Datum.png" class="img-fluid figure-img"></p>
-<figcaption>Regional datums to optimize location accuracy. Image source: GPS for Land Surveyors</figcaption>
-</figure>
-</div>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Datums may change across time and applications
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Geographers and cartographers have created and used <em>many</em> datums across time and applications. Sometimes datum refers both to a choice of ellipsoid <em>and</em> how to align it to the Earth. More importantly, <strong>different datums are used to increase the accuracy of representing different regions of Earth</strong>. At the <a href="http://wiki.gis.com/wiki/index.php/Datum_(geodesy)">GIS wiki</a> you can see a list of names of different datums optimized for different regions.</p>
-</div>
-</div>
+<li><p>Repository name: <code>merge_test_YOURLASTNAME</code>.</p></li>
+<li><p>Description: Repo to practice resolving git merge conflicts (delete later).</p></li>
+<li><p>Visibility: Keep the repository public.</p></li>
+<li><p>Don’t select any template to start.</p></li>
+<li><p>Add a README file.</p></li>
+<li><p>Add a Python .gitignore template.</p></li>
+<li><p>No license.</p></li>
+</ul></li>
+<li><p>On your personal computer and using VSCode, clone your repository.</p></li>
+<li><p>Update the default method for pulling into repository by running this line of code in the terminal:</p></li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This establishes that the default strategy for pulling is that git will first try to auto-merge the files. If auto-merging is not possible, it will then indicate a merge conflict.</p>
 </section>
-<section id="step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth" class="level3">
-<h3 class="anchored" data-anchor-id="step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth">Step 3. Obtain a geographic CRS with lat/lon coordinates for all the Earth</h3>
-<p>At this point, we have successfully made a correspondence between the Earth’s surface of and our ellipsoid. This means we can now use the latitude,longitude (lat/lon) coordinates of the ellipsoid to locate <em>any</em> point on the Earth’s surface. This is called a <strong>geographic CRS</strong>. Geographic coordinate reference systems use degrees of latitude and longitude to locate points on the Earth, still thinking of it as a 3D object.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../book/images/lesson-8/lat_lon_on_earth.png" class="img-fluid figure-img" style="width:85.0%"></p>
-<figcaption>We use a geographic CRS to create angular coordiantes on the Earth (latitude and longitude) that allow us to locate any place</figcaption>
-</figure>
-</div>
+<section id="activity-1-quarto-merge-conflict" class="level2">
+<h2 class="anchored" data-anchor-id="activity-1-quarto-merge-conflict">Activity 1: Quarto merge conflict</h2>
+<section id="step-1-personal-computer-write-some-code" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-personal-computer-write-some-code">Step 1 (@ personal computer): Write some code</h3>
+<ol type="1">
+<li><p>Create a new Quarto document called <code>merge_test_YOURLASTNAME.qmd</code>.</p></li>
+<li><p>Add this YAML header to specify which jupyter kernel will be used to render the file:</p></li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">jupyter</span><span class="kw">:</span><span class="at"> eds220-env</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Copy the following code into a Python code chunk in your Quarto file:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a test 10x3 dataframe</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"A"</span>: np.arange(<span class="dv">1</span>, <span class="dv">11</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"B"</span>: np.random.randint(<span class="dv">10</span>, <span class="dv">100</span>, size<span class="op">=</span><span class="dv">10</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"C"</span>: np.random.choice([<span class="st">"w"</span>, <span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span>], size<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Select rows subset</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> df[df[<span class="st">'C'</span>] <span class="op">==</span> <span class="st">'w'</span>]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subset has "</span>, <span class="bu">len</span>(subset), <span class="st">"rows."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="4" type="1">
+<li>Examine the code, make sure you understanding what it is doing! Preview the output by running</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview merge_test_YOURLASTNAME.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li><p>Save your file, pull, commit, and push your updates to GitHub.</p></li>
+<li><p>Go over to GitHub and look at your repository. Your Quarto file is now upstream!</p></li>
+</ol>
 </section>
-<section id="step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map" class="level3">
-<h3 class="anchored" data-anchor-id="step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map">Step 4. Select a projection to flatten a portion of your ellipsoid and make a map</h3>
-<p>A <strong>map</strong> is a flat (2-dimensional) representation of a region of the Earth. In a geographic CRS we use a 3-dimensional model of the Earth (the ellipsoid) to locate places on it. To transform our 3-dimensional ellipsoid to make a 2-dimensional representation we need to use a projection. A <strong>projection</strong> is a method to convert between angular coordinates (i.e.&nbsp;lat/lon coordinates in 3D) and planar coordinates (i.e.&nbsp;<span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span> coordinates in 2D).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../book/images/lesson-8/figure2-projections.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption>Image Source: Battersby, S. (2017). Map Projections. The Geographic Information Science &amp; Technology Body of Knowledge</figcaption>
-</figure>
-</div>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Many projections
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>There are <em>many</em> ways to project an ellipsoid into a 2-dimensional region. However, <strong>no matter what projection we use, the area, distances, or angles of the actual regions on Earth will be distorted when we project.</strong> Ultimately, the choice of projection relies on whether we want to optimze calculations involving area, angle, or distance measurements, as well as aesthetics when creating a map.</p>
-</div>
-</div>
-<p>The following video, <em>Vox - Why all world maps are wrong</em>, does a great job at how projections work!</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<!--
-📖 [QGIS - A gentle introduction to GIS - Coordinate Reference Systems ](https://docs.qgis.org/3.28/en/docs/gentle_gis_introduction/coordinate_reference_systems.html)
--->
+<section id="step-2-workbench-clone-repo-and-update-code" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-workbench-clone-repo-and-update-code">Step 2 (@ workbench): Clone repo and update code</h3>
+<ol type="1">
+<li><p>Clone the <code>merge_test_YOURLASTNAME</code> repository to your workbench-1 workspace.</p></li>
+<li><p>In the terminal, run</p></li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li><p>Open the Quarto file and update the selection code to <em>select a different letter</em>.</p></li>
+<li><p>Preview the output by running</p></li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview merge_test_YOURLASTNAME.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="5" type="1">
+<li><p>Save and try to pull. What does it tell you and why?</p></li>
+<li><p>Commit, pull, and push your changes. Do your changes go through? Why or why not?</p></li>
+<li><p>Go over to GitHub and look at your repository. Your updated Quarto file is now upstream!</p></li>
+</ol>
 </section>
-<section id="step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region" class="level3">
-<h3 class="anchored" data-anchor-id="step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region">Step 5. Obtain a projected CRS with <span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span> coordinates for a specific region</h3>
-<p>When we project a region of the ellipsoid to represent a region of Earth on the plane we obtain a new set of planar coordinates, thus creating a <strong>projected CRS</strong>. A projected CRS must also include a <strong>unit of measure</strong> for its axes. These new coordinates are usually called <strong>eastings</strong>, when referring to the eastward-measured distance (<span class="math inline">\(x\)</span>-coordinate), and <strong>northings</strong>, when referring to the northward-measured distance (<span class="math inline">\(y\)</span>-coordinate).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../book/images/lesson-8/projected_crs.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>A projected CRS gives planar coordinates.</figcaption>
-</figure>
-</div>
-<!-- 
-TODO
-## Common CRSs
-
-These are some commonly encountered geographic coordinate reference systems. 
-
-### WGS84
-The World Geodetic System 1984 (WGS84) is a geogprahic coordiante system used extensively. 
-This is the coordinate reference system used by global positioning systems (GPS). 
-It's coordinates longitude and latitude, are angular and measured in degrees, minutes, and seconds. 
-
-
-### NAD83
-
-
-### UTM
--->
-<!--
-## Matching CRS
-
-- Which CRS to chose
-
-## Resources
-
-📖 [Choosing the Right Map Projection by  Michael Corey](https://source.opennews.org/articles/choosing-right-map-projection/)
-
-📖 [NCEAS Overview of Coordinate Reference Systems (CRS) in R](https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf)
-
--->
-<!--
-TODO: wrap up
--->
+<section id="step-3-personal-computer-update-code-without-pulling-changes" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-personal-computer-update-code-without-pulling-changes">Step 3 (@ personal computer): Update code without pulling changes</h3>
+<p><strong>Let’s go back to the repo <code>merge_test_YOURLASTNAME</code> in your personal computer.</strong></p>
+<ol type="1">
+<li><p><strong>Do not pull.</strong> Not pulling when you re-engage with your work is a bad practice! But we need to do it in order to create the merge conflict. 😈</p></li>
+<li><p>Update the selection again to be a different letter. You may preview the ouput if you want.</p></li>
+<li><p>Save and commit your work, then try to pull again. What does it tell you? Read the message carefully!</p></li>
+<li><p>Congrats, you’ve created a merge conflict!</p></li>
+</ol>
+</section>
+<section id="step-4-personal-computer-resolve-merge-conflict" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-personal-computer-resolve-merge-conflict">Step 4 (@ personal computer): Resolve merge conflict</h3>
+<ol type="1">
+<li><p>Don’t panic!</p></li>
+<li><p>Look at the Quarto document and identify where the conflict has occurred:</p></li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">### Your local changes</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">=======</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">### The upstream code (latest version on GH)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> a4b95dc743f0244b11754e9cb8c6385d427eaa9b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li><p>Decide what to do with the code inside the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. Four options:</p>
+<ol type="a">
+<li>Keep your new code!</li>
+<li>Keep your upstream code!</li>
+<li>Combine the best parts of code from each!<br>
+</li>
+<li>Delete it all and write something completely different!</li>
+</ol></li>
+<li><p>Resolve the conflict. On VSCode you can use the IDE buttons at the top of the conflict:</p></li>
+</ol>
+<p><img src="images/git-merge-conflicts/VSCode-merge-conflict.png" class="img-fluid"></p>
+<p>Or you can also manually edit the file by deleting the boundary lines around the merge conflict (the lines containing <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>).</p>
+<ol start="5" type="1">
+<li>Once you are done resolving the conflict, save your work, commit (explaining how you resolve it), pull, and push.</li>
+</ol>
+<p><strong>NOTE: sometimes, multiple conflicts may have occurred in different places in the same script, or in separate scripts.</strong> You must resolve them all before you can wrap up the merge conflict.</p>
+<ol start="6" type="1">
+<li>Celebrate!</li>
+</ol>
 
 
 </section>
