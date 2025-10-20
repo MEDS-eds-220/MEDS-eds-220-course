@@ -1,0 +1,125 @@
+---
+toc-title: In this lesson
+slides: https://docs.google.com/presentation/d/1IeqTcZFZHsk93ASsU6VTNC68vwlaRbfg-eC9uMzfVow/edit?usp=sharing
+---
+
+# git merge conflicts
+
+<!-- *This activity has been adapted to quarto and Jupyter notebooks from [Casey O’Hara’s git activity for EDS 211](https://docs.google.com/document/d/1ZLD7CQXCgCp2B1xXGlwoJHOB_dzWe088lOVsJmqA3eY/edit?usp=sharing) with information from [NCEAS Learning Hub 10  Collaborating using Git and GitHub & Merge Conflicts](https://learning.nceas.ucsb.edu/2023-10-coreR/session_10.html).* -->
+
+Git tracks changes by noting which lines of code have changed - you can only add, delete, or change (delete then add) a line at a time.  When collaborating with others on coding tasks, occasionally two people try to change the same line at the same time.  This results in a merge conflict!
+
+
+In this activity we will:
+
+1) Create and resolve a merge conflict individually on a Quarto file. 
+
+2) Create and resolve a merge conflict in pairs on a Quarto file.
+
+3) Create and resolve a merge conflict individually on a Jupyter notebook using VSCode. 
+
+## Setup (everyone, individual)
+
+1. Log in to GitHub.
+
+2. Create a new repository called `merge_test_YOURLASTNAME`, include a README.
+
+3. Clone your repository to your personal computer and open it on VSCode.
+
+4. Update the default method for pulling into repository by running this line of code in the terminal: 
+```bash
+git config pull.rebase false
+```
+This establishes that the default strategy for pulling is that git will first try to auto-merge the files. If auto-merging is not possible, it will then indicate a merge conflict.
+
+
+## Activity 1: Quarto merge conflict
+
+### Step 1 (@ personal computer): Write some code
+
+1. Create a new Quarto document called `merge_test_YOURLASTNAME.qmd`.
+
+2. Copy the following code into a Python code chunk in your Quarto file:
+
+```python
+import pandas as pd
+import numpy as np
+
+# Create a test 10x3 dataframe
+df = pd.DataFrame({
+    "A": np.arange(1, 11),
+    "B": np.random.randint(10, 100, size=10),
+    "C": np.random.choice(["x", "y", "z"], size=10)
+})
+
+print(df)
+
+# Select rows with letter = x
+subset = df[df['C'] == 'x']
+
+print("Subset has ", len(subset), "rows.")
+```
+
+3. Examine the code, make sure you understanding what it is doing!
+
+4. Save your file, pull, commit, and push your updates to GitHub. 
+
+### Step 2 (@ workbench): Clone repo and update code
+
+1. Clone the `merge_test_YOURLASTNAME` repository to your workbench-1 workspace. 
+
+2. In the terminal, run
+```bash
+git config pull.rebase false
+```
+
+3. Open the Quarto file and update the selection to any other subset of your liking. 
+
+4. Save and try to pull. What does it tell you and why?
+
+5. Commit, pull, and push your changes. Do your changes go through? Why or why not?
+
+### Step 3  (@ personal computer): Update code without pulling changes
+
+Let's go back to the repo `merge_test_YOURLASTNAME` your personal computer. 
+
+1. **Do not pull.** This is a bad practice! But we need to do it in order to create the merge conflict. 
+
+2. Make some other update to the code, perhaps how the dataset is crated, what information is printed, or how the subset is selected. 
+
+3. Save and commit your work, then try to pull again.  What does it tell you?  Read the message carefully!
+
+4. Congrats, you’ve created a merge conflict! 
+
+### Step 4  (@ personal computer): Resolve merge conflict
+
+1. Don’t panic!
+
+2. Look at the Quarto document and identify where the conflict has occurred:
+
+```bash
+<<<<<<< HEAD
+### Your local changes
+=======
+### The upstream code (latest version on GH)
+>>>>>>> a4b95dc743f0244b11754e9cb8c6385d427eaa9b
+```
+
+3. Decide what to do with the code inside the  `<<<<<<<` and `>>>>>>>`.  Four options:
+
+    a. Keep your new code! 
+    b. Keep your upstream code! 
+    c. Combine the best parts of code from each!  
+    d. Delete it all and write something completely different! 
+
+4. Resolve the conflict. On VSCode you can use the IDE buttons at the top of the conflict:
+
+![](images/git-merge-conflicts/VSCode-merge-conflict.png)
+
+Or you can also manually edit the file by deleting the boundary lines around the merge conflict (the lines containing `<<<<<<<`, `=======`, and `>>>>>>>`).
+
+5. Once you are done resolving the conflict, save your work, commit (explaining how you resolve it), pull, and push.
+
+**NOTE: sometimes, multiple conflicts may have occurred in different places in the same script, or in separate scripts.**  You must resolve them all before you can wrap up the merge conflict.
+
+6. Celebrate!
