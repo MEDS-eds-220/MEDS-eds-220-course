@@ -3,7 +3,7 @@ toc-title: In this lesson
 slides: https://docs.google.com/presentation/d/1IeqTcZFZHsk93ASsU6VTNC68vwlaRbfg-eC9uMzfVow/edit?usp=sharing
 ---
 
-# git merge conflicts
+# Merge conflicts
 
 <!-- *This activity has been adapted to quarto and Jupyter notebooks from [Casey O’Hara’s git activity for EDS 211](https://docs.google.com/document/d/1ZLD7CQXCgCp2B1xXGlwoJHOB_dzWe088lOVsJmqA3eY/edit?usp=sharing) with information from [NCEAS Learning Hub 10  Collaborating using Git and GitHub & Merge Conflicts](https://learning.nceas.ucsb.edu/2023-10-coreR/session_10.html).* -->
 
@@ -47,7 +47,7 @@ git config pull.rebase false
 This establishes that the default strategy for pulling is that git will first try to auto-merge the files. If auto-merging is not possible, it will then indicate a merge conflict.
 
 
-## Activity 1: Quarto merge conflict
+## Activity 1: merge conflict
 
 ### Step 1 (@ personal computer): Write some code
 
@@ -155,10 +155,89 @@ Or you can also manually edit the file by deleting the boundary lines around the
 
 **NOTE: sometimes, multiple conflicts may have occurred in different places in the same script, or in separate scripts.**  You must resolve them all before you can wrap up the merge conflict.
 
-6. Celebrate!
+6. Celebrate! 🎉
 
 ::: {.callout-tip}
-## Always pull before starting to update your code!
+## Always do `git pull` before starting to update your code!
 
-
+If you are your only collaborator, the safest way to avoid creating merge conflicts with yourself is to always run `git pull` when you start working locally. 
 :::
+
+## Activity 2: merge gone right
+
+We don't necessarily get a merge conflict every time that a file is modified separately more than once. Sometimes git actually tries its best and is able to reconcile the two versions. Conflicts often happen when the same line of code is being udpated. Here we'll see an example of a merge gone right.
+
+### Setup
+
+1. Do `git pull` on your personal computer.
+
+2. Do `git pull` on  workbench-1.
+
+Now we are sure we have the latest version of the file on both computers. 
+
+### Step 1 (@ personal computer): Update code
+
+1. Update some of the code that is creating the data frame. Perhaps update the letters or numbers that are selected or the column names, or the shape of the data frame. *Do not update any other code.*
+
+2. Commit, pull, and push your changes.
+
+
+### Step 2 (@ workbench): Update code (a different section)
+
+1. **Do not pull.** We already know better, but let's pretend we were distracted today and we forgot! 
+
+2. Update the code that subsets the dataframe by selecting a different letter. Notice we are not updating the same code as before. 
+
+3. Save and commit your work, then try to pull again.  What does it tell you?  Read the message carefully!
+
+### Step 3 (@ workbench): Commit the merge
+
+There were no merge conflicts because git tried it's best and managed to merge your code with the upstream code. However, git still needs to create a **merge commit message**. So, it opens a text editor where you can update the draft merge commit message. 
+
+1. Make any updates to the git merge message. This is optional, you can just keep the default message. 
+
+2. If the text editor looks like this, you are in `Vim`:
+
+```bash
+Merge branch 'main' of https://github.com/carmengg/merge_test-DELETE
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.
+~                                                                                                   
+~                                                                                                   
+~                                                                                                   
+~          
+```
+
+Update the message if needed. To exit the editor:
+
+a. Press `Esc`
+b. Type `:wq` (which means write and quit)
+c. Press `Enter`
+
+3. If the text editor looks like this, you are in `nano`:
+
+![](images/git-merge-conflicts/nano.png){width=60%}
+
+Update the message if needed. To exit the editor:
+
+a. Press `CTRL + O` (the letter O, not zero) to save.
+b. Press `Enter` to confirm the file name.
+c. Exit the editor by pressing `CTRL + X`.
+
+4. Congrats! You merged without conflicts! 🎊
+
+
+::: {.callout-tip}
+## Remember: Always do `git pull` before starting to update your code!
+
+Even if merge commits are not a big deal, the best practice is to keep your git history clean by running `git pull` when you start working. 
+:::
+
+
+<!-- 
+NEXT TIME: merge conflicts with notebooks.
+https://www.reviewnb.com/git-jupyter-notebook-ultimate-guide
+ -->
