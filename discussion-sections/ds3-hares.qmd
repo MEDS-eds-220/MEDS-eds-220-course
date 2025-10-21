@@ -4,7 +4,6 @@ subtitle: Week 3 - Discussion section
 week: 3
 image: images/hare.jpg
 sidebar: false
-jupyter: mpc-env-kernel
 ---
 
 This discussion section will guide you through exploring data about snowshoe hares in the (*Lepus americanus*) in the Bonanza Creek Experimental Forest located in Alaska, USA. In this discussion section, you will:
@@ -78,7 +77,7 @@ d. Do you need to add an attribution in the image description? Check the license
 a. Back in your notebook, import the `55_Hare_Data_2012.txt` file from its URL using the `pandas.read_csv()` function. Store it in a variable named `hares`. 
 
 <!--
-```{python}
+```python
 import numpy as np
 import pandas as pd
 
@@ -126,14 +125,14 @@ a. In the metadata section of the EDI repository, find which are the allowed val
 b. Get the number of times each unique sex non-NA value appears.
 
 <!--
-```{python}
+```python
 hares['sex'].value_counts()
 ```
 -->
 
 c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
 <!--
-```{python}
+```python
 hares['sex'].value_counts(dropna=False)
 ```
 -->
@@ -146,7 +145,7 @@ d. Discuss with your team the output of the unique value counts. In particular:
 e. Write code to confirm your suspicions about c-iii.
 
 <!--
-```{python}
+```python
 hares['sex'].unique()
 ```
 -->
@@ -172,7 +171,7 @@ a. Create a new column called `sex_simple` using the `numpy.select()` function s
 - anything else gets assigned `np.nan`
 
 <!--
-```{python}
+```python
 conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
               (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
 
@@ -186,7 +185,7 @@ hares.head()
 
 b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
 <!--
-```{python}
+```python
 hares['sex_simple'].value_counts()
 ```
 -->
@@ -200,7 +199,7 @@ hares['sex_simple'].value_counts()
 a. Use `groupby()` to calculate the mean weight by sex using the new column. 
 
 <!--
-```{python}
+```python
 hares.groupby('sex_simple')['weight'].mean()
 ```
 -->
@@ -223,7 +222,7 @@ In a new code cell, collect all the relevant code to create a streamlined workfl
 - Use appropriate line breaks and indentation to make code readable.
 
 <!-- 
-```{python}
+```python
 # Load data from EDI data repository
 URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
 hares = pd.read_csv(URL)
