@@ -153,7 +153,7 @@ Git should have now stored your PAT on the server!
 
 ::: {.callout-warning icon=false}
 ## Preparation for Thursday class (October 2)
-1. Create a directory called `data/` within your `eds220-2025-in-class` repository.
+1. Create a directory called `data` within your `eds220-2025-in-class` repository.
 2. Download the CSV file `wetlands_seasonal_bird_diversity.csv` from our [shared drive](https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=sharing).
 3. **Do not push this file to GitHub.**
 :::
@@ -165,7 +165,7 @@ Git should have now stored your PAT on the server!
 
 ### Class 3 (Thursday)
 
-1. Completed activity (see below) to add the `data/` directory to the `.gitignore` file of the `EDS-220/in-class-notebooks/` directory.
+1. Completed activity (see below) to add the `data` directory to the `.gitignore` file of the `EDS-220/in-class-notebooks/` directory.
 2. Covered [`pandas` subsetting notes](/book/chapters/lesson-3-pandas-subsetting/lesson-3-pandas-subsetting.qmd) up to...
 
 ::: {.callout-tip collapse="true" icon=false}
@@ -175,7 +175,7 @@ Git should have now stored your PAT on the server!
 
 2. In the workbench 1 server, inside your `EDS-220/in-class-notebooks/` directory, create a new directory called `data`. 
 
-3. Using the file navigation panel, upload the `wetlands_seasonal_bird_diversity.csv` file to the `data/` directory. 
+3. Using the file navigation panel, upload the `wetlands_seasonal_bird_diversity.csv` file to the `data` directory. 
 
 ## In the terminal:
 
@@ -190,7 +190,7 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
         data/
 ```
-This means git has detected that the `data/` directory exists but it is not yet tracking changes in it. We are in charge of deciding whether we want to track changes in it or not!
+This means git has detected that the `data` directory exists but it is not yet tracking changes in it. We are in charge of deciding whether we want to track changes in it or not!
 
 3. Run `ls` to see the files in the directory. Your output will look like this, notice the `.gitiginore` file is not listed:
 ```default
@@ -209,7 +209,7 @@ data       week1-lesson3-pandas-subsetting.ipynb
 
 4. Run `nano .gitignore`. This will open the `.gitignore` file in the `nano` editor.
 
-5. Add the `data/` folder to the `.gitignore` file by adding this text at the top of the file:
+5. Add the `data` folder to the `.gitignore` file by adding this text at the top of the file:
 ```default
 # Ignore the 'data' directory
 data/
@@ -225,7 +225,7 @@ data/
 - Use the arrow keys or `Page Up`/`Page Down` to scroll through the file.
 - Press `q` to exit. 
 
-8. Run `git status` and check the output. The `data/` directroy will no longer be listed! You will see your `.gitgnore` having changes ready for commit.
+8. Run `git status` and check the output. The `data` directroy will no longer be listed! You will see your `.gitgnore` having changes ready for commit.
 
 9. Commit and push your changes to the `.gitignore`.
 :::
@@ -482,17 +482,15 @@ Read the notes on [coordinate reference systems](/book/chapters/lesson-8-crs.qmd
 ### Class 8 (Tuesday)
 
 1. Went over git merge conflict [slides](https://docs.google.com/presentation/d/1IeqTcZFZHsk93ASsU6VTNC68vwlaRbfg-eC9uMzfVow/edit?usp=sharing).
-
 2. Installed Quarto following MEDS installation guide and installed the VSCode Quarto extension.
-
 3. Completed [activites 1 and 2](/book/appendices/git-merge-conflicts.qmd) to practice git merge conflicts. 
 
 
 
 ::: {.callout-warning icon=false}
 ## Preparation for next class
-1. In the `eds220-in-class` repository in your personal computer, create a directory called `data/`.
-2. Confirm the `data/` folder is not being tracked by git. 
+1. In the `eds220-in-class` repository in your personal computer, create a directory called `data`.
+2. Confirm the `data` folder is not being tracked by git. 
 3. Download the directories file `ca_state_boundary` and `gbif_sus_scrofa_california` from our [shared drive](https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=sharing). You should have the follwing file structure:
 ```bash
 data
@@ -510,51 +508,12 @@ data
 
 ### Class 9 (Thursday)
 
-1. Coordinate reference systems [review](https://docs.google.com/presentation/d/1FrGVSyQ-DHH7NcV5geE-EYbQ59DaMK0uyPJuSsG2ZMk/edit?usp=sharing). 
-
+1. [Coordinate reference systems](https://docs.google.com/presentation/d/1FrGVSyQ-DHH7NcV5geE-EYbQ59DaMK0uyPJuSsG2ZMk/edit?usp=sharing) and [vector data types](https://docs.google.com/presentation/d/1PWv7LrItaDUjTxPn5HhaIbBXBc7we7Q0MXXHiAwdrQ4/edit?usp=sharing) review and quiz! 
 2. Covered the [`geopandas`](https://meds-eds-220.github.io/MEDS-eds-220-course/book/chapters/lesson-10-geopandas-intro/lesson-10-geopandas-intro.html) notes.
 
-<!-- ::: {.callout-tip icon=false collapse="true" }
-## 🧭 Coordinate Reference Systems — Quiz
-
-1. **Fill in the blank:**  
-   A _____________ is a system used to represent locations on Earth as coordinates.  
-
-2. **Multiple choice:**  
-   The Earth is best modeled as:  
-   a) A perfect sphere  
-   b) A cube  
-   c) An ellipsoid  
-   d) A flat surface  
-
-3. **Short answer:**  
-   What do we call the process of aligning an ellipsoid so that its surface corresponds to real locations on Earth?  
-
-4. **True or False:**  
-   All datums are global — the same one can be used for any region without loss of accuracy.  
-
-5. **Fill in the blank:**  
-   A **geographic CRS** uses __________ and __________ to locate any point on Earth.  
-
-6. **Multiple choice:**  
-   The main purpose of a projection is to:  
-   a) Make Earth’s 3D coordinates easier to read in degrees  
-   b) Convert a 3D surface into a 2D map  
-   c) Increase the precision of GPS signals  
-   d) Remove all distortions from maps  
-
-7. **True or False:**  
-   Every projection preserves area, distance, and angles.  
-
-8. **Short answer:**  
-   What are the two coordinate names commonly used in a projected CRS?  
-
-9. **Fill in the blank:**  
-   A projected CRS expresses coordinates in linear units such as __________.  
-
-10. **Short answer:**  
-    Name one key difference between a **geographic CRS** and a **projected CRS**.
-::: -->
+<!-- 
+Access quiz at:
+-->
 
 ::: {.callout-warning icon=false}
 ## Preparation for next class
