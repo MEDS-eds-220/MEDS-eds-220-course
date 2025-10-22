@@ -517,6 +517,34 @@ Access quiz at:
 
 ::: {.callout-warning icon=false}
 ## Preparation for next class
+The following steps take place in your personal computer.
+
+1. Follow the steps in the [About the data](https://meds-eds-220.github.io/MEDS-eds-220-course/book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html#about-the-data) section of the *Streamline your code* notes to download the 2022 TIGER shapefiles of the US states. 
+2. Place the `tl_2022_us_state` folder containing the shapefile files in your `EDS-220/eds220-in-class/data` directory. 
+3. In your `EDS-220/eds220-in-class` directory, create a new Python notebook called `week5-code-streamlining.ipynb`.
+4. Add the following three cells to your notebook. Make sure you have the data loaded before class! 🙌
+
+Cell 1:
+```python
+import os
+
+import pandas as pd
+import geopandas as gpd
+```
+Cell 2:
+```python
+# Import power plants data
+URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/refs/heads/main/data/power_plants_epsg4269.csv'
+power_plants = pd.read_csv(URL)
+power_plants.head()
+```
+Cell 3:
+```python
+# Import states data
+fp = os.path.join('data','tl_2022_us_state','tl_2022_us_state.shp')
+states = gpd.read_file(fp)
+states.head()
+```
 
 :::
 
