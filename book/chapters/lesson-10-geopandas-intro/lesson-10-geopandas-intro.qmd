@@ -14,12 +14,12 @@ GeoPandas is a Python library that extends the `pandas` library by adding suppor
 
 Wild pigs (*Sus scrofa*) are a destructive invasive species in California, causing significant environmental and agricultural damage. Introduced to the region in the 1700s, they have since spread across the state, impacting native ecosystems through habitat destruction, soil disturbance due to their rooting behavior, and competition with native wildlife for food @finzel_wild_2015. This widespread damage has made managing wild pig populations a critical issue for conservation and agricultural communities in California.
 
-![Wild boar in Santa Teresa Park, CA. [Photo by Don DeBold](https://www.flickr.com/photos/ddebold/52936296848)](/book/images/lesson-10/wild_pig.png){width="70%"}
+![Wild pig in Santa Teresa Park, CA. [Photo by Don DeBold](https://www.flickr.com/photos/ddebold/52936296848)](/book/images/lesson-10/wild_pig.png){width="70%"}
 
 In this lesson we will use simplified point data about wild pig sightings in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). 
 GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
 
-The data we will use today has been simplified from the complete *Sus scrofa* occurrencies data @gbiforg_user_occurrence_2023 accessed through the GBIF website. 
+The data we will use today has been simplified from the complete *Sus scrofa* occurrencies data accessed through the GBIF website @gbiforg_user_occurrence_2023 . 
 
 <!-- TODO: column descriptions -->
 <!-- TODO: add info about the CA shapefile -->
@@ -80,13 +80,13 @@ ca_boundary
 The core data structure in GeoPandas is the `geopandas.GeoDataFrame`. 
 We can think of it as a `pandas.DataFrame` with a dedicated geometry column that can perform spatial operations. 
 
-The **geometry column** in a `geopandas.GeoDataFrame` holds the geometry (point, polygon, etc) of each spatial feature. This geometry column is of type `geopandas.GeoSeries`. Columns in the `geopandas.GeoDataFrame` with attributes about the features are `pandas.Series` like in a regular `pandas.DataFrame`. 
+The **geometry column** in a `geopandas.GeoDataFrame` holds the geometry (point, polygon, etc.) of each spatial feature. This geometry column is of type `geopandas.GeoSeries`. Columns in the `geopandas.GeoDataFrame` with attributes about the features are `pandas.Series` like in a regular `pandas.DataFrame`. 
 
 ![Image adapted from [*Introduction to GeoPandas*](https://geopandas.org/en/stable/getting_started/introduction.html).](/book/images/lesson-10/geodataframe.png){width="70%"}
 
 #### Example
 
-First, notice that the leftmost column of the `pigs` geo-dataframe is a column named `geometry` whose values indicate points:
+First, notice that the rightmost column of the `pigs` geo-dataframe is a column named `geometry` whose values indicate points:
 
 ```{python}
 pigs.head(3)
@@ -127,7 +127,7 @@ This is a `shapely` point. `shapely` is another Python library that to construct
 What is the geometry type of the single feature in the California state boundary?
 :::
 
-## CRS and extent
+## CRS
 
 Two other important attributes of a `geopandas.GeoDataFrame` are its coordinate reference system (CRS) and its extent. 
 
@@ -139,11 +139,20 @@ We can think of the **coordinate reference system (CRS)** as the instructions to
 pigs.crs
 ```
 
-<!-- TODO: explain what we are getting here -->
+The CRS for our data is the World Geodetic System 1984 (WGS84), represented by the code EPSG:4326. It uses latitude and longitude in degrees to represent places on Earth. This is a very popular CRS, used by Google Earth, GPS systems, and many web-based mapping tools, including Google Maps and OpenStreetMap. We can obtain more information about our CRS by accessing other attributes:
+
+```{python}
+print('Ellipsoid: ', pigs.crs.ellipsoid)
+print('Datum: ', pigs.crs.datum)
+print('Is geographic?: ', pigs.crs.is_geographic)
+print('Is projected?: ', pigs.crs.is_projected)
+```
+
+## Extent
 
 The **extent** of the geo-dataframe is the bounding box covering *all* the spatial features in our geo-dataframe. This is formed by finding the points that are furthest west, east, south, and north.
 
-![Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-10/spatial-extent.png){width="80%"}
+![Spatial extent of different vector data. Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-10/spatial-extent-annotated.png){width="80%"}
 
 We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attribute:
 
@@ -151,11 +160,12 @@ We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attr
 # Obtain the geographic extent of the geo-dataframe
 pigs.total_bounds
 ```
-<!-- TODO: explain what we are getting here -->
+
+These four numbers represent the `minx`, `miny`, `maxx`, `maxy` values for the bounds of the entire geo-dataframe. 
 
 ::: {.callout-tip}
 ## Check-in
-Print the CRS, and extent of the California boundary. 
+Print the CRS and extent of the California state boundary. 
 :::
 
 <!--
@@ -202,7 +212,7 @@ The geospatial information of the `geopandas.GeoDataFrame` will be used to creat
 
 #### Example
 
-Let us take a quick look at our recent pigs data:
+Let's take a quick look at our recent pigs data:
 
 ```{python}
 pigs_recent.plot()
@@ -215,35 +225,35 @@ To do this, we will use the `matplotlib` Python library for creating visualizati
 We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
 
 Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
-The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can icnlude multiple axes in it.  
+The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  
 
-![Image source: [Getting Started with Matplotlib](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
+![Image source: [Getting Started with Matplotlib.](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
 
 To create a new blank figure:
 
-1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function, and
-2. show the graph using `plt.show()`:
+1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function
+2. Display the figure using `plt.show()`:
 
 ```{python}
-# Initialize empyt figure (fig) and axis (ax)
+# Initialize empty figure (fig) and axis (ax)
 fig, ax = plt.subplots()
 
 # Display figure
 plt.show()
 ```
 
-Notice that `plt.subplots()` is a function that returns two objects, when we call it, get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
 
 
 ### Adding a layer
 
 When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
-The general syntax to plot a datafram `df` onto an axis is:
+The general syntax to plot data from a dataframe `df` onto an axis is:
 ```python
-# Initialize empyt figure and axis
+# Initialize empty figure and axis
 fig, ax = plt.subplots()
 
-# Plot a df on the ax axis
+# Plot df on the ax axis
 df.plot(ax=ax,  # Add plot to axis
         ...)    # Other arguments for plot function
 
@@ -270,10 +280,10 @@ plt.show()
 ### Customization 
 
 Matplotlib allows for a lot of customization. 
-Some of it can be done directly in the `plot()` method for the dataframe (like we've done when ploting data using `pandas`), while other is done by updating attributes of the axis `ax`. 
+Some of it can be done directly in the `plot()` method for the dataframe (like we've done when ploting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
 The following diagram shows some examples of elements in the axis that can be updated.
 
-![Image source: Matplotlib documentation](/book/images/lesson-10/anatomy.png){width="70%"}
+![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
 
 #### Example
 
@@ -300,7 +310,11 @@ plt.show()
 
 ::: {.callout-tip}
 ## Check-in 
-Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!
+1. Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!
+
+2. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?
+
+3. Discuss with a partner: what are some possible biases or limitations in GBIF species occurrence data (e.g., spatial coverage, sampling effort, data quality)?
 
 ```{python}
 #| echo: false
