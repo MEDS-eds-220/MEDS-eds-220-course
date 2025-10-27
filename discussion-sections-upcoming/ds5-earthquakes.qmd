@@ -21,16 +21,20 @@ With your partner, decide which one of you will be Partner 1 and Partner 2. Then
 
 ### **Partner 1:**
 
-1. Create a new Github repository titled `Earthquake-branching `. Add a README,a python gitignore, and a MIT License.
+1.  Create a new Github repository titled `Earthquake-branching `. Add a README, a python gitignore, and an MIT License.
 
-2. Add your partner as a collaborater on your repository. In your Repo, navigate to **Settings**. Click on "Collaboraters", and add Partner #2 's github username as a collaborator. 
+2.  Add your partner as a collaborater on your repository. In your Repo, navigate to **Settings**. Click on "Collaboraters", "Add People", and add Partner #2 's github username as a collaborator. 
 
-3. Access the workbench-1 server and clone your new repository in your EDS220 folder. 
+3.  Access the workbench-1 server and clone your new repository in your EDS220 folder. 
 
-4. Create a new Python notebook inside your `Earthquake-branching` directory and rename it to `section-5-earthquakes.ipynb`. 
+4.  Create a new Python notebook inside your `Earthquake-branching` directory and rename it to `section-5-earthquakes.ipynb`. 
 
-5. . Use the terminal to push this file to your remote repository. 
+5.  Use the terminal to push this file to your remote repository. 
+
+6. Complete the following exercise ( up until step # **ADD STEP #**) together on Partner #1's computer. Don't worry, partner #2- since you are a collaborator, you have access to this repository like it is your own!
 :::
+
+
 
 ## General directions
 :::{.callout-tip appearance="minimal"}
@@ -88,11 +92,134 @@ Use your plan as a starting point to recreate the plot.
 
 ## 3. Update your notebook
 
-a. nclude any takeaways from the map in a markdown cell after your plot.
+a. Include any takeaways from the map in a markdown cell after your plot.
 
 b. Go over your notebook and add markdown cells with appropriate titles and subtitles to guide the reader through the different steps in your workflow. 
 
 c. Include a markdown cell at the top with a title for your notebook and a description of what it is about.
+
+
+# Branching
+
+It's time to practice some branching! Creating branches on Github encourages collaboration on Github repos without all the merge conflicts! A branch gives you an isolated environment to make changes without immediatley effecting the `main` branch. 
+
+## Partner 2 Tasks
+
+### **Partner 2**
+
+1. Clone the `Earthquake-branching` repository that your partner added you as a collaborator on to your Workbench. 
+
+2. Create a new branch to make edits on with the following command in the workbnech terminal. This command is creating a new branch and calling it `partner2-branch` (be sure to update "partner2" with Partner #2's name!)
+
+
+```default
+git checkout -b partner2-branch
+```
+
+3. Double check that you are on your new branch. Run the following code in the terminal. If it returns an asterik (*) next to your new branch name, you are on your new branch! 
+
+```default
+git branch
+```
+4. Make the following changes on your new branch: 
+
+- Update the color to be a fun Halloween color! 
+- Follow the documentation for [`plt.figtext`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figtext.html) to add your name as an author on this plot in the bottom right corner. 
+
+
+5. Set the upstream remote branch
+
+Before pushing, you need to set the upstream branch! This sets up a tracking relationship between your local branch and your remote branch. You will only need to set this up once for each individual branch you make! 
+
+```default 
+--set-upstream origin partner2-branch
+```
+
+6. Push your changes! 
+
+Run `git pull` to make sure you hsve the most up to date remote changes. Then run `git push`. 
+
+:::{.callout-tip icon=true collapse=true}
+# Comprehension Check
+Where did you just push your changes to? Where do you need to go to check the changes you just made on your remote repository? 
+:::
+
+
+7. Create a pull request! 
+
+You know have a branch called `main` that has the plot you and your partner created. You also have a branch called `partner2-branch` that has updated colors and Partner #2's name as an author. We want to merge the changes from this `partner2-branch` into our main branch. To do so, we will create a pull request. 
+
+        1. Navigate to the remote repository on github.com
+        2.  Click on the pull request icon
+        3.  Click "New Pull Request"
+        4.  In the compare changes tab, merge your branch into the main branch 
+        - * Insert screenshot*
+        5. Click "Create Pull Request"
+        6.  Github will compare your branch with main and make sure there are no conflicts. If not, a "Merge pull request option" will appear. Click on this! 
+        7.  Write a commit message that encompasses the changes you are mergining into the main branch
+        8.  Finally, click "Confirm Merge". You have just merged your branch into main!!! 
+
+
+
+
+## Partner 1 Tasks
+
+### **Partner 1**
+
+Partner 1 will now follow a similar sequence of tasks, with a very important addition! The remote repository now contains changes from your parnter that you do not have locally. You need to do a ` git pull` to avoid merge conflicts! 
+
+1. In ther workbench terminal, run `git pull` to make sure you have all changes that your partner made locally. 
+
+2. Create a new branch to make edits on with the following command in the workbnech terminal. This command is creating a new branch and calling it `partner1-branch` (be sure to update "partner1" with Partner #1's name!)
+
+
+```default
+git checkout -b partner1-branch
+```
+
+3. Double check that you are on your new branch. Run the following code in the terminal. If it returns an asterik (*) next to your new branch name, you are on your new branch! 
+
+```default
+git branch
+```
+4. Make the following changes on your new branch: 
+
+- Follow the documentation for [`plt.figtext`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figtext.html) to add your name as an author on this plot in the bottom right corner. 
+
+
+5. Set the upstream remote branch
+
+Before pushing, you need to set the upstream branch! This sets up a tracking relationship between your local branch and your remote branch. You will only need to set this up once for each individual branch you make! 
+
+```default 
+--set-upstream origin partner1-branch
+```
+
+6. Push your changes! 
+
+Run `git pull` to make sure you hsve the most up to date remote changes. Then run `git push`. 
+
+:::{.callout-tip icon=true collapse=true}
+# Comprehension Check
+Where did you just push your changes to? Where do you need to go to check the changes you just made on your remote repository? 
+:::
+
+
+ou know have a branch called `main` that has the plot you and your partner created. You also have a branch called `partner1-branch` that has updated colors and Partner #1's name as an author. We want to merge the changes from this `partner1-branch` into our main branch. To do so, we will create a pull request. 
+
+        1. Navigate to the remote repository on github.com
+        2.  Click on the pull request icon
+        3.  Click "New Pull Request"
+        4.  In the compare changes tab, merge your branch into the main branch 
+        - * Insert screenshot*
+        5. Click "Create Pull Request"
+        6.  Github will compare your branch with main and make sure there are no conflicts. If not, a "Merge pull request option" will appear. Click on this! 
+        7.  Write a commit message that encompasses the changes you are mergining into the main branch
+        8.  Finally, click "Confirm Merge". You have just merged your branch into main!!! 
+
+
+
+
 
 
 <!--
