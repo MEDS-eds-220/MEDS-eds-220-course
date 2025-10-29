@@ -567,17 +567,56 @@ There's no setup for this week's discussion section.
 ### Class 9 (Tuesday)
 
 1. Finished [`geopandas`](https://meds-eds-220.github.io/MEDS-eds-220-course/book/chapters/lesson-10-geopandas-intro/lesson-10-geopandas-intro.html) notes.
-2. Covered notes on [streamlining your code](/book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.qmd) up to [...].
+2. Covered notes on [streamlining your code](/book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.qmd) up to (including) `assert`. 
 
-<!-- 
-### Class 10
+
+### Class 10 (Thursday)
+1. Finished notes on [streamlining your code](/book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.qmd).
+
+
 ::: {.callout-warning icon=false}
-## Preparation for Monday class (November 4)
-Read notes on [data merging](/book/chapters/merging-data.qmd)
+## Preparation for next class
+The following steps take place in your personal computer.
+
+1. Read the [About the data](http://localhost:3968/book/chapters/lesson-12-merge-data/lesson-12-merge-data.html) section in the Reprojecting notes. 
+2. Download the [Admin O - Countries](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/) and add it to the `data` folder for you `eds-220-in-class` directory.
+3. In your `EDS-220/eds220-in-class` directory, create a new Python notebook called `week6-reprojecting.ipynb`
+4. Add the following three cells to your notebook. Make sure you have the data loaded before class! 🙌
+
+Cell 1:
+```python
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import geopandas as gpd
+```
+Cell 2:
+```python
+# Import countries shapefile
+fp = os.path.join('data','ne_50m_admin_0_countries','ne_50m_admin_0_countries.shp')
+countries = gpd.read_file(fp)
+countries.columns = countries.columns.str.lower()  # Simplify column names
+countries = countries[['admin', 'type', 'geometry']]
+countries.head(3)
+```
+Cell 3:
+```python
+# Import Arctic communities GeoJSON directly from URL
+URL = 'https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3Aed7718ae-fb0d-43dd-9270-fbfe80bfc7a4'
+communities = gpd.read_file(URL)
+communities.head()
+```
+Cell 3:
+```python
+# Import country names from URL
+URL = 'https://raw.githubusercontent.com/MEDS-eds-220/MEDS-eds-220-course/refs/heads/main/book/chapters/lesson-12-merge-data/country_names.csv'
+country_names = pd.read_csv(URL)
+country_names.head()
+```
 :::
 
-### Discussion section
-No work to do ahead of the discussion section.  -->
+### Discussion section (Friday)
+No work to do ahead of the discussion section. 
 :::
 
 <!--
