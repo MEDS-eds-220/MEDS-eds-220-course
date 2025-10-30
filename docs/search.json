@@ -2361,7 +2361,7 @@
     "href": "discussion-sections/discussion-sections-listing.html",
     "title": "Discussion sections",
     "section": "",
-    "text": "week\n\n\n\ntopic\n\n\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula Hurricanes\n\n\n\n\n\n\n\n\n\n7\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\nNo matching items"
+    "text": "week\n\n\n\ntopic\n\n\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula Hurricanes\n\n\n\n\n\n\n\n\n\n5\n\n\nPlotting geospatial data with Git Branching\n\n\n\n\n\n\n\n\n\n7\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "discussion-sections/ds-2-water-crisis-exploration.html",
@@ -3445,5 +3445,75 @@
     "title": "EDS 220 - Working with Environmental Datasets",
     "section": "",
     "text": "https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1K35S3H\n\nimport geopandas as gpd\nimport matplotlib.pyplot as plt\nimport contextily as ctx\n\n\ndata = gpd.read_file('data/GCC_Data/allreefs_gcc.geojson')\n\n\ndata.columns\n\nIndex(['objectid', 'region', 'country', 'country_iso', 'eez', 'realm',\n       'province', 'ecoregion', 'latitude', 'longitude', 'gebco_depth',\n       'pct_hardcoral', 'pct_hardcoral_min', 'pct_hardcoral_max',\n       'pct_hardcoral_nsurveys', 'sample_yr_median', 'sample_yr_min',\n       'sample_yr_max', 'method_cat', 'dhw_max_cumul', 'dhw0', 'dhw4',\n       'sst_annualtrend', 'sst_kurtosis', 'sst_max', 'sst_range',\n       'sst_skewness', 'sst_var', 'aca_pr_bank', 'aca_pr_crest',\n       'aca_pr_lagoon', 'aca_pr_seagrass', 'aca_pr_slope',\n       'aca_top_geo_simple', 'calcite', 'currents_velocity_mean',\n       'diffuse_atn_max', 'dissolved_oxygen', 'gs_vr_score', 'npp_mean',\n       'npp_sd', 'par_max', 'ph_mean', 'reef_area_15km', 'score_cn',\n       'score_cy', 'wave_energy_mean', 'effluent_open_n', 'effluent_septic_n',\n       'effluent_total_n', 'effluent_treated_n', 'nutrient_raw',\n       'sediment_raw', 'grav_nc_raw', 'mgmt_highest', 'num_ports_raw',\n       'pop_count_raw', 'reef_value_raw', 'geometry'],\n      dtype='object')\n\n\n\ndata.plot()\n\n\n\n\n\n\n\n\n\ndata.realm.unique()\n\narray(['Temperate Northern Pacific', 'Tropical Atlantic',\n       'Western Indo-Pacific', 'Central Indo-Pacific',\n       'Eastern Indo-Pacific', 'Temperate Northern Atlantic', None,\n       'Tropical Eastern Pacific', 'Temperate Australasia'], dtype=object)\n\n\n\nwip = data[data.realm=='Western Indo-Pacific']\n\n\n# Ensure your GeoDataFrame is in the Web Mercator projection\nwip = wip.to_crs(epsg=3857)\n\nfig, ax = plt.subplots()\n\n# Remove the axis for a cleaner map\nax.axis('off')\n\n# Plot your data\nwip.plot(ax=ax, column='pct_hardcoral')\n\n# Add a basemap with a specified zoom level\nctx.add_basemap(ax, zoom=3)  # Adjust the zoom level as needed for your map extent\n\nplt.show()"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html",
+    "href": "discussion-sections/ds5-earthquakes.html",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "",
+    "text": "In this discussion section you will wrangle data about earthquakes and practice:\n\nBreaking down a question into accessible data wrangling steps\nImporting and plotting different types of geospatial data\nFinding additional guidance online to carry out your data wrangling plans\nGit branching and pull requests with a partner"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#happy-halloween",
+    "href": "discussion-sections/ds5-earthquakes.html#happy-halloween",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "",
+    "text": "In this discussion section you will wrangle data about earthquakes and practice:\n\nBreaking down a question into accessible data wrangling steps\nImporting and plotting different types of geospatial data\nFinding additional guidance online to carry out your data wrangling plans\nGit branching and pull requests with a partner"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#setup",
+    "href": "discussion-sections/ds5-earthquakes.html#setup",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "Setup",
+    "text": "Setup\n\n\n\n\n\n\nWith your partner, decide which one of you will be Partner 1 and Partner 2. Then complete the following setup:\n\nPartner 1:\n\nCreate a new Github repository titled earthquake-branching. Add a README, a python gitignore, and an MIT License.\nAdd your partner as a collaborator on your remote repository.\n\n\nIn your remote repo, navigate to Settings\nClick on “Collaborators” &gt; “Add People”\nAdd Partner #2 ’s Github username as a collaborator.\n\n\nAccess the workbench-1 server and clone your new repository in your EDS 220 folder.\nCreate a new Python notebook inside your earthquake-branching directory and rename it to section-5-earthquakes.ipynb.\nUse the terminal to commit and push this file to your remote repository.\n\n\n\nPartner 2:\nNo setup right now!"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#general-directions",
+    "href": "discussion-sections/ds5-earthquakes.html#general-directions",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "General directions",
+    "text": "General directions\n\n\n\n\n\n\n\nAdd comments as appropriate along your code following the course commenting standards.\nInclude markdown cells in between your code cells to add titles and information to each exercise\nCommit every time you finish a major step. Remember to write informative commits in the imperative mood."
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#about-the-data",
+    "href": "discussion-sections/ds5-earthquakes.html#about-the-data",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "About the data",
+    "text": "About the data\nFor this task you will use two datasets.\nThe first dataset is simplified data from the USGS Earthquakes Database. This data is in tabular format and has the following columns:\n\n\n\nColumn\nDescription\n\n\n\n\ntime\ndate and time of event (all events from 2014)\n\n\nlatitude\ndecimal degrees [-90,90]\n\n\nlongitude\ndecimal degrees [-360,360]\n\n\ndepth\ndepth of the event (km)\n\n\nmag\nmagnitude of event\n\n\nid\nevent identifier\n\n\nplace\nwhere the event took place\n\n\ntype\ntype of event\n\n\n\nThis is the same dataset you used in assginment 1. You can access the data through this link.\nFurther information about the dataset can be accessed in the ANSS Comprehensive Earthquake Catalog (ComCat) Documentation.\nThe second dataset is Natural Earth’s low resolution cultural boundaries data. These are useful to make maps of the whole world, although might not be suitable for mapping individual nations or finer geospatial analysis. You can access the “Admin 0 – Countries” dataset available in this link.\n\n\n\n\n\n\nComplete exercises 1, 2, and 3 together on Partner #1’s computer. Don’t worry, Partner #2- since you are a collaborator, you have access to this repository like it is your own!"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#brainstorm",
+    "href": "discussion-sections/ds5-earthquakes.html#brainstorm",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "1. Brainstorm",
+    "text": "1. Brainstorm\nIn this session you will recreate the following map:\n\n\nIndividually, write down high-level steps on how you would explore and wrangle the data to produce this map. Do not code anything yet.\nDiscuss your high-level steps with your team. What do you see as potential challenges to implementing your plan?\nAs a team, select an initial plan for recreating this plot."
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#create-the-plot",
+    "href": "discussion-sections/ds5-earthquakes.html#create-the-plot",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "2. Create the plot",
+    "text": "2. Create the plot\nUse your plan as a starting point to recreate the plot.\n\nYou may (or not) need to look online to carry out some of the steps in your plan. It is completely fine to seek help online! Resourceful troubleshooting is a key skill in data science.\nIt’s ok if your initial plan changes as you work with the data and discuss challenges with your team! This brainstorm is to create a shared starting point.\n\n\nDon’t forget to write informative commits in the imperative every time you finish a major step."
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#update-your-notebook",
+    "href": "discussion-sections/ds5-earthquakes.html#update-your-notebook",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "3. Update your notebook",
+    "text": "3. Update your notebook\n\nInclude any takeaways from the map in a markdown cell after your plot.\nGo over your notebook and add markdown cells with appropriate titles and subtitles to guide the reader through the different steps in your workflow.\nInclude a markdown cell at the top with a title for your notebook and a description of what it is about.\n\n\n\n\n\n\n\nCommit and push all changes to your remote repository!"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#partner-2-tasks",
+    "href": "discussion-sections/ds5-earthquakes.html#partner-2-tasks",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "Partner 2 Tasks",
+    "text": "Partner 2 Tasks\n\nPartner 2\n\nCheck your email for the invitation to the earthquake-branching repository your partner added you as a collaborator to. Accept the invitation. Then, clone the earthquake-branching repository to your workbench.\nCreate a new branch to make edits on with the following command in the workbench terminal. This command is creating a new branch and calling it partner2-branch (be sure to update “partner2” with Partner #2’s name!)\n\ngit checkout -b partner2-branch\n\nDouble check that you are on your new branch. Run the following code in the terminal. If it returns an asterik (*) next to your new branch name, you are on your new branch!\n\ngit branch\nOutput:\n\n\nSet the upstream remote branch\n\nBefore pushing, you need to set the upstream branch! This sets up a tracking relationship between your local branch and your remote branch. You will only need to set this up once for each individual branch you make!\n--set-upstream origin partner2-branch\n\nMake the following changes on your new branch:\n\n\nFollow the documentation for plt.figtext to add your name as an author on this plot in the bottom right corner.\n\n\nPush your changes!\n\nRun git pull to make sure you have the most up to date remote changes. Then run git push.\n\n\n\n\n\n\nTipComprehension Check\n\n\n\n\n\nWhere did you just push your changes to? Where do you need to go to check the changes you just made on your remote repository?\n\n\n\n\nCreate a pull request!\n\nYou now have a branch called main that has the plot you and your partner created. You also have a branch called partner2-branch that has updated colors and Partner #2’s name as an author. We want to merge the changes from this partner2-branch into our main branch. To do so, we will create a pull request.\n\nNavigate to the remote repository on github.com\nClick on the pull request icon\nClick “New Pull Request”\nIn the compare changes tab, merge your branch into the main branch\n\n\n\nClick “Create Pull Request”\nGithub will compare your branch with main and make sure there are no conflicts. If there are no conflicts, a “Merge pull request” option will appear. Click on this!\nWrite a commit message that encompasses the changes you are merging into the main branch\nFinally, click “Confirm Merge”. You have just merged your branch into main!!!"
+  },
+  {
+    "objectID": "discussion-sections/ds5-earthquakes.html#partner-1-tasks",
+    "href": "discussion-sections/ds5-earthquakes.html#partner-1-tasks",
+    "title": "Plotting geospatial data with Git Branching",
+    "section": "Partner 1 Tasks",
+    "text": "Partner 1 Tasks\n\nPartner 1\nPartner 1 will now follow a similar sequence of tasks, with a very important addition! The remote repository now contains changes from your parnter that you do not have locally. You need to do a git pull to avoid merge conflicts!\n\nIn ther workbench terminal, run git pull to make sure you have all changes that your partner made locally.\nCreate a new branch to make edits on with the following command in the workbench terminal. This command is creating a new branch and calling it partner1-branch (be sure to update “partner1” with Partner #1’s name!)\n\ngit checkout -b partner1-branch\n\nDouble check that you are on your new branch. Run the following code in the terminal. If it returns an asterik (*) next to your new branch name, you are on your new branch!\n\ngit branch\nOutput :\n\n\nSet the upstream remote branch\n\nBefore pushing, you need to set the upstream branch! This sets up a tracking relationship between your local branch and your remote branch. You will only need to set this up once for each individual branch you make!\n--set-upstream origin partner1-branch\n\nMake the following changes on your new branch:\n\n\nFollow the documentation for plt.figtext to add your name as an author on this plot in the bottom right corner.\n\n\nPush your changes!\n\nRun git pull to make sure you have the most up to date remote changes. Then run git push.\n\n\n\n\n\n\nTipComprehension Check\n\n\n\n\n\nWhere did you just push your changes to? Where do you need to go to check the changes you just made on your remote repository?\n\n\n\nYou now have a branch called main that has the plot you and your partner created. You also have a branch called partner1-branch that has Partner #1’s name as an author. We want to merge the changes from this partner1-branch into our main branch. To do so, we will create a pull request.\n\nNavigate to the remote repository on github.com\nClick on the pull request icon\nClick “New Pull Request”\nIn the compare changes tab, merge your branch into the main branch\n\n\n\nClick “Create Pull Request”\nGithub will compare your branch with main and make sure there are no conflicts. If there are no conflicts, a “Merge pull request” option will appear. Click on this!\nWrite a commit message that encompasses the changes you are merging into the main branch\nFinally, click “Confirm Merge”. You have just merged your branch into main!!!"
   }
 ]
