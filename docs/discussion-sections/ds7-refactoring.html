@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Yucatan Peninsula hurricanes – EDS 220 - Working with Environmental Datasets</title>
+<title>Protected areas code refactoring – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -181,14 +216,13 @@ div.csl-indent {
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
-  <li><a href="#data-loading-and-preliminary-exploration" id="toc-data-loading-and-preliminary-exploration" class="nav-link" data-scroll-target="#data-loading-and-preliminary-exploration">2. Data loading and preliminary exploration</a></li>
-  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">3. Brainstorm</a></li>
-  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">4. Data wrangling</a></li>
-  <li><a href="#visualize-saffir-simpson-categories-across-time" id="toc-visualize-saffir-simpson-categories-across-time" class="nav-link" data-scroll-target="#visualize-saffir-simpson-categories-across-time">5: Visualize Saffir-Simpson categories across time</a></li>
-  <li><a href="#collect-your-code-and-explain-your-results" id="toc-collect-your-code-and-explain-your-results" class="nav-link" data-scroll-target="#collect-your-code-and-explain-your-results">6. Collect your code and explain your results</a></li>
+  <li><a href="#data-loading-exploration" id="toc-data-loading-exploration" class="nav-link" data-scroll-target="#data-loading-exploration">1. Data loading exploration</a></li>
+  <li><a href="#plan-refactoring" id="toc-plan-refactoring" class="nav-link" data-scroll-target="#plan-refactoring">2. Plan refactoring</a></li>
+  <li><a href="#refactor" id="toc-refactor" class="nav-link" data-scroll-target="#refactor">3. Refactor!</a></li>
+  <li><a href="#finish-percentage-coverage" id="toc-finish-percentage-coverage" class="nav-link" data-scroll-target="#finish-percentage-coverage">4. Finish percentage coverage</a></li>
+  <li><a href="#investigate-issues" id="toc-investigate-issues" class="nav-link" data-scroll-target="#investigate-issues">5. Investigate issues</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -197,8 +231,8 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Yucatan Peninsula hurricanes</h1>
-<p class="subtitle lead">Week 4 - Discussion section</p>
+<h1 class="title">Protected areas code refactoring</h1>
+<p class="subtitle lead">Week 7 - Discussion section</p>
 </div>
 
 
@@ -215,12 +249,17 @@ div.csl-indent {
 </header>
 
 
-<p>In this discussion section you will wrangle historical data about hurricanes at the Yucatan Peninsula in Mexico. In this discussion section, you will:</p>
+<p>In this discussion section you will practice refactoring code. <strong>Refactoring</strong> means improving the structure or readability of your coude without changing what it does. The goal is to make code cleaner, easier to understand, and easier to maintain. For example, you might refactor by:</p>
 <ul>
-<li>Practice breaking down a question into accessible data wrangling steps</li>
-<li>Choose appropriate packages and methods to carry out your analysis</li>
-<li>Practice finding additional guidance online to carry out your data wrangling plans</li>
+<li>renaming variables to make their purpose clearer</li>
+<li>grouping variables into more transparent data structures</li>
+<li>removing hard-coded information</li>
+<li>creating functions to take care of repeated tasks</li>
+<li>breaking down long functions into smaller ones</li>
+<li>simplifying complex logic flows</li>
+<li>streamlining repeated code.</li>
 </ul>
+<p>Though the main goal when we are programming is to make our code do what we want, refactoring is a good habit that can make it easier to build upon our work and share it with others.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <div class="callout callout-style-simple callout-tip no-icon">
@@ -230,175 +269,93 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>Access the workbench-1 server.</p></li>
-<li><p>Navigate to the<code>eds-220-sections</code> directory in the file navigation panel and the terminal.</p></li>
-<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-4-yucatan-hurricanes.ipynb</code>.</p></li>
-<li><p>Use the terminal to push this file to your remote repository.</p></li>
+<li><p>Download the notebook <code>week7-refactoring.ipynb</code> from the <a href="https://drive.google.com/drive/folders/1L1bvxICUy1OkW5_UNMA_WTjOCXUaE8Nz?usp=share_link">course’s Google Drive</a> and move it inside your <code>eds-220-sections</code> directory.</p></li>
+<li><p>Download the zip file <code>WDPA_Nov2025_Latam.zip</code>from the course’s <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link">Google Drive</a>, unzip it, and add it to the <code>data</code> directory in your <code>eds-220-sections</code> directory.</p></li>
+<li><p>Run the <code>week7-refactoring.ipynb</code> notebook to make sure you can access the data.</p></li>
 </ol>
-</div>
-</div>
-</div>
-</section>
-<section id="general-directions" class="level2">
-<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<ul>
-<li>Add comments as appropriate along your code following the course commenting standards.</li>
-<li>Include markdown cells in between your code cells to add titles and information to each exercise</li>
-<li>Commit every time you finish a major step. <strong>Remember to write your commits in the imperative mood.</strong></li>
-</ul>
 </div>
 </div>
 </div>
 </section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>In this discussion section we will use <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hfr.71.23">historical data about hurricanes in the Yucatan Peninsula <span class="citation" data-cites="boose_ecological_2023"><span>[1]</span></span></a>.</p>
-<p>The Yucatan Peninsula, located in southeastern Mexico and bordered by the Gulf of Mexico and the Caribbean Sea, is a region highly susceptible to hurricanes due to its geographic location. These intense storms bring strong winds, heavy rainfall, and storm surges that significantly impact both terrestrial and coastal ecosystems. Hurricanes can cause widespread deforestation, alter habitats, and disrupt biodiversity, affecting, among other habitats, mangroves and coral reefs.</p>
+<p>The World Database on Protected Areas (WDPA) is the only global database of natural protected areas, it can be viewed and downloaded at <a href="www.protectedplanet.net">www.protectedplanet.net</a>. WDPA is a joint project of the United Nations Environment Programme World Conservation Monitoring Centre (UNEP-WCMC) and the International Union for Conservation of Nature (IUCN) <span class="citation" data-cites="UNEPWCMC_2019"><a href="#ref-UNEPWCMC_2019" role="doc-biblioref">[1]</a></span>. This dataset includes both marine and terrestrial protected areas, combining both spatial and attribute data <span class="citation" data-cites="UNEPWCMC_IUCN_2025"><a href="#ref-UNEPWCMC_IUCN_2025" role="doc-biblioref">[2]</a></span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../discussion-sections/images/hurricane-mitch.jpg" class="img-fluid figure-img"></p>
-<figcaption>Hurricane Mitch (Category 5 on the Saffir-Simpson Hurricane Wind Scale) impacted the Yucatan Peninsula in late October 1998, with its effects felt most strongly around October 28-29. The Yucatan experienced heavy rains and flooding as Mitch passed near the region. <a href="https://www.nesdis.noaa.gov/news/25-years-later-looking-back-the-october-monster-named-mitch">Image source: NOAA</a></figcaption>
+<p><img src="images/WDPA-data-viewer.png" class="img-fluid figure-img"></p>
+<figcaption>Image from the WDPA data viewer at <a href="www.protectedplanet.net">www.protectedplanet.net</a>.</figcaption>
 </figure>
 </div>
-<p>This dataset includes information about the Saffir-Simpson hurricane category for each hurricane. The <a href="https://www.weather.gov/mfl/saffirsimpson#:~:text=The%20Saffir%2DSimpson%20Hurricane%20Wind,loss%20of%20life%20and%20damage.">Saffir-Simpson scale</a> is a widely used classification system that categorizes hurricanes based on their sustained wind speeds and potential for damage. Ranging from Category 1 to Category 5, the scale assesses the intensity of hurricanes, with Category 1 being the least severe and Category 5 representing catastrophic storms. Categories 3 and above are considered major hurricanes, capable of causing significant structural damage, flooding, and long-lasting environmental impacts.</p>
+<p>The data used in this exercise is a subset of the original dataset and it <em>only includes polygons for protected areas in Latin America</em> (the original dataset is global with both polygon and point data). This subset was prepared for educational purposes and can be downloaded from the course’s <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link">Google Drive</a> through the zip file <code>WDPA_Nov2025_Latam.zip</code>. It maintains the file structure of the original complete dataset.</p>
 </section>
-<section id="archive-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
+<section id="data-loading-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading-exploration">1. Data loading exploration</h2>
+<ol type="1">
+<li><p>This dataset is exceptionally well documented. Take time to look through the PDFs associated with the data and investigate what the values for each column represent.</p></li>
+<li><p>Use the data viewer in the <a href="https://www.protectedplanet.net/en">WDPA website</a> to briefly explore the data over Central America.</p></li>
+</ol>
+</section>
+<section id="plan-refactoring" class="level2">
+<h2 class="anchored" data-anchor-id="plan-refactoring">2. Plan refactoring</h2>
+<p>In this step you will only use the HTML rendered version of the notebook. The goal is to help you inspect code and make a plan without the temptation to start coding or running any cells!</p>
 <ol type="a">
-<li><p>Take some time to mindfully look through the dataset’s description and metadata.</p></li>
-<li><p>In your notebook: use a markdown cell to add a <em>brief</em> description of the dataset, including a citation, date of access, and a link to the archive.</p></li>
+<li><p>Imagine you are given <a href="../discussion-sections-upcoming/ds7-refactoring-development/week7-discussion-section-EXERCISE.html">this preliminary analysis</a> a colleague has been working and a last bit that they left unfinished. Take time to read the code to understand what is being done.</p></li>
+<li><p>This exploratory analysis has code that can be streamlined. With your group, discuss some ways in which you could streamline the code to avoid repetitions that may make this code harder to update. <em>You could update the code in any way you want.</em></p></li>
+<li><p>Write down the high-level steps you will implement in your refactoring.</p></li>
 </ol>
 </section>
-<section id="data-loading-and-preliminary-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="data-loading-and-preliminary-exploration">2. Data loading and preliminary exploration</h2>
+<section id="refactor" class="level2">
+<h2 class="anchored" data-anchor-id="refactor">3. Refactor!</h2>
 <ol type="a">
-<li>We will be using the <code>hf071-01-hurricanes.csv</code> file. Agree with your team on how you will import this file to your notebook and store it in a variable named <code>df</code>.</li>
+<li>Work with your group to refactor the code to calculate the percentage of protected areas and obtain the exact same print out:</li>
 </ol>
-<!--
-```python
-# VIA FILEPATH
-import os
-import pandas as pd
-
-fp = os.path.join('data', 'hf071-01-hurricanes.csv')
-df = pd.read_csv(fp)
-
-
-# VIA URL
-URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-hfr.71.23&entityid=ab0fe2bf4f3ad850371ccb9c69d78469'
-df = pd.read_csv(URL)
-```
--->
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY ACCESSED THE DATA BEFORE CONTINUING</strong>
-</p>
-<ol start="2" type="a">
-<li>Obtain preliminary information and explore this data frame using <code>pandas</code> methods.</li>
-</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Total protected area in Belize (sq. km): 10,181.87</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Total protected area in Costa Rica (sq. km): 199,170.72</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Total protected area in El Salvador (sq. km): 5,701.12</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Total protected area in Guatemala (sq. km): 40,316.17</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Total protected area in Honduras (sq. km): 96,103.89</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Total protected area in Nicaragua (sq. km): 84,985.39</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Total protected area in Panama (sq. km): 133,553.40</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="brainstorm" class="level2">
-<h2 class="anchored" data-anchor-id="brainstorm">3. Brainstorm</h2>
-<p>In this session we want to answer the following question:</p>
-<blockquote class="blockquote">
-<p>How many hurricanes with Saffir-Simpson category 5 have been registered and what was their duration?</p>
-</blockquote>
+<section id="finish-percentage-coverage" class="level2">
+<h2 class="anchored" data-anchor-id="finish-percentage-coverage">4. Finish percentage coverage</h2>
+<p>The colleague writing this code ran out of steam and the calculations for the percentage of protected area relative to each country’s land area was not finished.</p>
 <ol type="a">
-<li><p>Individually, write down step-by-step instructions on how you would wrangle the <code>df</code> data frame to answer the question. Do not code anything yet. <strong>Remember:</strong> It’s okay if you don’t know how to code each step. The important thing is to have an idea of what you’d like to do.</p></li>
-<li><p>Discuss your step-by-step instructions with your team. What do you see as potential challenges to implementing your plan?</p></li>
-<li><p>As a team, select an initial data wrangling plan for answering the question.</p></li>
+<li>Update your code to print the corresponding percentages for each Central American country.</li>
 </ol>
 </section>
-<section id="data-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-wrangling">4. Data wrangling</h2>
-<p>Use your plan as a starting point to answer the question.</p>
+<section id="investigate-issues" class="level2">
+<h2 class="anchored" data-anchor-id="investigate-issues">5. Investigate issues</h2>
+<p>Discuss the following with your team:</p>
 <ul>
-<li>You may (or not) need to look online to carry out some of the steps in your plan. It is completely fine to seek help online! Resourceful troubleshooting is a key skill in data science.</li>
-<li>It’s ok if your initial plan changes as you work with the data and discuss challenges with your team! This brainstorm is to create a shared starting point.</li>
+<li>Do these percentages make sense? Why or why not?</li>
+<li>Are there known data quality or use recommendations this colleague should have taken into account since the start of the analysis? Take some time to look through the WDPA_WDOECM_Manual file.</li>
+<li>How should the analysis change if we wanted to calculate the percentage of <em>terrestrial</em> protected area per country accurately?</li>
 </ul>
+<div class="callout callout-style-simple callout-warning no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Remeber: Geospatial analysis should be done carefully and with consideration of the multiple ways the data interact with each other. Rarely a straightforward analsys captures the nuance this kind of datasets may have!</p>
+</div>
+</div>
+</div>
 </section>
-<section id="visualize-saffir-simpson-categories-across-time" class="level2">
-<h2 class="anchored" data-anchor-id="visualize-saffir-simpson-categories-across-time">5: Visualize Saffir-Simpson categories across time</h2>
-<ol type="a">
-<li><p>Create a scatter plot of the start date of the hurricanes against the Saffir-Simpson scale. Use <code>matplotlib</code> to customize your graph, including updating the tick labels to be only 1, 2, 3, 4, and 5 since the Saffir-Simpsn scale does not take decimal values.</p></li>
-<li><p>Analyze your plot and write (in full sentences!) any trends that you observe.</p></li>
-</ol>
-<p style="text-align: center;">
-<strong>Don’t forget to commit, pull, and push.</strong>
-</p>
-</section>
-<section id="collect-your-code-and-explain-your-results" class="level2">
-<h2 class="anchored" data-anchor-id="collect-your-code-and-explain-your-results">6. Collect your code and explain your results</h2>
-<ol type="a">
-<li>In a new code cell, collect all the relevant code to create a streamlined workflow to obtain the final data to answer the question. Your code cell should:</li>
-</ol>
-<ul>
-<li>Only print the final results.</li>
-<li>Not include output from intermediate variables or checks.</li>
-<li>Not include methods or functions that do not directly contribute to the analysis (even if they don’t print anything ex: <code>df.head()</code>).</li>
-<li>If appropriate, combine methods using code chaining instead of creating intermediate variables.</li>
-<li>Comment your code following our class comments guidelines.</li>
-<li>Use appropriate line breaks and indentation to make code readable.</li>
-</ul>
-<ol start="2" type="a">
-<li>Write a full sentence explaining your answer to the question in (3). Don’t forget to include units. You may also want to include any insights about the rest of the data for the Category 5 hurricanes.</li>
-</ol>
-<!--
-```python
-import os
-import pandas as pd
+<section id="references" class="level2">
 
-# Import data
-fp = os.path.join('data', 'hf071-01-hurricanes.csv')
-df = pd.read_csv(fp)
-
-# Convert datetime 
-df['start.date'] = pd.to_datetime(df['start.date'])
-df['end.date'] = pd.to_datetime(df['end.date'])
-
-# Calculate duration of events
-df['duration']= df['end.date'] - df['start.date']
-
-# Select rows with Saffir-Simpson category 5
-df[df.ss==5]
-```
-
-```python
-# Plot 
-fig, ax = plt.subplots()
-
-df.plot(ax=ax,
-        x='start.date',
-        y='ss',
-        kind='scatter', 
-        alpha=0.5 )
-
-ax.set_title('')
-ax.set_yticks([1,2,3,4,5])  # note that we don't need to specify labels
-ax.set_ylabel('Saffir-Simpson Category')
-ax.set_xlabel(' ')
-
-ax.set_title('Saffir-Simpson Category of Hurricanes in the Yucatan Peninsula (1851-2000)')
-
-plt.show
-```
--->
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-boose_ecological_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">E. Boose and D. Foster, <span>“Ecological <span>Impacts</span> of <span>Hurricanes</span> <span>Across</span> the <span>Yucatan</span> <span>Peninsula</span> 1851-2000.”</span> Environmental Data Initiative, 2023. doi: <a href="https://doi.org/10.6073/PASTA/F219113373913F2DAF421732E28D3C38">10.6073/PASTA/F219113373913F2DAF421732E28D3C38</a>. Available: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hfr.71.23">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-hfr.71.23</a>. [Accessed: Oct. 23, 2024]</div>
+<div id="ref-UNEPWCMC_2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">UNEP-WCMC, <em>User manual for the world database on protected areas and world database on other effective area-based conservation measures: Version 1.6</em>. Cambridge, UK: <span>UNEP-WCMC</span>, 2019. Available: <a href="http://wcmc.io/WDPA_Manual">http://wcmc.io/WDPA_Manual</a></div>
+</div>
+<div id="ref-UNEPWCMC_IUCN_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">UNEP-WCMC and IUCN, <span>“Protected planet: The world database on protected areas (WDPA) [on-line], november 2025.”</span> <a href="https://www.protectedplanet.net" class="uri">https://www.protectedplanet.net</a>; <span>UNEP-WCMC and IUCN</span>, Cambridge, UK, 2025.</div>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
