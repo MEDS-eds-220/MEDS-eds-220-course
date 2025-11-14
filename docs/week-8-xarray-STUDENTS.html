@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>commits-guidelines – EDS 220 - Working with Environmental Datasets</title>
+<title>13 NetCDF and xarray – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -193,116 +193,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#guidelines-for-writing-good-commit-messages" id="toc-guidelines-for-writing-good-commit-messages" class="nav-link active" data-scroll-target="#guidelines-for-writing-good-commit-messages">Guidelines for Writing Good Commit Messages</a>
-  <ul class="collapse">
-  <li><a href="#use-the-imperative-mood" id="toc-use-the-imperative-mood" class="nav-link" data-scroll-target="#use-the-imperative-mood">1. Use the Imperative Mood</a></li>
-  <li><a href="#keep-the-first-line-short-and-descriptive" id="toc-keep-the-first-line-short-and-descriptive" class="nav-link" data-scroll-target="#keep-the-first-line-short-and-descriptive">2. Keep the First Line Short and Descriptive</a></li>
-  <li><a href="#provide-more-detail-in-the-body-if-necessary" id="toc-provide-more-detail-in-the-body-if-necessary" class="nav-link" data-scroll-target="#provide-more-detail-in-the-body-if-necessary">3. Provide More Detail in the Body (If Necessary)</a></li>
-  <li><a href="#explain-the-why-and-the-impact" id="toc-explain-the-why-and-the-impact" class="nav-link" data-scroll-target="#explain-the-why-and-the-impact">4. Explain the “Why” and the Impact</a></li>
-  <li><a href="#be-consistent" id="toc-be-consistent" class="nav-link" data-scroll-target="#be-consistent">5. Be Consistent</a></li>
-  <li><a href="#capitalize-the-first-letter-of-the-summary" id="toc-capitalize-the-first-letter-of-the-summary" class="nav-link" data-scroll-target="#capitalize-the-first-letter-of-the-summary">6. Capitalize the First Letter of the Summary</a></li>
-  <li><a href="#avoid-commit-messages-like-fixes-or-miscellaneous" id="toc-avoid-commit-messages-like-fixes-or-miscellaneous" class="nav-link" data-scroll-target="#avoid-commit-messages-like-fixes-or-miscellaneous">7. Avoid Commit Messages Like “Fixes” or “Miscellaneous”</a></li>
-  <li><a href="#group-related-changes-together" id="toc-group-related-changes-together" class="nav-link" data-scroll-target="#group-related-changes-together">8. Group Related Changes Together</a></li>
-  <li><a href="#reference-relevant-issues-or-pull-requests" id="toc-reference-relevant-issues-or-pull-requests" class="nav-link" data-scroll-target="#reference-relevant-issues-or-pull-requests">9. Reference Relevant Issues or Pull Requests</a></li>
-  <li><a href="#use-short-informative-messages-for-small-changes" id="toc-use-short-informative-messages-for-small-changes" class="nav-link" data-scroll-target="#use-short-informative-messages-for-small-changes">10. Use Short, Informative Messages for Small Changes</a></li>
-  <li><a href="#test-before-committing" id="toc-test-before-committing" class="nav-link" data-scroll-target="#test-before-committing">11. Test Before Committing</a></li>
-  <li><a href="#avoid-emoticons-and-slang" id="toc-avoid-emoticons-and-slang" class="nav-link" data-scroll-target="#avoid-emoticons-and-slang">12. Avoid Emoticons and Slang</a></li>
-  <li><a href="#example-of-a-well-structured-commit-message" id="toc-example-of-a-well-structured-commit-message" class="nav-link" data-scroll-target="#example-of-a-well-structured-commit-message">Example of a Well-Structured Commit Message:</a></li>
-  </ul></li>
+  <li><a href="#variable-values" id="toc-variable-values" class="nav-link active" data-scroll-target="#variable-values">Variable values</a></li>
+  <li><a href="#dimensions-and-coordinates" id="toc-dimensions-and-coordinates" class="nav-link" data-scroll-target="#dimensions-and-coordinates">Dimensions and Coordinates</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">13 NetCDF and <code>xarray</code></h1>
+</div>
 
 
 
-<section id="guidelines-for-writing-good-commit-messages" class="level1">
-<h1>Guidelines for Writing Good Commit Messages</h1>
-<section id="use-the-imperative-mood" class="level2">
-<h2 class="anchored" data-anchor-id="use-the-imperative-mood">1. Use the Imperative Mood</h2>
-<p>Write commit messages in the imperative mood (i.e., as if you’re giving a command). This is a widely accepted convention.</p>
-<p><strong>Example:</strong> - Good: <code>Add function to process user input</code> - Bad: <code>Added function to process user input</code> or <code>Adding function to process user input</code></p>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this lesson, we will get acquainted with a popuar format for working with multidimensional datasets called NetCDF and the Python package <code>xarray</code> which is based on NetCDF.</p>
+<div id="cell-2" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="variable-values" class="level3">
+<h3 class="anchored" data-anchor-id="variable-values">Variable values</h3>
+<p>The underlying data in the <code>xarray.DataArray</code> is a <code>numpy.array</code> that holds the variable values.</p>
+<div id="cell-4" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Values of a single variable at each point of the coords </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="keep-the-first-line-short-and-descriptive" class="level2">
-<h2 class="anchored" data-anchor-id="keep-the-first-line-short-and-descriptive">2. Keep the First Line Short and Descriptive</h2>
-<p>The first line of the commit message should summarize the changes in around 50 characters or less. This makes it easy to scan in logs or on GitHub.</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span> bug in data processing pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="provide-more-detail-in-the-body-if-necessary" class="level2">
-<h2 class="anchored" data-anchor-id="provide-more-detail-in-the-body-if-necessary">3. Provide More Detail in the Body (If Necessary)</h2>
-<p>If the commit requires further explanation, add a blank line after the summary and provide a more detailed description in the body. Focus on <strong>what</strong> and <strong>why</strong>, not necessarily <strong>how</strong>.</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Add</span> user authentication check before data access</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Previously,</span> users could access the data without proper authentication.</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">This</span> commit adds a check to ensure that only authenticated users can</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">access</span> the sensitive data.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="explain-the-why-and-the-impact" class="level2">
-<h2 class="anchored" data-anchor-id="explain-the-why-and-the-impact">4. Explain the “Why” and the Impact</h2>
-<p>Make sure the commit message explains the reason behind the change, not just what was changed. This helps future developers (or your future self) understand the motivation.</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Refactor</span> database query to improve performance</span>
+<section id="dimensions-and-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="dimensions-and-coordinates">Dimensions and Coordinates</h3>
+<p>To specify the dimensions of our upcoming <code>xarray.DataArray</code>, we must examine how we’ve constructed the <code>numpy.array</code> holding the temperature data. The first dimension is time, the second is latitude, and longitude the third.</p>
+<p>From our exercises, we can also see that the coordinates (values of each dimension) are:</p>
+<ul>
+<li>time coordinates are 2022-09-01, 2022-09-02, 2022-09-03</li>
+<li>latitude coordinates are 70, 60, 50, 40, 30 (notice decreasing order)</li>
+<li>longitude coordinates are 60, 70, 80, 90, 100 (notice increasing order)</li>
+</ul>
+<p>We add the dimensions as a tuple of strings and coordinates as a dictionary:</p>
+<div id="cell-6" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Names of the dimensions in the required order</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> previous query was causing significant lag for larger datasets.</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">This</span> change optimizes the query and reduces execution time by 40%.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create coordinates to use for indexing along each dimension </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> {<span class="st">'time'</span>:pd.date_range(<span class="st">"2022-09-01"</span>, <span class="st">"2022-09-03"</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          <span class="st">'lat'</span>:np.arange(<span class="dv">70</span>, <span class="dv">20</span>, <span class="op">-</span><span class="dv">10</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>          <span class="st">'lon'</span>:np.arange(<span class="dv">60</span>, <span class="dv">110</span>, <span class="dv">10</span>)}  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="attributes" class="level4">
+<h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
+<p>Next, we add the attributes (metadata) for our temperature data as a dictionary:</p>
+<div id="cell-8" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Attributes (metadata) of the data array </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>attrs <span class="op">=</span> { <span class="st">'title'</span>:<span class="st">'temperature across weather stations'</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">'standard_name'</span>:<span class="st">'air_temperature'</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">'units'</span>:<span class="st">'degree_c'</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="be-consistent" class="level2">
-<h2 class="anchored" data-anchor-id="be-consistent">5. Be Consistent</h2>
-<p>Use a consistent format for commit messages throughout the project. If your team follows a particular convention (e.g., prefixing messages with issue numbers), stick to it.</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Consistent format with issue tracking</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[ISSUE-123]</span> Fix broken link in user dashboard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="capitalize-the-first-letter-of-the-summary" class="level2">
-<h2 class="anchored" data-anchor-id="capitalize-the-first-letter-of-the-summary">6. Capitalize the First Letter of the Summary</h2>
-<p>Always start the commit message with a capital letter to keep it professional and uniform.</p>
-<p><strong>Example:</strong> - Good: <code>Update documentation for new feature</code> - Bad: <code>update documentation for new feature</code></p>
-</section>
-<section id="avoid-commit-messages-like-fixes-or-miscellaneous" class="level2">
-<h2 class="anchored" data-anchor-id="avoid-commit-messages-like-fixes-or-miscellaneous">7. Avoid Commit Messages Like “Fixes” or “Miscellaneous”</h2>
-<p>Vague or uninformative commit messages are not helpful. Avoid commit messages like “Fixes,” “Updates,” “Miscellaneous changes,” or “WIP.”</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Bad:</span> <span class="st">"Fix stuff"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Good:</span> <span class="st">"Fix missing validation for email input"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="group-related-changes-together" class="level2">
-<h2 class="anchored" data-anchor-id="group-related-changes-together">8. Group Related Changes Together</h2>
-<p>A commit should represent a single logical change. Avoid lumping multiple unrelated changes into a single commit. Instead, break them up into separate, focused commits.</p>
-<p><strong>Example:</strong> - Good: Commit the bug fix in one commit and the new feature in another. - Bad: Combine multiple changes in one commit with a message like “Fix bug and add new feature.”</p>
-</section>
-<section id="reference-relevant-issues-or-pull-requests" class="level2">
-<h2 class="anchored" data-anchor-id="reference-relevant-issues-or-pull-requests">9. Reference Relevant Issues or Pull Requests</h2>
-<p>If applicable, reference issue numbers, bug reports, or pull requests in the commit message to tie the commit to the broader project context.</p>
-<p><strong>Example:</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Fix</span> typo in data validation logic <span class="er">(</span><span class="co">#456)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="use-short-informative-messages-for-small-changes" class="level2">
-<h2 class="anchored" data-anchor-id="use-short-informative-messages-for-small-changes">10. Use Short, Informative Messages for Small Changes</h2>
-<p>Even for small changes, write clear and meaningful messages. Something like <code>Fix typo</code> or <code>Update README</code> is fine for minor commits as long as it’s clear what the change is about.</p>
-</section>
-<section id="test-before-committing" class="level2">
-<h2 class="anchored" data-anchor-id="test-before-committing">11. Test Before Committing</h2>
-<p>Ensure the code works as expected before committing, and write a commit message that reflects the final, working state of the change.</p>
-</section>
-<section id="avoid-emoticons-and-slang" class="level2">
-<h2 class="anchored" data-anchor-id="avoid-emoticons-and-slang">12. Avoid Emoticons and Slang</h2>
-<p>Commit messages should be professional. Avoid using emojis, abbreviations, or casual language.</p>
-<p><strong>Example:</strong> - Bad: <code>🔥 Fix all the things! 🚀</code> - Good: <code>Fix critical bugs in data parsing logic</code></p>
-</section>
-<section id="example-of-a-well-structured-commit-message" class="level2">
-<h2 class="anchored" data-anchor-id="example-of-a-well-structured-commit-message">Example of a Well-Structured Commit Message:</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Refactor</span> user input validation to reduce redundancy</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> validation logic for user input was repeated in multiple places.</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">This</span> commit refactors the validation into a separate function that</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">can</span> be reused across different modules. This improves code maintainability</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">and</span> reduces potential errors.</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Closes</span> <span class="co">#123</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="putting-it-all-together" class="level4">
+<h4 class="anchored" data-anchor-id="putting-it-all-together">Putting it all together</h4>
+<p>Finally, we put all these pieces together (data, dimensions, coordinates, and attributes) to create an <code>xarray.DataArray</code>:</p>
+<div id="cell-10" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize xarray.DataArray</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> xr.DataArray(data <span class="op">=</span> temp_data, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                    dims <span class="op">=</span> dims,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                    coords <span class="op">=</span> coords,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                    attrs <span class="op">=</span> attrs)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>temp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can also update the variable’s attributes after creating the object. Notice that each of the coordinates is also an <code>xarray.DataArray</code>, so we can add attributes to them.</p>
+<div id="cell-12" class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update attributes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>temp.attrs[<span class="st">'description'</span>] <span class="op">=</span> <span class="st">'Simple example of an xarray.DataArray'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add attributes to coordinates </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>temp.time.attrs <span class="op">=</span> {<span class="st">'description'</span>:<span class="st">'date of measurement'</span>}</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>temp.lat.attrs[<span class="st">'standard_name'</span>]<span class="op">=</span> <span class="st">'grid_latitude'</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>temp.lat.attrs[<span class="st">'units'</span>] <span class="op">=</span> <span class="st">'degree_N'</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>temp.lon.attrs[<span class="st">'standard_name'</span>]<span class="op">=</span> <span class="st">'grid_longitude'</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>temp.lon.attrs[<span class="st">'units'</span>] <span class="op">=</span> <span class="st">'degree_E'</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>temp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
