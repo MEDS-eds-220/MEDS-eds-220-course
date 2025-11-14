@@ -1,0 +1,228 @@
+# Assignment 4
+
+The total grade of the assignment will be divided in this way:
+
+- 20% - Task 1
+- 70% - Task 2, sections 2-7
+- 10% - Task 2, sections 8 and 9
+
+## Submission instructions 
+:::{.callout-warning appearance="minimal"}
+
+This assignment is due by **11:59 pm on Saturday, November 23**. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in these checklists:
+
+- File formatting and uploading:
+  - [ ] Answer for task 1 must be submitted as a PDF file.
+  - [ ] Answers for task 2 must be submitted as PDF file  to Gradescope, *not* a html or any other format.
+  - [ ] Double-check that each PDF is uploaded to the correct task on Gradescope. 
+  - [ ] Before you upload your finished notebook to Gradescope, please rename your notebook so it is called `hwk4-task2-false-color-YOURLASTNAME.pdf`.
+
+- Notebook PDF content checklists:
+  - [ ] Ensure your notebooks include a link to your assignment's GitHub repository in the designated section.
+  - [ ] The notebooks you submit must have your solutions to the exercises, They *should not be the blank template notebooks*. 
+  - [ ] The notebooks you submit must include your code *and* all required rendered plots, graphs, and printed output. Run all cells before exporting your .ipynb file to PDF and make sure all the outputs are visible.
+
+
+**Resubmissions after the due date due to not satisfying one of the checks above will be strictly held to the course's 50%-regrade resubmission policy (see syllabus).**
+
+If you have any questions about assignment logistics, please reach out to the TA or instructor by 5 pm Friday, November 22. 
+:::
+
+:::{.callout-warning appearance="minimal"}
+There is a separate gradescope assignment for task 2, section 7 (GitHub repository). For this submission, you will need to link your whole GitHub repository.
+:::
+
+
+:::{.callout-warning appearance="minimal" collapse="true" }
+### Converting your notebook to PDF
+To convert your notebook to PDF, we will first convert your notebook to HTML, and then save as PDF.  
+
+1. Open your notebook in VS code.
+
+2. Select the three dots at the top of your notebook. 
+
+
+![](images/export_instructions.png)
+
+3. Select Export > HTML (**not pdf**)
+
+
+![](images/export_bar.png){width=70%}
+
+
+4. Choose where you want to save this HTML to your computer
+
+5. Open up the html and go to File > Print > Save as PDF
+
+6. Save your PDF as ``hwk4-task2-false-color-YOURLASTNAME.pdf` and submit to Gradescope. 
+
+
+:::
+
+## Task 1: The politics of pixels reading
+
+When working with satellite data, it’s easy to assume that it is inherently objective and equally accessible to everyone. However, Bennett et al., in their paper *The Politics of Pixels: A Review and Agenda for Critical Remote Sensing* (2022 @bennett_politics_2022), challenge this assumption, arguing that remote sensing needs a critical lens. They emphasize that various sociopolitical factors influence who collects remotely sensed data, how it’s collected, and ultimately, who benefits from its insights. This reading will encourage you to explore the biases and inequalities that can be embedded in remote sensing technologies and practices.
+
+![](/assignments/images/spacex-VBNb52J8Trk-unsplash.jpg)
+
+
+**Read the paper and write a one-paragraph (between 100 and 150 words) reflection about it.**
+This paper is a bit denser than the others we’ve read, section V is worth special attention.
+**Review the [rubric for this assignment here](https://docs.google.com/document/d/1GQ8C0APsoIG1R9UQL-QGOtENYi413_Fv/edit?usp=sharing&ouid=111507336322611936333&rtpof=true&sd=true).** Answer at least one of the following questions for your reflection:
+
+1. Reflecting on your personal or professional background, how might sociopolitical factors shape the availability and interpretation of satellite and other remotely sensed data for communities or organizations you’re familiar with?
+
+2. What potential ethical responsibilities arise for environmental data scientists when working with remote sensing data that may carry biases or limitations? 
+
+3. If you were tasked with implementing remote sensing for a project, what steps might you take to ensure the data collected is fair, accessible, and unbiased? 
+
+
+:::{.callout-warning appearance="minimal"}
+Ready to submit your answer? Make sure your submission follows the checklist at the top of the assginment! 
+:::
+
+## Task 2:  Visualizing fire scars through false color
+
+In early January 2025, the Eaton Fire and Palisades Fire erupted nearly simultaneously in the foothills and coastal wildland-urban interface zones of Los Angeles County, fueled by powerful Santa Ana winds Together, they devastated thousands of homes, displaced tens of thousands of residents, and inflicted severe ecological and infrastructural damage.
+
+False color imagery, created using satellite data from instruments like Landsat, is a useful tool for monitoring wildfire impacts. By assigning infrared bands to visible colors, these images highlight vegetation health, burn severity, and the extent of fire scars. This approach helps researchers and land managers assess recovery efforts, identify high-risk areas, and plan restoration strategies.
+
+In this task, you will create a false color image of the Eaton and Palisades Fires using remote sensing data, highlighting the fire scar and exploring how coding and data visualization support environmental monitoring.
+
+![[Palisades Fire as seen from Downtown Los Angeles, Image captured via PTZ Camera/VMS system.](https://commons.wikimedia.org/wiki/File:PalisadesFire_fromDowntown.png)](/assignments/images/PalisadesFire_fromDowntown.png){width="70%"}
+
+### About the data
+
+In this task you will use two datsets. The first is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmosperically corrected surface reflectance data, collected by the Landsat 8 satellite. 
+
+The data was retrieved from the [Microsof Planetary Computer data catalogue](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) and clipped to an area surrounding the fire perimeters. This data should be used for visualization and educational purposes only and can be accessed at the `landsat8-2025-02-23-palisades-eaton.nc` in the [course shared data Google Drive](https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link).
+
+The second dataset will be fire perimeters for the Eaton and Palisades fires. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file).
+
+### Setup
+
+:::{.callout-tip appearance="minimal"}
+Create a new GitHub repository named `eds220-hwk4`. You will need to create one notebooks named `hwk4-task2-false-color-YOURLASTNAME.ipynb`.
+
+Your repository should have the following structure and include *only* these files:
+```default
+eds220-hwk4
+│--  README.md
+│--  hwk4-task2-false-color-YOURLASTNAME.ipynb
+|--  .gitignore
+```
+:::
+
+:::{.callout-warning appearance="minimal"}
+📋 Don't forget to read the [rubric for this task](https://docs.google.com/document/d/1-Zm731BLVCs1MXHT5R1H9rr6uvcwHnMZQ2q8xkQ_fWM/edit?usp=sharing) before you start working on it.
+:::
+
+### Instructions
+
+#### 1. Reading
+Read the following resources about false color images and Landsat imagery: 
+
+- [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue? How to Interpret a False-Color Satellite Image](https://earthobservatory.nasa.gov/features/FalseColor)
+
+- [What are the band designations for the Landsat satellites?](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites)
+
+- [Common Landsat Band Combinations](https://www.usgs.gov/media/images/common-landsat-band-combinations)
+
+<!--
+- [How do I use a scale factor with Landsat Level-2 science products?](https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products)
+-->
+
+
+:::{.callout-caution appearance="minimal"}
+Sections 2 through 5 must be completed in the `hwk4-task2-false-color-YOURLASTNAME.ipynb` notebook. In this notebook you will be using both your fire perimeter data and the Landsat data `landsat8-2025-02-23-palisades-eaton.nc`. You may need to complete data wrangling steps beyond the ones described to create the requested outputs.
+:::
+
+#### 2. Fire perimeter data exploration
+
+Explore the fire perimeter data and write a brief summary of the information you obtained from the preliminary exploration. Your summary should include, at least, the CRS of the data and whether this is projected or geographic. 
+
+#### 3. NetCDF data import
+
+On the terminal:
+
+a. Activate the EDS 220 conda environment and verify it is active.
+
+b. Install the netCDF4 package in the *EDS 220 environment* by running
+```default
+conda install -c conda-forge netcdf4
+```
+
+c. Verify that the `netcdf4` package was installed.
+
+In your notebook:
+
+d. Import the Landsat data using `xr.open_dataset()`.
+
+e. Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data's variables and dimensions.
+
+#### 4. Restoring geospatial information
+
+#### 5. True color image
+
+
+c. Drop the `band` dimension of the data. HINT: [`squeeze()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html) and [`drop_vars()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.drop_vars.html).
+
+d. Without creating any new variables: 
+  - select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
+  - convert it to a `numpy.array` using the `to_array()` method, and then 
+  - use `.plot.imshow()` to create an RGB image with the data. 
+There will be a warning, that's ok.
+
+e. Adjust the scale used for plotting the bands to get a true color image. 
+HINT: [Check the `robust` parameter](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting. 
+
+f. In a markdown cell write a brief explanation comparing the ouputs for parts (d) and (e). 
+
+#### 6. False color image
+Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).
+
+#### 7. Map
+a. Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire _perimeter_.  Customize it appropriately including, at least, an informative title and legend.
+
+b. Write a figure description for the map including a brief explanation of how false color imagery is being used.
+
+:::{.callout-caution appearance="minimal"}
+The rest of the sections are about updating and cleaning your notebooks and repository. **This is hugely important!** By maintaining clean, well-structured repositories and notebooks, you’re not only showcasing your technical skills but also building a portfolio that reflects your professionalism, attention to detail, and ability to collaborate effectively with others.
+
+Here is an [example of an organized repository and notebook](https://github.com/carmengg/eds220-oil-spills-sample-repo) based on the oil spills task from homework 3. 
+:::
+
+#### 8. Clean your notebooks
+
+The target audience for your notebooks is a fellow EDS 220 student who is just learning about wrangling raster data using Python. 
+
+- Add enough and appropriate comments to explain your code.
+- Add enough and appropriate markdown cells to explain the procedures you are using and their output.
+- First cell in the notebook must be a markdown cell including: 
+  - [ ] Title
+  - [ ] Author
+  - [ ] Link to GitHub repository containing the notebook (for grading purposes)
+- Each notebook must include an "About" section with the following subsections: 
+    - [ ] Purpose: what is this notebook about?
+    - [ ] Highlights: List of highlights of analysis (3 or 4 highlights). What do you consider to be the most important aspects of this coding exercise?
+    - [ ] About the data: Datasets description
+    - [ ] References: Formal references to datasets. You can use the APA style as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
+
+The rest of your notebook should be organized into logical subsections (indicated through markdown headers) for the analysis and visualization you are performing. The subsections should easily guide the reader through the analysis.
+
+#### 8. Update your repository {#sec-repo-instructions}
+
+Update your repository's README with (at least) the following (based on [EDS 296](https://ucsb-meds.github.io/README-guidelines/)):
+
+- [ ] **Title.** Short, but descriptive title.
+- [ ] **"About" section.** A brief explanation of the repository’s purpose.
+  Paragraphs or a bulleted list are both acceptable options. 
+  You may include an image or logo that represents the project.
+- [ ] **"Repository Structure" section.** A concise description of what’s housed in the repository.
+  This includes information about the repository structure or file organization.
+- [ ] **"Data" section.** Details regarding data access. Any necessary information on where data lives (e.g. is it housed in the repo, on a server, in a library / package etc.) and how to access it in order to run the code. 
+- [ ] **"References" section.** In an appropriate, consistent format, including links, provide a reference to the course and any other sources that supported the development of the repository. **Include formal references to the datasets.** You can use the APA style to cite data sources as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
+
+:::{.callout-warning appearance="minimal"}
+Ready to submit your answers? Make sure your submission follows the checklist at the top of the assginment! 
+:::
