@@ -141,7 +141,7 @@ Sections 2 through 5 must be completed in the `hwk4-task2-false-color-YOURLASTNA
 
 Explore the fire perimeter data and write a brief summary of the information you obtained from the preliminary exploration. Your summary should include, at least, the CRS of the data and whether this is projected or geographic. 
 
-#### 3. NetCDF data import
+#### 3. NetCDF data import and exploration
 
 On the terminal:
 
@@ -158,31 +158,42 @@ In your notebook:
 
 d. Import the Landsat data using `xr.open_dataset()`.
 
-e. Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data's variables and dimensions.
+e. Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data's variables, dimensions, and coordinates.
 
 #### 4. Restoring geospatial information
 
+a. Use `rio.crs` to print what is the CRS of this dataset. Is this a geospatial object?
+
+b. You may have noticed on section 3 that the geospatial information for this dataset is stored in the variable `spatial_ref`. Print the CRS by using accesing the `spatial_ref.crs_wkt` attribute of the dataset.
+
+c. Recover the geospatial information by using [`rio.write_crs()`](https://corteva.github.io/rioxarray/stable/getting_started/crs_management.html#Setting-the-CRS) and the spatial reference information form part b. 
+
+d. Print the CRS of the updated dataset. 
+
 #### 5. True color image
 
-
-c. Drop the `band` dimension of the data. HINT: [`squeeze()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html) and [`drop_vars()`](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.drop_vars.html).
-
-d. Without creating any new variables: 
+a. Without creating any new variables: 
   - select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
   - convert it to a `numpy.array` using the `to_array()` method, and then 
   - use `.plot.imshow()` to create an RGB image with the data. 
-There will be a warning, that's ok.
+There will be two warnings, that's ok.
 
-e. Adjust the scale used for plotting the bands to get a true color image. 
+b. Adjust the scale used for plotting the bands to get a true color image. 
 HINT: [Check the `robust` parameter](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting. 
 
-f. In a markdown cell write a brief explanation comparing the ouputs for parts (d) and (e). 
+c. To resolve the other warning, identify which bands have `nan` values. HINT: There are many ways of doing so. One option is to use [`numpy.isnan()`](https://numpy.org/devdocs/reference/generated/numpy.isnan.html).
+
+d. Use the [`.fillna()`](https://docs.xarray.dev/en/latest/generated/xarray.Dataset.fillna.html) mehtod for `xarray.Dataset`s to substitute the any `nan` values in the Landsat data for zero. 
+
+e. Create a new true color image that gets plotted without warnings. 
+
+f. In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (e). 
 
 #### 6. False color image
-Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).
+Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order). 
 
 #### 7. Map
-a. Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire _perimeter_.  Customize it appropriately including, at least, an informative title and legend.
+a. Create a map showing the shortwave infrared/near-infrared/red false color image together with both fire _perimeters_.  Customize it appropriately including, at least, an informative title and legend. You may also want to include text on the map to identify which fire is which.
 
 b. Write a figure description for the map including a brief explanation of how false color imagery is being used.
 
