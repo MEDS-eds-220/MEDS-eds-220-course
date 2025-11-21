@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
+<title>Social dimensions of Eaton and Palisades fires – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,30 +55,10 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -122,9 +102,6 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -223,17 +200,12 @@ div.csl-indent {
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
-  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
-  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
-  <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
-  <li><a href="#location-column-descriptions" id="toc-location-column-descriptions" class="nav-link" data-scroll-target="#location-column-descriptions">4. Location column descriptions</a></li>
-  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></a></li>
-  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">6. Examine state codes</a></li>
-  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">7. Brainstorm</a></li>
-  <li><a href="#exploratory-wrangling" id="toc-exploratory-wrangling" class="nav-link" data-scroll-target="#exploratory-wrangling">8. Exploratory wrangling</a></li>
-  <li><a href="#find-unique-state-codes" id="toc-find-unique-state-codes" class="nav-link" data-scroll-target="#find-unique-state-codes">9. Find unique state codes</a></li>
+  <li><a href="#metadata-exploration" id="toc-metadata-exploration" class="nav-link" data-scroll-target="#metadata-exploration">1. Metadata exploration</a></li>
+  <li><a href="#polygon-intersection" id="toc-polygon-intersection" class="nav-link" data-scroll-target="#polygon-intersection">2. Polygon intersection</a></li>
+  <li><a href="#polygon-clipping" id="toc-polygon-clipping" class="nav-link" data-scroll-target="#polygon-clipping">3. Polygon clipping</a></li>
+  <li><a href="#visualize-fire-perimeters-with-a-basemap" id="toc-visualize-fire-perimeters-with-a-basemap" class="nav-link" data-scroll-target="#visualize-fire-perimeters-with-a-basemap">4. Visualize fire perimeters with a basemap</a></li>
+  <li><a href="#visualize-eji-data" id="toc-visualize-eji-data" class="nav-link" data-scroll-target="#visualize-eji-data">5. Visualize EJI data</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -242,8 +214,8 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Water conflicts in the Colorado River Basin</h1>
-<p class="subtitle lead">Week 2 - Discussion section</p>
+<h1 class="title">Social dimensions of Eaton and Palisades fires</h1>
+<p class="subtitle lead">Week 8 - Discussion section</p>
 </div>
 
 
@@ -260,12 +232,20 @@ div.csl-indent {
 </header>
 
 
-<p>This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
-<ul>
-<li>Practice version control using git via the terminal</li>
-<li>Use methods to work with <code>pandas.Series</code> of strings using the <code>.str</code> accessor</li>
-<li>Practice method chaining</li>
-</ul>
+<!-- In this discussion section you will ...
+
+FILL OUT
+ -->
+<div class="callout callout-style-simple callout-caution no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The work in this section will be part of your final project blog post that will go on your website!</p>
+</div>
+</div>
+</div>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <div class="callout callout-style-simple callout-tip no-icon">
@@ -275,343 +255,174 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>In the workbench-1 server, start a new JupyterLab session or access an active one.</p></li>
-<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
-<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-2-co-basin-water-conflicts.ipynb</code>.</p></li>
-<li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
+<li><p>Find fire perimeters for the Eaton and Palisades fires that occurred in Los Angeles County on 2025. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file). <em>These are the same files you will use for assignment 4.</em></p></li>
+<li><p>Add the fire perimeter datasets to the <code>data</code> directory in your <code>eds-220-sections</code> directory.</p></li>
+<li><p>Download the <strong>2024</strong> <a href="https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html">Environmental Justice Index data</a> for <strong>California</strong> in the <strong>geodatabase</strong> data format. Add it to the <code>data</code> directory in your <code>eds-220-sections</code> directory.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<!-- ## About the data
+
+The [Environmental Justice Index] is [INSERT], it can be viewed and downloaded at 
+[EJI website](https://www.atsdr.cdc.gov/place-health/php/eji/index.html). EJI is a [WHO DOES THIS] [@CDC_ATSDR_EJI]
+
+[MINI DESCRIPTION OF WHAT IS IN IT]
+
+You can interactively explore this dataset through the [EJI explorer](https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html). 
+
+[WRITE SOMETHING ABOUT FIRE PERIMETERS] -->
+</section>
+<section id="metadata-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="metadata-exploration">1. Metadata exploration</h2>
+<ol type="a">
+<li>Review the CSV with the metadata information for the EJI data.</li>
+<li>Look at the variables and with your team <strong>select a few variables</strong> that, in your opinion, could influence a community’s response to a wildfire. You’ll be working with some of them in the following exercises.</li>
+</ol>
+</section>
+<section id="polygon-intersection" class="level2">
+<h2 class="anchored" data-anchor-id="polygon-intersection">2. Polygon intersection</h2>
+<ol type="a">
+<li><p>Open the fire perimeters and the EJI data and do initial data exploration.</p></li>
+<li><p>Spatially join the EJI data with the Palisades fire perimeter using <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.sjoin.html"><code>geopandas.sjoin()</code></a> to get a <code>geopandas.GeoDataFrame</code> that will have only have the census tracts intersecting the Palisades fire perimeter.</p></li>
+<li><p>Create an exploratory map showing</p>
 <ol type="1">
-<li><code>git status</code> : check git status</li>
-<li><code>git add FILE-NAME</code> : stage updated file</li>
-<li><code>git status</code> : check git status again to confirm</li>
-<li><code>git commit -m "Commit message"</code> : commit with message</li>
-<li><code>git pull</code> : check local repo is up to date (best practice)</li>
-<li><code>git push</code> : push changes to upstream repository</li>
+<li>the census tracts that intersect the Palisades fire perimeter and</li>
+<li>the Palisades fire perimeter.</li>
 </ol></li>
 </ol>
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING</strong>
-</p>
-</div>
-</div>
-</div>
-</section>
-<section id="general-directions" class="level2">
-<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
 <div class="callout callout-style-simple callout-tip no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<ul>
-<li>Add comments in each one of your code cells.</li>
-<li>Include markdown cells in between your code cells to add titles and information.</li>
-<li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
-</ul>
+<p>Discuss how big is the Palisades fire perimeter in relation to the census tracts.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="a">
+<li>Create the corresponding <code>geopandas.GeoDataFrame</code> and exploratory map for the Eaton fire.</li>
+</ol>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Discuss how big is the Eaton fire perimeter in relation to the census tracts intersectig the Eaton fire perimeter.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="about-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
-<p>The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../discussion-sections/images/co-river-basin.png" class="img-fluid figure-img"></p>
-<figcaption>Colorado River Basin. U.S. Bureau of Reclamation.</figcaption>
-</figure>
-</div>
-</section>
-<section id="archive-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
+<section id="polygon-clipping" class="level2">
+<h2 class="anchored" data-anchor-id="polygon-clipping">3. Polygon clipping</h2>
 <ol type="a">
-<li><p>Look through the dataset’s description in the ScienceBase repository. Find the following information:</p>
-<ol type="i">
-<li>Where was the data collected from?? <!-- 
-articles from newspapers describing water-related events in geographic areas in the Basin
---></li>
-<li>During what time frame were the observations in the dataset collected? <!--
-2005-2021
---></li>
-<li>What was the author’s perceived value of this dataset? <!--
- examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
---></li>
-</ol></li>
-<li><p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.</p></li>
-<li><p>Take a look at the data’s metadata by clicking on the “View” icon of the <code>Coded Events Colorado River Basin Water Conflict Table Metadata.xml</code> file.</p></li>
+<li>Clip the census tracts to the Palisades fire perimeter using <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.clip.html"><code>geopandas.clip()</code></a>.</li>
+<li>Do the same for the Eaton fire perimeter.</li>
+<li>Quickly visualize your data.</li>
 </ol>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-<!-- 3 minutes -->
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Discuss with your group the difference between a spatial join (step 2) and clipping (step 3). Make sure you understand the difference and what your goal is when transforming geospatial data!</p>
+</div>
+</div>
+</div>
 </section>
-<section id="data-loading" class="level2">
-<h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
-<!--
-a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
--->
+<section id="visualize-fire-perimeters-with-a-basemap" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-fire-perimeters-with-a-basemap">4. Visualize fire perimeters with a basemap</h2>
+<p>To add a basemap to our plot we will be using the <a href="https://contextily.readthedocs.io/en/latest/"><code>contextily</code></a> library.</p>
 <ol type="a">
-<li><p>Create a new directory <code>data/</code> inside your <code>eds-220-sections</code> directory.</p></li>
-<li><p>Download the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> and upload it into the <code>data/</code> folder.</p></li>
-<li><p>Update the <code>.gitignore</code> file of your <code>eds-220-sections</code> so it ignores the <code>data/</code> folder. Push the changes to this file. Verify that git is ignoring the data file. <strong>Note:</strong> If you update the <code>.gitignore</code> file via GitHub, you need to run <code>git pull</code> when you go back to the server.</p></li>
-<li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
+<li><p>Import the <code>contextily</code> library at the top of your notebook as <code>ctx</code>. This library is already installed in the EDS 220 environment.</p></li>
+<li><p>Use and update the code below to plot the fire perimeters adding a basemap:</p></li>
 </ol>
-<!--
-```python
-import pandas as pd
-pd.set_option("display.max.columns", None)
-
-df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
-df.head(5)
-```
--->
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">12</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add basemap using contextily</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ctx.add_basemap(ax, source<span class="op">=</span>ctx.providers.OpenStreetMap.Mapnik)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD FIRE PERIMETERS: UPDATE FILL TRANSPARENCY AND COLOR</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD LEGEND OR ANNOTATION TO IDENTIFY EACH FIRE</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD TITLE</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="preliminary-data-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
+<section id="visualize-eji-data" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-eji-data">5. Visualize EJI data</h2>
 <ol type="a">
-<li><p>Set <code>pandas</code> to display all columns in the data frame.</p></li>
-<li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
+<li>Use and update the code below to plot one of the variables you and your team explored in step 1 as being relevant to a community’s response to a wildfire.</li>
 </ol>
-<!--
-```python
-# df.head()
-# df.shape
-# df.columns
-# df.Stakeholders.unique()
-```
-
--->
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM 🙌</strong>
-</p>
-<p style="text-align: center;">
-<strong>YOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS</strong>
-</p>
-<p style="text-align: center;">
-<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING</strong>
-</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="location-column-descriptions" class="level2">
-<h2 class="anchored" data-anchor-id="location-column-descriptions">4. Location column descriptions</h2>
-<p>In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 90%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Column</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Place</td>
-<td>Where the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.</td>
-</tr>
-<tr class="even">
-<td>State</td>
-<td>State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="string-accessor-for-pandas.series" class="level2">
-<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></h2>
-<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
-<ol type="a">
-<li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
-</ol>
-<div id="48615eaf" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0    California; Nevada
-1               Arizona
-2                   NaN
-3          Nevada; Utah
-dtype: object</code></pre>
+<div id="05a867df" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">10</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># UPDATE WITH YOU EJI VARIABLE FROM STEP 1</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>vmin <span class="op">=</span> <span class="bu">min</span>(census_within_palisades[eji_variable].<span class="bu">min</span>(), census_within_eaton[eji_variable].<span class="bu">min</span>())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>vmax <span class="op">=</span> <span class="bu">max</span>(census_within_palisades[eji_variable].<span class="bu">max</span>(), census_within_eaton[eji_variable].<span class="bu">max</span>())</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>census_within_palisades.plot(</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span> eji_variable,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax1,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'UPDATE TITLE'</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">'off'</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Eaton perimeter</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>census_within_eaton.plot(</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span>eji_variable,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax2,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'UPDATE TITLE'</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">'off'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Add overall title</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'YOUR VARIABLE HERE - Fire Areas Comparison'</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable( norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.25</span>, <span class="fl">0.08</span>, <span class="fl">0.5</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'YOUR VARIABLE HERE (WITH UNITS)'</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<div id="4039747b" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x1102bd510&gt;</code></pre>
+<div class="callout-body-container">
+<p>With your team, write a short paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildifre relief?</p>
 </div>
-</div>
-<div id="7d1efd9d" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">0</th>
-<th data-quarto-table-cell-role="th">1</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>California</td>
-<td>Nevada</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Arizona</td>
-<td>None</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Nevada</td>
-<td>Utah</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<div id="9a6e9719" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>0  0    California
-   1        Nevada
-1  0       Arizona
-3  0        Nevada
-   1          Utah
-dtype: object</code></pre>
 </div>
 </div>
 </section>
-<section id="examine-state-codes" class="level2">
-<h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
-<p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflicts</strong>.</p>
-<ol type="a">
-<li>What are the unique values in the <code>States</code> column once filtering the dataset for states that have a water conflict? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in markdown cells, not as comments.</li>
-</ol>
-<!--
-```python
-print(df['State'].unique())
-```
-
-```python
-for x in df['State'].unique():
-    print(x)
-```
--->
-</section>
-<section id="brainstorm" class="level2">
-<h2 class="anchored" data-anchor-id="brainstorm">7. Brainstorm</h2>
-<ol type="a">
-<li><p>Individually, write step-by-step instructions on how you would wrangle the data frame <code>df</code> to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.</p></li>
-<li><p>Discuss your step-by-step instructions with your team.</p></li>
-</ol>
-<p>The next exercises will guide you through finding the unique state codes in the dataset. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
-<!--
-## X. Drop NAs
-
-Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
-
-```python
-states = df['State'].dropna()
-states
-```
-
-```python
-states.hasnans
-```
--->
-</section>
-<section id="exploratory-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="exploratory-wrangling">8. Exploratory wrangling</h2>
-<ol type="a">
-<li>Perform the following wrangling:
-<ol type="i">
-<li>select the State column from the <code>df</code> data frame</li>
-<li>split the strings in the column by the delimeter <code>;</code> into different columns</li>
-<li>stack the results of the resulting data frame into a single <code>pandas.Series</code></li>
-<li>find the unique string values in the resulting series</li>
-</ol></li>
-</ol>
-<p>Your final answer should use method chaining without creating new variables.</p>
-<!--
-```python
-df['State'].str.split(';', expand=True).stack().unique()
-```
--->
-<p style="text-align: center;">
-<strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?</strong>
-</p>
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-</section>
-<section id="find-unique-state-codes" class="level2">
-<h2 class="anchored" data-anchor-id="find-unique-state-codes">9. Find unique state codes</h2>
-<ol type="a">
-<li><p>Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?</p></li>
-<li><p>Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
-</ol>
-<!--
-```python
-(df['State'].str.split(';', expand=True)
-            .stack()
-            .str.strip()
-            .unique()
-            )
-```
--->
-<ol start="3" type="a">
-<li>Bonus: How many articles mention each state?</li>
-</ol>
-<!--
-```python
-(df['State'].str.split(';', expand=True)
-            .stack()
-            .str.strip()
-            .value_counts()
-            )
-```
--->
-<p style="text-align: center;">
-<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
-</p>
-
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-holloman_coded_2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. V. Holloman, M. K. Hines, and D. K. Zoanni, <span>“Coded <span>Water</span> <span>Conflict</span> and <span>Crisis</span> <span>Events</span> in the <span>Colorado</span> <span>River</span> <span>Basin</span>, <span>Derived</span> from <span>LexisNexis</span> search 2005-2021.”</span> U.S. Geological Survey, 2023. doi: <a href="https://doi.org/10.5066/P9X6WR7J">10.5066/P9X6WR7J</a>. Available: <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480</a>. [Accessed: Sep. 27, 2024]</div>
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Protected areas code refactoring – EDS 220 - Working with Environmental Datasets</title>
+<title>Water conflicts in the Colorado River Basin – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,7 +78,7 @@ div.csl-indent {
 }</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -122,6 +122,9 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -220,13 +223,17 @@ div.csl-indent {
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#metadata-exploration" id="toc-metadata-exploration" class="nav-link" data-scroll-target="#metadata-exploration">1. Metadata exploration</a></li>
-  <li><a href="#plan-refactoring" id="toc-plan-refactoring" class="nav-link" data-scroll-target="#plan-refactoring">2. Plan refactoring</a></li>
-  <li><a href="#refactor" id="toc-refactor" class="nav-link" data-scroll-target="#refactor">3. Refactor!</a></li>
-  <li><a href="#finish-percentage-coverage" id="toc-finish-percentage-coverage" class="nav-link" data-scroll-target="#finish-percentage-coverage">4. Finish percentage coverage</a></li>
-  <li><a href="#investigate-issues" id="toc-investigate-issues" class="nav-link" data-scroll-target="#investigate-issues">5. Investigate issues</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
+  <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
+  <li><a href="#location-column-descriptions" id="toc-location-column-descriptions" class="nav-link" data-scroll-target="#location-column-descriptions">4. Location column descriptions</a></li>
+  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></a></li>
+  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">6. Examine state codes</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">7. Brainstorm</a></li>
+  <li><a href="#exploratory-wrangling" id="toc-exploratory-wrangling" class="nav-link" data-scroll-target="#exploratory-wrangling">8. Exploratory wrangling</a></li>
+  <li><a href="#find-unique-state-codes" id="toc-find-unique-state-codes" class="nav-link" data-scroll-target="#find-unique-state-codes">9. Find unique state codes</a></li>
   </ul>
 </nav>
     </div>
@@ -235,8 +242,8 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Protected areas code refactoring</h1>
-<p class="subtitle lead">Week 7 - Discussion section</p>
+<h1 class="title">Water conflicts in the Colorado River Basin</h1>
+<p class="subtitle lead">Week 2 - Discussion section</p>
 </div>
 
 
@@ -253,17 +260,12 @@ div.csl-indent {
 </header>
 
 
-<p>In this discussion section you will practice refactoring code. <strong>Refactoring</strong> means improving the structure or readability of your coude without changing what it does. The goal is to make code cleaner, easier to understand, and easier to maintain. For example, you might refactor by:</p>
+<p>This discussion section will guide you through exploring data about water-related conflicts at the Colorado River Basin using data from the <a href="https://www.usgs.gov">U.S. Geological Survey (USGS)</a>. In this discussion section, you will:</p>
 <ul>
-<li>renaming variables to make their purpose clearer</li>
-<li>grouping variables into more transparent data structures</li>
-<li>removing hard-coded information</li>
-<li>creating functions to take care of repeated tasks</li>
-<li>breaking down long functions into smaller ones</li>
-<li>simplifying complex logic flows</li>
-<li>streamlining repeated code.</li>
+<li>Practice version control using git via the terminal</li>
+<li>Use methods to work with <code>pandas.Series</code> of strings using the <code>.str</code> accessor</li>
+<li>Practice method chaining</li>
 </ul>
-<p>Though the main goal when we are programming is to make our code do what we want, refactoring is a good habit that can make it easier to build upon our work and share it with others.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <div class="callout callout-style-simple callout-tip no-icon">
@@ -273,93 +275,341 @@ div.csl-indent {
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>Download the notebook <code>week7-refactoring.ipynb</code> from the <a href="https://drive.google.com/drive/folders/1L1bvxICUy1OkW5_UNMA_WTjOCXUaE8Nz?usp=share_link">course’s Google Drive</a> and move it inside your <code>eds-220-sections</code> directory.</p></li>
-<li><p>Download the zip file <code>WDPA_Nov2025_Latam.zip</code>from the course’s <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link">Google Drive</a>, unzip it, and add it to the <code>data</code> directory in your <code>eds-220-sections</code> directory.</p></li>
-<li><p>Run the <code>week7-refactoring.ipynb</code> notebook to make sure you can access the data.</p></li>
+<li><p>In the workbench-1 server, start a new JupyterLab session or access an active one.</p></li>
+<li><p>In the terminal, use <code>cd</code> to navigate into the <code>eds-220-sections</code> directory. Use <code>pwd</code> to verify <code>eds-220-sections</code> is your current working directory.</p></li>
+<li><p>Create a new Python notebook inside your <code>eds-220-sections</code> directory and rename it to <code>section-2-co-basin-water-conflicts.ipynb</code>.</p></li>
+<li><p>Use the terminal to stage, commit, and push this file to the remote repository. Remember:</p>
+<ol type="1">
+<li><code>git status</code> : check git status</li>
+<li><code>git add FILE-NAME</code> : stage updated file</li>
+<li><code>git status</code> : check git status again to confirm</li>
+<li><code>git commit -m "Commit message"</code> : commit with message</li>
+<li><code>git pull</code> : check local repo is up to date (best practice)</li>
+<li><code>git push</code> : push changes to upstream repository</li>
+</ol></li>
 </ol>
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM</strong>
+</p>
+<p style="text-align: center;">
+<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY SET UP YOUR NOTEBOOKS BEFORE CONTINUING</strong>
+</p>
+</div>
+</div>
+</div>
+</section>
+<section id="general-directions" class="level2">
+<h2 class="anchored" data-anchor-id="general-directions">General directions</h2>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<ul>
+<li>Add comments in each one of your code cells.</li>
+<li>Include markdown cells in between your code cells to add titles and information.</li>
+<li>Indications about when to commit and push changes are included, but you are encouraged to commit and push more often.</li>
+</ul>
 </div>
 </div>
 </div>
 </section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
-<p>The World Database on Protected Areas (WDPA) is the only global database of natural protected areas, it can be viewed and downloaded at <a href="www.protectedplanet.net">www.protectedplanet.net</a>. WDPA is a joint project of the United Nations Environment Programme World Conservation Monitoring Centre (UNEP-WCMC) and the International Union for Conservation of Nature (IUCN) <span class="citation" data-cites="UNEPWCMC_2019"><a href="#ref-UNEPWCMC_2019" role="doc-biblioref">[1]</a></span>. This dataset includes both marine and terrestrial protected areas, combining both spatial and attribute data <span class="citation" data-cites="UNEPWCMC_IUCN_2025"><a href="#ref-UNEPWCMC_IUCN_2025" role="doc-biblioref">[2]</a></span>.</p>
+<p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
+<p>The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/WDPA-data-viewer.png" class="img-fluid figure-img"></p>
-<figcaption>Image from the WDPA data viewer at <a href="www.protectedplanet.net">www.protectedplanet.net</a>.</figcaption>
+<p><img src="../discussion-sections/images/co-river-basin.png" class="img-fluid figure-img"></p>
+<figcaption>Colorado River Basin. U.S. Bureau of Reclamation.</figcaption>
 </figure>
 </div>
-<p>The data used in this exercise is a subset of the original dataset and it <em>only includes polygons for protected areas in Latin America</em> (the original dataset is global with both polygon and point data). This subset was prepared for educational purposes and can be downloaded from the course’s <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link">Google Drive</a> through the zip file <code>WDPA_Nov2025_Latam.zip</code>. It maintains the file structure of the original complete dataset.</p>
 </section>
-<section id="metadata-exploration" class="level2">
-<h2 class="anchored" data-anchor-id="metadata-exploration">1. Metadata exploration</h2>
-<ol type="1">
-<li><p>This dataset is exceptionally well documented. Take time to look through the PDFs associated with the data and investigate what the values for each column represent.</p></li>
-<li><p>Use the data viewer in the <a href="https://www.protectedplanet.net/en">WDPA website</a> to briefly explore the data over Central America.</p></li>
-</ol>
-</section>
-<section id="plan-refactoring" class="level2">
-<h2 class="anchored" data-anchor-id="plan-refactoring">2. Plan refactoring</h2>
-<p>In this step you will not run or write any code. The goal is to help you inspect code and make a plan without the temptation to start coding or running any cells!</p>
+<section id="archive-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="archive-exploration">1. Archive exploration</h2>
 <ol type="a">
-<li><p>Imagine you are given <a href="../discussion-sections-upcoming/ds7-refactoring-development/week7-discussion-section-EXERCISE.html">this preliminary analysis</a> a colleague has been working and a last bit that they left unfinished. Take time to read the code to understand what is being done.</p></li>
-<li><p>This exploratory analysis has code that can be streamlined. With your group, discuss some ways in which you could streamline the code to avoid repetitions that may make this code harder to update. <em>You could update the code in any way you want.</em></p></li>
-<li><p>Write down the high-level steps you will implement in your refactoring.</p></li>
+<li><p>Look through the dataset’s description in the ScienceBase repository. Find the following information:</p>
+<ol type="i">
+<li>Where was the data collected from?? <!-- 
+articles from newspapers describing water-related events in geographic areas in the Basin
+--></li>
+<li>During what time frame were the observations in the dataset collected? <!--
+2005-2021
+--></li>
+<li>What was the author’s perceived value of this dataset? <!--
+ examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
+--></li>
+</ol></li>
+<li><p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.</p></li>
+<li><p>Take a look at the data’s metadata by clicking on the “View” icon of the <code>Coded Events Colorado River Basin Water Conflict Table Metadata.xml</code> file.</p></li>
 </ol>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+<!-- 3 minutes -->
 </section>
-<section id="refactor" class="level2">
-<h2 class="anchored" data-anchor-id="refactor">3. Refactor!</h2>
+<section id="data-loading" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
+<!--
+a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
+-->
 <ol type="a">
-<li>Work with your group to refactor the code to calculate the percentage of protected areas and obtain the exact same print-out:</li>
+<li><p>Create a new directory <code>data/</code> inside your <code>eds-220-sections</code> directory.</p></li>
+<li><p>Download the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> and upload it into the <code>data/</code> folder.</p></li>
+<li><p>Update the <code>.gitignore</code> file of your <code>eds-220-sections</code> so it ignores the <code>data/</code> folder. Push the changes to this file. Verify that git is ignoring the data file. <strong>Note:</strong> If you update the <code>.gitignore</code> file via GitHub, you need to run <code>git pull</code> when you go back to the server.</p></li>
+<li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Total protected area in Belize (sq. km): 10,181.87</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Total protected area in Costa Rica (sq. km): 199,170.72</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Total protected area in El Salvador (sq. km): 5,701.12</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Total protected area in Guatemala (sq. km): 40,316.17</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Total protected area in Honduras (sq. km): 96,103.89</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Total protected area in Nicaragua (sq. km): 84,985.39</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Total protected area in Panama (sq. km): 133,553.40</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="finish-percentage-coverage" class="level2">
-<h2 class="anchored" data-anchor-id="finish-percentage-coverage">4. Finish percentage coverage</h2>
-<p>The colleague writing this code ran out of steam and the calculations for the percentage of protected area relative to each country’s land area was not finished.</p>
-<ol type="a">
-<li>Update your code to print the corresponding percentages for each Central American country.</li>
-</ol>
-</section>
-<section id="investigate-issues" class="level2">
-<h2 class="anchored" data-anchor-id="investigate-issues">5. Investigate issues</h2>
-<p>Discuss the following with your team:</p>
-<ul>
-<li>Do these percentages make sense? Why or why not?</li>
-<li>Are there known data quality or use recommendations this colleague should have taken into account since the start of the analysis? Take some time to look through the <code>WDPA_WDOECM_Manual</code> file.</li>
-<li>How should the analysis change if we wanted to calculate the percentage of <em>terrestrial</em> protected area per country accurately?</li>
-</ul>
-<div class="callout callout-style-simple callout-warning no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Remember: Geospatial analysis should be done carefully and with consideration of the multiple ways the data interact with each other. Rarely does a straightforward analysis capture the nuance that this kind of dataset may have!</p>
-</div>
-</div>
-</div>
-</section>
-<section id="references" class="level2">
+<!--
+```python
+import pandas as pd
+pd.set_option("display.max.columns", None)
 
+df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
+df.head(5)
+```
+-->
+</section>
+<section id="preliminary-data-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
+<ol type="a">
+<li><p>Set <code>pandas</code> to display all columns in the data frame.</p></li>
+<li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
+</ol>
+<!--
+```python
+# df.head()
+# df.shape
+# df.columns
+# df.Stakeholders.unique()
+```
+
+-->
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM 🙌</strong>
+</p>
+<p style="text-align: center;">
+<strong>YOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS</strong>
+</p>
+<p style="text-align: center;">
+<strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+</section>
+<section id="location-column-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="location-column-descriptions">4. Location column descriptions</h2>
+<p>In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Place</td>
+<td>Where the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td>State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="string-accessor-for-pandas.series" class="level2">
+<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></h2>
+<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
+<ol type="a">
+<li>The code below gives a brief demonstration of the using the <code>str</code> accessor to use the <code>split()</code> method for <code>pandas.Series</code>. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.</li>
+</ol>
+<div id="83a981a7" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0    California; Nevada
+1               Arizona
+2                   NaN
+3          Nevada; Utah
+dtype: object</code></pre>
+</div>
+</div>
+<div id="0aa30085" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x107cec1a0&gt;</code></pre>
+</div>
+</div>
+<div id="0a9c47c9" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># .split splits strings by ';' and expands output into separate columns</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>California</td>
+<td>Nevada</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Arizona</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Nevada</td>
+<td>Utah</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="3be50559" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use stack() method to flatten the data frame into a series</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># default is to drop NAs and None from result</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>, expand<span class="op">=</span><span class="va">True</span>).stack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0  0    California
+   1        Nevada
+1  0       Arizona
+3  0        Nevada
+   1          Utah
+dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="examine-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
+<p>Our goal today is to <strong>find which states are reported in the dataset as having a water conflicts</strong>.</p>
+<ol type="a">
+<li>What are the unique values in the <code>States</code> column once filtering the dataset for states that have a water conflict? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in markdown cells, not as comments.</li>
+</ol>
+<!--
+```python
+print(df['State'].unique())
+```
+
+```python
+for x in df['State'].unique():
+    print(x)
+```
+-->
+</section>
+<section id="brainstorm" class="level2">
+<h2 class="anchored" data-anchor-id="brainstorm">7. Brainstorm</h2>
+<ol type="a">
+<li><p>Individually, write step-by-step instructions on how you would wrangle the data frame <code>df</code> to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.</p></li>
+<li><p>Discuss your step-by-step instructions with your team.</p></li>
+</ol>
+<p>The next exercises will guide you through finding the unique state codes in the dataset. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
+<!--
+## X. Drop NAs
+
+Use the `dropna()` method on the State column to create a new `pandas.Series` called `states` without NAs. Confirm there are no NAs in the new `states` series.
+
+```python
+states = df['State'].dropna()
+states
+```
+
+```python
+states.hasnans
+```
+-->
+</section>
+<section id="exploratory-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-wrangling">8. Exploratory wrangling</h2>
+<ol type="a">
+<li>Perform the following wrangling:
+<ol type="i">
+<li>select the State column from the <code>df</code> data frame</li>
+<li>split the strings in the column by the delimeter <code>;</code> into different columns</li>
+<li>stack the results of the resulting data frame into a single <code>pandas.Series</code></li>
+<li>find the unique string values in the resulting series</li>
+</ol></li>
+</ol>
+<p>Your final answer should use method chaining without creating new variables.</p>
+<!--
+```python
+df['State'].str.split(';', expand=True).stack().unique()
+```
+-->
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+</section>
+<section id="find-unique-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="find-unique-state-codes">9. Find unique state codes</h2>
+<ol type="a">
+<li><p>Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?</p></li>
+<li><p>Update your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
+</ol>
+<!--
+```python
+(df['State'].str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .unique()
+            )
+```
+-->
+<ol start="3" type="a">
+<li>Bonus: How many articles mention each state?</li>
+</ol>
+<!--
+```python
+(df['State'].str.split(';', expand=True)
+            .stack()
+            .str.strip()
+            .value_counts()
+            )
+```
+-->
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-UNEPWCMC_2019" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">UNEP-WCMC, <em>User manual for the world database on protected areas and world database on other effective area-based conservation measures: Version 1.6</em>. Cambridge, UK: <span>UNEP-WCMC</span>, 2019. Available: <a href="http://wcmc.io/WDPA_Manual">http://wcmc.io/WDPA_Manual</a></div>
-</div>
-<div id="ref-UNEPWCMC_IUCN_2025" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">UNEP-WCMC and IUCN, <span>“Protected planet: The world database on protected areas (WDPA) [on-line], november 2025.”</span> <a href="https://www.protectedplanet.net" class="uri">https://www.protectedplanet.net</a>; <span>UNEP-WCMC and IUCN</span>, Cambridge, UK, 2025.</div>
+<div id="ref-holloman_coded_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">D. V. Holloman, M. K. Hines, and D. K. Zoanni, <span>“Coded <span>Water</span> <span>Conflict</span> and <span>Crisis</span> <span>Events</span> in the <span>Colorado</span> <span>River</span> <span>Basin</span>, <span>Derived</span> from <span>LexisNexis</span> search 2005-2021.”</span> U.S. Geological Survey, 2023. doi: <a href="https://doi.org/10.5066/P9X6WR7J">10.5066/P9X6WR7J</a>. Available: <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480</a>. [Accessed: Sep. 27, 2024]</div>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
