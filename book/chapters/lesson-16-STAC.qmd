@@ -232,16 +232,82 @@ sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)
 
 :::{.callout-tip}
 ## Exercise
-The `'cop-dem-glo-90'` collection contains the Copernicus Digital Elevation Model (DEM) at 90m resolution data. 
+The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem) collection contains elevation data at 90 m spatial resolution. The collection ID in the MPC catalog is `'cop-dem-glo-90'`.
 
 1) Reuse the `bbox` for Santa Barbara to look for items in this collection. 
-2) Get the first item in the search and examine its assets.
+2) Get the first item in the search and examine its properties and assets.
 3) Check the item's rendered preview asset by clicking on it's URL.
-4) Open and plot the item's data using `rioxarray`.
+4) Open and plot the item's data using `rioxarray`, save it into a variable named `dem`.
 5) Obtain the maximum and minimum elevation on the scene as *numbers*. 
-6) Print the maximum and minimum elevation [rounded to two decimal points using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). 
+6) Print the maximum and minimum elevation [rounded to two decimal points using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). For vertical units, consult the [data's handbook](https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf).
 :::
 
+<!--
+
+```{python}
+# Open DEM item over SB
+search = catalog.search(
+    collections=["cop-dem-glo-90"],
+    intersects = bbox,
+)
+items = search.item_collection()
+
+dem = rioxr.open_rasterio(items[0].assets['data'].href)
+```
+-->
+
+
+## Aggregation
+
+Let's take a look at our elevation raster over Santa Barbara:
+
+```{python}
+dem.plot()
+```
+
+Rasters with high spatial resolution can offer great insight into fine-scale patterns, but can also be challenging to process due to their size.
+
+We can use **aggregation methods** to **spatially downsample** a raster into a coarser resolution. 
+
+A simple way to spatially downsample an `xarray.DataArray` is:
+
+```python
+xdataarray.coarsen(x=x_window, y=y_window).aggr()
+```
+where:
+
+- `xdataarray` is a 2-dimensional `xarray.DataArray` with dimensions `x` and `y`. 
+- `x` and `y` are the names dimensions of the `xarray.DataArray` (these could have other names like `lon`/`lat`)
+- `x_window` and `y_window` are the dimensions of the window used to make the aggregation (must be an integer). 
+- `aggr()` is an aggregator function, this is the function which will be applied to each window. Examples are `min()`, `max()`, `sum()` and `mean()`.
+
+
+**Example**
+
+Suppose we want to coarsen our DEM elevation raster from 1200x1200 pixels to a raster of 60x60 pixels by calculating the maximun at each window. Remember the windows are non-overlapping, so we will obtain one pixel per window. A quick division tells us that to got from 1200x1200 to 60x60 we will need to use a 20x20 window.  The aggregator function on each of this window will be `max()`.
+
+Our call looks like this:
+
+```{python}
+# Coarsen to a 60x60 raster calculating the maximum value in each window
+dem_coarse = dem.coarsen(x=20,y=20).max()
+dem_coarse
+```
+
+```{python}
+# Inspect old and coarsened resolution
+print(f"old resolution: {dem.rio.width}x{dem.rio.height}")
+print(f"coarse resolution: {dem_coarse.rio.width}x{dem_coarse.rio.height}")
+dem_coarse.plot()
+```
+
+
+:::{.callout-tip}
+## Exercise
+1. Downsample the elevation raster into a 240x240 raster by taking the average over windows of the appropriate size. Plot the resulting raster.
+2. Use an f-string to check whether the spatial bounds of the rasters have changed.
+3. If you are curious about the different colormaps, check out the [`xarray documentation`](https://docs.xarray.dev/en/latest/user-guide/plotting.html#colormaps).
+:::
 
 <!--
 ## Exercise
@@ -290,7 +356,7 @@ STAC Documentation:
 
 - [Read a STAC Catalog Using PySTAC](https://stacspec.org/en/tutorials/1-read-stac-python/)
 
-[Microsoft Planetary Computer Documentation - Reading Data from the STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/)
+- [Microsoft Planetary Computer Documentation - Reading Data from the STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/)
 
 <!-- https://planetarycomputer.microsoft.com/docs/tutorials/hurricane-florence-animation/
 
