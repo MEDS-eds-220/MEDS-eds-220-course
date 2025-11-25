@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>assignment4-palisades – EDS 220 - Working with Environmental Datasets</title>
+<title>assignment4-thomas-fire – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -178,8 +178,12 @@ div.csl-indent {
  <span class="dropdown-text">assignment 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../assignments/assignment4-palisades.html">
+    <a class="dropdown-item" href="../assignments/assignment4-palisades-eaton-fires.html">
  <span class="dropdown-text">assignment 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../assignments/final-project.html">
+ <span class="dropdown-text">final project</span></a>
   </li>  
     </ul>
   </li>
@@ -244,8 +248,8 @@ div.csl-indent {
 <p>The total grade of the assignment will be divided in this way:</p>
 <ul>
 <li>20% - Task 1</li>
-<li>70% - Task 2, sections 2-7</li>
-<li>10% - Task 2, sections 8 and 9</li>
+<li>70% - Task 2, sections 2-6</li>
+<li>10% - Task 2, section 7</li>
 </ul>
 <section id="submission-instructions" class="level2">
 <h2 class="anchored" data-anchor-id="submission-instructions">Submission instructions</h2>
@@ -255,14 +259,18 @@ div.csl-indent {
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>This assignment is due by <strong>11:59 pm on Saturday, November 22</strong>. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in these checklists:</p>
+<p>This assignment is due by <strong>11:59 pm on Saturday, November 23</strong>. All tasks for this assignment should be submitted via Gradescope. Make sure you double-check your submission to ensure it satisfies all the items in these checklists:</p>
 <ul>
 <li>File formatting and uploading:
 <ul class="task-list">
 <li><label><input type="checkbox">Answer for task 1 must be submitted as a PDF file.</label></li>
 <li><label><input type="checkbox">Answers for task 2 must be submitted as PDF file to Gradescope, <em>not</em> a html or any other format.</label></li>
 <li><label><input type="checkbox">Double-check that each PDF is uploaded to the correct task on Gradescope.</label></li>
-<li><label><input type="checkbox">Before you upload your finished notebook to Gradescope, please rename your notebook so it is called <code>hwk4-task2-false-color-YOURLASTNAME.pdf</code>.</label></li>
+<li><label><input type="checkbox">Before you upload your finished notebook to Gradescope, please rename your notebook so they are called</label>
+<ul>
+<li><code>hwk4-task2-fire-perimeter-YOURLASTNAME.pdf</code> and</li>
+<li><code>hwk4-task2-false-color-YOURLASTNAME.pdf</code></li>
+</ul></li>
 </ul></li>
 <li>Notebook PDF content checklists:
 <ul class="task-list">
@@ -311,7 +319,7 @@ Converting your notebook to PDF
 <ol start="4" type="1">
 <li><p>Choose where you want to save this HTML to your computer</p></li>
 <li><p>Open up the html and go to File &gt; Print &gt; Save as PDF</p></li>
-<li><p>Save your PDF as `<code>hwk4-task2-false-color-YOURLASTNAME.pdf</code> and submit to Gradescope.</p></li>
+<li><p>Save your PDF as <code>hwk4-task2-fire-perimeter-YOURLASTNAME.pdf</code> or `<code>hwk4-task2-false-color-YOURLASTNAME.pdf</code> and submit to Gradescope.</p></li>
 </ol>
 </div>
 </div>
@@ -340,20 +348,21 @@ Converting your notebook to PDF
 </section>
 <section id="task-2-visualizing-fire-scars-through-false-color" class="level2">
 <h2 class="anchored" data-anchor-id="task-2-visualizing-fire-scars-through-false-color">Task 2: Visualizing fire scars through false color</h2>
-<p>In early January 2025, the Eaton Fire and Palisades Fire erupted nearly simultaneously in the foothills and coastal wildland-urban interface zones of Los Angeles County, fueled by powerful Santa Ana winds Together, they devastated thousands of homes, displaced tens of thousands of residents, and inflicted severe ecological and infrastructural damage.</p>
+<p>The Thomas Fire, which burned over 280,000 acres in Ventura and Santa Barbara counties in December 2017, was one of California’s largest wildfires at the time. It caused widespread ecological damage, displaced communities, and left lasting environmental impacts.</p>
 <p>False color imagery, created using satellite data from instruments like Landsat, is a useful tool for monitoring wildfire impacts. By assigning infrared bands to visible colors, these images highlight vegetation health, burn severity, and the extent of fire scars. This approach helps researchers and land managers assess recovery efforts, identify high-risk areas, and plan restoration strategies.</p>
-<p>In this task, you will create a false color image of the Eaton and Palisades Fires using remote sensing data, highlighting the fire scar and exploring how coding and data visualization support environmental monitoring.</p>
+<p>In this task, you will create a false color image of the Thomas Fire using remote sensing data, highlighting the fire scar and exploring how coding and data visualization support environmental monitoring.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../assignments/images/PalisadesFire_fromDowntown.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption><a href="https://commons.wikimedia.org/wiki/File:PalisadesFire_fromDowntown.png">Palisades Fire as seen from Downtown Los Angeles, Image captured via PTZ Camera/VMS system.</a></figcaption>
+<p><img src="../assignments/images/thomas_fire.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>A Kern County firefighter stands watch as the Thomas Fire starts to spread over ridge lines in Toro Canyon.</figcaption>
 </figure>
 </div>
 <section id="about-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="about-the-data">About the data</h3>
 <p>In this task you will use two datsets. The first is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmosperically corrected surface reflectance data, collected by the Landsat 8 satellite.</p>
-<p>The data was retrieved from the <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">Microsof Planetary Computer data catalogue</a> and clipped to an area surrounding the fire perimeters. This data should be used for visualization and educational purposes only and can be accessed at the <code>landsat8-2025-02-23-palisades-eaton.nc</code> in the <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=share_link">course shared data Google Drive</a>.</p>
-<p>The second dataset will be fire perimeters for the Eaton and Palisades fires. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file).</p>
+<p>The data was retrieved from the <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">Microsof Planetary Computer data catalogue</a> and pre-processed to remove data outside land and coarsen the spatial resolution. This data should be used for visualization and educational purposes only and can be accessed at this path within workbench-1:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>/courses/EDS220/data/hwk4_landsat_data landsat8-2018-01-26-sb-simplified.nc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The second dataset will be historical open-access data about fire perimeters in California. There are several datasets with this information online. You will need to select one from a reputable source that includes the fire perimeter of the Thomas Fire during 2017.</p>
 </section>
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
@@ -363,12 +372,20 @@ Converting your notebook to PDF
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Create a new GitHub repository named <code>eds220-hwk4</code>. You will need to create one notebooks named <code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code>.</p>
-<p>Your repository should have the following structure and include <em>only</em> these files:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>eds220-hwk4</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>│--  README.md</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>│--  hwk4-task2-false-color-YOURLASTNAME.ipynb</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>|--  .gitignore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create a new GitHub repository named <code>eds220-hwk4</code>. You will need to create two notebooks named:</p>
+<ul>
+<li><code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code> and</li>
+<li><code>hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</code>.</li>
+</ul>
+<p>Your repository should have the following structure:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eds220-hwk4</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>│   README.md</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>|   hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>│   hwk4-task2-false-color-YOURLASTNAME.ipynb</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>|   .gitignore</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>└───data</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    │   thomas-fire-boundary-file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -402,78 +419,56 @@ Converting your notebook to PDF
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Sections 2 through 5 must be completed in the <code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code> notebook. In this notebook you will be using both your fire perimeter data and the Landsat data <code>landsat8-2025-02-23-palisades-eaton.nc</code>. You may need to complete data wrangling steps beyond the ones described to create the requested outputs.</p>
+<p>Section 2 must be completed in the <code>hwk4-task2-fire-perimeter-YOURLASTNAME.ipynb</code> notebook.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="fire-perimeter-data-exploration" class="level4">
-<h4 class="anchored" data-anchor-id="fire-perimeter-data-exploration">2. Fire perimeter data exploration</h4>
-<p>Explore the fire perimeter data and write a brief summary of the information you obtained from the preliminary exploration. Your summary should include, at least, the CRS of the data and whether this is projected or geographic.</p>
-</section>
-<section id="netcdf-data-import-and-exploration" class="level4">
-<h4 class="anchored" data-anchor-id="netcdf-data-import-and-exploration">3. NetCDF data import and exploration</h4>
+<section id="fire-perimeter-data-retrieval-and-selection" class="level4">
+<h4 class="anchored" data-anchor-id="fire-perimeter-data-retrieval-and-selection">2. Fire perimeter data retrieval and selection</h4>
+<ol type="a">
+<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the CRS of the data and whether this is projected or geographic.</p></li>
+<li><p>From your fire perimeter data, select the Thomas Fire boundary. The fire occurred in 2017.</p></li>
+<li><p>Save <em>only</em> the 2017 Thomas Fire boundary as a geospatial file in the format of your choosing. The file should go into the <code>data/</code> directory in your repository.</p></li>
+<li><p>In a markdown cell, briefly explain your reasoning for selecting that specific file format.</p></li>
+</ol>
 <div class="callout callout-style-simple callout-caution no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>If you are <strong>working on your personal computer</strong>: then follow steps a, b, and c to update the EDS-220 conda environment (recommended).</p>
-<p>If you are <strong>working on workbench-1</strong>: the EDS-220 environment is already updated with the <code>netcdf4</code> package and you can skip steps a, b, and c.</p>
+<p>Sections 3, 4, and 5 must be completed in the <code>hwk4-task2-false-color-YOURLASTNAME.ipynb</code> notebook. In this notebook you will be using both your fire perimeter data and the simplified Landsat data <code>landsat8-2018-01-26-sb-simplified.nc</code>. You may need to complete data wrangling steps beyond the ones described to create the requested outputs.</p>
 </div>
 </div>
 </div>
-<p>On the terminal:</p>
-<ol type="a">
-<li><p>Activate the EDS 220 conda environment and verify it is active.</p></li>
-<li><p>Install the netCDF4 package in the <em>EDS 220 environment</em> by running</p></li>
-</ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>conda install -c conda-forge netcdf4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="3" type="a">
-<li>Verify that the <code>netcdf4</code> package was installed.</li>
-</ol>
-<p>In your notebook:</p>
-<ol start="4" type="a">
-<li><p>Import the Landsat data using <code>xr.open_dataset()</code>.</p></li>
-<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data’s variables, dimensions, and coordinates.</p></li>
-</ol>
-</section>
-<section id="restoring-geospatial-information" class="level4">
-<h4 class="anchored" data-anchor-id="restoring-geospatial-information">4. Restoring geospatial information</h4>
-<ol type="a">
-<li><p>Use <code>rio.crs</code> to print what is the CRS of this dataset. Is this a geospatial object?</p></li>
-<li><p>You may have noticed on section 3 that the geospatial information for this dataset is stored in the variable <code>spatial_ref</code>. Print the CRS by using accesing the <code>spatial_ref.crs_wkt</code> attribute of the dataset.</p></li>
-<li><p>Recover the geospatial information by using <a href="https://corteva.github.io/rioxarray/stable/getting_started/crs_management.html#Setting-the-CRS"><code>rio.write_crs()</code></a> and the spatial reference information form part b.</p></li>
-<li><p>Print the CRS of the updated dataset.</p></li>
-</ol>
 </section>
 <section id="true-color-image" class="level4">
-<h4 class="anchored" data-anchor-id="true-color-image">5. True color image</h4>
+<h4 class="anchored" data-anchor-id="true-color-image">3. True color image</h4>
 <ol type="a">
-<li>Without creating any new variables:</li>
+<li><p>Construct a file path to the Landsat data using <code>os</code> and import it using <code>rioxr.open_rasterio()</code>.</p></li>
+<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information. Your summary should include the a description of the data’s variables and dimensions.</p></li>
+<li><p>Drop the <code>band</code> dimension of the data. HINT: <a href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html"><code>squeeze()</code></a> and <a href="https://docs.xarray.dev/en/stable/generated/xarray.DataArray.drop_vars.html"><code>drop_vars()</code></a>.</p></li>
+<li><p>Without creating any new variables:</p></li>
 </ol>
 <ul>
 <li>select the red, green, and blue variables (in that order) of the <code>xarray.Dataset</code> holding the Landsat data,</li>
 <li>convert it to a <code>numpy.array</code> using the <code>to_array()</code> method, and then</li>
-<li>use <code>.plot.imshow()</code> to create an RGB image with the data. There will be two warnings, that’s ok.</li>
+<li>use <code>.plot.imshow()</code> to create an RGB image with the data. There will be a warning, that’s ok.</li>
 </ul>
-<ol start="2" type="a">
+<ol start="5" type="a">
 <li><p>Adjust the scale used for plotting the bands to get a true color image. HINT: <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html">Check the <code>robust</code> parameter</a>. The issue here is the clouds: their RGB values are outliers and cause the other values to be squished when plotting.</p></li>
-<li><p>To resolve the other warning, identify which bands have <code>nan</code> values. HINT: There are many ways of doing so. One option is to use <a href="https://numpy.org/devdocs/reference/generated/numpy.isnan.html"><code>numpy.isnan()</code></a>.</p></li>
-<li><p>Use the <a href="https://docs.xarray.dev/en/latest/generated/xarray.Dataset.fillna.html"><code>.fillna()</code></a> mehtod for <code>xarray.Dataset</code>s to substitute the any <code>nan</code> values in the Landsat data for zero.</p></li>
-<li><p>Create a new true color image that gets plotted without warnings.</p></li>
-<li><p>In a markdown cell write a brief explanation comparing the ouputs for parts (a) and (e).</p></li>
+<li><p>In a markdown cell write a brief explanation comparing the ouputs for parts (d) and (e).</p></li>
 </ol>
 </section>
 <section id="false-color-image" class="level4">
-<h4 class="anchored" data-anchor-id="false-color-image">6. False color image</h4>
+<h4 class="anchored" data-anchor-id="false-color-image">4. False color image</h4>
 <p>Without creating any new variables, create a false color image by plotting the short-wave infrared (swir22), near-infrared, and red variables (in that order).</p>
 </section>
 <section id="map" class="level4">
-<h4 class="anchored" data-anchor-id="map">7. Map</h4>
+<h4 class="anchored" data-anchor-id="map">5. Map</h4>
 <ol type="a">
-<li><p>Create a map showing the shortwave infrared/near-infrared/red false color image together with both fire <em>perimeters</em>. Customize it appropriately including, at least, an informative title and legend. You may also want to include text on the map to identify which fire is which.</p></li>
+<li><p>Create a map showing the shortwave infrared/near-infrared/red false color image together with the Thomas Fire <em>perimeter</em>. Customize it appropriately including, at least, an informative title and legend.</p></li>
 <li><p>Write a figure description for the map including a brief explanation of how false color imagery is being used.</p></li>
 </ol>
 <div class="callout callout-style-simple callout-caution no-icon">
@@ -489,7 +484,7 @@ Converting your notebook to PDF
 </div>
 </section>
 <section id="clean-your-notebooks" class="level4">
-<h4 class="anchored" data-anchor-id="clean-your-notebooks">8. Clean your notebooks</h4>
+<h4 class="anchored" data-anchor-id="clean-your-notebooks">6. Clean your notebooks</h4>
 <p>The target audience for your notebooks is a fellow EDS 220 student who is just learning about wrangling raster data using Python.</p>
 <ul>
 <li>Add enough and appropriate comments to explain your code.</li>
@@ -511,7 +506,7 @@ Converting your notebook to PDF
 <p>The rest of your notebook should be organized into logical subsections (indicated through markdown headers) for the analysis and visualization you are performing. The subsections should easily guide the reader through the analysis.</p>
 </section>
 <section id="sec-repo-instructions" class="level4">
-<h4 class="anchored" data-anchor-id="sec-repo-instructions">9. Update your repository</h4>
+<h4 class="anchored" data-anchor-id="sec-repo-instructions">7. Update your repository</h4>
 <p>Update your repository’s README with (at least) the following (based on <a href="https://ucsb-meds.github.io/README-guidelines/">EDS 296</a>):</p>
 <ul class="task-list">
 <li><label><input type="checkbox"><strong>Title.</strong> Short, but descriptive title.</label></li>
