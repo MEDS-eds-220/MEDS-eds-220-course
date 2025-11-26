@@ -1,5 +1,9 @@
 # 16 Land cover statistics
 
+<!---
+This needs context about whwat we are doing and why.
+-->
+
 ## About the data
 
 In this lesson we will use two datasets.
@@ -7,7 +11,7 @@ In this lesson we will use two datasets.
 The first one is [GAP/LANDFIRE National Terrestrial Ecosystems data for 2011 @davidson_gaplandfire_2016](https://www.sciencebase.gov/catalog/item/573cc51be4b0dae0d5e4b0c5), from the [US Geological Survey (USGS)](https://www.usgs.gov). This is a categorical raster with a 30 m x 30 m pixel resolution representing highly thematically detailed land cover map of the U.S. We will access this data through the [Microsoft Planetary Computer (MPC) data catalog](https://planetarycomputer.microsoft.com/dataset/gap). The class names and corresponding codes have been saved to a separete CSV to simplify access in this lesson. Further information on how to access the classes directly from the data are available in the [MPC catalog](https://planetarycomputer.microsoft.com/dataset/gap#Example-Notebook).
 
 
-The second dataset is a shapefile with the perimeters for 2017 California fires. This data was extracted from the CALFIRE's [Historical Wildland Fire Perimeters](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all/about).
+The second dataset is a shapefile with the perimeters for 2017 California fires. This data was extracted from the CALFIRE's [Historical Wildland Fire Perimeters](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all/about) @CALFIRE_FirePerimeters_All.
 
 ## Fire perimeter preparation
 
@@ -39,8 +43,8 @@ fire_perimeters = gpd.read_file(os.path.join('data',
                                              )
 thomas_fire = fire_perimeters[fire_perimeters['FIRE_NAME']=='THOMAS']
 
-# Examin fire perimeter data
-thomas_fire.crs
+# Examine fire perimeter data
+print(thomas_fire.crs)
 thomas_fire.plot()
 ```
 
@@ -51,8 +55,8 @@ Our goal is to retrieve the National Terrestrial Ecosystems data over the fire p
 Our bounding box will come from the Thomas Fire perimeter. Notice we use method chaining to reproject and extract the bounds.
 
 ```{python}
-# Create bounding box for search
-thomas_fire_bbox = list(thomas_fire.to_crs('epsg:4326') # Reproject for search
+# Create list of bounding box coords for search in 4326 CRS
+thomas_fire_bbox = list(thomas_fire.to_crs('epsg:4326') 
                                    .total_bounds
                                     )
 thomas_fire_bbox
@@ -177,7 +181,7 @@ plt.show()
 
 ## Raster no-data values
 
-Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However, as we previously saw, our raster's data type is `uint16` (16 bits unsigned integer). The cast issue appears since `np.nan` is a float (decimal number) and it cannot be casted as a `uint16`. To make sure the clipping operator fills in any pixels with the adequate no-data value, let's manually set it:
+Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However, as we previously saw, our raster's data type is `uint16` (16 bits unsigned integer). The cast issue appears since `np.nan` is a float (decimal number) and it cannot be casted as a `uint16`. To make sure the clipping function fills in any pixels with the adequate no-data value, let's manually set it:
 
 ```{python}
 print('Original no-data value: ', lulc.rio.nodata)
@@ -220,7 +224,7 @@ This would be a natural point where we'd like to save our raster for future use.
 
 ## Land cover statistics
 
-In the rest of this lesson we will compute land cover statistics within the Thomas Fire perimeter. The following exercises will guide you through this process:
+In the rest of this lesson we will calculate land cover statistics within the Thomas Fire perimeter. The following exercises will guide you through this process:
 
 :::{.callout-tip}
 ## Exercises
@@ -327,4 +331,13 @@ fig.subplots_adjust(left=0.25, right=0.95, top=0.85)  # Adjust spacing for the c
 plt.show()
 ```
 
+:::
+
+
+:::{.callout-tip}
+## Bonus Exercise
+
+In this lesson we used a CSV with the class labels for the GAP/LANDFIRE National Terrestrial Ecosystems data. However, this information is stored in the `properties` for the STAC `item` we worked with. 
+
+Access the labels for the item and used them to recreate the `labels` `pandas.DataFrame` we imported from the CSV. 
 :::
