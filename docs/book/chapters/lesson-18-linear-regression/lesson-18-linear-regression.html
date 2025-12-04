@@ -507,7 +507,7 @@ window.Quarto = {
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration">Data exploration</h2>
 <p>Let’s start by loading the data and taking a very high-level look at it:</p>
-<div id="93b2af9e" class="cell" data-execution_count="1">
+<div id="76af421a" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -515,10 +515,10 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="2b7e5e41" class="cell" data-execution_count="2">
+<div id="e4f066e9" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hares<span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>,<span class="st">'knb-lter-bnz'</span>,<span class="st">'55_Hare_Data_2012.txt'</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>hares.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -634,7 +634,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="18294474" class="cell" data-execution_count="3">
+<div id="be953032" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hares.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -661,7 +661,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 </div>
 <p>We can see from the <code>info()</code> display that most of these variables are of type <code>object</code> (most likely <code>strings</code>) and some continuous and categorical numerical variables. To facilitate our data wrangling we convert the <code>date</code> column to a <code>datetime</code> type:</p>
-<div id="375de25b" class="cell" data-execution_count="4">
+<div id="e6e6b245" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hares[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(hares[<span class="st">'date'</span>])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hares.date.dtype)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -684,10 +684,10 @@ memory usage: 369.8+ KB</code></pre>
 <li>‘m’ for ‘mortality’.</li>
 </ul>
 <p>Let’s see the data in this column:</p>
-<div id="95f677cf" class="cell" data-execution_count="5">
+<div id="474f5341" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine unique values and counts in age column</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(hares[<span class="st">'age'</span>].value_counts(dropna<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -834,8 +834,8 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>This is te time to make a decision: since the metadata states that ‘a’ indicates adult and ‘j’ indicates juvenile, we will only keep observations that have ‘a’ or ‘j’ (either capitalized or not) as part of the age value.</p>
-<div id="fb65948d" class="cell" data-execution_count="6">
+<p>This is the time to make a decision: since the metadata states that ‘a’ indicates adult and ‘j’ indicates juvenile, we will only keep observations that have ‘a’ or ‘j’ (either capitalized or not) as part of the age value.</p>
+<div id="3424efc0" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update age values to juvenile and adult for observations where 'a' and 'j' are included</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>hares.loc[hares.age.<span class="bu">str</span>.contains(<span class="st">'j'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>), <span class="st">'age'</span>] <span class="op">=</span> <span class="st">'juvenile'</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>hares.loc[hares.age.<span class="bu">str</span>.contains(<span class="st">'a'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>), <span class="st">'age'</span>] <span class="op">=</span> <span class="st">'adult'</span></span>
@@ -847,8 +847,8 @@ memory usage: 369.8+ KB</code></pre>
 <pre><code>Number of selected juvenile and adult hares: 1155</code></pre>
 </div>
 </div>
-<p>To understand our data a better we examine the distribution of hare age across years. Let’s wrangle our data a bit to get there:</p>
-<div id="2405d833" class="cell" data-execution_count="7">
+<p>To better understand our data we examine the distribution of hare age across years. Let’s wrangle our data a bit to get there:</p>
+<div id="9e82f95b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract year in which each observation happened</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>hares_juv_adult[<span class="st">'year'</span>] <span class="op">=</span> hares_juv_adult.date.dt.year</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -858,7 +858,7 @@ memory usage: 369.8+ KB</code></pre>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                 .pivot(index<span class="op">=</span><span class="st">'year'</span>, columns<span class="op">=</span><span class="st">'age'</span>, values<span class="op">=</span><span class="st">'counts'</span>)   <span class="co"># Pivot into long format</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                                 )</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>hares_per_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
@@ -953,25 +953,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 </div>
 <p>If you are wondering, here <code>year</code> is the name of the dataframe’s row index and <code>age</code> is the name of the column index. In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:</p>
-<!-- 
-
-::: {#e8897909 .cell execution_count=8}
-``` {.python .cell-code}
-# Quick plot for class demo
-hares_per_year[['juvenile', 'adult']].plot(
-    kind='bar',
-    stacked=True
-)
-```
-
-::: {.cell-output .cell-output-display}
-![](lesson-18-linear-regression_files/figure-html/cell-9-output-1.png){}
-:::
-:::
-
-
--->
-<div id="98969b21" class="cell" data-execution_count="9">
+<div id="c9de00df" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure + axes</span></span>
@@ -1005,7 +987,7 @@ hares_per_year[['juvenile', 'adult']].plot(
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-18-linear-regression_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="lesson-18-linear-regression_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1030,7 +1012,7 @@ Exercise
 <section id="linear-regression" class="level2">
 <h2 class="anchored" data-anchor-id="linear-regression">Linear regression</h2>
 <p>For our analysis we want to investigate possible relations between hind foot length and weight for juvenile hares. Let’s take a look at our target data:</p>
-<div id="621bfdc9" class="cell" data-execution_count="10">
+<div id="9524183a" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset juvenile hares with hind foot and weight measurements</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>juveniles_weight_hindft <span class="op">=</span> hares_juv_adult[(hares_juv_adult[<span class="st">'hindft'</span>].notna()) <span class="op">&amp;</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                          (hares_juv_adult[<span class="st">'weight'</span>].notna()) <span class="op">&amp;</span></span>
@@ -1045,21 +1027,20 @@ Exercise
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-18-linear-regression_files/figure-html/cell-11-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="lesson-18-linear-regression_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We can see there seems to be a linear trend between the weight and hind foout length variables, though as the hind foot length increases the variability does too.</p>
 <p>Let’s investigate whether a linear model is an adequate way to describe this data. To do this we will use the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html"><code>LinearRegression</code></a> model from the <a href="https://scikit-learn.org/stable/index.html"><code>scikit-learn</code></a> library. If you need a refresher about how a linear regression works, <a href="https://openintrostat.github.io/ims/model-slr.html">click here</a> for a a great resource.</p>
-<!-- TODO: add simple linear model explanation for my own benefit-->
 <p>The trickiest part of fiting the model is to get the data in the required shape. From the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html"><code>LinearRegression</code> documentation</a> we see that:</p>
 <ul>
-<li>input data (the x-values, independent variable, or training data) shape should be <code>(n_samples, 1)</code>. The 1 comes because we have single feature modeling the output data.</li>
+<li>input data (the x-values, independent variable, or training data) shape should be <code>(n_samples, 1)</code>. The 1 comes from having a single feature modeling the output data.</li>
 <li>output data (the y-values, dependent variable, or target data) shape should be <code>(n_samples,)</code>.</li>
 </ul>
 <p>Let’s select and reshape the input and output data accordingly:</p>
-<div id="400ec40a" class="cell" data-execution_count="11">
+<div id="16260a6f" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># x-values</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array(juveniles_weight_hindft[<span class="st">'hindft'</span>]).reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))   <span class="co"># Reshape to (n_samples, 1)</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Input data shape: </span><span class="sc">{</span>X<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -1073,7 +1054,7 @@ Output data shape: (265,)</code></pre>
 </div>
 </div>
 <p>Next, we create a <code>LinearRegression</code> instance and fit it to our data to create a <code>model</code>. From the <code>model</code> we extract the coefficient of determination or <span class="math inline">\(R^2\)</span>, and the x-axis intercept and slope from our linear model.</p>
-<div id="f3362c11" class="cell" data-execution_count="12">
+<div id="9928cdfe" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearRegression().fit(X, y)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1102,40 +1083,9 @@ Slope: 10.092239638623006</code></pre>
 <li><span class="math inline">\(\beta_0\)</span> = the <strong><span class="math inline">\(x\)</span>-intercept</strong> of the linear model, this is interpreted as the estimated average value when <span class="math inline">\(x=0\)</span></li>
 <li><span class="math inline">\(\beta_1\)</span> = the <strong>slope</strong> of the linear model, this is the estimated difference in the predicted value <span class="math inline">\(\hat{y}\)</span> per unit of <span class="math inline">\(x\)</span>.</li>
 </ul>
-<p>The <strong>coefficient of determination</strong>, <span class="math inline">\(R^2\)</span> is always between 0 and 1. It is interpreted as the amount of variation in the outcome variable <span class="math inline">\(y\)</span> that is explained by the least squares line the variable <span class="math inline">\(x\)</span>.</p>
-<!-- 
-
-::: {#03b6f0ba .cell execution_count=13}
-``` {.python .cell-code}
-# Quick plot for in-class
-
-fig, ax = plt.subplots()
-
-ax.scatter(x=juveniles_weight_hindft['hindft'], 
-           y=juveniles_weight_hindft['weight'], 
-           alpha=0.5)
-
-# Define parameters of the regression line
-x_start = juveniles_weight_hindft['hindft'].min()
-x_end = juveniles_weight_hindft['hindft'].max()
-
-# Plot the line
-ax.plot([x_start, x_end], 
-        [slope*x_start + intercept, slope*x_end + intercept],
-        color="black")
-# Show the plot
-plt.show()
-```
-
-::: {.cell-output .cell-output-display}
-![](lesson-18-linear-regression_files/figure-html/cell-14-output-1.png){}
-:::
-:::
-
-
--->
+<p>The <strong>coefficient of determination</strong>, <span class="math inline">\(R^2\)</span> is between 0 and 1, with <span class="math inline">\(R^2=1\)</span> describing a perfect fit of the model to the data. The <span class="math inline">\(R^2\)</span> value is interpreted as the amount of variation in the outcome variable <span class="math inline">\(y\)</span> that is explained by the least squares line the variable <span class="math inline">\(x\)</span>.</p>
 <p>We can use all this information to plot our linear model together with our data:</p>
-<div id="21cd731e" class="cell" data-execution_count="14">
+<div id="a1eb624d" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
@@ -1178,7 +1128,7 @@ plt.show()
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-18-linear-regression_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="lesson-18-linear-regression_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
