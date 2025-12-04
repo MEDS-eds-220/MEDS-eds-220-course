@@ -2692,7 +2692,7 @@
     "href": "discussion-sections/discussion-sections-listing.html",
     "title": "Discussion sections",
     "section": "",
-    "text": "week\n\n\ntopic\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula hurricanes\n\n\n\n\n\n\n\n5\n\n\nPlotting geospatial data with git branching\n\n\n\n\n\n\n\n6\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\n\n7\n\n\nProtected areas code refactoring\n\n\n\n\n\n\n\n8\n\n\nSocial dimensions of Eaton and Palisades fires\n\n\n\n\n\nNo matching items"
+    "text": "week\n\n\n\ntopic\n\n\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula hurricanes\n\n\n\n\n\n\n\n\n\n5\n\n\nPlotting geospatial data with git branching\n\n\n\n\n\n\n\n\n\n6\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\n\n\n\n7\n\n\nProtected areas code refactoring\n\n\n\n\n\n\n\n\n\n8\n\n\nSocial dimensions of Eaton and Palisades fires\n\n\n\n\n\n\n\n\n\n10\n\n\nCreating a GIF of water level change at Lake Cachuma\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "conventions.html",
@@ -3804,5 +3804,47 @@
     "title": "EDS 220 - Working with Environmental Datasets",
     "section": "",
     "text": "https://knb.ecoinformatics.org/view/doi%3A10.5063%2FF1K35S3H\n\nimport geopandas as gpd\nimport matplotlib.pyplot as plt\nimport contextily as ctx\n\n\ndata = gpd.read_file('data/GCC_Data/allreefs_gcc.geojson')\n\n\ndata.columns\n\nIndex(['objectid', 'region', 'country', 'country_iso', 'eez', 'realm',\n       'province', 'ecoregion', 'latitude', 'longitude', 'gebco_depth',\n       'pct_hardcoral', 'pct_hardcoral_min', 'pct_hardcoral_max',\n       'pct_hardcoral_nsurveys', 'sample_yr_median', 'sample_yr_min',\n       'sample_yr_max', 'method_cat', 'dhw_max_cumul', 'dhw0', 'dhw4',\n       'sst_annualtrend', 'sst_kurtosis', 'sst_max', 'sst_range',\n       'sst_skewness', 'sst_var', 'aca_pr_bank', 'aca_pr_crest',\n       'aca_pr_lagoon', 'aca_pr_seagrass', 'aca_pr_slope',\n       'aca_top_geo_simple', 'calcite', 'currents_velocity_mean',\n       'diffuse_atn_max', 'dissolved_oxygen', 'gs_vr_score', 'npp_mean',\n       'npp_sd', 'par_max', 'ph_mean', 'reef_area_15km', 'score_cn',\n       'score_cy', 'wave_energy_mean', 'effluent_open_n', 'effluent_septic_n',\n       'effluent_total_n', 'effluent_treated_n', 'nutrient_raw',\n       'sediment_raw', 'grav_nc_raw', 'mgmt_highest', 'num_ports_raw',\n       'pop_count_raw', 'reef_value_raw', 'geometry'],\n      dtype='object')\n\n\n\ndata.plot()\n\n\n\n\n\n\n\n\n\ndata.realm.unique()\n\narray(['Temperate Northern Pacific', 'Tropical Atlantic',\n       'Western Indo-Pacific', 'Central Indo-Pacific',\n       'Eastern Indo-Pacific', 'Temperate Northern Atlantic', None,\n       'Tropical Eastern Pacific', 'Temperate Australasia'], dtype=object)\n\n\n\nwip = data[data.realm=='Western Indo-Pacific']\n\n\n# Ensure your GeoDataFrame is in the Web Mercator projection\nwip = wip.to_crs(epsg=3857)\n\nfig, ax = plt.subplots()\n\n# Remove the axis for a cleaner map\nax.axis('off')\n\n# Plot your data\nwip.plot(ax=ax, column='pct_hardcoral')\n\n# Add a basemap with a specified zoom level\nctx.add_basemap(ax, zoom=3)  # Adjust the zoom level as needed for your map extent\n\nplt.show()"
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html",
+    "href": "discussion-sections/ds10-gif.html",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "",
+    "text": "Lake Cachuma was once a primary water source for Santa Barbara County, but the California drought has made it an unreliable resevoir. In 2017, the reservoir was part of the 2.13% of California that was considered to be in an “exceptional drought”. Given that this resevoir is the majority water source for over 200,000 Santa Barbara residents, the water levels in the Cachuma have a major impact on its residents. While the drought is not over, heavy rains in 2022 - 2023 helped Lake Cachuma reach it’s capacity for the first time in 11 years.\n\nIn this discussion section you will practice creating animated visualizations to show temporal change in geospatial data. You’ll work with time series satellite imagery to visualize water level fluctuations at Lake Cachuma during California’s recent drought and recovery periods. The goal is to learn how to:\n\naccess and process time series satellite data from the Microsoft Planetary Computer\nwork with NAIP aerial imagery data\ncombine individual frames into an animated GIF\ncommunicate temporal environmental change effectively through animation"
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html#about",
+    "href": "discussion-sections/ds10-gif.html#about",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "",
+    "text": "Lake Cachuma was once a primary water source for Santa Barbara County, but the California drought has made it an unreliable resevoir. In 2017, the reservoir was part of the 2.13% of California that was considered to be in an “exceptional drought”. Given that this resevoir is the majority water source for over 200,000 Santa Barbara residents, the water levels in the Cachuma have a major impact on its residents. While the drought is not over, heavy rains in 2022 - 2023 helped Lake Cachuma reach it’s capacity for the first time in 11 years.\n\nIn this discussion section you will practice creating animated visualizations to show temporal change in geospatial data. You’ll work with time series satellite imagery to visualize water level fluctuations at Lake Cachuma during California’s recent drought and recovery periods. The goal is to learn how to:\n\naccess and process time series satellite data from the Microsoft Planetary Computer\nwork with NAIP aerial imagery data\ncombine individual frames into an animated GIF\ncommunicate temporal environmental change effectively through animation"
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html#setup",
+    "href": "discussion-sections/ds10-gif.html#setup",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "Setup",
+    "text": "Setup\n\n\n\n\n\n\n\nDownload the notebook week10-gif.ipynb from the course’s Google Drive and move it inside your eds-220-sections directory."
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html#about-the-data",
+    "href": "discussion-sections/ds10-gif.html#about-the-data",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "About the data",
+    "text": "About the data\nNAIP (National Agriculture Imagery Program) provides high-resolution aerial imagery across the continental United States. The imagery is collected during the agricultural growing season and is available approximately every 2-3 years. NAIP provides 4-band imagery (Red, Green, Blue, and Near-Infrared) at 0.6-1 meter spatial resolution, offering detailed views of land surface changes.\nWe’ll access NAIP data through Microsoft Planetary Computer, a platform that provides free access to large geospatial datasets through a STAC (SpatioTemporal Asset Catalog) API. This allows us to efficiently search for and retrieve imagery over our area of interest across multiple years."
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html#purpose",
+    "href": "discussion-sections/ds10-gif.html#purpose",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "Purpose",
+    "text": "Purpose\nWe will use satelite imagery to see if we can notice changes in water levels when the reservoir was at an all time low versus the following years. We will be specifically looking at the water levels in Harvey Bay. In order to show the water level change in this 6 year time span, we will create a gif."
+  },
+  {
+    "objectID": "discussion-sections/ds10-gif.html#general-directions",
+    "href": "discussion-sections/ds10-gif.html#general-directions",
+    "title": "Creating a GIF of water level change at Lake Cachuma",
+    "section": "General Directions",
+    "text": "General Directions\nAll material for this activity is located in the section10-gif-STUDENTS.ipynb file in this google drive. Download the notebook to your eds220-2025-sections directory and follow the prompts in the notebook to complete the activity."
   }
 ]
