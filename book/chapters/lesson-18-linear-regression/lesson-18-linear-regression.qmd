@@ -2,13 +2,15 @@
 
 In this lesson we will learn how to perform a simple linear regression by examining the counts, weight, and size measurements of juvenile snowshoe hares (*Lepus americanus*) observed at the Bonanza Creek Experimental Forest from 1999 to 2012 @kielland_snowshoe_2017. 
 
-![Photo credit: Jim Dau, [Alaska Department of Fish and Game.](https://www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main)](/book/images/lesson-18/snowshoehare_boards.jpg)
-
 <!--TODO: include learning objectives -->
 
 ## About the data
 
 Size measurements, sex, and age of snowshoe hares were collected and made available by Dr. Knut Kielland and colleagues at the [Bonanza Creek Experimental Forest Long Term Ecological Research (LTER) site](https://www.lter.uaf.edu) located approximately 20 km southwest of Fairbanks, Alaska, USA. The data contains observations of 3380 snowshoe hares obtained by capture-recapture studies conducted yearly from 1999 to 2012 in three sampling sites: Bonanza Riparian, Bonanza Mature and Bonanza Black Spruce. 
+
+![Photo credit: Jim Dau, [Alaska Department of Fish and Game.](https://www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main)](/book/images/lesson-18/snowshoehare_boards.jpg)
+
+## Data exploration
 
 Let's start by loading the data and taking a very high-level look at it:
 
@@ -168,17 +170,17 @@ Let's investigate whether a linear model is an adequate way to describe this dat
 
 The trickiest part of fiting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
 
-- output data (the y-values or target data) shape should be `(n_samples,)`.
--  input data (the x-values or training data) shape should be `(n_samples, 1)`. The 1 comes because we have single feature modeling the output data.
+- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes because we have single feature modeling the output data.
+- output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
 
 Let's select and reshape the input and output data accordingly:
 
 ```{python}
-# Input
+# x-values
 X = np.array(juveniles_weight_hindft['hindft']).reshape((-1, 1))   # Reshape to (n_samples, 1)
 print(f"Input data shape: {X.shape}")
 
-# Output
+# y-values
 y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
 print(f"Output data shape: {y.shape}")
 ```
@@ -200,6 +202,19 @@ print(f"x-axis intercept: {intercept}")
 slope = model.coef_[0]
 print(f"Slope: {slope}")
 ```
+
+Remember that the equation of the linear model is given by
+
+$$\hat{y} = \beta_0 + \beta_1 x, $$
+
+where
+
+- $x$ = input variable
+- $\hat{y}$ = **estimated $y$ value** at $x$ from the linear model 
+- $\beta_0$ = the **$x$-intercept** of the linear model, this is interpreted as the estimated average value when $x=0$
+- $\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
+
+The **coefficient of determination**, $R^2$ is always between 0 and 1. It is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line the variable $x$. 
 
 <!-- 
 ```{python}
@@ -249,14 +264,14 @@ ax.plot([x_start, x_end],
         linestyle="--")
 
 # Add the parameters
-beta0 = r'$intercept = \hat\beta_0 =$' + str(round(intercept,2))
-ax.text(80, 1300, beta0, fontsize=10, weight='bold', horizontalalignment='center')
+beta0 = r'$intercept = \hat\beta_0 =$'+ str(round(intercept,2))
+ax.text(80, 1300, beta0, fontsize=10, horizontalalignment='center')
 
 beta1 = r'$slope = \hat\beta_1 =$' + str(round(slope,2))
-ax.text(80, 1200, beta1, fontsize=10, weight='bold', horizontalalignment='center')
+ax.text(80, 1200, beta1, fontsize=10, horizontalalignment='center')
 
 r_squared = r'$R^2 =$' + str(round(R_sq,2))
-ax.text(80, 1100, r_squared, fontsize=10, weight='bold', horizontalalignment='center')        
+ax.text(80, 1100, r_squared, fontsize=10, horizontalalignment='center')        
 
 # Add a title and axis label
 ax.set_title('Relationship between hind foot length and weight of  \n juvenile snowshoe hares at Bonanza Creek Experimental Forest',
@@ -269,10 +284,22 @@ plt.show()
 ```
 
 :::{.callout-tip}
-# Exercise 1
+# Exercise
+Answer the following questions:
+
+a. Does it make sense to interpret the $x$-axis intercept as an estimated measurement of weight?
+
+b. What is the estimated change in weight for each millimiter increase in hind foot length?
+
+c. Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? What other variables could be worth exploring to model the weight?
+
+d. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
 :::
 
+<!--
 :::{.callout-tip}
 # Exercise 2
-:::
 
+This would be an exercise about doing linear regression while grouping by sex
+:::
+-->
