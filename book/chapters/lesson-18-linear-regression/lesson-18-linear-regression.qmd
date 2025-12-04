@@ -63,7 +63,7 @@ pd.DataFrame(hares['age'].value_counts(dropna=False))
 
 <br>
 
-This is te time to make a decision: since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. 
+This is the time to make a decision: since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. 
 
 ```{python}
 # Update age values to juvenile and adult for observations where 'a' and 'j' are included
@@ -75,7 +75,7 @@ hares_juv_adult = hares[hares.age.isin(['juvenile', 'adult'])].copy()
 print(f"Number of selected juvenile and adult hares: {len(hares_juv_adult)}")
 ```
 
-To understand our data a  better we examine the distribution of hare age across years. Let's wrangle our data a bit to get there:
+To better understand our data we examine the distribution of hare age across years. Let's wrangle our data a bit to get there:
 
 ```{python}
 # Extract year in which each observation happened
@@ -91,16 +91,6 @@ hares_per_year
 
 If  you are wondering, here `year` is the name of the dataframe's row index and `age` is the name of the column index. 
 In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:
-
-<!-- 
-```{python}
-# Quick plot for class demo
-hares_per_year[['juvenile', 'adult']].plot(
-    kind='bar',
-    stacked=True
-)
-``` 
--->
 
 ```{python}
 #| code-fold: True
@@ -166,11 +156,9 @@ We can see there seems to be a linear trend between the weight and hind foout le
 
 Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a a great resource. 
 
-<!-- TODO: add simple linear model explanation for my own benefit-->
-
 The trickiest part of fiting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
 
-- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes because we have single feature modeling the output data.
+- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes from having a single feature modeling the output data.
 - output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
 
 Let's select and reshape the input and output data accordingly:
@@ -214,30 +202,8 @@ where
 - $\beta_0$ = the **$x$-intercept** of the linear model, this is interpreted as the estimated average value when $x=0$
 - $\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
 
-The **coefficient of determination**, $R^2$ is always between 0 and 1. It is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line the variable $x$. 
+The **coefficient of determination**, $R^2$ is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line the variable $x$. 
 
-<!-- 
-```{python}
-# Quick plot for in-class
-
-fig, ax = plt.subplots()
-
-ax.scatter(x=juveniles_weight_hindft['hindft'], 
-           y=juveniles_weight_hindft['weight'], 
-           alpha=0.5)
-
-# Define parameters of the regression line
-x_start = juveniles_weight_hindft['hindft'].min()
-x_end = juveniles_weight_hindft['hindft'].max()
-
-# Plot the line
-ax.plot([x_start, x_end], 
-        [slope*x_start + intercept, slope*x_end + intercept],
-        color="black")
-# Show the plot
-plt.show()
-``` 
--->
 
 We can use all this information to plot our linear model together with our data:
 
