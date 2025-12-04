@@ -1,0 +1,278 @@
+# Linear regression
+
+In this lesson we will learn how to perform a simple linear regression by examining the counts, weight, and size measurements of juvenile snowshoe hares (*Lepus americanus*) observed at the Bonanza Creek Experimental Forest from 1999 to 2012 @kielland_snowshoe_2017. 
+
+![Photo credit: Jim Dau, [Alaska Department of Fish and Game.](https://www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main)](/book/images/lesson-18/snowshoehare_boards.jpg)
+
+<!--TODO: include learning objectives -->
+
+## About the data
+
+Size measurements, sex, and age of snowshoe hares were collected and made available by Dr. Knut Kielland and colleagues at the [Bonanza Creek Experimental Forest Long Term Ecological Research (LTER) site](https://www.lter.uaf.edu) located approximately 20 km southwest of Fairbanks, Alaska, USA. The data contains observations of 3380 snowshoe hares obtained by capture-recapture studies conducted yearly from 1999 to 2012 in three sampling sites: Bonanza Riparian, Bonanza Mature and Bonanza Black Spruce. 
+
+Let's start by loading the data and taking a very high-level look at it:
+
+
+```{python}
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.linear_model import LinearRegression
+```
+
+```{python}
+hares= pd.read_csv(os.path.join('data','knb-lter-bnz','55_Hare_Data_2012.txt'))
+hares.head()
+```
+
+```{python}
+hares.info()
+```
+
+We can see from the `info()` display that most of these variables are of type `object` (most likely `strings`) and some continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
+
+```{python}
+hares['date'] = pd.to_datetime(hares['date'])
+print(hares.date.dtype)
+```
+
+## Examining hares age data
+
+From the data's `info()` display we can see that the `age` column has 1269 non-NA rows. In this example we are interested in working with data from juvenile hares exclusively. So we will:
+
+1. Examine the values in the `age` column
+2. Filter for observations in which age is 'adult' or 'juvenile'
+3. Investigate the age distributions across time
+
+From the [dataset's metadata](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-bnz.55.22) we know there are three allowedd values in the `age` column: 
+
+- 'a' for 'adult', 
+- 'j' for 'juvenile', and 
+- 'm' for 'mortality'. 
+
+Let's see the data in this column:
+
+```{python}
+# Examine unique values and counts in age column
+pd.DataFrame(hares['age'].value_counts(dropna=False))
+```
+
+<br>
+
+This is te time to make a decision: since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. 
+
+```{python}
+# Update age values to juvenile and adult for observations where 'a' and 'j' are included
+hares.loc[hares.age.str.contains('j', case=False, na=False), 'age'] = 'juvenile'
+hares.loc[hares.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
+
+# Filter for confirmed observations of juvenile and adult hares
+hares_juv_adult = hares[hares.age.isin(['juvenile', 'adult'])].copy()
+print(f"Number of selected juvenile and adult hares: {len(hares_juv_adult)}")
+```
+
+To understand our data a  better we examine the distribution of hare age across years. Let's wrangle our data a bit to get there:
+
+```{python}
+# Extract year in which each observation happened
+hares_juv_adult['year'] = hares_juv_adult.date.dt.year
+
+# Create hares/year dataframe
+hares_per_year = (hares_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
+                                 .reset_index(name='counts')       # Remove multi-index
+                                 .pivot(index='year', columns='age', values='counts')   # Pivot into long format
+                                 )
+hares_per_year
+```
+
+If  you are wondering, here `year` is the name of the dataframe's row index and `age` is the name of the column index. 
+In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:
+
+<!-- 
+```{python}
+# Quick plot for class demo
+hares_per_year[['juvenile', 'adult']].plot(
+    kind='bar',
+    stacked=True
+)
+``` 
+-->
+
+```{python}
+#| code-fold: True
+
+# Create figure + axes
+fig, ax = plt.subplots(figsize=(8, 5))
+
+hares_per_year[['juvenile', 'adult']].plot(    # Rearrange columns for stacking order
+    kind='bar',
+    stacked=True,
+    ax=ax,
+    edgecolor='black',
+    color=["#8FBC8F", "#4682B4"], 
+)
+
+# Labels, title, and legend
+ax.set_xlabel("Year")
+ax.set_ylabel("Count")
+ax.set_title("Juvenile and Adult Snowshoe Hares per Year \n at Bonanza Creek Experimental Forest (1999-2012)",
+             {'fontsize':15})
+ax.legend(title="Age class",
+         loc="upper right",   
+         bbox_to_anchor=(0.9, 0.9))
+
+# Axes and ticks
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
+```
+
+No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see a diminishing trend in the number of juvenile hare trappings. The two exceptions are 2005, 2008, and 2011. 
+
+<!-- In 2005 juvenile hare counts were 6 times higher than in 2004, and in 2008 counts were 8.8 times higher than in 2007. In 2011 the juvenile snowshoe hare count was 9.5 times higher than in 2010. -->
+
+:::{.callout-tip}
+# Exercise
+Consider the following question: In what ways could the data collection methods affect the results we see here?
+:::
+
+
+<!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest to conduct the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1998, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest to maintain the number and location of traps constant over the years. -->
+
+## Linear regression
+
+For our analysis we want to investigate possible relations between hind foot length and weight for juvenile hares.
+Let's take a look at our target data:
+
+```{python}
+# Subset juvenile hares with hind foot and weight measurements
+juveniles_weight_hindft = hares_juv_adult[(hares_juv_adult['hindft'].notna()) & 
+                                          (hares_juv_adult['weight'].notna()) &
+                                          (hares_juv_adult['age']=='juvenile')]
+
+
+print(f"Number of juvenile hares with hind foot and weight measurements: {len(juveniles_weight_hindft)}")
+juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
+```
+
+We can see there seems to be a linear trend between the weight and hind foout length variables, though as the hind foot length increases the variability does too. 
+
+Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a a great resource. 
+
+<!-- TODO: add simple linear model explanation for my own benefit-->
+
+The trickiest part of fiting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
+
+- output data (the y-values or target data) shape should be `(n_samples,)`.
+-  input data (the x-values or training data) shape should be `(n_samples, 1)`. The 1 comes because we have single feature modeling the output data.
+
+Let's select and reshape the input and output data accordingly:
+
+```{python}
+# Input
+X = np.array(juveniles_weight_hindft['hindft']).reshape((-1, 1))   # Reshape to (n_samples, 1)
+print(f"Input data shape: {X.shape}")
+
+# Output
+y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
+print(f"Output data shape: {y.shape}")
+```
+
+Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination or $R^2$, and the x-axis intercept and slope from our linear model. 
+
+```{python}
+# Fit model
+model = LinearRegression().fit(X, y)
+
+# Calculate R^2
+R_sq = model.score(X, y)
+print(f"Coefficient of determination (R^2): {R_sq}")
+
+# Retrieve intercept and slope
+intercept = model.intercept_
+print(f"x-axis intercept: {intercept}")
+
+slope = model.coef_[0]
+print(f"Slope: {slope}")
+```
+
+<!-- 
+```{python}
+# Quick plot for in-class
+
+fig, ax = plt.subplots()
+
+ax.scatter(x=juveniles_weight_hindft['hindft'], 
+           y=juveniles_weight_hindft['weight'], 
+           alpha=0.5)
+
+# Define parameters of the regression line
+x_start = juveniles_weight_hindft['hindft'].min()
+x_end = juveniles_weight_hindft['hindft'].max()
+
+# Plot the line
+ax.plot([x_start, x_end], 
+        [slope*x_start + intercept, slope*x_end + intercept],
+        color="black")
+# Show the plot
+plt.show()
+``` 
+-->
+
+We can use all this information to plot our linear model together with our data:
+
+```{python}
+#| code-fold: True
+
+
+fig, ax = plt.subplots(figsize=(8,6))
+
+ax.scatter(x=juveniles_weight_hindft['hindft'], 
+           y=juveniles_weight_hindft['weight'], 
+           alpha=0.5,
+           color='#8FBC8F')
+
+# Define parameters of the regression line
+x_start = juveniles_weight_hindft['hindft'].min()
+x_end = juveniles_weight_hindft['hindft'].max()
+
+# Plot the line
+ax.plot([x_start, x_end], 
+        [slope*x_start + intercept, slope*x_end + intercept],
+        color="darkred", 
+        lw=2, 
+        linestyle="--")
+
+# Add the parameters
+beta0 = r'$intercept = \hat\beta_0 =$' + str(round(intercept,2))
+ax.text(80, 1300, beta0, fontsize=10, weight='bold', horizontalalignment='center')
+
+beta1 = r'$slope = \hat\beta_1 =$' + str(round(slope,2))
+ax.text(80, 1200, beta1, fontsize=10, weight='bold', horizontalalignment='center')
+
+r_squared = r'$R^2 =$' + str(round(R_sq,2))
+ax.text(80, 1100, r_squared, fontsize=10, weight='bold', horizontalalignment='center')        
+
+# Add a title and axis label
+ax.set_title('Relationship between hind foot length and weight of  \n juvenile snowshoe hares at Bonanza Creek Experimental Forest',
+             {'fontsize':15})
+ax.set_xlabel('Hind foot length (mm)')
+ax.set_ylabel('Weight (g)')
+
+# Show the plot
+plt.show()
+```
+
+:::{.callout-tip}
+# Exercise 1
+:::
+
+:::{.callout-tip}
+# Exercise 2
+:::
+
