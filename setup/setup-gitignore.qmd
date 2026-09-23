@@ -1,0 +1,66 @@
+---
+title: Edit .gitignore file through terminal
+sidebar: false
+---
+
+## Setup
+
+1. Download the CSV file `wetlands_seasonal_bird_diversity.csv` from our [shared drive](https://drive.google.com/file/d/1VCmBYZ1LmgmvxQt9KEcczc6KPDlAYRp0/view?usp=share_link).
+
+2. In the workbench 1 server, inside your `EDS-220/eds220-in-class/` directory, create a new directory called `data`. 
+
+3. Using the file navigation panel, upload the `wetlands_seasonal_bird_diversity.csv` file to the `data` directory. 
+
+## In the terminal
+
+1. Verify you are in the `eds220-in-class/` directory by using `pwd`. Your output should look like this:
+```default
+/Users/your-username/MEDS/EDS-220/eds220-in-class
+```
+
+2. Run `git status`. At the end of the output you'll see:
+```default
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        data/
+```
+This means git has detected that the `data` directory exists but it is not yet tracking changes in it. We are in charge of deciding whether we want to track changes in it or not!
+
+3. Run `ls` to see the files in the directory. Your output will look like this, notice the `.gitignore` file is not listed:
+```default
+README.md  week1-lesson1-python-review.ipynb
+data       week1-lesson3-pandas-subsetting.ipynb
+```
+
+4. Run `ls -a` to see *all* files in the directory, including hidden files (those that start with a period `.`). At this point, your output will look like this:
+```default
+.                   README.md
+..                  data
+.git                week1-lesson1-python-review.ipynb
+.gitignore          week1-lesson3-pandas-subsetting.ipynb
+.ipynb_checkpoints
+```
+
+5. Run `nano .gitignore`. This will open the `.gitignore` file in the `nano` editor.
+
+6. Add the `data` folder to the `.gitignore` file by adding this text at the top of the file:
+```default
+# Ignore the 'data' directory
+data/
+```
+
+7. Once you have made your changes, save the file:
+    - In `nano`, press `CTRL + O` (the letter O, not zero) to save.
+    - Press `Enter` to confirm the file name (`.gitignore`).
+
+8. Exit the editor by pressing `CTRL + X`.
+
+9. Run `less .gitignore` to scroll through the `.gitignore` file and verify the changes are there:
+    - Use the arrow keys or `Page Up`/`Page Down` to scroll through the file.
+    - Press `q` to exit. 
+
+10. Run `git status` and check the output. The `data` directory will no longer be listed! You will see your `.gitignore` having changes ready for commit.
+
+11. Commit and push your changes to the `.gitignore`.
+
+![Skatetocat by [suziejurado](https://github.com/suziejurado). Octocat is a registered trademark of GitHub, Inc.; the octocat images are not covered by this website's CC BY-NC 4.0 license.](images/skatetocat.png){width="50%" fig-align="center"}

@@ -1,0 +1,49 @@
+---
+title: Storing your PAT in the server
+sidebar: false
+---
+
+To store your personal access token (PAT) in the server:
+
+## 1. Have a PAT ready
+
+If you already have a PAT that you can copy paste, you can skip to step 2. Otherwise, create or regenerate one. You can follow the instructions in the [MEDS installation guide](https://ucsb-meds.github.io/MEDS-installation-guide/#GitHub-PAT) or create or regenerate one directly through GitHub.
+
+## 2. Set up the git credential helper
+
+a. Using the terminal, navigate to the directory from where you want to push your updates. Make sure you are on that directory (for example, verify you are on the `eds220-in-class` by running `pwd` on the terminal). 
+
+b. Run the following command on the terminal:
+
+```default
+git config --global credential.helper store
+```
+This indicates to git that you want to store the PAT instead of caching it.
+
+c. Run `git config --global --list` on the terminal. You should see something like this as the output:
+
+```default
+user.name=carmengg
+user.email=c_galazgarcia@ucsb.edu
+credential.helper=store
+```
+That last line indicates that the credential helper is now `store`. 
+
+## 3. Complete a push
+
+Go through the steps to make a push. Git will prompt you for your credentials, use your GitHub username and use the PAT as the password. Press enter and finalize the push!
+
+## 4. Verify credentials
+
+a. Go to your user's home directory by running `cd ~`.
+
+b. Run `more .git-credentials`. You should see something like this as the output:
+
+```default
+https://carmengg:ghp_XTWwWrEtGfL45iIgU6PPDFd990ceIYydqY@github.com
+```
+This means your PAT is now stored (*the PAT here is an example*).
+
+Git should have now stored your PAT on the server!
+
+![Mona Lovelace by [heyhayhay](https://github.com/heyhayhay). Octocat is a registered trademark of GitHub, Inc.; the octocat images are not covered by this website's CC BY-NC 4.0 license.](images/mona-lovelace.jpg){width="50%" fig-align="center"}
