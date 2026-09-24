@@ -1,9 +1,18 @@
 ---
-title: Build conda environment for the course
+title: Build conda environment and add Jupyter kernel
 sidebar: false
 ---
 
-*Make sure you have completed the [VSCode set-up](setup-vscode.qmd) before creating the environment.*
+
+## Build conda environment
+
+:::{.callout-important}
+## Set up VSCode before moving on!
+
+Make sure you have completed the [VSCode set-up](setup-vscode.qmd) before creating the environment.
+:::
+
+#
 
 1. Open VSCode on your computer.
 
@@ -23,3 +32,54 @@ sidebar: false
 It will take about 15 minutes to build the environment. Once conda has finished, verify that the environment was created by running `conda env list`. 
 
 ![NUXtocat by [cameronfoxly](https://github.com/cameronfoxly). Octocat is a registered trademark of GitHub, Inc.; the octocat images are not covered by this website's CC BY-NC 4.0 license.](images/nuxtocat.png){width="50%" fig-align="center"}
+
+## Add Jupyter kernel
+
+:::{.callout-important}
+## Build the environment before moving on!
+Make sure you have [built the `eds220-env`](setup-conda-env.qmd) before creating the kernel.
+:::
+
+1. Open VSCode on your computer.
+
+2. Add a new bash terminal in it. 
+
+3. Verify you have the `eds220-env` conda environment available by running
+```bash
+conda env list
+```
+
+4. Activate the `eds220-env` by running
+```bash
+conda activate eds220-env
+```
+
+5. Verify the environment has been activated. 
+
+6. Run
+```bash
+python -m ipykernel install --user --name eds220-env --display-name "EDS-220 env"
+```
+
+7. Verify that the kernel has been created by running
+```bash
+jupyter kernelspec list
+```
+The output should look similar to this:
+```bash
+Available kernels:
+  eds220-env        /Users/galaz-garcia/Library/Jupyter/kernels/eds220-env
+  python3           /Users/galaz-garcia/opt/anaconda3/share/jupyter/kernels/python3
+```
+
+8. Close and reopen VSCode. 
+
+9. To use the new kernel, open a Jupyter notebook on VSCode and...
+
+![](images/kernel-1.png){width=90%}
+
+![](images/kernel-2.png){width=90%}
+
+![](images/kernel-3.png){width=90%}
+
+![Labtocat by [JohnCreek](https://github.com/JohnCreek). Octocat is a registered trademark of GitHub, Inc.; the octocat images are not covered by this website's CC BY-NC 4.0 license.](images/labtocat.png){width="50%" fig-align="center"}
