@@ -4,7 +4,7 @@ toc-title: In this lesson
 
 # 2 Subsetting
 
-In this lesson we will learn different methods to select data from a `pandas.DataFrame`. Like it's often the case when working with the `pandas` package, there are *many* ways in which we can subset a data frame. Here we will review the core methods to do this. 
+In this lesson we will learn different methods to select data from a `pandas.DataFrame`. As is often the case when working with the `pandas` package, there are *many* ways in which we can subset a data frame. Here we will review the core methods to do this. 
 
 A summary of the methods covered in this lesson can be found in @fig-summary.
 
@@ -14,7 +14,7 @@ By the end of this lesson, students will be able to:
 - Choose appropriate methods for selecting rows and columns from a `pandas.DataFrame`
 - Construct conditions to subset rows
 - Describe the difference between label-based subsetting and position-based subsetting
-- Apply best practies when using `iloc` and `loc` selection
+- Apply best practices when using `iloc` and `loc` selection
 
 
 ## About the data
@@ -24,7 +24,7 @@ The SONGS dataset was collected as part of the [San Onofre Nuclear Generating St
 
 ![San Onofre Nuclear Generating Station in San Diego County, California. Source: Southern California Edison](/book/images/lesson-3/SONGS_aerial.jpg)
 
-The annual bird species abundance estimates is a CSV file with 13 columns and 14 rows. You can see the first three rows below.
+The annual bird species abundance estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
 
 ```{python}
 #| echo: false
@@ -33,19 +33,19 @@ import pandas as pd
 # Read in file
 df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
 
-# See the first five rows
+# See the first three rows
 df.head(3)
 ```
 
-The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
+The four wetlands where the bird surveys occurred are Carpinteria Salt Marsh (CSM), Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year in which the data was collected. Surveys have happened yearly from 2010 to 2023. 
 
 ![Mugu Lagoon in Ventura County, California, seen from the Mugu Peak Trail. Source: USA National Park Service](/book/images/lesson-3/Mugu_Lagoon_from_the_Mugu_Peak_Trail.jpg)
 
 ## CSV files
 
-A **CSV (Comma-Separated Values) file** is an open, simple text format for storing tabular data, with rows separated by line breaks and columns by commas. It's widely used in environmental science for sharing datasets like species counts and environmental monitoring data because it’s easy to create, read, and process in different platforms, without the need of proprietary software.
+A **CSV (Comma-Separated Values) file** is an open, simple text format for storing tabular data, with rows separated by line breaks and columns by commas. It's widely used in environmental science for sharing datasets like species counts and environmental monitoring data because it’s easy to create, read, and process in different platforms, without the need for proprietary software.
 
-To read in a CSV file into our Python workspace as `pandas.DataFrame` we use the `pandas.read_csv` function:
+To read in a CSV file into our Python workspace as a `pandas.DataFrame` we use the `pandas.read_csv` function:
 
 ```{python}
 #| eval: false
@@ -83,12 +83,12 @@ df.shape
 
 ## Selecting a single column
 
-Selecting a single column by column name is the simplest case for selecting data in a data frame. The genereal syntax to do this is:
+Selecting a single column by column name is the simplest case for selecting data in a data frame. The general syntax to do this is:
 ```python
 df['column_name']
 ```
-Notice the column name is given as string inside the square brackets. 
-This is an example of **label-based subsetting**, which means we want to select data from our data frame using the *names* of the columns, *not their position*. When we select rows or column using their position, we are doing **position-based subsetting**. We'll see some methods to do this when we move into selecting rows.
+Notice the column name is given as a string inside the square brackets. 
+This is an example of **label-based subsetting**, which means we want to select data from our data frame using the *names* of the columns, *not their position*. When we select rows or columns using their position, we are doing **position-based subsetting**. We'll see some methods to do this when we move into selecting rows.
 
 #### Example 
  Suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:
@@ -102,15 +102,15 @@ mul_spring.head()
 
 Since we only selected a single column, `mul_spring` is a `pandas.Series`:
 ```{python}
-# Check the type of the ouput
+# Check the type of the output
 print(type(mul_spring))
 ```
 :::{.callout-note}
 ## `pd.DataFrame` = dictionary of columns
-Remember we can think of a `pandas.DataFrame` as a dictionary of its columns? Then we can access a single column using the column name as the key, just like we would do in a dictionary. That is the  we just used: `df['column_name']`.
+Remember we can think of a `pandas.DataFrame` as a dictionary of its columns? Then we can access a single column using the column name as the key, just like we would do in a dictionary. That is the syntax we just used: `df['column_name']`.
 :::
 
-We can also do label-based subsetting of a single column  using attribute syntax:
+We can also do label-based subsetting of a single column using attribute syntax:
 ```python
 df.column_name
 ```
@@ -122,10 +122,10 @@ df.MUL_spring.head()
 
 :::{.callout-caution}
 ## Favor `df['column_name']` instead of `df.column_name`
-In general, it is better to use the `df['column_name']` syntax. A couple reasons why are:
+In general, it is better to use the `df['column_name']` syntax. A couple of reasons why are:
 
 - `df['column_name']` can take in any column name, while `df.column_name` only works if the column name has no spaces or special characters
-- `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whether `pd.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
+- `df['column_name']` avoids conflicts with `pd.DataFrame` methods and attributes. For example, if `df` has a column named `count`, it's ambiguous whether `df.count` is referring to the [`count()` method](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html) or the `count` column.
 :::
 
 ## Selecting multiple columns...
@@ -143,7 +143,7 @@ Notice there are double square brackets. This is because we are passing the list
 
 :::{.callout-tip}
 ## Check-in
-Is this an example of label-based selection or location-based selection?
+Is this an example of label-based selection or position-based selection?
 :::
 
 #### Example
@@ -154,7 +154,7 @@ If we want to look at the species in the Tijuana Estuary during winter and fall,
 tje_wf = df[['TJE_winter','TJE_fall']]
 ```
 
-Notice there are double square brackets. This is because we are passing the list of names `['TJE_winter','TJE_fall']` to the selection brakcets `[]`. 
+Notice there are double square brackets. This is because we are passing the list of names `['TJE_winter','TJE_fall']` to the selection brackets `[]`. 
 
 :::{.callout-tip}
 ## Check-in
@@ -210,11 +210,11 @@ Selecting rows that satisfy a particular condition is one of the most usual kind
 ```python
 df[condition_on_rows]
 ```
-That `condition_of_rows` can be a myriad things, let's see some usual scenarios.
+That `condition_on_rows` can be a myriad of things. Let's see some usual scenarios.
 
 #### Example
 
-Suppose we are intersted in all data after 2020. We can select these rows in this way:
+Suppose we are interested in all data after 2020. We can select these rows in this way:
 
 ```{python}
 # Select all rows with year > 2020
@@ -225,7 +225,7 @@ post_2020
 Let's break down what is happening here. The condition for our rows is `df['year']>2020`, this is a `pandas.Series` with boolean values (`True` or `False`) indicating which rows satisfy the condition year>2020:
 
 ```{python}
-# Check the type of df['year']>1996
+# Check the type of df['year']>2020
 print(type(df['year']>2020))
 
 # Print the boolean series
@@ -243,7 +243,7 @@ df['year']>2020
 
 #### Example
 
-Suppose we want to look at data from years 2012 to 2015 (including both years). One way of doing this is to use the `between` operator in our condition:
+Suppose we want to look at data from years 2012 to 2015 (including both years). One way of doing this is to use the `between` method in our condition:
 
 ```{python}
 subset = df[df['year'].between(2012, 2015)]
@@ -289,7 +289,7 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 -->
 
 ### ... using multiple conditions
-We can combine multipe conditions to select rows by surrounding each one in parenthesis `()` and using the or operator `|` and the and operator `&`.
+We can combine multiple conditions to select rows by surrounding each one in parentheses `()` and using the or operator `|` and the and operator `&`.
 
 #### Example: or 
 
@@ -325,11 +325,11 @@ df.iloc[4]
 ```
 
 ```{python}
-# Select rows 9 through 13, inclduing 13
+# Select rows 9 through 13, including 13
 df.iloc[9:14]
 ```
 
-Notice that, since we are back to indexing by position, the right endpoint of the slice is not included in the ouput. 
+Notice that, since we are back to indexing by position, the right endpoint of the slice is not included in the output. 
 
 ## Selecting rows and columns simultaneously...
 
@@ -381,7 +381,7 @@ Let's break it down:
 
 - the `row-indices` parameter is the slice *of integer indices* 3:8. Remember the right endpoint (8) won't be included.
 
-- the `column-indices` parameter is the list of integer indices 3 and 4. This means we are selecting the fourth and fifth column.
+- the `column-indices` parameter is the list of integer indices 3 and 4. This means we are selecting the fourth and fifth columns.
 
 ## Notes about `loc` and `iloc`
 
@@ -405,7 +405,7 @@ Suppose we want to access the 9th column in the data frame - then we want to sel
 ```{python}
 # Select column by position using iloc
 # The syntax is iloc[row-indices, column-indices]
-# [:,8] means "select all rows from the 8th column"
+# [:,8] means "select all rows from the column at index 8"
 sdw_spring = df.iloc[:,8]
 sdw_spring.head()
 ```
@@ -414,13 +414,13 @@ Unless you are *really* looking for information about the 9th column, **consider
 
 - it relies on a person correctly counting the position of a column. Even with a small dataset this can be prone to error.
 
-- it is not explicit: if we want information about San Dieguito Wetland during spring, `df.SDW_spring` or `df['SDW_spring']` are explicitely telling us we are accessing that information. `df.iloc[:,8]` is obscure and uninformative.
+- it is not explicit: if we want information about San Dieguito Wetland during spring, `df.SDW_spring` or `df['SDW_spring']` are explicitly telling us we are accessing that information. `df.iloc[:,8]` is obscure and uninformative.
 
-- datastets can get updated. Maybe a new column was added before `SDW_spring`, this would change the position of the column, which would make any code depending on `df.iloc[:,8]` invalid. 
+- datasets can get updated. Maybe a new column was added before `SDW_spring`, this would change the position of the column, which would make any code depending on `df.iloc[:,8]` invalid. 
 
-Using `iloc` for accessing can still be the best option when working with very large, static datasets. As always, consider what will make your code both understandable and efficient. 
+Using `iloc` for accessing columns can still be the best option when working with very large, static datasets. As always, consider what will make your code both understandable and efficient. 
 
-Generally. **accessing columns by labels can help reproducibility!**
+Generally, **accessing columns by labels can help reproducibility!**
 :::
 
 
@@ -431,9 +431,9 @@ Generally. **accessing columns by labels can help reproducibility!**
 
 ## Resources
 
-What is presented in this section is not an  exhaustive list of methods to select data in `pandas.DataFrames`. There are *so many* ways to subset data to get the same result. Some of the content from this lesson is adapted from the following resources and I encourage you to read them to learn more! 
+What is presented in this section is not an exhaustive list of methods to select data in `pandas.DataFrames`. There are *so many* ways to subset data to get the same result. Some of the content from this lesson is adapted from the following resources and I encourage you to read them to learn more! 
 
-📖 [Pandas getting started tutorials - How to I select a subset of a
+📖 [Pandas getting started tutorials - How do I select a subset of a
 DataFrame](https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html) 
 
 📖 [Pandas documentation - User Guide - Indexing and Selecting Data](https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-slicing-with-labels)

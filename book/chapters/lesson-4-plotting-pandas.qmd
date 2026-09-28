@@ -6,9 +6,9 @@ toc-title: In this lesson
 In this lesson we will learn to use the `plot()` method of a `pandas.DataFrame` to create simple exploratory graphs from tabular data. 
 
 ## Learning objectives
-By the end of this lesson students will be able to: 
+By the end of this lesson, students will be able to: 
 
-- Obtain and interpret preliminary information about a `pandas.DataFrame` using methods such as `info()` (structure), `describe()` (summary statistics), `nunique()` (unique value counts), `unique()` (distinct values), `and value_counts()` (frequency counts)
+- Obtain and interpret preliminary information about a `pandas.DataFrame` using methods such as `info()` (structure), `describe()` (summary statistics), `nunique()` (unique value counts), `unique()` (distinct values), and `value_counts()` (frequency counts)
 - Create simple exploratory plots using the `plot()` method for `pandas.DataFrames` to visualize trends and distributions
 - Understand the concept of performing operations on a `pandas.DataFrame` in-place
 - Apply method chaining to enable concise and readable code
@@ -18,7 +18,7 @@ By the end of this lesson students will be able to:
 In this lesson we will reuse the annual estimates of bird species abundance in four coastal wetlands along the California coast that we used in the previous lesson on subsetting a `pandas.DataFrame`. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
-The annual bird species abundance estimates is a CSV file with 13 columns and 14 rows. You can see the first three rows below.
+The annual bird species abundance estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
 <!-- TODO: add link to other lesson. Add pictures of birds -->
 
 ```{python}
@@ -32,7 +32,7 @@ df = pd.read_csv('lesson-3-pandas-subsetting/data/wetlands_seasonal_bird_diversi
 df.head(3)
 ```
 
-The four wetlands where the bird surveys occured are Carpinteria Salt Marsh (CSM),  Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year on which the data was collected. Surveys have happened yearly from 2010 to 2023. 
+The four wetlands where the bird surveys occurred are Carpinteria Salt Marsh (CSM), Mugu Lagoon (MUL), the San Dieguito Wetland (SDW), and the Tijuana Estuary (TJE). The values from the second column to the last column correspond to the number of different bird species recorded across the survey sites in each wetland during winter, spring, and fall of a given year. For example, the `CSM_fall` column has the number of species recorded in fall at Carpinteria Salt Marsh across years. The `year` column corresponds to the calendar year in which the data was collected. Surveys have happened yearly from 2010 to 2023. 
 
 
 ## `plot()` method
@@ -66,7 +66,7 @@ As we can see, this doesn't make much sense! In particular, look at the x-axis. 
 
 ## Line plots
 
-We can make a line plot of one column against another by using the following the general syntax:
+We can make a line plot of one column against another by using the following general syntax:
 
 ```python
 df.plot(x='x_values_column', y='y_values_column')
@@ -76,7 +76,7 @@ df.plot(x='x_values_column', y='y_values_column')
 If we want to plot the bird surveys at Carpinteria Salt Marsh across years we can do:
 
 ```{python}
-# Birds species registered during winter at CSM yearly
+# Bird species registered during winter at CSM yearly
 df.plot(x='year', y='CSM_winter')
 ```
 
@@ -84,7 +84,7 @@ We can do some basic customization specifying other parameters of the `plot()` m
 
 - `title`: title to use for the plot.
 - `xlabel`: name to use for the x-label on x-axis
-- `ylabel`: bame to use for the y-label on y-axis
+- `ylabel`: name to use for the y-label on y-axis
 - `color`: change the color of our plot
 - `legend`: boolean value `True` or `False`. `True` (default) includes the legend, `False` removes the legend
 
@@ -115,7 +115,7 @@ You can see all the [optional parameters for the `plot()` function in the docume
 We can plot multiple line plots by updating these parameters in the `plot()` method:
 
 - `y` : a list of column names that will be plotted against the x-axis
-- `color`: a dictionary `{'column_1' : 'color_1', 'column_2':'color_2}` specifying the color of each column's line plot
+- `color`: a dictionary `{'column_1' : 'color_1', 'column_2':'color_2'}` specifying the color of each column's line plot
 
 #### Example
 
@@ -138,7 +138,7 @@ df.plot(x='year',
 Notice that for specifying the colors we used a **HEX code**, this gives us more control over how our graph looks.
 
 
-We can also create separate plots for each column by setting the `subset` to `True`.
+We can also create separate plots for each column by setting the `subplots` parameter to `True`.
 
 ```{python}
 df.plot(x='year', 
@@ -156,7 +156,7 @@ df.plot(x='year',
 ## Updating the index
 
 **Updating the index** of our data frame to be something other than the default integers numbering the rows can be a useful operation for plotting. 
-To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. It's general syntax is:
+To update the index we use the [`set_index()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html) method for a `pandas.DataFrame`. Its general syntax is:
 
 ```python
 df = df.set_index(new_index)
@@ -169,8 +169,8 @@ where `new_index` is:
 
 This operation does not happen in-place. 
 
-- A funciton **acting in-place** means that our original object (in this case a `pandas.DataFrame`) is modified. 
-- If the function **does not act in-place**, a new object (in this case a `pandas.DataFrame`)  is created and the original is not modified. 
+- A function **acting in-place** means that our original object (in this case a `pandas.DataFrame`) is modified. 
+- If the function **does not act in-place**, a new object (in this case a `pandas.DataFrame`) is created and the original is not modified. 
 
 If we wanted to update our `df` data frame we could do an **explicit assignment** to reassign the output of `set_index()` to `df`:
 
@@ -188,7 +188,7 @@ df.set_index('column_name', inplace=True)
 
 :::{.callout-caution}
 ## In general, avoid using the `inplace=True` argument and favor explicit variable assignments
-Check the information about the `inplace` parameter in the [`set_index()` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html). You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for better readability and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
+Check the information about the `inplace` parameter in the [`set_index()` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html). You will often see the `inplace` parameter in methods for `pandas.DataFrames`. The best practice is to avoid `inplace=True` for more readable and maintainable code. Explicitly assigning the result to a new variable or the same variable makes it clear that an operation has occurred.
 :::
 
 #### Example
@@ -237,7 +237,7 @@ df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 
 is an example of **method chaining**. Each method in the chain returns an object (typically the same object), allowing the next method to be called directly on the result.  This is a powerful technique that makes code concise and readable. 
 
-Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parenthesis:
+Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parentheses:
 
 ```python
 (df.set_index('year')
@@ -247,7 +247,7 @@ Chaining methods can result in lines of code that are too long and hard to read.
 ```
 :::{.callout-note}
 ## Method chaining and the R pipe operator
-If you are familiar with R, you may have noticed that the period `.` in the method chianing acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line, while the period is used at the beginning of the line.
+If you are familiar with R, you may have noticed that the period `.` in the method chaining acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line, while the period is used at the beginning of the line.
 :::
 
 An alternative to the previous code chaining could have been:
@@ -273,11 +273,11 @@ We will move on to another dataset for the rest of this lesson.
 
 ## About the data
 
-For the next plots we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica  during 2007, 2008, and 2009. 
+For the next plots we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica, during 2007, 2008, and 2009. 
 
 ![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-4/lter_penguins.png)
 
-The dataset has 344 rows and 8 columns. We can see it's first three rows below:
+The dataset has 344 rows and 8 columns. We can see its first three rows below:
 
 ```{python}
 #| echo: false
@@ -289,7 +289,7 @@ penguins.head(3)
 
 ## Data exploration
 
-The data is usually accessed through the `palmerpenguins` R data package @palmerpenguins. In this lesson we will access the CSV directly into our workspace using the URL: [https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv]()
+The data is usually accessed through the `palmerpenguins` R data package @palmerpenguins. In this lesson we will access the CSV directly into our workspace using the URL: [https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv](https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv)
 
 
 Let's start by reading in the data:
@@ -313,7 +313,7 @@ penguins.info()
 penguins.describe()
 ```
 
-We can also subset the dataframe to get information about a particular column or groups of columns:
+We can also subset the data frame to get information about a particular column or groups of columns:
 
 ```{python}
 # Count unique values in categorical columns and year
@@ -334,14 +334,14 @@ penguins['species'].value_counts()
 
 At the beginning of the lesson we talked about how the `plot()` method creates a line plot by default. The parameter that controls this behaviour is the `kind` parameter. By changing the value of `kind` we can create different kinds of plots. Let's look at the documentation to see what these values are:
 
-![Extract from the `pandas.DataFrame.plot` documentation. Accessed on Sept 25,2024](/book/images/lesson-4/df-plot-doc.png)
+![Extract from the `pandas.DataFrame.plot` documentation. Accessed on Sept 25, 2024](/book/images/lesson-4/df-plot-doc.png)
 
 Notice the default value of `kind` is `'line'`. 
 
 Let's change the `kind` parameter to create some different plots. 
 
 ## Scatter plots
-Suppose we want to visualy compare the flipper length against the body mass, we can do this with a scatterplot: 
+Suppose we want to visually compare the flipper length against the body mass. We can do this with a scatterplot: 
 
 ```{python}
 penguins.plot(kind='scatter',
@@ -365,16 +365,16 @@ penguins.plot(kind='scatter',
 
 ## Bar plots
 
-We can create bar plots of our data setting `kind='bar'` in the `plot()` method.
+We can create bar plots of our data by setting `kind='bar'` in the `plot()` method.
 
-For example, let's say we want to get data about the 10 penguins with lowest body mass. We can first select this data using the `nsmallest()` method for series:
+For example, let's say we want to get data about the 10 penguins with the lowest body mass. We can first select this data using the `nsmallest()` method for series:
 
 ```{python}
 smallest = penguins['body_mass_g'].nsmallest(10)
 smallest
 ```
 
-We can then plot this data as a bar plot
+We can then plot this data as a bar plot:
 
 ```{python}
 smallest.plot(kind='bar')
@@ -389,7 +389,7 @@ penguins.nsmallest(10, 'body_mass_g')
 
 ## Histograms
 
-We can create a histogram of our data setting `kind='hist'` in `plot()`. 
+We can create a histogram of our data by setting `kind='hist'` in `plot()`. 
 
 ```{python}
 # Using plot without subsetting data - a mess again
@@ -410,7 +410,7 @@ penguins['flipper_length_mm'].plot(kind='hist',
 
 :::{.callout-tip}
 ## Check-in
-1. Select the `bill_length_mm` and `bill_depth_mm` columns in the `penguins` dataframe and then update the kind parameter to `box` to make boxplots of the bill length and bill depth.
+1. Select the `bill_length_mm` and `bill_depth_mm` columns in the `penguins` data frame and then update the `kind` parameter to `box` to make boxplots of the bill length and bill depth.
 <!--
 ```{python}
 penguins[['bill_length_mm','bill_depth_mm']].plot(kind='box')
