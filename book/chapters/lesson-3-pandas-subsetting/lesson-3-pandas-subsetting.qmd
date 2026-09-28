@@ -19,12 +19,12 @@ By the end of this lesson, students will be able to:
 
 ## About the data
 
-In this lesson we will use annual estimates of bird species abundance in four coastal wetlands along the California coast. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
+In this lesson we will use annual estimates of bird species richness (the number of different bird species recorded) in four coastal wetlands along the California coast. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
 ![San Onofre Nuclear Generating Station in San Diego County, California. Source: Southern California Edison](/book/images/lesson-3/SONGS_aerial.jpg)
 
-The annual bird species abundance estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
+The annual bird species richness estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
 
 ```{python}
 #| echo: false
@@ -45,14 +45,25 @@ The four wetlands where the bird surveys occurred are Carpinteria Salt Marsh (CS
 
 A **CSV (Comma-Separated Values) file** is an open, simple text format for storing tabular data, with rows separated by line breaks and columns by commas. It's widely used in environmental science for sharing datasets like species counts and environmental monitoring data because it’s easy to create, read, and process in different platforms, without the need for proprietary software.
 
-To read in a CSV file into our Python workspace as a `pandas.DataFrame` we use the `pandas.read_csv` function:
+To read in a CSV file into our Python workspace we will first use the `os` package to create a reproducible file path:
 
 ```{python}
-#| eval: false
+import os 
 import pandas as pd
 
+fp = os.path.join('data','wetlands_seasonal_bird_diversity.csv')
+fp
+```
+
+`os` is a package that provides functions for interacting with the operating system, allowing us to perform tasks like file manipulation in a platform-independent way.
+
+Using the `os.path.join()` function allows us to create file paths that work on any operating system. Each operating system uses a different way to separate folders in a path (e.g., Windows uses backslashes `\`, while macOS and Linux use forward slashes `/`). By using `os.path.join()`, Python automatically handles the correct separator for the operating system you're working on. This avoids errors and makes your code more portable.
+
+We can then use this file path to read in a CSV with `pandas` by using the `pandas.read_csv` function:
+
+```{python}
 # Read in file, argument is the file path
-df = pd.read_csv('data/wetlands_seasonal_bird_diversity.csv')
+df = pd.read_csv(fp)
 ```
 
 Next, we obtain some high-level information about this data frame: 
@@ -319,17 +330,39 @@ All the selections we have done so far have been using labels. Sometimes we may 
 
 #### Example
 
+Our `post_2020` subset kept the original row labels from `df`: 11, 12, and 13.
+
 ```{python}
-# Select the fifth row (index=4)
-df.iloc[4]
+# Select the first row by position
+post_2020.iloc[0]
 ```
 
 ```{python}
-# Select rows 9 through 13, including 13
-df.iloc[9:14]
+# Select the same row by its label
+post_2020.loc[11]
 ```
 
-Notice that, since we are back to indexing by position, the right endpoint of the slice is not included in the output. 
+Both return the 2021 row. `iloc` counts positions starting from 0, while `loc` uses the labels in the index. That's why `post_2020.loc[0]` raises a `KeyError`: there is no row labeled 0 in `post_2020`.
+
+```{python}
+#| echo: false
+#| output: false
+# Show only the last line of error messages
+%xmode Minimal
+```
+
+```{python}
+#| error: true
+# There is no row with label 0
+post_2020.loc[0]
+```
+
+```{python}
+#| echo: false
+#| output: false
+# Restore the default error messages
+%xmode Context
+```
 
 ## Selecting rows and columns simultaneously...
 
@@ -414,11 +447,11 @@ Unless you are *really* looking for information about the 9th column, **consider
 
 - it relies on a person correctly counting the position of a column. Even with a small dataset this can be prone to error.
 
-- it is not explicit: if we want information about San Dieguito Wetland during spring, `df.SDW_spring` or `df['SDW_spring']` are explicitly telling us we are accessing that information. `df.iloc[:,8]` is obscure and uninformative.
+- it is not explicit: if we want information about San Dieguito Wetland during spring, `df['SDW_spring']` are explicitly telling us we are accessing that information. `df.iloc[:,8]` is obscure and uninformative.
 
 - datasets can get updated. Maybe a new column was added before `SDW_spring`, this would change the position of the column, which would make any code depending on `df.iloc[:,8]` invalid. 
 
-Using `iloc` for accessing columns can still be the best option when working with very large, static datasets. As always, consider what will make your code both understandable and efficient. 
+Using `iloc` for accessing columns can still be the best option when working with files without headers, duplicate column names, or when you just want "the first column". As always, consider what will make your code both understandable and efficient. 
 
 Generally, **accessing columns by labels can help reproducibility!**
 :::
