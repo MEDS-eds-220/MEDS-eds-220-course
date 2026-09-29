@@ -1,0 +1,31 @@
+flowchart LR
+    A(I want to select)
+    A --> C(only columns)
+    A --> K(only rows)
+    A --> P(rows & columns)
+    C --> D(a single column)
+    D --> E{{"df['col_name']"}}
+    C --> F(multiple columns)
+    F --> H(with a list of column names)
+    H --> J{{"df[['col1','col3']]"}}
+    F --> G(with a slice)
+    G --> I{{"df.loc[:,'col_start':'col_end']"}}
+    K --> L(with a condition)
+    L --> M{{"df[df['col']>10]"}}
+    K --> U(with multiple conditions)
+    U --> V{{"df[(condition1) & (condition2)]"}}
+    K --> N(by position)
+    N --> O{{"df.iloc[10:16]"}}
+    P --> S(by labels or conditions)
+    S --> T{{"df.loc[row-selection, column-selection]"}}
+    P --> Q(by position)
+    Q --> R{{"df.iloc[row-indices, column-indices]"}}
+
+
+    %% Add styling for {{}} nodes: yellow for label-based, green for position-based
+    classDef labelStyle fill:#FFFACD,stroke:#333,color:#d6336c,font-family:monospace,white-space:nowrap;
+    classDef positionStyle fill:#EAF7EA,stroke:#333,color:#1E6B34,font-family:monospace,white-space:nowrap;
+
+    %% Apply classes to nodes with {{}} code
+    class E,I,J,M,V,T labelStyle;
+    class O,R positionStyle;
