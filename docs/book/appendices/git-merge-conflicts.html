@@ -455,10 +455,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>No license.</p></li>
 </ul></li>
 <li><p>On your personal computer and using VSCode, clone your repository.</p></li>
-<li><p>Update the default method for pulling into repository by running this line of code in the terminal:</p></li>
+<li><p>Update the default method for pulling into repositories on your personal computer by running this line of code in the terminal:</p></li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This establishes that the default strategy for pulling is that git will first try to auto-merge the files. If auto-merging is not possible, it will then indicate a merge conflict.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This establishes that the default strategy for pulling is that git will first try to auto-merge the files. If auto-merging is not possible, it will then indicate a merge conflict. The <code>--global</code> option applies this setting to every repository on your computer, so you only need to run it once per computer.</p>
 </section>
 <section id="activity-1-merge-conflict" class="level2">
 <h2 class="anchored" data-anchor-id="activity-1-merge-conflict">Activity 1: merge conflict</h2>
@@ -503,9 +503,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="step-2-workbench-clone-repo-and-update-code">Step 2 (@ workbench): Clone repo and update code</h3>
 <ol type="1">
 <li><p>Clone the <code>merge_test_YOURLASTNAME</code> repository to your workbench-1 workspace.</p></li>
-<li><p>In the terminal, run</p></li>
+<li><p>Check that <code>pull.rebase</code> is configured on the workbench by running this in the terminal:</p></li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If the output is <code>false</code>, you are all set. If there is no output, run <code>git config --global pull.rebase false</code>.</p>
 <ol start="3" type="1">
 <li><p>Open the Quarto file and update the selection code to <em>select a different letter</em>.</p></li>
 <li><p>Preview the output by running</p></li>
@@ -661,18 +662,14 @@ https://www.reviewnb.com/git-jupyter-notebook-ultimate-guide
 <p>For this activity, pair up with a partner and assign roles for team member 1 and 2. We will test if you’re able to create and resolve a git merge conflict!</p>
 <ol type="1">
 <li><p><strong>Team member 1:</strong> Send team member 2 the link to your <code>merge_test_YOURLASTNAME</code>. GitHub repository.</p></li>
-<li><p><strong>Team member 2:</strong> Clone team member 1’s repository to your local computer using VSCode.</p></li>
-<li><p>In the terminal, run</p></li>
-</ol>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="4" type="1">
-<li>As a team, work to create a merge conflict that team member 1 can resolve. Decide:</li>
+<li><p><strong>Team member 2:</strong> Clone team member 1’s repository to your local computer using VSCode. You already configured <code>pull.rebase</code> on your computer during the setup, so there is no need to do it again.</p></li>
+<li><p>As a team, work to create a merge conflict that team member 1 can resolve. Decide:</p></li>
 </ol>
 <ul>
 <li>Who needs to update what file?</li>
 <li>When should each of you push or pull?</li>
 </ul>
-<ol start="5" type="1">
+<ol start="4" type="1">
 <li><p>Now try creating another merge conflict so that team member 2 can resolve it.</p></li>
 <li><p>Discuss: what are some best practices you can follow with a team to avoide having merge conflicts?</p></li>
 </ol>
