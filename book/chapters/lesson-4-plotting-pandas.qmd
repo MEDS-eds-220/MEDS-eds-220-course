@@ -15,10 +15,10 @@ By the end of this lesson, students will be able to:
 
 ## About the data
 
-In this lesson we will reuse the annual estimates of bird species abundance in four coastal wetlands along the California coast that we used in the previous lesson on subsetting a `pandas.DataFrame`. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
+In this lesson we will reuse the annual estimates of bird species richness (the number of different bird species recorded) in four coastal wetlands along the California coast that we used in the previous lesson on subsetting a `pandas.DataFrame`. This dataset was derived for education purposes for this course from the [UCSB SONGS Mitigation Monitoring: Wetland Performance Standard - Bird Abundance and Species Richness dataset](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6) @schroeter_ucsb_2024. 
 The SONGS dataset was collected as part of the [San Onofre Nuclear Generating Station (SONGS) San Dieguito Wetland Restoration monitoring program](https://marinemitigation.msi.ucsb.edu). 
 
-The annual bird species abundance estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
+The annual bird species richness estimates are in a CSV file with 13 columns and 14 rows. You can see the first three rows below.
 <!-- TODO: add link to other lesson. Add pictures of birds -->
 
 ```{python}
@@ -62,7 +62,7 @@ When we call it without specifying any other parameters `plot()` creates one lin
 df.plot()
 ```
 
-As we can see, this doesn't make much sense! In particular, look at the x-axis. The default for `plot` is to use the values of the index as the x-axis values. Let's see some examples about how to improve this situation.
+As we can see, this doesn't make much sense! Since the `year` column is also numeric, it gets plotted as a line too, and its values (2010 to 2023) are so much larger than the species counts that all the other lines are squashed at the bottom of the graph. Also, look at the x-axis. The default for `plot` is to use the values of the index as the x-axis values. Let's see some examples about how to improve this situation.
 
 ## Line plots
 
@@ -150,8 +150,10 @@ df.plot(x='year',
                  'TJE_fall': '#AB47BC'
                  },
         subplots=True
-        )
+        );
 ```
+
+The semicolon `;` at the end of the code suppresses the text output of the `plot()` method, which is otherwise printed above the graph (here, an array with the two plot objects), so that only the graph is shown.
 
 ## Updating the index
 
@@ -235,7 +237,7 @@ The code used in the check-in
 df.set_index('year').loc[:,'SDW_winter':'TJE_fall'].plot()
 ```
 
-is an example of **method chaining**. Each method in the chain returns an object (typically the same object), allowing the next method to be called directly on the result.  This is a powerful technique that makes code concise and readable. 
+is an example of **method chaining**. Each method in the chain returns a new object (usually a `pandas.DataFrame` or `pandas.Series`), allowing the next method to be called directly on the result.  This is a powerful technique that makes code concise and readable. 
 
 Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parentheses:
 
@@ -247,7 +249,9 @@ Chaining methods can result in lines of code that are too long and hard to read.
 ```
 :::{.callout-note}
 ## Method chaining and the R pipe operator
-If you are familiar with R, you may have noticed that the period `.` in the method chaining acts in the same way as the R pipe operator (`%>%` or `|>`). The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line, while the period is used at the beginning of the line.
+If you are familiar with R, you may have noticed that the period `.` in the method chaining plays a similar role to the R pipe operator (`%>%` or `|>`). They are not the same, though: the R pipe passes the result on the left as the first argument of *any* function, while the period can only call methods that belong to the object on the left. 
+
+The syntax of one method per line is similar to what is used in the tidyverse, except that the pipe is used at the end of the line, while the period is used at the beginning of the line.
 :::
 
 An alternative to the previous code chaining could have been:
@@ -341,7 +345,7 @@ Notice the default value of `kind` is `'line'`.
 Let's change the `kind` parameter to create some different plots. 
 
 ## Scatter plots
-Suppose we want to visually compare the flipper length against the body mass. We can do this with a scatterplot: 
+Suppose we want to visually compare the flipper length against the body mass. We can do this with a scatter plot: 
 
 ```{python}
 penguins.plot(kind='scatter',
@@ -420,7 +424,7 @@ penguins[['bill_length_mm','bill_depth_mm']].plot(kind='box')
 2. Create a simple histogram of the flipper length of female gentoo penguins.
 <!--
 ```{python}
-penguins.loc[(penguins.species == 'Gentoo') & (penguins.sex == 'female'), 'flipper_length_mm'].plot(kind='hist')
+penguins.loc[(penguins['species'] == 'Gentoo') & (penguins.sex == 'female'), 'flipper_length_mm'].plot(kind='hist')
 ```
 -->
 :::
