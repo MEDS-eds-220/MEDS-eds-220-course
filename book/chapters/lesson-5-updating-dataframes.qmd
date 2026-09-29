@@ -1,23 +1,22 @@
 ---
+title: 4 Updating data frames
 toc-title: In this lesson
 fig-cap-location: margin
 ---
 
-# 4 Updating data frames
-
-In this lesson we will introduce methods for updating a `pandas.DataFrame`, these include adding and removing columns and updating specific values. 
+In this lesson we will introduce methods for updating a `pandas.DataFrame`. These include adding and removing columns and updating specific values. 
 
 <!--
 ## Learning objectives
 
 **TODO**
 
-By the end of this lesson students will be able to:
+By the end of this lesson, students will be able to:
 -->
 
 ## About the data
 
-For this section we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica  during 2007, 2008, and 2009. 
+For this section we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. 
 
 ![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-5/penguins-logo.png)
 
@@ -79,7 +78,7 @@ dict[new_key] = new_value
 
 #### Example
 
-We want to create a new column where the body mass is in kilograms instead of grams, then we need to divide each value in the `body_mass_g` by 1000. 
+We want to create a new column where the body mass is in kilograms instead of grams, then we need to divide each value in the `body_mass_g` column by 1000. 
 
 ```{python}
 # Add new column body_mass_kg 
@@ -100,7 +99,7 @@ df = df.assign(new_col_name=new_column_values)
 ```
 Notice the new column names are not strings, we declare them as if we were creating variables.
 
-This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in-place. This can be useful for chaining operations:
+This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in place. This can be useful for chaining operations:
 
 ```{python}
 (penguins.assign(bill_length_cm=penguins.bill_length_mm/10)
@@ -121,7 +120,7 @@ df.insert(loc=integer_index,  # Location of new column
 
 #### Example
 
-Let's give each penguin observation a unique identifier as a three digit number and add this column at the beginning of the data frame.
+Let's give each penguin observation a unique identifier as a three-digit number and add this column at the beginning of the data frame.
 
 ```{python}
 # Create random 3-digit codes
@@ -176,7 +175,7 @@ penguins.head()
 
 ## Removing columns
 
-We can remove columns using the [`drop()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html) method for `pandas.Data.Frames`, the syntax is:
+We can remove columns using the [`drop()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html) method for `pandas.DataFrames`. The syntax is:
 ```python
 df = df.drop(columns=col_names)
 ```
@@ -214,7 +213,7 @@ Sometimes we want to update a specific value in our data frame. We'll review som
 We can access a single value in a `pandas.DataFrame` using the locators
 
 - [`at[]`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.at.html) to select by labels, or
-- [`iat[]`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.at.html) to select by position. 
+- [`iat[]`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iat.html) to select by position. 
 
 
 The syntax for `at[]` is:
@@ -238,7 +237,7 @@ If we want to know what was the bill length of the penguin which has ID number 8
 penguins.at[859, 'bill_length_mm']
 ```
 
-We get this bill length is an NA. Maybe we want to update it to 38.3 mm. We can do this with `at[]` too:
+We see that this bill length is an NA. Maybe we want to update it to 38.3 mm. We can do this with `at[]` too:
 ```{python}
 # Correct bill length value of penguin with ID 859
 penguins.at[859,'bill_length_mm'] = 38.3
@@ -287,11 +286,11 @@ Often, we need to create a new column where the new values depend on conditions 
 
 #### Example
 
-We want to classify the Palmer penguins such that :
+We want to classify the Palmer penguins such that:
 
-- penguins with body mass less than 3kg as small, 
-- penguins with body mass greater or equal than 3 kg but less than 5 kg as medium, 
-- and those with body mass greater or equal than 5 kg as large. 
+- penguins with body mass less than 3 kg as small, 
+- penguins with body mass greater than or equal to 3 kg but less than 5 kg as medium, 
+- and those with body mass greater than or equal to 5 kg as large. 
 
 One way to add this information in a new column is using the [`numpy.select()`](https://numpy.org/doc/stable/reference/generated/numpy.select.html) function:
 
@@ -330,14 +329,14 @@ df.loc[row_selection, column_name] = new_values
 where 
 
 - `row_selection` is the rows we want to update, this can be any expression that gives us a boolean `pandas.Series`, 
-- `col_name` is a single column name, and 
+- `column_name` is a single column name, and 
 - `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected. 
 
 Using `loc[]` in assignment modifies the data frame directly without the need for reassignment.
 
 #### Example
 
-We want to update the "male" values in the sex column to "M".
+We want to update the "male" values in the `sex` column to "M".
 
 ```{python}
 # Select rows with sex=male and simplify values in 'sex' column
@@ -399,7 +398,7 @@ penguins.head()
 
 To understand why the `SettingWithCopyWarning` pops up we need to understand that some `pandas` operations return a view to your data, while others return a copy of your data.
 
-- **Views** are actual subsets of the original data, when we update them, we are modifying the original data frame. 
+- **Views** are actual subsets of the original data; when we update them, we are modifying the original data frame. 
 
 - **Copies** are unique objects, independent of our original data frames. When we update a copy we are not modifying the original data frame. 
 
@@ -411,7 +410,7 @@ Depending on what we are trying to do we might want to modify the original data 
 
 ![](/book/images/lesson-5/modify-view-copy.png)
 
-Pandas raises the `SettingWithCopyWarning`  because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).
+Pandas raises the `SettingWithCopyWarning` because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).
 
 #### Example
 
@@ -427,7 +426,7 @@ biscoe = penguins[penguins.island=='Biscoe']
 biscoe['sample_col'] = 100  # This raises SettingWithCopyWarning
 ```
 
-`pandas` is trying to alert you that it is unsure about whether `biscoe` is a view or a copy and it's unclear whether an of our code will modify our dataset or not.
+`pandas` is trying to alert you that it is unsure about whether `biscoe` is a view or a copy and it's unclear whether any of our code will modify our dataset or not.
 
 To fix this we can **take control of the copy-view situation and explicitly ask for a copy of the dataset when subsetting the data**. Use the [`copy()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html) method to do this:
 
@@ -448,15 +447,15 @@ biscoe.head()
 
 ```{python}
 # Confirm that original data was not modified
-print('sample_column' in penguins.columns)
+print('sample_col' in penguins.columns)
 ```
 
-The `SettingWithCopyWarning` can be tricky, there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset when needed and possible will save you from the usual pitfalls! 
+The `SettingWithCopyWarning` can be tricky; there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset when needed and possible will save you from the usual pitfalls! 
 
 To learn more about the `SettingWithCopyWarning`, these are some articles that go into more depth:
 
-📖 [`pandas` Documentation -  Returning a view versus a copy](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy)
+📖 [`pandas` Documentation - Returning a view versus a copy](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy)
 
-📖 [Real Python-  SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/#reader-comments)
+📖 [Real Python - SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/#reader-comments)
 
 📖 [Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas](https://www.dataquest.io/blog/settingwithcopywarning/)

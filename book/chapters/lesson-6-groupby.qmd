@@ -1,4 +1,9 @@
-# 5 Grouping
+---
+title: 5 Grouping
+toc-title: In this lesson
+fig-cap-location: margin
+---
+
 <!-- TODO: improve introduction -->
 In this section we will go over the split-apply-combine strategy and the `groupby()` function.
 
@@ -6,7 +11,7 @@ This lesson is based on the [R lesson on summary statistics using group-by and s
 
 ## Learning objectives
 
-By the end of this lesson students will be able to: 
+By the end of this lesson, students will be able to: 
 
 - Understand and apply the Split-Apply-Combine strategy to analyze grouped data.
 - Use `groupby()` to split a `pandas.DataFrame` by one or more columns.
@@ -15,7 +20,7 @@ By the end of this lesson students will be able to:
 
 ## About the data
 
-For this section we will use the  Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica  during 2007, 2008, and 2009. 
+For this section we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. 
 
 ![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-5/penguins-logo.png)
 
@@ -35,7 +40,7 @@ penguins.head()
 
 ## Summary statistics
 
-It is easy to get summary statistics for each column in a `pandas.DataFrame` by using methods such as 
+It is easy to get summary statistics for each column in a `pandas.DataFrame` by using methods such as:
 
 - `sum()`: sum values in each column,
 - `count()`: count non-NA values in each column,
@@ -62,7 +67,7 @@ Add a note about select_dtypes
 
 ## Grouping
 
-Our penguins data is naturally split into different groups: there are three different species, two sexes, and three islands. Often, we want to calculate a certain statistic for each group. For example, suppose we want to calculate the average flipper length per species.  How would we do this "by hand"?
+Our penguins data is naturally split into different groups: there are three different species, two sexes, and three islands. Often, we want to calculate a certain statistic for each group. For example, suppose we want to calculate the average flipper length per species. How would we do this "by hand"?
 
 0. We start with our data and notice there are multiple species in the `species` column.
 
@@ -84,7 +89,7 @@ This is known as the **Split-Apply-Combine strategy**. This strategy follows the
 ![Split-apply-combine to calculate mean flipper length](/book/images/lesson-6/split-apply-combine-penguins-diagram.png)
 :::
 
-For a `pandas.DataFrame` or `pandas.Series`,  we can use the [`groupby()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html) method to split (i.e. group) the data into different categories. 
+For a `pandas.DataFrame` or `pandas.Series`, we can use the [`groupby()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html) method to split (i.e. group) the data into different categories. 
 
 The general syntax for `groupby()` is
 
@@ -123,7 +128,7 @@ Let's recap what went on in that line (remember the `.` can be read as "and then
 - select the `'flipper_length_mm'` column, and then...
 - calculate the `mean()` of this column with respect to the groups.
 
-Notice that the name of the series is the same as the column on which we calculated the summary statistc. We can easily update this using the `rename()` method:
+Notice that the name of the series is the same as the column on which we calculated the summary statistic. We can easily update this using the `rename()` method:
 
 ```{python}
 # Average flipper length per species
@@ -140,7 +145,7 @@ We can also group by combinations of columns.
 
 #### Example
 
-We want to know what was the number of penguins surveyed in each island on different years. We can use the `count()` method to count the number of non-NA values in each column like this:
+We want to know the number of penguins surveyed on each island in different years. We can use the `count()` method to count the number of non-NA values in each column like this:
 
 ```{python}
 penguins.count()
@@ -165,15 +170,11 @@ Let's say we want to plot the surveyed population per year and island. We could 
          )
 ```
 
----
-toc-title: In this lesson
-fig-cap-location: margin
----
 
 :::{.callout-tip }
 ## Check-in
 
-(1) Use the `max()` method for `pandas.DataFrames` to calculate the maximum value of a penguin's body mass by year and species.
+(1) Use the `max()` method for `pandas.DataFrame`s to calculate the maximum value of a penguin's body mass by year and species.
 
 <!--
 ```{python}

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>lesson-6-groupby – EDS 220 - Working with Environmental Datasets</title>
+<title>5 Grouping – EDS 220 - Working with Environmental Datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -155,10 +155,25 @@ div.csl-indent {
     <a class="nav-link" href="../../setup/setup-landing.html"> 
 <span class="menu-text">setup</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../week-by-week/week-by-week.html"> 
-<span class="menu-text">week by week</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-week-by-week" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">week by week</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-week-by-week">    
+        <li>
+    <a class="dropdown-item" href="../../week-by-week/previous-years.html">
+ <span class="dropdown-text">past years</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-0-2026.html">
+ <span class="dropdown-text">week 0</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-1-2026.html">
+ <span class="dropdown-text">week 1</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link active" href="../../book/preface.html" aria-current="page"> 
 <span class="menu-text">notes</span></a>
@@ -452,7 +467,7 @@ div.csl-indent {
 <p>This lesson is based on the <a href="https://learning.nceas.ucsb.edu/2023-06-delta/session_11.html#summary-statistics-using-group_by-and-summarize">R lesson on summary statistics using group-by and summarize</a> <span class="citation" data-cites="do-linh_open_2023"><a href="#ref-do-linh_open_2023" role="doc-biblioref">[1]</a></span> co-developed at the NCEAS Learning Hub.</p>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>By the end of this lesson students will be able to:</p>
+<p>By the end of this lesson, students will be able to:</p>
 <ul>
 <li>Understand and apply the Split-Apply-Combine strategy to analyze grouped data.</li>
 <li>Use <code>groupby()</code> to split a <code>pandas.DataFrame</code> by one or more columns.</li>
@@ -470,7 +485,7 @@ div.csl-indent {
 </figure>
 </div>
 <p>The dataset has 344 rows and 8 columns. Let’s start by loading the data:</p>
-<div id="c7734dde" class="cell" data-execution_count="1">
+<div id="d05ea5a2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -562,7 +577,7 @@ div.csl-indent {
 </section>
 <section id="summary-statistics" class="level2">
 <h2 class="anchored" data-anchor-id="summary-statistics">Summary statistics</h2>
-<p>It is easy to get summary statistics for each column in a <code>pandas.DataFrame</code> by using methods such as</p>
+<p>It is easy to get summary statistics for each column in a <code>pandas.DataFrame</code> by using methods such as:</p>
 <ul>
 <li><code>sum()</code>: sum values in each column,</li>
 <li><code>count()</code>: count non-NA values in each column,</li>
@@ -573,7 +588,7 @@ div.csl-indent {
 </ul>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
-<div id="1962ed67" class="cell" data-execution_count="2">
+<div id="cd23c522" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the number of non-NA values in each column </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>penguins.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -588,7 +603,7 @@ year                 344
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="6d2b7f8c" class="cell" data-execution_count="3">
+<div id="a47021b2" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get minimum value in each column with numerical values</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>penguins.select_dtypes(<span class="st">'number'</span>).<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -636,21 +651,21 @@ Add a note about select_dtypes
 <section id="example-1" class="level4">
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>If we don’t use <code>groupby()</code> and directly apply the <code>mean()</code> method to our flipper length column, we obtain the average of all the values in the column:</p>
-<div id="b2615b70" class="cell" data-execution_count="4">
+<div id="594ced6e" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>200.91520467836258</code></pre>
 </div>
 </div>
 <p>To get the mean flipper length by species we first group our dataset by the species column’s values. However, if we just use the <code>groupby()</code> method without specifying what we wish to calculate on each group, not much happens up front:</p>
-<div id="0bd379f1" class="cell" data-execution_count="5">
+<div id="f027a457" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x149eda550&gt;</code></pre>
+<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x104c1d510&gt;</code></pre>
 </div>
 </div>
 <p>We get a <code>GroupBy</code> object, which is like an intermediate step. It doesn’t perform the actual calculations until we specify an operation:</p>
-<div id="36a28ad2" class="cell" data-execution_count="6">
+<div id="c8353f8a" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>penguins.groupby(<span class="st">'species'</span>)[<span class="st">'flipper_length_mm'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -668,8 +683,8 @@ Name: flipper_length_mm, dtype: float64</code></pre>
 <li>select the <code>'flipper_length_mm'</code> column, and then…</li>
 <li>calculate the <code>mean()</code> of this column with respect to the groups.</li>
 </ul>
-<p>Notice that the name of the series is the same as the column on which we calculated the summary statistc. We can easily update this using the <code>rename()</code> method:</p>
-<div id="b2dcce60" class="cell" data-execution_count="7">
+<p>Notice that the name of the series is the same as the column on which we calculated the summary statistic. We can easily update this using the <code>rename()</code> method:</p>
+<div id="2d791bf1" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average flipper length per species</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>avg_flipper <span class="op">=</span> (penguins.groupby(<span class="st">"species"</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                        .flipper_length_mm</span>
@@ -690,8 +705,8 @@ Name: mean_flipper_length, dtype: float64</code></pre>
 </section>
 <section id="example-2" class="level4">
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
-<p>We want to know what was the number of penguins surveyed in each island on different years. We can use the <code>count()</code> method to count the number of non-NA values in each column like this:</p>
-<div id="6288166d" class="cell" data-execution_count="8">
+<p>We want to know the number of penguins surveyed on each island in different years. We can use the <code>count()</code> method to count the number of non-NA values in each column like this:</p>
+<div id="d2f8a92b" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>penguins.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>species              344
@@ -706,7 +721,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>When we group by island and year we get the count of non-NA values for each column across each combination of island and year:</p>
-<div id="af596459" class="cell" data-execution_count="9">
+<div id="10a16664" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>]).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
@@ -827,7 +842,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Let’s say we want to plot the surveyed population per year and island. We could then use method chaining to do this:</p>
-<div id="75688288" class="cell" data-execution_count="10">
+<div id="0db4e4f8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(penguins.groupby([<span class="st">'island'</span>,<span class="st">'year'</span>])</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>         .count()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         .species</span>
@@ -855,11 +870,11 @@ Check-in
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Use the <code>max()</code> method for <code>pandas.DataFrames</code> to calculate the maximum value of a penguin’s body mass by year and species.</li>
+<li>Use the <code>max()</code> method for <code>pandas.DataFrame</code>s to calculate the maximum value of a penguin’s body mass by year and species.</li>
 </ol>
 <!--
 
-::: {#d80487e0 .cell execution_count=11}
+::: {#2235d91f .cell execution_count=11}
 ``` {.python .cell-code}
 (penguins.groupby(['year','species'])
         .body_mass_g.max()
@@ -891,7 +906,7 @@ Name: max_body_mass, dtype: float64
 </ol>
 <!--
 
-::: {#a6195da3 .cell execution_count=12}
+::: {#fc6f751d .cell execution_count=12}
 ``` {.python .cell-code}
 (penguins.groupby(['year','species'])
         .body_mass_g
