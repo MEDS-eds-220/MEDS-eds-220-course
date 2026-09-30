@@ -17,6 +17,7 @@ By the end of this lesson, students will be able to:
 - Use `groupby()` to split a `pandas.DataFrame` by one or more columns.
 - Calculate summary statistics for groups in a `pandas.DataFrame`.
 - Use method chaining for readable data analysis.
+- Explain how `groupby()` handles NA values and choose between `count()` and `size()` to count observations in each group.
 
 ## About the data
 
@@ -44,7 +45,7 @@ It is easy to get summary statistics for each column in a `pandas.DataFrame` by 
 
 - `sum()`: sum values in each column,
 - `count()`: count non-NA values in each column,
-- `size()`: count the number values in a column (including NA values)
+- `size()`: count the number of values in a column (including NA values),
 - `min()` and `max()`: get the minimum and maximum value in each column,  
 - `mean()` and `median()`: get the mean and median value in each column,
 - `std()` and `var()`: get the standard deviation and variance in each column.
@@ -68,7 +69,7 @@ Add a note about select_dtypes
 
 ## Grouping
 
-Our penguins data is naturally split into different groups: there are three different species, two sexes, and three islands. Often, we want to calculate a certain statistic for each group. For example, suppose we want to calculate the average flipper length per species. How would we do this "by hand"?
+Our penguins data is naturally split into different groups: there are three different species, two sexes (with some missing values), and three islands. Often, we want to calculate a certain statistic for each group. For example, suppose we want to calculate the average flipper length per species. How would we do this "by hand"?
 
 0. We start with our data and notice there are multiple species in the `species` column.
 
@@ -142,8 +143,7 @@ avg_flipper = (penguins.groupby('species')
 avg_flipper
 ```
 
-
-<!-- 
+<!--
 To choose a new name for the result, we can use the `agg()` method with a **named aggregation**. The general syntax is
 
 ```python
@@ -152,7 +152,7 @@ df.groupby(columns_to_group_by).agg(new_column_name=('column', 'summary_method')
 
 The result is a data frame with one column for each named aggregation:
 
-```{python}
+```python
 # Average flipper length per species
 avg_flipper_species = (penguins.groupby('species')
                         .agg(mean_flipper_length=('flipper_length_mm', 'mean'))
@@ -165,21 +165,19 @@ Since the result is a data frame, we need to say which column to sort by in `sor
 
 With `agg()` we can also calculate several summary statistics at once:
 
-```{python}
+```python
 # Several summary statistics per species
 penguins.groupby('species').agg(mean_flipper_length=('flipper_length_mm', 'mean'),
                                 max_body_mass=('body_mass_g', 'max'),
                                 n_penguins=('species', 'size'))
-``` 
+```
 -->
-
-<br>
 
 We can also group by combinations of columns. 
 
 #### Example
 
-Suppose we want to know the mean flipper length, this time by examing separately penguins species surveyed on each island. 
+Suppose we want to know the mean flipper length, this time by examining separately penguin species surveyed on each island. 
 
 ```{python}
 # Average flipper length per species and island
@@ -194,7 +192,7 @@ avg_flipper_species_island
 
 ## Grouping and NA values
 
-Notice first that 11 penguins have no recorded sex. We can check this is in several ways:
+Notice first that 11 penguins have no recorded sex. We can check this using:
 
 - `size`: returns the number of observations in a `pandas.Series`
 - `count()`: returns the number of non-NA observations in the series
@@ -204,7 +202,7 @@ Notice first that 11 penguins have no recorded sex. We can check this is in seve
 penguins['sex'].size - penguins['sex'].count()
 ```
 
-By default, `groupby()` leaves out the rows where the grouping column has NA values. When we group by `sex`, and count the number of observations (rows) we are left with, the 11 NA values are not included:
+By default, `groupby()` leaves out the rows where the grouping column has NA values. When we group by `sex` and count the number of observations (rows) we are left with, the 11 NA values are not included:
 
 ```{python}
 penguins.groupby('sex').size()
@@ -220,17 +218,21 @@ penguins.groupby('sex', dropna=False).size()
 
 :::{.callout-tip }
 ## Check-in
-We are intersted in knowing the number of penguins surveyed on each island in different years. 
+We are interested in knowing the number of penguins surveyed on each island in different years.
 
-1. Run 
-```python
-penguins.groupby(['island','year']).count()
-``` 
-and 
-```python
-penguins.groupby(['island','year']).size()
-```
-2. Discuss the differences between each output. What method would give you the number of penguins surveyed in each island and year combination?
+1. Run
+
+   ```python
+   penguins.groupby(['island','year']).count()
+   ```
+
+   and
+
+   ```python
+   penguins.groupby(['island','year']).size()
+   ```
+
+2. Discuss the differences between each output. What method would give you the number of penguins surveyed on each island and year combination?
 :::
 
 
@@ -242,8 +244,6 @@ The counts for a given combination of island and year are not the same in every 
 To count the number of rows in each group, regardless of NA values, we use the `size()` method.
 
 --->
-
-
 
 Let's say we want to plot the surveyed population per year and island. We could then use method chaining to do this:
 
@@ -265,7 +265,7 @@ Let's say we want to plot the surveyed population per year and island. We could 
 (1) Use the `max()` method to calculate the maximum value of a penguin's body mass by year and species.
 
 <!--
-```{python}
+```python
 (penguins.groupby(['year','species'])
         ['body_mass_g'].max()
         .rename('max_body_mass')
@@ -276,7 +276,7 @@ Let's say we want to plot the surveyed population per year and island. We could 
 (2) Use (1) to display the highest body masses per year and species as a bar plot in descending order.
 
 <!--
-```{python}
+```python
 (penguins.groupby(['year','species'])
         ['body_mass_g']
         .max()
@@ -286,6 +286,3 @@ Let's say we want to plot the surveyed population per year and island. We could 
 ```
 -->
 :::
-
-
-
