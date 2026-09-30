@@ -194,30 +194,56 @@ avg_flipper_species_island
 
 ## Grouping and NA values
 
-We want to know the number of penguins surveyed on each island in different years. We can use the `count()` method to count the number of non-NA values in each column like this:
+Notice first that 11 penguins have no recorded sex. We can check this is in several ways:
+
+- `size`: returns the number of observations in a `pandas.Series`
+- `count()`: returns the number of non-NA observations in the series
 
 ```{python}
-penguins.count()
+# Number of NA observations
+penguins['sex'].size - penguins['sex'].count()
 ```
 
-When we group by island and year we get the count of non-NA values for each column across each combination of island and year:
+By default, `groupby()` leaves out the rows where the grouping column has NA values. When we group by `sex`, and count the number of observations (rows) we are left with, the 11 NA values are not included:
 
 ```{python}
+penguins.groupby('sex').size()
+```
+
+To keep the NA values as their own group, we use the `dropna=False` parameter:
+
+```{python}
+penguins.groupby('sex', dropna=False).size()
+```
+
+## Check-ins
+
+:::{.callout-tip }
+## Check-in
+We are intersted in knowing the number of penguins surveyed on each island in different years. 
+
+1. Run 
+```python
 penguins.groupby(['island','year']).count()
-```
-
----
-
-**CHECK HERE** (audit item 4: `size()` to count rows per group)
-
-Notice that the counts for a given combination of island and year are not the same in every column: `count()` skips NA values, so columns with missing data have lower counts. To count the number of rows in each group, regardless of NA values, we use the `size()` method:
-
-```{python}
-# Number of penguins surveyed per island and year
+``` 
+and 
+```python
 penguins.groupby(['island','year']).size()
 ```
+2. Discuss the differences between each output. What method would give you the number of penguins surveyed in each island and year combination?
+:::
 
----
+
+<!---
+When we use `count()` we get the count of non-NA values for each column across each combination of island and year.
+
+The counts for a given combination of island and year are not the same in every column: `count()` skips NA values, so columns with missing data have lower counts. 
+
+To count the number of rows in each group, regardless of NA values, we use the `size()` method.
+
+--->
+
+
 
 Let's say we want to plot the surveyed population per year and island. We could then use method chaining to do this:
 
@@ -231,24 +257,6 @@ Let's say we want to plot the surveyed population per year and island. We could 
                 ylabel='Island, Year')
          )
 ```
-
----
-
-**CHECK HERE** (audit item 7: NA values in the grouping column are dropped)
-
-By default, `groupby()` leaves out the rows where the grouping column has NA values. For example, 11 penguins have no recorded sex, so they don't appear when we group by `sex`:
-
-```{python}
-penguins.groupby('sex').size()
-```
-
-To keep the NA values as their own group, we use the `dropna=False` parameter:
-
-```{python}
-penguins.groupby('sex', dropna=False).size()
-```
-
----
 
 
 :::{.callout-tip }
