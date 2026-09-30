@@ -5,7 +5,7 @@ fig-cap-location: margin
 ---
 
 <!-- TODO: improve introduction -->
-In this section we will go over the split-apply-combine strategy and the `groupby()` function.
+In this lesson we will go over the split-apply-combine strategy and the `groupby()` function.
 
 This lesson is based on the [R lesson on summary statistics using group-by and summarize](https://learning.nceas.ucsb.edu/2023-06-delta/session_11.html#summary-statistics-using-group_by-and-summarize) @do-linh_open_2023 co-developed at the NCEAS Learning Hub.
 
@@ -16,11 +16,11 @@ By the end of this lesson, students will be able to:
 - Understand and apply the Split-Apply-Combine strategy to analyze grouped data.
 - Use `groupby()` to split a `pandas.DataFrame` by one or more columns.
 - Calculate summary statistics for groups in a `pandas.DataFrame`.
-- Use method chaining for efficient data analysis.
+- Use method chaining for readable data analysis.
 
 ## About the data
 
-For this section we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. 
+For this lesson we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. 
 
 ![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-5/penguins-logo.png)
 
@@ -96,8 +96,8 @@ The general syntax for `groupby()` is
 ```python
 df.groupby(columns_to_group_by).summary_method()
 ```
-Most often, we will have that
-`columns_to_group_by` will be a single column name (a string) or a list of column names. The unique values of the column (or columns) will be used as the groups of the data frame.
+Most often,
+`columns_to_group_by` is a single column name (a string) or a list of column names. The unique values of the column (or columns) will be used as the groups of the data frame.
 
 
 #### Example
@@ -121,7 +121,7 @@ We get a `GroupBy` object, which is like an intermediate step. It doesn't perfor
 penguins.groupby('species')['flipper_length_mm'].mean()
 ```
 
-Let's recap what went on in that line (remember the `.` can be read as "and then..."):
+Let's recap what went on in that line (the `.` can be read as "and then..."):
 
 - start with the `penguins` data frame, and then...
 - use `groupby()` to group the data frame by `species` values, and then...
@@ -133,7 +133,7 @@ Notice that the name of the series is the same as the column on which we calcula
 ```{python}
 # Average flipper length per species
 avg_flipper = (penguins.groupby("species")
-                        .flipper_length_mm
+                        ['flipper_length_mm']
                         .mean()
                         .rename('mean_flipper_length')
                         .sort_values(ascending=False)
@@ -162,11 +162,12 @@ Let's say we want to plot the surveyed population per year and island. We could 
 ```{python}
 (penguins.groupby(['island','year'])
          .count()
-         .species
+         ['species']
          .sort_values()
          .plot(kind='barh',
                 title='Penguins surveyed at the Palmer Archipelago',
-                ylabel=('Island, Year'))
+                xlabel='Number of penguins',
+                ylabel='Island, Year')
          )
 ```
 
@@ -174,12 +175,12 @@ Let's say we want to plot the surveyed population per year and island. We could 
 :::{.callout-tip }
 ## Check-in
 
-(1) Use the `max()` method for `pandas.DataFrame`s to calculate the maximum value of a penguin's body mass by year and species.
+(1) Use the `max()` method to calculate the maximum value of a penguin's body mass by year and species.
 
 <!--
 ```{python}
 (penguins.groupby(['year','species'])
-        .body_mass_g.max()
+        ['body_mass_g'].max()
         .rename('max_body_mass')
         )
 ```
@@ -190,11 +191,14 @@ Let's say we want to plot the surveyed population per year and island. We could 
 <!--
 ```{python}
 (penguins.groupby(['year','species'])
-        .body_mass_g
+        ['body_mass_g']
         .max()
-        .sort_values(ascending=False)
+        .sort_values()
         .plot(kind='barh')
         )
 ```
 -->
 :::
+
+
+
