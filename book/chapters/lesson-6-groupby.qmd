@@ -44,6 +44,7 @@ It is easy to get summary statistics for each column in a `pandas.DataFrame` by 
 
 - `sum()`: sum values in each column,
 - `count()`: count non-NA values in each column,
+- `size()`: count the number values in a column (including NA values)
 - `min()` and `max()`: get the minimum and maximum value in each column,  
 - `mean()` and `median()`: get the mean and median value in each column,
 - `std()` and `var()`: get the standard deviation and variance in each column.
@@ -114,25 +115,36 @@ To get the mean flipper length by species we first group our dataset by the spec
 penguins.groupby('species')['flipper_length_mm']
 ```
 
-We get a `GroupBy` object, which is like an intermediate step. It doesn't perform the actual calculations until we specify an operation:
+We get a `GroupBy` object, which is an intermediate step. It doesn't perform the actual calculations until we specify an operation:
 
 ```{python}
 # Average flipper length per species
 penguins.groupby('species')['flipper_length_mm'].mean()
 ```
 
-Let's recap what went on in that line (the `.` can be read as "and then..."):
+Let's recap what happened in that line (the `.` can be read as "and then..."):
 
 - start with the `penguins` data frame, and then...
 - use `groupby()` to group the data frame by `species` values, and then...
 - select the `'flipper_length_mm'` column, and then...
 - calculate the `mean()` of this column with respect to the groups.
 
----
+Notice that the name of the series is the same as the column on which we calculated the summary statistic. We can easily update this using the `rename()` method:
 
-**CHECK HERE** (audit item 6: `.agg()` with named aggregation replaces `.rename()`)
+```{python}
+# Average flipper length per species
+avg_flipper = (penguins.groupby('species')
+                        ['flipper_length_mm']
+                        .mean()
+                        .rename('mean_flipper_length')
+                        .sort_values(ascending=False)
+                        )
+avg_flipper
+```
 
-Notice that the name of the series is the same as the column on which we calculated the summary statistic. To choose a new name for the result, we can use the `agg()` method with a **named aggregation**. The general syntax is
+
+<!-- 
+To choose a new name for the result, we can use the `agg()` method with a **named aggregation**. The general syntax is
 
 ```python
 df.groupby(columns_to_group_by).agg(new_column_name=('column', 'summary_method'))
@@ -142,11 +154,11 @@ The result is a data frame with one column for each named aggregation:
 
 ```{python}
 # Average flipper length per species
-avg_flipper = (penguins.groupby('species')
+avg_flipper_species = (penguins.groupby('species')
                         .agg(mean_flipper_length=('flipper_length_mm', 'mean'))
                         .sort_values('mean_flipper_length', ascending=False)
                         )
-avg_flipper
+avg_flipper_species
 ```
 
 Since the result is a data frame, we need to say which column to sort by in `sort_values()`.
@@ -158,13 +170,29 @@ With `agg()` we can also calculate several summary statistics at once:
 penguins.groupby('species').agg(mean_flipper_length=('flipper_length_mm', 'mean'),
                                 max_body_mass=('body_mass_g', 'max'),
                                 n_penguins=('species', 'size'))
-```
+``` 
+-->
 
----
+<br>
 
 We can also group by combinations of columns. 
 
 #### Example
+
+Suppose we want to know the mean flipper length, this time by examing separately penguins species surveyed on each island. 
+
+```{python}
+# Average flipper length per species and island
+avg_flipper_species_island = (penguins.groupby(['species','island'])
+                                ['flipper_length_mm']
+                                .mean()
+                                .rename('mean_flipper_length')
+                                .sort_values(ascending=False)
+                                )
+avg_flipper_species_island
+```
+
+## Grouping and NA values
 
 We want to know the number of penguins surveyed on each island in different years. We can use the `count()` method to count the number of non-NA values in each column like this:
 
@@ -182,7 +210,7 @@ penguins.groupby(['island','year']).count()
 
 **CHECK HERE** (audit item 4: `size()` to count rows per group)
 
-Notice that the counts are not the same in every column: `count()` skips NA values, so columns with missing data have lower counts. To count the number of rows in each group, regardless of NA values, we use the `size()` method:
+Notice that the counts for a given combination of island and year are not the same in every column: `count()` skips NA values, so columns with missing data have lower counts. To count the number of rows in each group, regardless of NA values, we use the `size()` method:
 
 ```{python}
 # Number of penguins surveyed per island and year
