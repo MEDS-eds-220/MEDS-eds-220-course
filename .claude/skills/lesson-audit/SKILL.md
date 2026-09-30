@@ -79,4 +79,6 @@ Reply in chat (no HTML file unless asked), in this order:
 4. **Worth adding for this cohort.** At most three items, each tied to a concrete student error or homework question.
 5. **Minor.** Typos, inconsistent wording, redundant sentences. Keep it short.
 
+Number the items in sections 2–5 with one continuous sequence (for example, if Corrections ends at 3, Outdated methods starts at 4), so the instructor can ask for fixes by number. Don't number the section headings, and don't restart the count in each section.
+
 Reference locations as clickable markdown links relative to the repo root, for example `[line 42](book/chapters/lesson-3-pandas-subsetting/lesson-3-pandas-subsetting.qmd#L42)`. Leave out empty sections. End by offering to make specific fixes, and don't make them until asked.
