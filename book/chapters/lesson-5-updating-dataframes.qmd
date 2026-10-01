@@ -41,8 +41,9 @@ Let us start by importing the packages we will use in this lesson and loading th
 ```{python}
 import numpy as np
 import pandas as pd
+
 # Create a random number generator with a seed
-rng = np.random.default_rng(42)
+rng = np.random.default_rng(seed=42)
 
 # Import data
 URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'
@@ -97,7 +98,7 @@ We can also create or update an existing column using the [`assign()`](https://p
 ```python
 df = df.assign(new_col_name=new_column_values)
 ```
-Notice the new column names are not strings, we declare them as if we were creating variables.
+Notice the new column names are not strings. We declare them as if we were creating variables.
 
 This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in place. This can be useful for chaining operations:
 
@@ -129,7 +130,7 @@ Let's give each penguin observation a unique identifier as a three-digit number 
 codes = rng.choice(np.arange(100, 1000), size=len(penguins), replace=False)  # Sampling w/o replacement
 
 # Insert codes at the front of data frame
-penguins.insert(loc=0,  # Index
+penguins.insert(loc=0,  # First position
                 column='id_code',
                 value=codes)
         
@@ -232,7 +233,7 @@ penguins = penguins.set_index('id_code')
 penguins
 ```
 
-If we want to know what was the bill length of the penguin which has ID number 330, we can directly access that information using `at[]`:
+If we want to know the bill length of the penguin with ID 330, we can directly access that information using `at[]`:
 
 ```{python}
 # Check bill length of penguin with ID 330
@@ -263,7 +264,9 @@ penguins.columns.get_loc('column_name')
 ## Check-in
 a. Obtain the location of the `bill_length_mm` column.
 
-b. Use `iat[]` to access the same bill length value for the penguin with ID 330 and revert it back to an NA. Confirm your update using `iloc[]`.
+b. Use `iat[]` to access the same bill length value for the penguin with ID 330 and set it back to NA. Confirm your update using `iloc[]`. 
+
+HINT: What would be an equivalent method to `penguins.columns.get_loc('column_name')` to get the location of a specific label in the index?
 :::
 
 <!--
@@ -412,7 +415,17 @@ Depending on what we are trying to do we might want to modify the original data 
 
 ![](/book/images/lesson-5/modify-view-copy.png)
 
-Pandas raises the `SettingWithCopyWarning` because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).
+`pandas` raises the `SettingWithCopyWarning` because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).
+
+::: {.callout-important}
+## Heads-up: pandas 3 and Copy-on-Write
+This course uses `pandas` 2. Starting with `pandas` 3.0 (released January 2026), [Copy-on-Write](https://pandas.pydata.org/docs/user_guide/copy_on_write.html) is the default behavior. If you run this lesson's code with `pandas` 3 (for example, in a newer installation or on another platform), you will notice two differences:
+
+- Chained assignment like `df[df['col'] == value]['col2'] = new_value` still does not update the data frame, but the warning is called `ChainedAssignmentError` instead of `SettingWithCopyWarning`.
+- Any subset of a data frame behaves like a copy. Modifying the subset never changes the original data frame, so you will not see a warning in the Biscoe island example below.
+
+The best practice is the same in both versions: to update values in a data frame, use `.loc[]`.
+:::
 
 #### Example
 
@@ -458,16 +471,6 @@ To learn more about the `SettingWithCopyWarning`, these are some articles that g
 
 📖 [`pandas` Documentation - Returning a view versus a copy](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/indexing.html#returning-a-view-versus-a-copy)
 
-📖 [Real Python - SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/#reader-comments)
+📖 [Real Python - SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/)
 
 📖 [Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas](https://www.dataquest.io/blog/settingwithcopywarning/)
-
-::: {.callout-important}
-## Heads-up: pandas 3 and Copy-on-Write
-This course uses `pandas` 2. Starting with `pandas` 3.0 (released January 2026), [Copy-on-Write](https://pandas.pydata.org/docs/user_guide/copy_on_write.html) is the default behavior. If you run this lesson's code with `pandas` 3 (for example, in a newer installation or on another platform), you will notice two differences:
-
-- Chained assignment like `df[df['col'] == value]['col2'] = new_value` still does not update the data frame, but the warning is called `ChainedAssignmentError` instead of `SettingWithCopyWarning`.
-- Any subset of a data frame behaves like a copy. Modifying the subset never changes the original data frame, so you will not see a warning in the Biscoe island example below.
-
-The best practice is the same in both versions: to update values in a data frame, use `.loc[]`.
-:::

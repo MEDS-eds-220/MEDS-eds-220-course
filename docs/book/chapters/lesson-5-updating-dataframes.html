@@ -491,8 +491,8 @@ By the end of this lesson, students will be able to:
 </figure>
 </div>
 <p>The dataset has 344 rows and 8 columns. We can see the head of the dataset below:</p>
-<div id="95ba860f" class="cell" data-execution_count="1">
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div id="d90ee42f" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
 
@@ -576,15 +576,16 @@ By the end of this lesson, students will be able to:
 <section id="adding-a-single-column" class="level2">
 <h2 class="anchored" data-anchor-id="adding-a-single-column">Adding a single column…</h2>
 <p>Let us start by importing the packages we will use in this lesson and loading the data:</p>
-<div id="07a9e13b" class="cell" data-execution_count="2">
+<div id="fc518467" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a random number generator with a seed</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Import data</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(URL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a random number generator with a seed</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Import data</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(URL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!--
 :::{.callout-caution}
@@ -608,7 +609,7 @@ By the end of this lesson, students will be able to:
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>We want to create a new column where the body mass is in kilograms instead of grams, then we need to divide each value in the <code>body_mass_g</code> column by 1000.</p>
-<div id="9677c209" class="cell" data-execution_count="3">
+<div id="e17f6414" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new column body_mass_kg </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'body_mass_kg'</span>] <span class="op">=</span> penguins[<span class="st">'body_mass_g'</span>]<span class="op">/</span><span class="dv">1000</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -620,7 +621,7 @@ By the end of this lesson, students will be able to:
 <div class="cell-output cell-output-stdout">
 <pre><code>body_mass_kg is in the data frame's columns:  True</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -712,9 +713,9 @@ By the end of this lesson, students will be able to:
 <h3 class="anchored" data-anchor-id="using-the-assign-method">…using the <code>assign()</code> method</h3>
 <p>We can also create or update an existing column using the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html"><code>assign()</code></a> method for <code>pandas.DataFrames</code>. The general syntax is:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.assign(new_col_name<span class="op">=</span>new_column_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Notice the new column names are not strings, we declare them as if we were creating variables.</p>
+<p>Notice the new column names are not strings. We declare them as if we were creating variables.</p>
 <p>This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in place. This can be useful for chaining operations:</p>
-<div id="9e2a326d" class="cell" data-execution_count="4">
+<div id="be7da59b" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(penguins.assign(bill_length_cm<span class="op">=</span>penguins[<span class="st">'bill_length_mm'</span>]<span class="op">/</span><span class="dv">10</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        .plot(kind<span class="op">=</span><span class="st">'scatter'</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>              x<span class="op">=</span><span class="st">'bill_length_cm'</span>, </span>
@@ -739,17 +740,17 @@ By the end of this lesson, students will be able to:
 <section id="example-1" class="level4">
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>Let’s give each penguin observation a unique identifier as a three-digit number and add this column at the beginning of the data frame.</p>
-<div id="9bac7ada" class="cell" data-execution_count="5">
+<div id="15676ad8" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create random 3-digit codes</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>codes <span class="op">=</span> rng.choice(np.arange(<span class="dv">100</span>, <span class="dv">1000</span>), size<span class="op">=</span><span class="bu">len</span>(penguins), replace<span class="op">=</span><span class="va">False</span>)  <span class="co"># Sampling w/o replacement</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert codes at the front of data frame</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>penguins.insert(loc<span class="op">=</span><span class="dv">0</span>,  <span class="co"># Index</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>penguins.insert(loc<span class="op">=</span><span class="dv">0</span>,  <span class="co"># First position</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                column<span class="op">=</span><span class="st">'id_code'</span>,</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                value<span class="op">=</span>codes)</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -867,7 +868,7 @@ df.columns.get_loc()
 <li>a code representing the observer.</li>
 </ul>
 <p>We can add these columns to <code>penguins</code> using <code>assign()</code>:</p>
-<div id="b7d78456" class="cell" data-execution_count="6">
+<div id="2b6765dd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create columns with observer codes and flipper length in cm</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> penguins.assign(flipper_length_cm<span class="op">=</span>penguins[<span class="st">'flipper_length_mm'</span>]<span class="op">/</span><span class="dv">10</span>, </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                           observer<span class="op">=</span>rng.choice([<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>],  <span class="co"># Sample with replacement</span></span>
@@ -875,7 +876,7 @@ df.columns.get_loc()
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                          )</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine result</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
 
@@ -989,7 +990,7 @@ df.columns.get_loc()
 <section id="example-3" class="level4">
 <h4 class="anchored" data-anchor-id="example-3">Example</h4>
 <p>Now that we updated the units for flipper length and body mass, it makes sense to remove the previous columns to avoid duplicate information. We can do this using <code>drop()</code>:</p>
-<div id="d18eb85b" class="cell" data-execution_count="7">
+<div id="76ee129a" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove duplicate length and mass measurements</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> penguins.drop(columns<span class="op">=</span>[<span class="st">'flipper_length_mm'</span>,<span class="st">'body_mass_g'</span>])</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1028,10 +1029,10 @@ df.columns.get_loc()
 <section id="example-4" class="level4">
 <h4 class="anchored" data-anchor-id="example-4">Example</h4>
 <p>For this example, let’s first update the index of the data frame to be the <code>id_code</code> column:</p>
-<div id="94553a97" class="cell" data-execution_count="8">
+<div id="aab4d8da" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> penguins.set_index(<span class="st">'id_code'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>penguins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="48">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -1202,22 +1203,22 @@ df.columns.get_loc()
 </div>
 </div>
 </div>
-<p>If we want to know what was the bill length of the penguin which has ID number 330, we can directly access that information using <code>at[]</code>:</p>
-<div id="24492c31" class="cell" data-execution_count="9">
+<p>If we want to know the bill length of the penguin with ID 330, we can directly access that information using <code>at[]</code>:</p>
+<div id="26bed85c" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check bill length of penguin with ID 330</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>penguins.at[<span class="dv">330</span>, <span class="st">'bill_length_mm'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="49">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>nan</code></pre>
 </div>
 </div>
 <p>We see that this bill length is an NA. Maybe we want to update it to 38.3 mm. We can do this with <code>at[]</code> too:</p>
-<div id="f6813462" class="cell" data-execution_count="10">
+<div id="dd4615af" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct bill length value of penguin with ID 330</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>penguins.at[<span class="dv">330</span>,<span class="st">'bill_length_mm'</span>] <span class="op">=</span> <span class="fl">38.3</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm value was updated</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>penguins.loc[<span class="dv">330</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="50">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>species                 Adelie
 island               Torgersen
 bill_length_mm            38.3
@@ -1247,13 +1248,14 @@ Check-in
 <div class="callout-body-container callout-body">
 <ol type="a">
 <li><p>Obtain the location of the <code>bill_length_mm</code> column.</p></li>
-<li><p>Use <code>iat[]</code> to access the same bill length value for the penguin with ID 330 and revert it back to an NA. Confirm your update using <code>iloc[]</code>.</p></li>
+<li><p>Use <code>iat[]</code> to access the same bill length value for the penguin with ID 330 and set it back to NA. Confirm your update using <code>iloc[]</code>.</p></li>
 </ol>
+<p>HINT: What would be an equivalent method to <code>penguins.columns.get_loc('column_name')</code> to get the location of a specific label in the index?</p>
 </div>
 </div>
 <!--
 
-::: {#b85ff06c .cell execution_count=11}
+::: {#59caea49 .cell execution_count=11}
 ``` {.python .cell-code}
 # Set to NaN using iat
 bill_length_index = penguins.columns.get_loc('bill_length_mm')
@@ -1263,7 +1265,7 @@ penguins.iat[3,bill_length_index] = np.nan
 penguins.iloc[3]
 ```
 
-::: {.cell-output .cell-output-display execution_count=51}
+::: {.cell-output .cell-output-display execution_count=11}
 ```
 species                 Adelie
 island               Torgersen
@@ -1299,7 +1301,7 @@ Name: 330, dtype: object
 <li>and those with body mass greater than or equal to 5 kg as large.</li>
 </ul>
 <p>One way to add this information in a new column is using the <a href="https://numpy.org/doc/stable/reference/generated/numpy.select.html"><code>numpy.select()</code></a> function:</p>
-<div id="9be64971" class="cell" data-execution_count="12">
+<div id="c0773249" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list with the conditions</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [penguins[<span class="st">'body_mass_kg'</span>] <span class="op">&lt;</span> <span class="dv">3</span>, </span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">3</span> <span class="op">&lt;=</span> penguins[<span class="st">'body_mass_kg'</span>]) <span class="op">&amp;</span> (penguins[<span class="st">'body_mass_kg'</span>] <span class="op">&lt;</span> <span class="dv">5</span>),</span>
@@ -1317,7 +1319,7 @@ Name: 330, dtype: object
 <span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the updated data frame to confirm the new column</span></span>
 <span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="52">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
@@ -1443,7 +1445,7 @@ Add np.where and pd.cut()
 <section id="example-6" class="level4">
 <h4 class="anchored" data-anchor-id="example-6">Example</h4>
 <p>We want to update the “male” values in the <code>sex</code> column to “M”.</p>
-<div id="3073c9e0" class="cell" data-execution_count="13">
+<div id="9d6d0934" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select rows with sex=male and simplify values in 'sex' column</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>penguins.loc[penguins[<span class="st">'sex'</span>]<span class="op">==</span><span class="st">'male'</span>, <span class="st">'sex'</span>] <span class="op">=</span> <span class="st">'M'</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1458,11 +1460,11 @@ Add np.where and pd.cut()
 <section id="best-practices" class="level3">
 <h3 class="anchored" data-anchor-id="best-practices">Best practices</h3>
 <p>Suppose we want to similarly update the “female” values in the <code>sex</code> column to “F”. This is an example of another way we might try to do it:</p>
-<div id="092c1ef0" class="cell" data-execution_count="14">
+<div id="f02a29d4" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select rows where 'sex' is 'female' and then attempt to update 'sex' column values</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>penguins[penguins[<span class="st">'sex'</span>]<span class="op">==</span><span class="st">'female'</span>][<span class="st">'sex'</span>] <span class="op">=</span> <span class="st">'F'</span> <span class="co"># This raises SettingWithCopyWarning</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/g8/f3j5vysd4pn88krh3zc0qv_h0000gn/T/ipykernel_1436/270219355.py:2: SettingWithCopyWarning: 
+<pre><code>/var/folders/g8/f3j5vysd4pn88krh3zc0qv_h0000gn/T/ipykernel_52599/270219355.py:2: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -1471,7 +1473,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>When we select the data we want to update using <strong>chained indexing</strong> (two selection brackets <code>[][]</code>) instead of <code>loc[]</code> we get a <code>SettingWithCopyWarning</code>. With this warning, <code>pandas</code> is trying to alert us to a potential bug. In this case, the bug is that we actually did not update our data frame:</p>
-<div id="f00260bc" class="cell" data-execution_count="15">
+<div id="d7354722" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm values were updated</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(penguins[<span class="st">'sex'</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1515,7 +1517,7 @@ Check-in
 </div>
 <!--
 
-::: {#421d022a .cell execution_count=16}
+::: {#62771219 .cell execution_count=16}
 ``` {.python .cell-code}
 # no chained indexing in assignment = no warning
 penguins.loc[penguins['sex']=='female','sex'] = 'F'
@@ -1524,7 +1526,7 @@ penguins.loc[penguins['sex']=='female','sex'] = 'F'
 penguins.head()
 ```
 
-::: {.cell-output .cell-output-display execution_count=56}
+::: {.cell-output .cell-output-display execution_count=16}
 ```{=html}
 <div>
 <style scoped>
@@ -1655,11 +1657,29 @@ penguins.head()
 <p><img src="../../book/images/lesson-5/view-copy.png" class="img-fluid"></p>
 <p>Depending on what we are trying to do we might want to modify the original data frame or we might want to modify a copy.</p>
 <p><img src="../../book/images/lesson-5/modify-view-copy.png" class="img-fluid"></p>
-<p>Pandas raises the <code>SettingWithCopyWarning</code> because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).</p>
+<p><code>pandas</code> raises the <code>SettingWithCopyWarning</code> because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Heads-up: pandas 3 and Copy-on-Write
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This course uses <code>pandas</code> 2. Starting with <code>pandas</code> 3.0 (released January 2026), <a href="https://pandas.pydata.org/docs/user_guide/copy_on_write.html">Copy-on-Write</a> is the default behavior. If you run this lesson’s code with <code>pandas</code> 3 (for example, in a newer installation or on another platform), you will notice two differences:</p>
+<ul>
+<li>Chained assignment like <code>df[df['col'] == value]['col2'] = new_value</code> still does not update the data frame, but the warning is called <code>ChainedAssignmentError</code> instead of <code>SettingWithCopyWarning</code>.</li>
+<li>Any subset of a data frame behaves like a copy. Modifying the subset never changes the original data frame, so you will not see a warning in the Biscoe island example below.</li>
+</ul>
+<p>The best practice is the same in both versions: to update values in a data frame, use <code>.loc[]</code>.</p>
+</div>
+</div>
 <section id="example-7" class="level4">
 <h4 class="anchored" data-anchor-id="example-7">Example</h4>
 <p>We only want to use data from Biscoe island and, after doing some analyses, we want to add a new column to it:</p>
-<div id="0bef8105" class="cell" data-execution_count="17">
+<div id="4b370cca" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select penguins from Biscoe island</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>biscoe <span class="op">=</span> penguins[penguins[<span class="st">'island'</span>]<span class="op">==</span><span class="st">'Biscoe'</span>]</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1668,7 +1688,7 @@ penguins.head()
 <span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a column</span></span>
 <span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>biscoe[<span class="st">'sample_col'</span>] <span class="op">=</span> <span class="dv">100</span>  <span class="co"># This raises SettingWithCopyWarning</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/g8/f3j5vysd4pn88krh3zc0qv_h0000gn/T/ipykernel_1436/2085853990.py:7: SettingWithCopyWarning: 
+<pre><code>/var/folders/g8/f3j5vysd4pn88krh3zc0qv_h0000gn/T/ipykernel_52599/2085853990.py:7: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -1678,7 +1698,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 <p><code>pandas</code> is trying to alert you that it is unsure about whether <code>biscoe</code> is a view or a copy and it’s unclear whether any of our code will modify our dataset or not.</p>
 <p>To fix this we can <strong>take control of the copy-view situation and explicitly ask for a copy of the dataset when subsetting the data</strong>. Use the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html"><code>copy()</code></a> method to do this:</p>
-<div id="d29b2800" class="cell" data-execution_count="18">
+<div id="a14c0586" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure you get an independent data frame that won't alter the original</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>biscoe <span class="op">=</span> penguins[penguins[<span class="st">'island'</span>]<span class="op">==</span><span class="st">'Biscoe'</span>].copy()</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1686,10 +1706,10 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>biscoe[<span class="st">'sample_col'</span>] <span class="op">=</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we are sure we did not modify our initial data, but rather the <code>biscoe</code> data frame:</p>
-<div id="4401ec59" class="cell" data-execution_count="19">
+<div id="a2a995e3" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm the new column is in our subset data</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>biscoe.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="59">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 
 
@@ -1801,7 +1821,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 </div>
-<div id="b54718a4" class="cell" data-execution_count="20">
+<div id="492224c4" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm that original data was not modified</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'sample_col'</span> <span class="kw">in</span> penguins.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1811,26 +1831,8 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <p>The <code>SettingWithCopyWarning</code> can be tricky; there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset when needed and possible will save you from the usual pitfalls!</p>
 <p>To learn more about the <code>SettingWithCopyWarning</code>, these are some articles that go into more depth:</p>
 <p>📖 <a href="https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/indexing.html#returning-a-view-versus-a-copy"><code>pandas</code> Documentation - Returning a view versus a copy</a></p>
-<p>📖 <a href="https://realpython.com/pandas-settingwithcopywarning/#reader-comments">Real Python - SettingWithCopyWarning in pandas: Views vs Copies</a></p>
+<p>📖 <a href="https://realpython.com/pandas-settingwithcopywarning/">Real Python - SettingWithCopyWarning in pandas: Views vs Copies</a></p>
 <p>📖 <a href="https://www.dataquest.io/blog/settingwithcopywarning/">Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas</a></p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Heads-up: pandas 3 and Copy-on-Write
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This course uses <code>pandas</code> 2. Starting with <code>pandas</code> 3.0 (released January 2026), <a href="https://pandas.pydata.org/docs/user_guide/copy_on_write.html">Copy-on-Write</a> is the default behavior. If you run this lesson’s code with <code>pandas</code> 3 (for example, in a newer installation or on another platform), you will notice two differences:</p>
-<ul>
-<li>Chained assignment like <code>df[df['col'] == value]['col2'] = new_value</code> still does not update the data frame, but the warning is called <code>ChainedAssignmentError</code> instead of <code>SettingWithCopyWarning</code>.</li>
-<li>Any subset of a data frame behaves like a copy. Modifying the subset never changes the original data frame, so you will not see a warning in the Biscoe island example below.</li>
-</ul>
-<p>The best practice is the same in both versions: to update values in a data frame, use <code>.loc[]</code>.</p>
-</div>
-</div>
 
 
 
