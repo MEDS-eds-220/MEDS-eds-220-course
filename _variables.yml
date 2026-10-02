@@ -10,6 +10,10 @@
 #   - _quarto.yml (navbar, sidebar)
 #   - HTML comments <!-- -->
 #   - the archived week-by-week/week-by-week-YYYY.qmd files (frozen, never edited)
+#
+# Write dates as 'Weekday, Month D' (e.g. 'Friday, October 2'). The course calendar
+# (shortcodes/course-calendar.lua) checks that every weekday matches its date and
+# warns when rendering if one doesn't.
 
 # ---------------------------------------
 # GENERAL
@@ -42,6 +46,7 @@ ta-student-hours: 'Tuesday 3 pm - 4 pm @ Bren Hall 3016'
 # Lectures on Tuesday and Thursday, discussion section on Friday.
 
 # Week 0
+week0-monday: 'Monday, September 21'      # start of the term: the course calendar counts weeks from here
 week0-range: 'Sept 21 - 27'
 week0-thursday: 'Thursday, September 24'   # setup session (no class on Tuesday)
 week0-friday: 'Friday, September 25'
@@ -110,6 +115,22 @@ week10-friday: 'Friday, December 4'
 finals-week-range: 'Dec 7 - 11'
 
 # ---------------------------------------
+# WEEKLY TOPICS (shown in the course calendar)
+
+week0-topic: 'Python review'
+week1-topic: 'Tabular data I'
+week2-topic: 'Tabular data II'
+week3-topic: 'Tabular data III'
+week4-topic: 'Vector data I'
+week5-topic: 'Vector data II'
+week6-topic: 'Multi-dimensional data'
+week7-topic: 'Rasters I'
+week8-topic: 'Rasters II'
+week9-topic: 'Rasters III'
+week10-topic: 'Extra topics'
+finals-week-topic: '-'
+
+# ---------------------------------------
 # DEADLINES
 # Homework is released on Friday and due at 11:59 pm on the following week's Saturday.
 # Logistics questions are answered until 5 pm on the day before the due date.
@@ -119,30 +140,68 @@ entry-survey-due: 'Thursday, September 24'
 hwk1-release: 'Friday, October 2'
 hwk1-questions-deadline: 'Friday, October 9'
 hwk1-due: 'Saturday, October 10'
+hwk1-resubmission: 'Saturday, October 17'
 
 hwk2-release: 'Friday, October 16'
 hwk2-questions-deadline: 'Friday, October 23'
 hwk2-due: 'Saturday, October 24'
+hwk2-resubmission: 'Saturday, October 31'
 
 hwk3-release: 'Friday, October 30'
 hwk3-questions-deadline: 'Friday, November 6'
 hwk3-due: 'Saturday, November 7'
+hwk3-resubmission: 'Saturday, November 14'
 
 hwk4-release: 'Friday, November 13'
 hwk4-questions-deadline: 'Friday, November 20'
 hwk4-due: 'Saturday, November 21'
+hwk4-resubmission: 'Saturday, November 28'
 
-final-blog-post-due: 'Thursday, December 3'
-final-repo-due: 'Saturday, December 5'
+final-project-instructions-available: 'Monday, November 23'
+final-blog-post-due: 'Saturday, December 5'
+final-repo-due: 'Wednesday, December 2'
 final-feedback-date: 'Tuesday, December 8'
 final-resubmission-due: 'Friday, December 11'
+final-resubmission-time: '5 pm'
+exit-survey-due: 'Friday, December 11'
 last-day-of-quarter: 'Friday, December 11'
+
+# ---------------------------------------
+# COURSE CALENDAR
+# Events shown by {{< course-calendar >}} (home page and syllabus slides).
+# `date` (and the optional `time`) are names of variables above, never dates written here.
+# Each event is placed in its week and weekday column from its date.
+# `type` sets the color: due (red), available (green), resubmission (orange), info or noclass (pink).
+
+calendar-events:
+  - {date: week0-thursday, label: 'Course starts', type: info}
+  - {date: entry-survey-due, label: 'Entry survey due', type: due}
+  - {date: hwk1-release, label: 'Hwk 1 available', type: available}
+  - {date: hwk1-due, label: 'Hwk 1 due', type: due}
+  - {date: hwk1-resubmission, label: 'Hwk 1 resubmission', type: resubmission}
+  - {date: hwk2-release, label: 'Hwk 2 available', type: available}
+  - {date: hwk2-due, label: 'Hwk 2 due', type: due}
+  - {date: hwk2-resubmission, label: 'Hwk 2 resubmission', type: resubmission}
+  - {date: hwk3-release, label: 'Hwk 3 available', type: available}
+  - {date: hwk3-due, label: 'Hwk 3 due', type: due}
+  - {date: hwk3-resubmission, label: 'Hwk 3 resubmission', type: resubmission}
+  - {date: hwk4-release, label: 'Hwk 4 available', type: available}
+  - {date: hwk4-due, label: 'Hwk 4 due', type: due}
+  - {date: hwk4-resubmission, label: 'Hwk 4 resubmission', type: resubmission}
+  - {date: final-project-instructions-available, label: 'Portfolio instructions available', type: available}
+  - {date: week9-thursday, label: 'No class (Thanksgiving break)', type: noclass}
+  - {date: week9-friday, label: 'No section (Thanksgiving break)', type: noclass}
+  - {date: final-blog-post-due, label: 'Blog post due', type: due}
+  - {date: final-repo-due, label: 'Data analysis + GH repo due', type: due}
+  - {date: final-feedback-date, label: 'Portfolio feedback available', type: available}
+  - {date: final-resubmission-due, time: final-resubmission-time, label: 'Portfolio final submission', type: due}
+  - {date: exit-survey-due, label: 'Exit survey due', type: due}
 
 # ---------------------------------------
 # SHARED FOLDERS, FILES AND FORMS
 
 shared-data-folder: https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=sharing
-shared-notebooks-folder: https://drive.google.com/drive/folders/1L1bvxICUy1OkW5_UNMA_WTjOCXUaE8Nz?usp=sharing
+shared-notebooks-folder: https://github.com/MEDS-eds-220/student-notebooks
 wetlands-bird-diversity-csv: https://drive.google.com/file/d/1VCmBYZ1LmgmvxQt9KEcczc6KPDlAYRp0/view?usp=share_link
 entry-survey: https://forms.gle/sqELW46qbEsW13nU7
 github-repos-spreadsheet: https://docs.google.com/spreadsheets/d/1ArGvWwOe5ZhSVFIAPc2iaKAH55C0QnNY6Dc1As0-aBw/edit?usp=sharing
