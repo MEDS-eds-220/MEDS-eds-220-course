@@ -54,7 +54,14 @@ EDS 217 did **not** cover `.iloc`, method chaining (it explicitly avoided it), `
    - **matplotlib 3.9+:** removed `cm.get_cmap`.
    - **pystac-client:** current method names.
 3. **Newer, widely accepted practices.** Only include a practice that the library's own documentation recommends, or that is clearly standard in current data science work. Don't include personal preferences or trends. Examples: `pathlib`, `np.random.default_rng`, `.loc` assignment, GeoParquet, lazy loading with `chunks=`, `.explore()`. Say why it matters for beginners, and roughly what it would cost to adopt.
-4. **Teaching gaps for this cohort.** Look for:
+4. **Term-specific values that should come from `_variables.yml`.** Dates, deadlines, teaching-team names, rooms and links to Google Docs, Sheets, Slides, Drive folders or forms must never be hard-coded in a page (see `CLAUDE.md`). Look for:
+   - hard-coded dates (weekday and month names, `M/D` patterns), even inside callouts and tables;
+   - teaching-team names, including past TAs (for example "come see Annie or Carmen");
+   - `docs.google.com`, `drive.google.com` and `forms.gle` links outside HTML comments;
+   - the past term or year (for example "Fall 2025").
+
+   For each one, name the variable to use (from `_variables.yml`) or propose a new one. Wrong values, such as an old date, a past TA or a weekday that doesn't match its date, go under **Corrections**. Values that are correct but hard-coded go under **Minor**. Also check that each `{{< var >}}` key used in the file exists in `_variables.yml`.
+5. **Teaching gaps for this cohort.** Look for:
    - missing explanations of the errors beginners actually hit (for example, `and`/`or` on a Series);
    - places that clash with what EDS 217 taught;
    - homework questions that depend on something the lesson doesn't teach.
