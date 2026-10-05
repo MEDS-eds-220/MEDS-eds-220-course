@@ -27,7 +27,7 @@ By the end of this lesson, students will be able to:
 The main reasons to create an environment for each of your projects are:
 
 - To not interfere with your computer’s pre-installed Python
-- Packages usually depend on other packages to work properly, this is called a **package dependency**. Dependencies across different packages need to be carefully managed and may potentially be different across projects.
+- Packages usually depend on other packages to work properly; this is called a **package dependency**. Dependencies across different packages need to be carefully managed and may potentially be different across projects.
 - Reproducibility! Being able to share your code and what it needs to run it with others
 
 ## Conda environments
@@ -35,14 +35,14 @@ The main reasons to create an environment for each of your projects are:
 [Conda](https://conda.org) is an environment *and* package management system: 
 it can both create and administer the environments *and* install compatible versions of software and their dependencies within an environment. 
 
-Environments created with Conda are usually called **Conda environments**. A Conda environment doesn't need to be a Python environment, Conda can manage packages for any programming language. 
+Environments created with Conda are usually called **Conda environments**. A Conda environment doesn't need to be a Python environment; Conda can manage packages for any programming language. 
 
 ![](/book/appendices/images/appendix-A/conda-logo.png){width=45% fig-align="center"}
 
 ## Conda channels
 
 **Conda channels** are the remote locations where packages are stored. Think of them as shops for getting packages.
-By default, packages are downloaded to your computer and updated from the [conda default channel](https://repo.anaconda.com/pkgs/). But there are others! [Conda-forge](https://conda-forge.org) and [bioconda](https://bioconda.github.io) are two popular ones.
+By default, packages are downloaded to your computer and updated from the [Conda default channel](https://repo.anaconda.com/pkgs/). But there are others! [Conda-forge](https://conda-forge.org) and [bioconda](https://bioconda.github.io) are two popular ones.
 We can choose which Conda channel to install a package from. 
 
 ## `pip`
@@ -70,12 +70,12 @@ base                  *  /Users/galaz-garcia/opt/anaconda3
 eds220-env               /Users/galaz-garcia/opt/anaconda3/envs/eds220-env
 ```
 
- Notice the file path next to the environment name. This is the absolute path to the environment's installation directory on my local machine. This is where Conda has created the environment and stored the packages!
+Notice the file path next to the environment name. This is the absolute path to the environment's installation directory on my local machine. This is where Conda has created the environment and stored the packages!
 
 **What is my currently active environment?**
 
 - When you run `conda env list`, the **asterisk next to the environment path indicates which environment is active**. In the previous example, I am using the base Python environment. 
-- The currently active environment also appears in the terminal in parenthesis at the beginning of each line, something like this:
+- The currently active environment also appears in the terminal in parentheses at the beginning of each line, something like this:
 
 ```default
 (base) my-computer:MEDS-eds-220-course galaz-garcia$
@@ -83,7 +83,7 @@ eds220-env               /Users/galaz-garcia/opt/anaconda3/envs/eds220-env
 
 ### 2. Create new Python environment
 
-To create a new environment called `test-env` wiht a specific version of Python (in this case Python 3.11) we simply run: 
+To create a new environment called `test-env` with a specific version of Python (in this case Python 3.11) we simply run: 
 
 ```default
 conda create --name test-env python=3.11
@@ -131,7 +131,7 @@ The **name and version** of each installed package in the environment appear in 
 For example, the same package with the same version might have different builds (and therefore different build strings) depending on whether it was installed on macOS, Windows, or Linux. This difference arises because the package may need to be compiled differently to optimize performance and ensure compatibility with each operating system.
 
 The **channel** column shows the source from which the package was downloaded and installed. 
-In this example the entries on this column are blank, signaling these packages were downloaded from the defeault Conda channel. We'll see other channels appear in the next examples.
+In this example the entries on this column are blank, signaling these packages were downloaded from the default Conda channel. We'll see other channels appear in the next examples.
 
 We can also request information about a specific package. For example, if we run
 ```default
@@ -155,7 +155,7 @@ we will get empty columns:
 #
 # Name                    Version                   Build  Channel
 ```
-because the `numpy` package is not intalled in this environment.
+because the `numpy` package is not installed in this environment.
 
 ### 5. Searching for and installing packages
 
@@ -170,7 +170,7 @@ Since we have not specified another channel, this command will install `numpy` f
 Verify that `numpy` is now installed.
 :::
 
-Now, suppose we want to install `rioxarray`, this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. 
+Now, suppose we want to install `rioxarray`; this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. 
 A sensible measure would be to first look if `rioxarray` is available in the defaults channels, which we can do by running:
 
 ```default
@@ -199,7 +199,7 @@ looking for, navigate to
 
 and use the search bar at the top of the page.
 ```
-As stated, `rioxarray` is not available on the default channels for my Conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information (you can try it if you want!).
+As stated, `rioxarray` is not available on the default channels for my Conda installation. Notice a couple of the channels it is searching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information (you can try it if you want!).
 
 We may have better luck searching for `rioxarray` in the conda-forge channel, which we can do like this:
 ```default
@@ -230,7 +230,7 @@ You'll see a moving bar that says Conda is **solving (the) environment** - this 
 - finding the dependencies for the packages you are trying to install, 
 - finding versions of these dependencies that are compatible with each other,
 - making sure these new packages are compatible with the packages already present in the environment, 
-- downgrade, upgrade, or remove packages as needed in the environment. 
+- downgrading, upgrading, or removing packages as needed in the environment. 
 
 Overall, Conda tries to install what we need with the least disruption. **Solving an environment can often take time** but it is crucial so that the environment remains stable and functional. 
 
@@ -275,7 +275,7 @@ We can also create a new environment by specifying the package versions and chan
 conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
 ```
 
-Notice we are explicitely requiring certain versions of our packages, and the `--channel conda-forge` option is asking Conda to prioritize getting the packages from conda-forge. 
+Notice we are explicitly requiring certain versions of our packages, and the `--channel conda-forge` option is asking Conda to prioritize getting the packages from conda-forge. 
 
 ::: {.callout-tip}
 ## Check-in
@@ -288,7 +288,7 @@ One of the main goals of using an environment to manage the packages used in you
 
 "Sharing the environment" means sharing instructions that Conda can use to recreate the environment you have. These instructions are, basically, a list of the packages installed in the environment, their versions, which channels were used to install them, and, optionally, build specifications. 
 
-There are several ways of creating these instructions to reconstruct an environment depending on the level of cross-platform compatibility we are looking for. However, each of the following methods to export the environment specifications will generate a new **YAML file**. This file type with `.yml` extension is human-readable markup language that is commonly used for configuration in software applications.
+There are several ways of creating these instructions to reconstruct an environment depending on the level of cross-platform compatibility we are looking for. However, each of the following methods to export the environment specifications will generate a new **YAML file**. This file type with `.yml` extension is a human-readable markup language that is commonly used for configuration in software applications.
 
 ::: {.callout-caution}
 ## Navigate to project directory
@@ -321,14 +321,14 @@ dependencies:
   - zstd=1.5.6=h915ae27_0
 prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env
 ```
-Here we can see the name of the environment, the channels used to install packages (in order of priority),  and the package names, each with a version and build string. This ensures that the environment can be recreated exactly as it is on another system.
+Here we can see the name of the environment, the channels used to install packages (in order of priority), and the package names, each with a version and build string. This ensures that the environment can be recreated exactly as it is on another system.
 This first method to export the environment specifications is the most detailed and it is both platform and package specific. 
 
 ::: {.callout-caution}
 ## Delete `prefix` line before sharing environment
 Notice the last line in the `environment.yml` file, this `prefix` indicates the absolute path to the environment's installation on your local machine. 
 
-You should **delete the `prefix` line when sharing the environment file**. Leaving it there is unnecessary and could cause confusion since it points to specific directroy in *your* local machine.
+You should **delete the `prefix` line when sharing the environment file**. Leaving it there is unnecessary and could cause confusion since it points to a specific directory in *your* local machine.
 :::
 
 #### Cross-platform compatible
@@ -338,7 +338,7 @@ Our second method to export the environment specifications is to run
 ```default
 conda env export --from-history > environment_hist.yml
 ```
-Here I named the file `environment_hist.yml` to not overwrite the previous `environmnet.yml`, that way you can compare both of them. Open the `environment_hist.yml` file, it will look similar to this (much shorter than the previous one):
+Here I named the file `environment_hist.yml` to not overwrite the previous `environment.yml`, that way you can compare both of them. Open the `environment_hist.yml` file, it will look similar to this (much shorter than the previous one):
 
 ```default
 name: my-env
@@ -350,11 +350,11 @@ dependencies:
 prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env
 ```
 
-Adding the `--from-history` option tells Conda to only include packages that we explicitely installed (in this case `numpy=1.26.4` and `rioxarray=0.17.0`), *omitting any dependencies that were automatically installed and channel information*. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. 
+Adding the `--from-history` option tells Conda to only include packages that we explicitly installed (in this case `numpy=1.26.4` and `rioxarray=0.17.0`), *omitting any dependencies that were automatically installed and channel information*. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. 
 
 ::: {.callout-caution}
 ## Adding channels to `environment.yml` file
-In section 5 we saw that the `rioxarray` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export` with the `--from-history` option only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Rememember to also delete the prefix line before sharing. The modified version of the `--from-history` output that will allow us to recreate the environment will be:
+In section 5 we saw that the `rioxarray` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export` with the `--from-history` option only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Remember to also delete the prefix line before sharing. The modified version of the `--from-history` output that will allow us to recreate the environment will be:
 
 ```default
 name: my-env
@@ -380,7 +380,7 @@ To create an environment from specifications in a `.yml` file we run
 conda env create --name eds220-env --file eds220-env.yml
 ```
 
-The `--name` option states how we want to name our environment (`eds220-env` in this case). If no `--name` option is given, Conda will name of the environment using the `name` field in the `environment.yml` file. 
+The `--name` option states how we want to name our environment (`eds220-env` in this case). If no `--name` option is given, Conda will name the environment using the `name` field in the `environment.yml` file. 
 
 ::: {.callout-tip}
 ## Check-in
@@ -402,10 +402,10 @@ The following table includes the commands covered in this lesson's exercises. Ch
 | `conda list` | list installed packages in active environment | 
 | `conda list PKGNAME` | check if `PKGNAME` package is installed in active environment | 
 | `conda install PKGNAME` | install `PKGNAME` package in environment using environment channel priorities (generally just from defaults channel)| 
-| `conda install --channel CHANNELNAME PKGNAME` | install `PKGNAME ` package in environment from from `CHANNELNAME` channel |
+| `conda install --channel CHANNELNAME PKGNAME` | install `PKGNAME` package in environment from `CHANNELNAME` channel |
 | `conda search PKGNAME` | search for `PKGNAME` package in environment's channels |
 | `conda search --channel CHANNELNAME PKGNAME` | search for `PKGNAME` package in `CHANNELNAME` channel |
-| `conda env export > ENV.yml` | export environment specifications of currently active environmemt into `ENV.yml` file (includes all dependencies, buildstrings, and channels)|
-| `conda env export --from-history > ENV.yml` | export environment specifications of currently active environmemt into `ENV.yml` file (only packages explicitely installed, no dependencies, buildstrings, or channels)|
+| `conda env export > ENV.yml` | export environment specifications of currently active environment into `ENV.yml` file (includes all dependencies, build strings, and channels)|
+| `conda env export --from-history > ENV.yml` | export environment specifications of currently active environment into `ENV.yml` file (only packages explicitly installed, no dependencies, build strings, or channels)|
 | `conda env create --name ENVNAME --file ENV.yml` | create an environment named `ENVNAME` from specifications in `ENV.yml` file |
 
