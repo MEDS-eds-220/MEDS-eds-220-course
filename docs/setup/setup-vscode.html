@@ -205,8 +205,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#first-steps" id="toc-first-steps" class="nav-link active" data-scroll-target="#first-steps">First steps</a></li>
+  <li><a href="#confirm-git-installation" id="toc-confirm-git-installation" class="nav-link" data-scroll-target="#confirm-git-installation">Confirm git installation</a></li>
+  <li><a href="#initialize-your-repository" id="toc-initialize-your-repository" class="nav-link" data-scroll-target="#initialize-your-repository">Initialize your repository</a></li>
+  <li><a href="#configure-git-pull.rebase" id="toc-configure-git-pull.rebase" class="nav-link" data-scroll-target="#configure-git-pull.rebase">Configure <code>git pull.rebase</code></a></li>
+  <li><a href="#check-conda-installation" id="toc-check-conda-installation" class="nav-link" data-scroll-target="#check-conda-installation">Check conda installation</a></li>
+  <li><a href="#install-the-vscode-python-extension" id="toc-install-the-vscode-python-extension" class="nav-link" data-scroll-target="#install-the-vscode-python-extension">Install the VSCode Python extension</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -230,36 +241,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="first-steps" class="level2">
+<h2 class="anchored" data-anchor-id="first-steps">First steps</h2>
 <ol type="1">
-<li><p>Create a <code>MEDS/EDS-220</code> directory in your personal computer.</p></li>
+<li><p>Create a <code>MEDS/EDS-220</code> directory in your personal computer if you don’t have one yet.</p></li>
 <li><p>Open VSCode.</p></li>
-<li><p>Add a new <strong>bash terminal</strong> in it.</p></li>
-<li><p>Confirm git installation by running <code>git version</code> in the terminal. If git is installed you will get something similar to</p></li>
+</ol>
+</section>
+<section id="confirm-git-installation" class="level2">
+<h2 class="anchored" data-anchor-id="confirm-git-installation">Confirm git installation</h2>
+<ol start="3" type="1">
+<li>Add a new <strong>bash terminal</strong> in it.</li>
+</ol>
+<p><img src="images/bash-terminal-1.png" class="img-fluid" style="width:90.0%"></p>
+<p><img src="images/bash-terminal-2.png" class="img-fluid" style="width:90.0%"></p>
+<p><img src="images/bash-terminal-3.png" class="img-fluid" style="width:90.0%"></p>
+<ol start="4" type="1">
+<li>Confirm git installation by running <code>git version</code> in the terminal. If git is installed you will get something similar to</li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> version 2.33.1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="5" type="1">
-<li><p><em>If you don’t get a similar output, install git by following the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#check-git">MEDS installation guide</a>.</em></p></li>
-<li><p>Clone your <code>eds220-in-class</code> repository inside the <code>MEDS/EDS-220</code> directory. You can do this using the terminal or using the VSCode interface:</p></li>
+<li><em>If you don’t get a similar output, install git by following the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#check-git">MEDS installation guide</a>.</em></li>
+</ol>
+</section>
+<section id="initialize-your-repository" class="level2">
+<h2 class="anchored" data-anchor-id="initialize-your-repository">Initialize your repository</h2>
+<ol start="6" type="1">
+<li>Clone your <code>eds220-in-class</code> repository inside the <code>MEDS/EDS-220</code> directory. You can do this using the terminal or using the VSCode interface:</li>
 </ol>
 <p><img src="images/clone-1.png" class="img-fluid" style="width:70.0%"></p>
 <p><img src="images/clone-2.png" class="img-fluid" style="width:70.0%"></p>
 <p><img src="images/clone-3.png" class="img-fluid" style="width:70.0%"></p>
 <p><img src="images/clone-4.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="configure-git-pull.rebase" class="level2">
+<h2 class="anchored" data-anchor-id="configure-git-pull.rebase">Configure <code>git pull.rebase</code></h2>
 <ol start="7" type="1">
+<li>Configure the way git handles <code>git pull</code> by running in the terminal:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>git config --global pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>--global</code> option saves this setting for every repository on this computer, so you only need to run it once per computer.</p>
+<ol start="8" type="1">
+<li>Verify that your configuration was successful by running:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>git config --global --list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This command shows you all the settings git is using at the moment. Your output should look something like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>user.name=carmengg</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>user.email=c_galazgarcia@ucsb.edu</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>pull.rebase=false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you see <code>pull.rebase=false</code> it means the configuration was successful.</p>
+</section>
+<section id="check-conda-installation" class="level2">
+<h2 class="anchored" data-anchor-id="check-conda-installation">Check conda installation</h2>
+<ol start="9" type="1">
 <li>Confirm your conda installation by running <code>conda info</code> in the terminal. If conda is active you will get something similar to</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">active</span> environment : base</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">active</span> env location : /Users/galaz-garcia/opt/anaconda3</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">shell</span> level : 1</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[...]</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">UID:GID</span> : 502:20</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">netrc</span> file : None</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">offline</span> mode : False</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ol start="8" type="1">
-<li><p><em>If conda needs to be added to the shell profile, follow the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#install-Anaconda">troubleshooting steps</a> in the MEDS installation guide within a <strong>bash terminal</strong> (not Powershell if you are on Windows).</em></p></li>
-<li><p>Install Python extension to VSCode:</p></li>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">active</span> environment : base</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">active</span> env location : /Users/galaz-garcia/opt/anaconda3</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">shell</span> level : 1</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">[...]</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">UID:GID</span> : 502:20</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">netrc</span> file : None</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">offline</span> mode : False</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="10" type="1">
+<li><em>If conda needs to be added to the shell profile, follow the <a href="https://ucsb-meds.github.io/MEDS-installation-guide/#install-Anaconda">troubleshooting steps</a> in the MEDS installation guide within a <strong>bash terminal</strong> (not Powershell if you are on Windows).</em></li>
+</ol>
+</section>
+<section id="install-the-vscode-python-extension" class="level2">
+<h2 class="anchored" data-anchor-id="install-the-vscode-python-extension">Install the VSCode Python extension</h2>
+<ol start="11" type="1">
+<li>Install Python extension to VSCode:</li>
 </ol>
 <p><img src="images/extensions-1.png" class="img-fluid" style="width:70.0%"></p>
 <p><img src="images/extensions-2.png" class="img-fluid" style="width:70.0%"></p>
@@ -270,8 +323,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>Universetocat by <a href="https://github.com/cameronfoxly">cameronfoxly</a>. Octocat is a registered trademark of GitHub, Inc.; the octocat images are not covered by this website’s CC BY-NC 4.0 license.</figcaption>
 </figure>
 </div>
+<ol start="12" type="1">
+<li>Install the Jupyter extension to VSCode. Similar steps as above!</li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
