@@ -70,7 +70,6 @@ c. Take a look at the data's metadata by clicking on the "View" icon of the `Cod
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
 </p>
 
-<!-- 3 minutes -->
 ## 2. Data loading
 
 
@@ -118,7 +117,7 @@ In these exercises we will work with columns in the data frame pertaining to the
 |---------|-----|
 | Place      | Where the event actually occurred, but also where the event's direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.|
 | State | State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded. |
-| Conflict Present? | Binary response to "Is a conflict present?" Conflict is defined here as an incompatibility of goals and various attempts of any present parties to control each other's choices. When the researchers reviewed the articles, they were looking for evidence of this behavior in the event explained. |
+| Conflict Present | Binary response to "Is a conflict present?" Conflict is defined here as an incompatibility of goals and various attempts of any present parties to control each other's choices. When the researchers reviewed the articles, they were looking for evidence of this behavior in the event explained. |
 : {tbl-colwidths="[10,90]"}
 
 
@@ -158,7 +157,7 @@ s.str.split(';').explode()
 <br>
 
 b. Within your team, form pairs:
-    - Person 1 explains to person 2 what is the outptut of CELL 3.
+    - Person 1 explains to person 2 what is the output of CELL 3.
     - Afterwards, person 2 explains to person 1 what is the output of CELL 4. 
 
 Check in with your team. We'll use some of this code later on.
@@ -167,14 +166,14 @@ Check in with your team. We'll use some of this code later on.
 
 Our goal today is to **find which states are reported in the dataset as having water conflicts**. 
 
-a. Takea look at the non-NA values in the `State` column. HINT: [`isna()` method for `pandas.Series`](https://pandas.pydata.org/docs/reference/api/pandas.Series.isna.html).
+a. Take a look at the non-NA values in the `State` column. HINT: [`notna()` method for `pandas.Series`](https://pandas.pydata.org/docs/reference/api/pandas.Series.notna.html#pandas.Series.notna).
 
 b. What could be a challenge to finding the states that have reported having water conflicts (without repetition)? 
 
 
 ## 7. Brainstorm
 
-a. Individually, **write down** step-by-step instructions on how you would wrangle the data frame to obtain an array (without repetition) of the state codes in which a water conflict has been reported. It's ok if you don't know how to code each step - it's way more important to have an idea of what you would like to do.
+a. Individually, **write downm** step-by-step instructions on how you would wrangle the data frame to obtain an array (without repetition) of the state codes in which a water conflict has been reported. Would you keep or remove NA values and why? It's ok if you don't know how to code each step - it's way more important to have an idea of what you would like to do.
 
 b. Discuss your step-by-step instructions with your team.
 
@@ -186,10 +185,10 @@ a. Perform the following wrangling:
     i. select the `State` column and the rows corresponding to water conflicts occurring
     ii. split the strings in the column by the delimiter `;`  
     iii. explode the resulting `pandas.Series` to have each element of a list as a separate row
-    iv. find the unique string values in the resulting `pandas.Series`
+    iv. find the unique string values in the resulting `pandas.Series`, keeping the NAs
 
 <p style="text-align: center;">
-**CHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?** 
+**CHECK IN WITH YOUR TEAM: IS EVERY STEP CLEAR?** 
 </p>
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
@@ -201,9 +200,23 @@ a. Discuss with your team: Why do some state codes seem to be repeated? What wou
 
 b. Update your code to obtain an array of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. **Hint:** [str.strip().](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html)
 
+Once your code works, rewrite it as a single method chain, with one method per line inside parentheses. 
 
-## Bonus
-Create a bar plot showing the number of conflicts reported per state. 
+
+## 10. Visualize data exploration & discussion
+a. Create a bar plot showing the number of conflicts reported per state and write a description of these results. Include a bar for NA values. 
+
+b. Using the [dataset's metadata](https://www.sciencebase.gov/catalog/file/get/63acac09d34e92aad3ca1480?f=__disk__8b%2Fdb%2Fbc%2F8bdbbc1c61caf84651f2c7af6b08288fd4f8c63b&transform=1&allowOpen=true), what are possible reasons a state might be missing? How does this affect what we can claim for our array of states?
+
+c. Zoom out: every dataset you will work with was created by people, instruments or models, through choices about what to record and how. 
+
+    - In this section, which data issues did you find only because you looked closely (for example, extra spaces or missing values)? What would have happened to your results if you hadn't noticed them?
+
+    - What are a couple of checks you could make a habit of whenever you start working with a new dataset?
+
+<p style="text-align: center;">
+**END OF SESSION**
+</p>
 
 <p style="text-align: center;">
 **check git status -> stage changes -> check git status -> commit with message -> pull -> push  changes**
