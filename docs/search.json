@@ -1068,7 +1068,7 @@
     "href": "discussion-sections/discussion-sections-listing.html",
     "title": "Discussion sections",
     "section": "",
-    "text": "These discussion sections are for Fall 2025 and might be updated or changed for this course.\n\n\n\n\n\n\n    \n      \n      \n    \n\n\n\n\n\n\n \n\n\n\nweek\n\n\n\ntopic\n\n\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula hurricanes\n\n\n\n\n\n\n\n\n\n5\n\n\nPlotting geospatial data with git branching\n\n\n\n\n\n\n\n\n\n6\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\n\n\n\n7\n\n\nProtected areas code refactoring\n\n\n\n\n\n\n\n\n\n8\n\n\nSocial dimensions of Eaton and Palisades fires\n\n\n\n\n\n\n\n\n\n10\n\n\nCreating a GIF of water level change at Lake Cachuma\n\n\n\n\n\n\nNo matching items"
+    "text": "Discussion sections for upcoming weeks are from Fall 2025 and might be updated or changed for this course.\n\n\n\n\n\n\n    \n      \n      \n    \n\n\n\n\n\n\n \n\n\n\nweek\n\n\n\ntopic\n\n\n\n\n\n\n\n\n\n\n\n \n\n\nRepository setup\n\n\n\n\n\n\n\n\n\n1\n\n\nPrey species in the California drylands\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n2\n\n\nWater conflicts in the Colorado River Basin\n\n\n\n\n\n\n\n\n\n3\n\n\nSnowshoe hares at Bonanza Creek Experimental Forest\n\n\n\n\n\n\n\n\n\n4\n\n\nYucatan Peninsula hurricanes\n\n\n\n\n\n\n\n\n\n5\n\n\nPlotting geospatial data with git branching\n\n\n\n\n\n\n\n\n\n6\n\n\nArctic regions geospatial wrangling\n\n\n\n\n\n\n\n\n\n7\n\n\nProtected areas code refactoring\n\n\n\n\n\n\n\n\n\n8\n\n\nSocial dimensions of Eaton and Palisades fires\n\n\n\n\n\n\n\n\n\n10\n\n\nCreating a GIF of water level change at Lake Cachuma\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "commits-guidelines.html",
@@ -3599,6 +3599,48 @@
     "text": "3. Preliminary data exploration\n\nSet pandas to display all columns in the data frame.\nUsing pandas methods, obtain preliminary information and explore this data frame in at least four different ways.\n\n\n\nCHECK IN WITH YOUR TEAM 🙌\n\n\nYOU CAN SLACK THEM TO LET THEM KNOW YOU’RE READY FOR TOMORROW OR BRING UP ANY QUESTIONS\n\n\nMAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
   },
   {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#location-column-descriptions",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#location-column-descriptions",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "4. Location column descriptions",
+    "text": "4. Location column descriptions\nIn these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions form the .xml metadata file:\n\n\n\n\n\n\n\nColumn\nDescription\n\n\n\n\nPlace\nWhere the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.\n\n\nState\nState Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded."
+  },
+  {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#string-accessor-for-pandas.series",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#string-accessor-for-pandas.series",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "5. String accessor for pandas.Series",
+    "text": "5. String accessor for pandas.Series\nIn the following exercises we will work with pandas.Series whose values are strings. This is a common scenario, so pandas has special string methods for this kind of series. These methods are accessed via the str accessor. Accessors provide additional functionality for working with specific kinds of data (in this case, strings).\n\nThe code below gives a brief demonstration of the using the str accessor to use the split() method for pandas.Series. Carefully read the code and check in with your team to see if you have questions about it. We’ll use it in a moment.\n\n\nimport numpy as np\nimport pandas as pd \n\n# Example series\ns = pd.Series(['California; Nevada', 'Arizona', np.nan, 'Nevada; Utah'])\ns\n\n0    California; Nevada\n1               Arizona\n2                   NaN\n3          Nevada; Utah\ndtype: object\n\n\n\n# str accessor (doesn't do anything by itself)\ns.str\n\n&lt;pandas.core.strings.accessor.StringMethods at 0x1079e81a0&gt;\n\n\n\n# Use str accessor with additional methods to perform string operations\n# .split splits strings by ';' and expands output into separate columns\ns.str.split(';', expand=True)\n\n\n\n\n\n\n\n\n0\n1\n\n\n\n\n0\nCalifornia\nNevada\n\n\n1\nArizona\nNone\n\n\n2\nNaN\nNaN\n\n\n3\nNevada\nUtah\n\n\n\n\n\n\n\n\n# Use stack() method to flatten the data frame into a series\n# default is to drop NAs and None from result\ns.str.split(';', expand=True).stack()\n\n0  0    California\n   1        Nevada\n1  0       Arizona\n3  0        Nevada\n   1          Utah\ndtype: object"
+  },
+  {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#examine-state-codes",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#examine-state-codes",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "6. Examine state codes",
+    "text": "6. Examine state codes\nOur goal today is to find which states are reported in the dataset as having a water conflicts.\n\nWhat are the unique values in the States column once filtering the dataset for states that have a water conflict? What could be a challenge to writing code to find which states are listed (without repetition)? Remember to write longer answers in markdown cells, not as comments."
+  },
+  {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#brainstorm",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#brainstorm",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "7. Brainstorm",
+    "text": "7. Brainstorm\n\nIndividually, write step-by-step instructions on how you would wrangle the data frame df to obtain a list (without repetition) of the state codes in which a water conflict has been reported. It’s ok if you don’t know how to code each step - it’s more important to have an idea of what you would like to do.\nDiscuss your step-by-step instructions with your team.\n\nThe next exercises will guide you through finding the unique state codes in the dataset. There are many ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the .str accessor in a pandas.Series."
+  },
+  {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#exploratory-wrangling",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#exploratory-wrangling",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "8. Exploratory wrangling",
+    "text": "8. Exploratory wrangling\n\nPerform the following wrangling:\n\nselect the State column from the df data frame\nsplit the strings in the column by the delimeter ; into different columns\nstack the results of the resulting data frame into a single pandas.Series\nfind the unique string values in the resulting series\n\n\nYour final answer should use method chaining without creating new variables.\n\n\nCHECK IN WITH YOUR TEAM: IS EVERY STEP IN THE CHAINING CLEAR?\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
+    "objectID": "discussion-sections/ds2-water-crisis-exploration.html#find-unique-state-codes",
+    "href": "discussion-sections/ds2-water-crisis-exploration.html#find-unique-state-codes",
+    "title": "Water conflicts in the Colorado River Basin",
+    "section": "9. Find unique state codes",
+    "text": "9. Find unique state codes\n\nDiscuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?\nUpdate your code to obtain a list of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. Hint: str.strip().\n\n\n\nBonus: How many articles mention each state?\n\n\n\ncheck git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes"
+  },
+  {
     "objectID": "discussion-sections/ds4-yucatan-hurricanes.html",
     "href": "discussion-sections/ds4-yucatan-hurricanes.html",
     "title": "Yucatan Peninsula hurricanes",
@@ -4149,14 +4191,14 @@
     "href": "week-by-week/weekly-descriptions/week-2-2026.html",
     "title": "Week 2 : Oct 5 - 11",
     "section": "",
-    "text": "THIS WEEK: The schedule and rooms remain the same, but the Thursday and Friday sessions will swap. Fatiq will lead the discussion section on Thursday, and Carmen will lead the full class on Friday. Everyone is expected to attend both.\n\n\n\nFix conda path on the server:\n\n\nRun\n\n/opt/miniforge3/bin/conda init bash\nsource ~/.bashrc\n\nRun conda info to confirm.\n\n\nReview of updating dataframes notes up to “Updating values” section.\nCovered “Updating values” section of the updating dataframes notes.\nStudent presentations of basic plotting and grouping exercises.\n\n\n\n\n\n\n\nPreparation for next class (Friday, October 9)\n\n\n\n\nInstall VS Code on your local computer if you haven’t already.\nComplete the VSCode setup. Make sure to follow every step.\n\n\n\n\nSee the setup for the Thursday discussion section below.\n\n\n\n\n\n\n\n\n\n\n\nPreparation for discussion section (on Thursday!)\n\n\n\n\nComplete steps 1, 2, and 3 of the second discussion section to load the data before the discussion section.\nCheck-in with your discussion section teams via Slack to make sure you’re all ready to go on Thursday! 🙌\n\n\n\n\nSee the setup for the Friday lecture above.\n\n\n\n\n\n\nCovered conda environments notes on the workbench and slides.\nSet up course environment on personal computers.\n\n\n\n\n\n\n\nPreparation for next class (Tuesday, October 13)\n\n\n\nNo set up for next class.\n\n\n\n\n\n\n\n\n\nAssignment 1 due this Saturday\n\n\n\nAssignment 1 is due by 11:59 pm on Saturday, October 10."
+    "text": "THIS WEEK: The schedule and rooms remain the same, but the Thursday and Friday sessions will swap. Fatiq will lead the discussion section on Thursday, and Carmen will lead the full class on Friday. Everyone is expected to attend both.\n\n\n\nFix conda path on the server:\n\n\nRun\n\n/opt/miniforge3/bin/conda init bash\nsource ~/.bashrc\n\nRun conda info to confirm.\n\n\nCovered “Updating values” section of the updating dataframes notes.\nStudent presentations of basic plotting and grouping exercises.\n\n\n\n\n\n\n\nPreparation for next class (Friday, October 9)\n\n\n\n\nInstall VS Code on your local computer if you haven’t already.\nComplete the VSCode setup. Make sure to follow every step.\n\n\n\n\nSee the setup for the Thursday discussion section below.\n\n\n\n\n\n\n\n\n\n\n\nPreparation for discussion section (on Thursday!)\n\n\n\n\nComplete steps 1, 2, and 3 of the second discussion section to load the data before the discussion section.\nCheck-in with your discussion section teams via Slack to make sure you’re all ready to go on Thursday! 🙌\n\n\n\n\nSee the setup for the Friday lecture above.\n\n\n\n\n\n\nCovered conda environments notes on the workbench and slides.\nSet up course environment on personal computers.\n\n\n\n\n\n\n\nPreparation for next class (Tuesday, October 13)\n\n\n\nNo set up for next class.\n\n\n\n\n\n\n\n\n\nAssignment 1 due this Saturday\n\n\n\nAssignment 1 is due by 11:59 pm on Saturday, October 10."
   },
   {
     "objectID": "week-by-week/weekly-descriptions/week-2-2026.html#class-4",
     "href": "week-by-week/weekly-descriptions/week-2-2026.html#class-4",
     "title": "Week 2 : Oct 5 - 11",
     "section": "",
-    "text": "Fix conda path on the server:\n\n\nRun\n\n/opt/miniforge3/bin/conda init bash\nsource ~/.bashrc\n\nRun conda info to confirm.\n\n\nReview of updating dataframes notes up to “Updating values” section.\nCovered “Updating values” section of the updating dataframes notes.\nStudent presentations of basic plotting and grouping exercises.\n\n\n\n\n\n\n\nPreparation for next class (Friday, October 9)\n\n\n\n\nInstall VS Code on your local computer if you haven’t already.\nComplete the VSCode setup. Make sure to follow every step.\n\n\n\n\nSee the setup for the Thursday discussion section below."
+    "text": "Fix conda path on the server:\n\n\nRun\n\n/opt/miniforge3/bin/conda init bash\nsource ~/.bashrc\n\nRun conda info to confirm.\n\n\nCovered “Updating values” section of the updating dataframes notes.\nStudent presentations of basic plotting and grouping exercises.\n\n\n\n\n\n\n\nPreparation for next class (Friday, October 9)\n\n\n\n\nInstall VS Code on your local computer if you haven’t already.\nComplete the VSCode setup. Make sure to follow every step.\n\n\n\n\nSee the setup for the Thursday discussion section below."
   },
   {
     "objectID": "week-by-week/weekly-descriptions/week-2-2026.html#discussion-section",
