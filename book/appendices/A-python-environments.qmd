@@ -45,7 +45,7 @@ Environments created with Conda are usually called **Conda environments**. A Con
 By default, packages are downloaded to your computer and updated from the [Conda default channel](https://repo.anaconda.com/pkgs/). But there are others! [Conda-forge](https://conda-forge.org) and [bioconda](https://bioconda.github.io) are two popular ones.
 We can choose which Conda channel to install a package from. 
 
-## `pip`
+## What about `pip`?
 
 `pip` is a *package* management system *only* for Python. We can use it to install packages from the [Python Package Index (PyPI)](https://pypi.org). We can use `pip` inside a Conda environment when a package is not available from a Conda channel. As a rule, install everything you can with Conda first and use `pip` only for what is left, always with the environment activated.
 
@@ -145,17 +145,23 @@ we obtain only the information about the `pip` package:
 pip                       24.2            py311hecd8cb5_0  
 ```
 
-We can use the same command to verify whether a package is installed. For example, if we run
+We can use the same command to verify whether a package is installed. For example, because the `numpy` package is not installed in this environment, if we run
 ```default
 conda list numpy
 ```
-we will get empty columns:
+we will get empty columns
 ```default
 # packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:
 #
 # Name                    Version                   Build  Channel
 ```
-because the `numpy` package is not installed in this environment.
+
+or obtain the error message:
+```default
+CondaValueError: No packages match 'numpy'.
+```
+
+depending on the Conda version you have.
 
 ### 5. Searching for and installing packages
 
@@ -170,20 +176,23 @@ Since we have not specified another channel, this command will install `numpy` f
 Verify that `numpy` is now installed.
 :::
 
-Now, suppose we want to install `rioxarray`; this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. 
-A sensible measure would be to first look if `rioxarray` is available in the defaults channels, which we can do by running:
+Now, suppose we want to install `contextily`; this is a Python package for adding basemaps (like street or satellite map tiles) to our maps. It might not be available from the default Conda channels. 
+A sensible measure would be to first look if `contextily` is available in the defaults channels, which we can do by running:
 
 ```default
-conda search rioxarray
+conda search contextily
 ```
 The output will look similar to
+
+++++THIS NEEDS TO BE UPDATED++++
+
 ```default
 Loading channels: done
-No match found for: rioxarray. Search: *rioxarray*
+No match found for: contextily. Search: *contextily*
 
 PackagesNotFoundError: The following packages are not available from current channels:
 
-  - rioxarray
+  - contextily
 
 Current channels:
 
@@ -199,31 +208,33 @@ looking for, navigate to
 
 and use the search bar at the top of the page.
 ```
-As stated, `rioxarray` is not available on the default channels for my Conda installation. Notice a couple of the channels it is searching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install `rioxarray` using `conda install rioxarray` we would have obtained an error message with similar information (you can try it if you want!).
+++++THIS NEEDS TO BE UPDATED++++
 
-We may have better luck searching for `rioxarray` in the conda-forge channel, which we can do like this:
+As stated, `contextily` is not available on the default channels for my Conda installation. Notice a couple of the channels it is searching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install `contextily` using `conda install contextily` we would have obtained an error message with similar information (you can try it if you want!).
+
+We may have better luck searching for `contextily` in the conda-forge channel, which we can do like this:
 ```default
-conda search --channel conda-forge rioxarray
+conda search --channel conda-forge contextily
 ```
 The result will be a list of available versions and builds of this package in the conda-forge channel:
+
+++++THIS NEEDS TO BE UPDATED++++
+
 ```default
 Loading channels: done
 # Name                       Version           Build  Channel             
-rioxarray                      0.0.3            py_0  conda-forge         
-rioxarray                      0.0.4            py_0  conda-forge         
-rioxarray                      0.0.5            py_0  conda-forge     
+contextily                     1.0.0            py_0  conda-forge         
 [...]
-rioxarray                     0.16.0    pyhd8ed1ab_0  conda-forge         
-rioxarray                     0.17.0    pyhd8ed1ab_0  conda-forge   
+contextily                     1.7.1    pyhd8ed1ab_0  conda-forge   
 ```
 ::: {.callout-tip}
 ## Check-in
-Do you see any versions of `rioxarray` with multiple builds?
+Do you see any versions of `contextily` with multiple builds?
 :::
 
-Since we now know that we can find `rioxarray` in the conda-forge channel, we can go ahead and install it from this channel using the command
+Since we now know that we can find `contextily` in the conda-forge channel, we can go ahead and install it from this channel using the command
 ```default
-conda install --channel conda-forge rioxarray
+conda install --channel conda-forge contextily
 ```
 You'll see a moving bar that says Conda is **solving (the) environment** - this is Conda doing its package management job! It means Conda is working on:
 
@@ -237,7 +248,7 @@ Overall, Conda tries to install what we need with the least disruption. **Solvin
 ::: {.callout-tip}
 ## Check-in
 1. Check whether `pandas` is installed in the environment.
-2. Which channels were used to install dependencies for `rioxarray`?
+2. Which channels were used to install dependencies for `contextily`?
 :::
 
 ### 6. Deactivate environment
@@ -265,10 +276,12 @@ We can run `conda env list` to verify the `test-env` does not exist anymore.
 
 ### 8. Create environment (one liner)
 
-We can also create a new environment by specifying the package versions and channel priorities. For example, to install the `numpy` and `rioxarray` versions we previously had in a new environment called `my-env` we run:
+We can also create a new environment by specifying the package versions and channel priorities. For example, to install the `numpy` and `contextily` versions we previously had in a new environment called `my-env` we run:
+
+++++THIS NEEDS TO BE UPDATED++++
 
 ```default
-conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
+conda create --name my-env contextily=1.7.1 numpy=1.26.4 --channel conda-forge
 ```
 
 Notice we are explicitly requiring certain versions of our packages, and the `--channel conda-forge` option is asking Conda to prioritize getting the packages from conda-forge. 
@@ -304,6 +317,9 @@ conda env export > environment.yml
 The `environment.yml` is the name of the YAML file that will have the environment specifications. 
 
 Open the `environment.yml` file that was generated, it will look similar to this excerpt:
+
+++++THIS NEEDS TO BE UPDATED++++
+
 ```default
 name: my-env
 channels:
@@ -336,21 +352,25 @@ conda env export --from-history > environment_hist.yml
 ```
 Here I named the file `environment_hist.yml` to not overwrite the previous `environment.yml`, that way you can compare both of them. Open the `environment_hist.yml` file, it will look similar to this (much shorter than the previous one):
 
+++++THIS NEEDS TO BE UPDATED++++
+
 ```default
 name: my-env
 channels:
   - defaults
 dependencies:
+  - contextily=1.7.1
   - numpy=1.26.4
-  - rioxarray=0.17.0
 prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env
 ```
 
-Adding the `--from-history` option tells Conda to only include packages that we explicitly installed (in this case `numpy=1.26.4` and `rioxarray=0.17.0`), *omitting any dependencies that were automatically installed*. The channels it lists come from your Conda settings, not from where the packages were actually installed. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. Be aware that `--from-history` may also leave out any packages installed with `pip`, so you would need to add those to the file by hand.
+Adding the `--from-history` option tells Conda to only include packages that we explicitly installed (in this case `contextily=1.7.1` and `numpy=1.26.4` ++++THIS NEEDS TO BE UPDATED++++), *omitting any dependencies that were automatically installed*. The channels it lists come from your Conda settings, not from where the packages were actually installed. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. Be aware that `--from-history` may also leave out any packages installed with `pip`, so you would need to add those to the file by hand.
 
 ::: {.callout-caution}
 ## Adding channels to `environment.yml` file
-In section 5 we saw that the `rioxarray` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export` with the `--from-history` option only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Remember to also delete the prefix line before sharing. The modified version of the `--from-history` output that will allow us to recreate the environment will be:
+In section 5 we saw that the `contextily` package is available on the conda-forge channel, but not the defaults channel. The output of `conda env export` with the `--from-history` option only includes the defaults channel, so we wouldn't be able to recreate the environment with that file as is. Remember **the `.yml` file can be manually modified** and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Remember to also delete the prefix line before sharing. The modified version of the `--from-history` output that will allow us to recreate the environment will be:
+
+++++THIS NEEDS TO BE UPDATED++++
 
 ```default
 name: my-env
@@ -358,8 +378,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - contextily=1.7.1
   - numpy=1.26.4
-  - rioxarray=0.17.0
 ```
 :::
 
