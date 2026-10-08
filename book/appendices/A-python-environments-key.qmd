@@ -4,7 +4,7 @@ toc-title: In this key
 search: false
 ---
 
-Instructor key for the [Conda environments](A-python-environments.qmd) code along. This page is not linked from the site navigation.
+Instructor key for the [Conda environments](A-python-environments.qmd) code along. This page is not linked from the site navigation. Section numbers match the "Hands-on environments" sections in the lesson. Each check-in from the lesson appears in a green box, followed by its answer.
 
 Slides: [What are environments and what is Conda?]({{< var python-environments-slides >}})
 
@@ -12,57 +12,75 @@ Slides: [What are environments and what is Conda?]({{< var python-environments-s
 
 1. Open a terminal.
 
-## Examine environments
-
-```bash
-conda info --envs
-```
-
-This command shows all the Conda environments available on your computer and their location. 
-
-The asterisk next to the environment path indicates which environment is active.
-
-## Create a new environment
-
-```bash
-conda create --name test-env python
-```
-
-This creates a new environment called `test-env` and, within it, installs the most recent version of Python.
-
-When you run it, it gives you information about the packages that will be installed and asks whether to proceed. Type `y` and press enter to create the environment and install the packages.
-
-**Check:**
+## 1. List environments
 
 ```bash
 conda env list
 ```
 
-## Activate environment
+`conda info --envs` gives the same output.
+
+- This command shows all the Conda environments available on your computer and their location. 
+- The asterisk next to the environment path indicates which environment is active. 
+- The active environment also appears in parentheses at the start of the terminal prompt, for example `(base)`.
+
+## 2. Create new Python environment
+
+```bash
+conda create --name test-env python=3.11
+```
+
+This creates a new environment called `test-env` and, within it, installs Python 3.11. Without a version (`conda create --name test-env python`), Conda installs the most recent version of Python.
+
+When you run it, it gives you information about the packages that will be installed and asks whether to proceed. Type `y` and press enter to create the environment and install the packages.
+
+::: {.callout-tip}
+## Check-in
+Check whether the new `test-env` environment is listed by Conda. Is it activated or not?
+:::
+
+**Answer:**
+
+```bash
+conda env list
+```
+
+`test-env` is listed but not activated: the asterisk is still next to `base`.
+
+## 3. Activate environment
 
 ```bash
 conda activate test-env
 ```
 
-**Check:**
+::: {.callout-tip}
+## Check-in
+Verify that `test-env` is now your current environment.
+:::
+
+**Answer:**
 
 ```bash
 conda env list
 ```
 
-## Check Python version
+The asterisk is now next to `test-env`, and the prompt starts with `(test-env)`.
+
+Check the Python version:
 
 ```bash
 python -V
 ```
 
-## See which packages are installed within the environment
+## 4. Packages information
+
+See which packages are installed within the environment:
 
 ```bash
 conda list
 ```
 
-## Check if a specific package is installed
+Point out the name, version, build and channel columns. The channel column is blank for packages from the default channel.
 
 Check if pip is installed:
 
@@ -70,27 +88,32 @@ Check if pip is installed:
 conda list pip
 ```
 
-Check if numpy is installed:
+Check if numpy is installed (it is not, so the columns are empty or you get `CondaValueError: No packages match 'numpy'`):
 
 ```bash
 conda list numpy
 ```
 
-## Install package from the conda-forge channel
+## 5. Searching for and installing packages
+
+Install numpy from the default channel:
 
 ```bash
-conda install --channel conda-forge numpy
+conda install numpy
 ```
 
-**Checks:**
+::: {.callout-tip}
+## Check-in
+Verify that `numpy` is now installed.
+:::
 
-Check if numpy is installed:
+**Answer:**
 
 ```bash
 conda list numpy
 ```
 
-Enter the Python interpreter and use numpy:
+Optional: enter the Python interpreter and use numpy.
 
 ```bash
 python
@@ -104,7 +127,54 @@ x*2
 
 Press `Ctrl + D` to exit the Python interpreter.
 
-## Deactivate environment
+## Search for packages
+
+::: {.callout-warning}
+Depending on whether this is being run with a standard Anaconda installation or not, it might actually find it in the conda-forge channel by default. If so, roll with it and move to the check-in.
+:::
+
+Search for `contextily` in the default channels (it is not there):
+
+```bash
+conda search contextily
+```
+
+Search for it in the conda-forge channel:
+
+```bash
+conda search --channel conda-forge contextily
+```
+
+::: {.callout-tip}
+## Check-in
+In your output, do you see any versions of `contextily` with multiple builds?
+:::
+
+**Answer:** Yes. Look for a version number that is listed more than once, each time with a different build string.
+
+Install `contextily` from conda-forge. Point out the "Solving environment" step while it runs.
+
+```bash
+conda install --channel conda-forge contextily
+```
+
+::: {.callout-tip}
+## Check-in
+1. Check whether `rasterio` is installed in the environment.
+2. Which channels were used to install dependencies for `contextily`?
+:::
+
+**Answer:**
+
+```bash
+conda list rasterio
+conda list
+```
+
+1. Yes. `rasterio` was installed as a dependency of `contextily`.
+2. The channel column shows `conda-forge` for the new dependencies. Packages that were already in the environment from the default channel still have a blank channel column.
+
+## 6. Deactivate environment
 
 ```bash
 conda deactivate
@@ -112,68 +182,80 @@ conda deactivate
 
 Returns to the base environment.
 
-**Check:**
+::: {.callout-tip}
+## Check-in
+Verify we are no longer in the `test-env`. What environment are we on?
+:::
+
+**Answer:**
 
 ```bash
 conda env list
 ```
 
-## Delete environment
+The asterisk is next to `base`, and the prompt starts with `(base)`.
+
+## 7. Delete environment
 
 ```bash
 conda remove --name test-env --all
 ```
 
+Type `y` and press enter to delete the environment.
+
 **Check:**
 
 ```bash
 conda env list
 ```
 
-## Create a Conda environment with specific versions and channels
+## 8. Create environment (one liner)
+
+Create a new environment called `my-env` with the `contextily` and `numpy` versions we had before, prioritizing conda-forge:
 
 ```bash
-conda create --name my-numpy-env python=3.9.13 numpy=1.21.5 --channel conda-forge
+conda create --name my-env contextily=1.7.1 numpy=2.4.6 --channel conda-forge
 ```
 
-**Check:**
+::: {.callout-tip}
+## Check-in
+Activate the environment and take a look at the dependencies that were installed with these two packages.
+:::
+
+**Answer:**
 
 ```bash
-python -V
-conda list numpy
+conda activate my-env
+conda list
 ```
 
-Another example, with `rioxarray=0.17.0` and `numpy=1.26.4`:
+Leave `my-env` active for the next section.
+
+## 9. Exporting an environment
+
+Check which directory you are in before exporting (`pwd` on Mac and Linux, `echo %cd%` in Windows CMD). The `.yml` files are created there.
+
+### Platform and package specific
 
 ```bash
-conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
+conda env export > environment.yml
 ```
-
-## Export full environment specs
-
-Check which folder you are in (for example, Documents) before exporting.
-
-```bash
-conda env export > environment_ex.yml
-```
-
-Creates the `.yml` file in the directory you're in.
 
 **Check:**
 
 ```bash
 ls
-less environment_ex.yml
+less environment.yml
 ```
 
 Press `q` to exit.
 
-The file lists every dependency, and these may not be compatible across operating systems.
+Point out the channels, the build strings and the `prefix` line, which should be deleted before sharing the file. Because every package has a build string, this file may not work on other operating systems.
 
-## Export environment specs from history
+### Cross-platform compatible
 
 ```bash
-conda env export --from-history --file environment_hist.yml
+conda env export --from-history > environment_hist.yml
 ```
 
 **Check:**
@@ -182,25 +264,27 @@ conda env export --from-history --file environment_hist.yml
 less environment_hist.yml
 ```
 
+Mention they would have to remove the file path at the end.
+
 Press `q` to exit.
 
-## Delete the example environments
+Only `numpy=2.4.6` and `contextily=1.7.1` appear. The channels come from your Conda settings (`defaults`), so you would need to add `conda-forge` by hand to recreate the environment.
+
+### Clean up
+
+Delete both files and the example environment:
 
 ```bash
-conda remove --name my-numpy-env --all
+rm environment.yml environment_hist.yml
+conda deactivate
 conda remove --name my-env --all
 ```
 
 **Check:**
 
 ```bash
+ls
 conda env list
-```
-
-## Delete environment file
-
-```bash
-rm environment_ex.yml
 ```
 
 ## Exercise
@@ -243,20 +327,26 @@ ls
 ```
 :::
 
-## Create a Conda environment from an `environment.yml` file
+## 10. Importing an environment
 
 **Setup:**
 
-1. Download the `environment.yml` file from <https://github.com/carmengg/eds220-mpc/blob/main/environment.yml> and save it in a directory you know.
+1. Download the [`eds220-env.yml`](https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds220-env.yml) file from the course repository and move it to a directory for a mock project.
 2. In the terminal, go to that directory.
 
 ```bash
-conda env create --name mpc-env -f environment.yml
+conda env create --name eds220-env --file eds220-env.yml
 ```
 
-**Check:**
+::: {.callout-tip}
+## Check-in
+Verify that the new environment was created, activate it, and take a look at the installed packages.
+:::
+
+**Answer:**
 
 ```bash
-conda activate mpc-env
-conda list planetary_computer
+conda env list
+conda activate eds220-env
+conda list
 ```
