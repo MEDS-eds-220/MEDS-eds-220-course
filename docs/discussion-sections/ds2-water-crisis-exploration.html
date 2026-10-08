@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -201,6 +236,13 @@ div.csl-indent {
   <li><a href="#archive-exploration" id="toc-archive-exploration" class="nav-link" data-scroll-target="#archive-exploration">1. Archive exploration</a></li>
   <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">2. Data loading</a></li>
   <li><a href="#preliminary-data-exploration" id="toc-preliminary-data-exploration" class="nav-link" data-scroll-target="#preliminary-data-exploration">3. Preliminary data exploration</a></li>
+  <li><a href="#location-column-descriptions" id="toc-location-column-descriptions" class="nav-link" data-scroll-target="#location-column-descriptions">4. Location column descriptions</a></li>
+  <li><a href="#string-accessor-for-pandas.series" id="toc-string-accessor-for-pandas.series" class="nav-link" data-scroll-target="#string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></a></li>
+  <li><a href="#examine-state-codes" id="toc-examine-state-codes" class="nav-link" data-scroll-target="#examine-state-codes">6. Examine state codes</a></li>
+  <li><a href="#brainstorm" id="toc-brainstorm" class="nav-link" data-scroll-target="#brainstorm">7. Brainstorm</a></li>
+  <li><a href="#exploratory-wrangling" id="toc-exploratory-wrangling" class="nav-link" data-scroll-target="#exploratory-wrangling">8. Exploratory wrangling</a></li>
+  <li><a href="#find-unique-state-codes" id="toc-find-unique-state-codes" class="nav-link" data-scroll-target="#find-unique-state-codes">9. Find unique state codes</a></li>
+  <li><a href="#visualize-data-exploration-discussion" id="toc-visualize-data-exploration-discussion" class="nav-link" data-scroll-target="#visualize-data-exploration-discussion">10. Visualize data exploration &amp; discussion</a></li>
   </ul>
 </nav>
     </div>
@@ -285,7 +327,7 @@ div.csl-indent {
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
 <p>For these exercises we will use data about <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">Water Conflict and Crisis Events in the Colorado River Basin</a> <span class="citation" data-cites="holloman_coded_2023"><a href="#ref-holloman_coded_2023" role="doc-biblioref">[1]</a></span>. This dataset is stored at <a href="https://www.sciencebase.gov/catalog/">ScienceBase</a>, a digital repository from the U.S. Geological Survey (USGS) created to share scientific data products and USGS resources.</p>
-<p>The dataset is a CSV file containing conflict or crisis around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
+<p>The dataset is a CSV file containing conflict or crisis events around water resource management in the Colorado River Basin. The Colorado River Basin, inhabited by several Native American tribes for centuries, is a crucial water source in the southwestern United States and northern Mexico, supporting over 40 million people, extensive agricultural lands, and diverse ecosystems. Its management is vital due to the region’s arid climate and the competing demands for water, leading to significant challenges related to water allocation and conservation.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../discussion-sections/images/co-river-basin.png" class="img-fluid figure-img"></p>
@@ -298,15 +340,9 @@ div.csl-indent {
 <ol type="a">
 <li><p>Look through the dataset’s description in the ScienceBase repository. Find the following information:</p>
 <ol type="i">
-<li>Where was the data collected from?? <!-- 
-articles from newspapers describing water-related events in geographic areas in the Basin
---></li>
-<li>During what time frame were the observations in the dataset collected? <!--
-2005-2021
---></li>
-<li>What was the author’s perceived value of this dataset? <!--
- examining crisis on a continual basis toward identification of hotspots from conflict, identifying primary stakeholders, and who experiences crises.
---></li>
+<li>Where was the data collected from?</li>
+<li>During what time frame were the observations in the dataset collected?</li>
+<li>What was the author’s perceived value of this dataset?</li>
 </ol></li>
 <li><p>In a markdown cell, use your answers to the previous questions to add a brief description of the dataset. Briefly discuss anything else that seems relevant to you. Include a citation, date of access, and a link to the archive.</p></li>
 <li><p>Take a look at the data’s metadata by clicking on the “View” icon of the <code>Coded Events Colorado River Basin Water Conflict Table Metadata.xml</code> file.</p></li>
@@ -314,28 +350,23 @@ articles from newspapers describing water-related events in geographic areas in 
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
 </p>
-<!-- 3 minutes -->
 </section>
 <section id="data-loading" class="level2">
 <h2 class="anchored" data-anchor-id="data-loading">2. Data loading</h2>
-<!--
-a. In class we have (so far) loaded data into our workspace either by downloading the file and storing a copy of it in our computer or by accessing the file directly through a URL. With your team, discuss what are, in general, the advantages and disadvantages of these two methods of data access. 
--->
 <ol type="a">
 <li><p>Create a new directory <code>data/</code> inside your <code>eds220-discussion-sections</code> directory.</p></li>
 <li><p>Download the <code>Colorado River Basin Water Conflict Table.csv</code> file <a href="https://www.sciencebase.gov/catalog/item/63acac09d34e92aad3ca1480">from the Science Base repository</a> and upload it into the <code>data/</code> folder.</p></li>
-<li><p>Update the <code>.gitignore</code> file of your <code>eds220-discussion-sections</code> so it ignores the <code>data/</code> folder. Push the changes to this file. Verify that git is ignoring the data file. <strong>Note:</strong> If you update the <code>.gitignore</code> file via GitHub, you need to run <code>git pull</code> when you go back to the server.</p></li>
-<li><p>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</p></li>
+<li><p>Update the <code>.gitignore</code> file of your <code>eds220-discussion-sections</code> so it ignores the <code>data/</code> folder. <strong>Verify that git is ignoring the data file.</strong></p></li>
 </ol>
-<!--
-```python
-import pandas as pd
-pd.set_option("display.max.columns", None)
-
-df = pd.read_csv('data/Colorado River Basin Water Conflict Table.csv')
-df.head(5)
-```
--->
+<p>You have at least three ways of doing this:</p>
+<ul>
+<li>Via GitHub: This is how we previously did it in class. If you update the <code>.gitignore</code> file via GitHub, don’t forget to run <code>git pull</code> when you go back to your repository in the workbench.</li>
+<li>Via VSCode or Positron: you can directly edit the <code>.gitignore</code> and push your changes.</li>
+<li>Via the terminal: in JupyterLab <code>.gitignore</code> is a hidden file that’s invisible from the file navigation panel. You can <a href="../setup/setup-gitignore.html">edit it through the terminal</a>.</li>
+</ul>
+<ol start="4" type="a">
+<li>Load the data into your <code>section-2-co-basin-water-conflicts.ipynb</code> notebook. Name your data frame variable <code>df</code>.</li>
+</ol>
 </section>
 <section id="preliminary-data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="preliminary-data-exploration">3. Preliminary data exploration</h2>
@@ -343,15 +374,6 @@ df.head(5)
 <li><p>Set <code>pandas</code> to display all columns in the data frame.</p></li>
 <li><p>Using <code>pandas</code> methods, obtain preliminary information and explore this data frame in at least four different ways.</p></li>
 </ol>
-<!--
-```python
-# df.head()
-# df.shape
-# df.columns
-# df.Stakeholders.unique()
-```
-
--->
 <p style="text-align: center;">
 <strong>CHECK IN WITH YOUR TEAM 🙌</strong>
 </p>
@@ -360,6 +382,162 @@ df.head(5)
 </p>
 <p style="text-align: center;">
 <strong>MAKE SURE YOU’VE ALL SUCCESSFULLY LOADED THE DATA AND DONE A PRELIMINARY EXPLORATION BEFORE CONTINUING</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+</section>
+<section id="location-column-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="location-column-descriptions">4. Location column descriptions</h2>
+<p>In these exercises we will work with columns in the data frame pertaining to the location of an event. Before continuing, read the following column descriptions from the <a href="https://www.sciencebase.gov/catalog/file/get/63acac09d34e92aad3ca1480?f=__disk__8b%2Fdb%2Fbc%2F8bdbbc1c61caf84651f2c7af6b08288fd4f8c63b&amp;transform=1&amp;allowOpen=true">.xml metadata file</a>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Place</td>
+<td>Where the event actually occurred, but also where the event’s direct implications are felt most directly. When the researchers reviewed the articles, they were looking for mentions of specific places impacted by the events. Empty cell indicates a place was not coded for this event. NA indicates a place is not referenced in the event text.</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td>State Name coded from Place field. Empty cell indicates a state was not coded for this event or that the article was not coded.</td>
+</tr>
+<tr class="odd">
+<td>Conflict Present</td>
+<td>Binary response to “Is a conflict present?” Conflict is defined here as an incompatibility of goals and various attempts of any present parties to control each other’s choices. When the researchers reviewed the articles, they were looking for evidence of this behavior in the event explained.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="string-accessor-for-pandas.series" class="level2">
+<h2 class="anchored" data-anchor-id="string-accessor-for-pandas.series">5. String accessor for <code>pandas.Series</code></h2>
+<p>In the following exercises we will work with <code>pandas.Series</code> whose values are strings. This is a common scenario, so <code>pandas</code> has special <a href="https://pandas.pydata.org/docs/user_guide/text.html#string-methods">string methods</a> for this kind of series. These methods are accessed via the <strong><code>str</code> accessor</strong>. <strong>Accessors</strong> provide additional functionality for working with specific kinds of data (in this case, strings).</p>
+<ol type="a">
+<li>The code below gives a brief demonstration of using the <code>str</code> accessor to use the <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.split.html"><code>split()</code> method for <code>pandas.Series</code></a>. Carefully read the code.</li>
+</ol>
+<div id="84d1e76d" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CELL 1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Example series</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> pd.Series([<span class="st">'California; Nevada'</span>, <span class="st">'Arizona'</span>, np.nan, <span class="st">'Nevada; Utah'</span>])</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0    California; Nevada
+1               Arizona
+2                   NaN
+3          Nevada; Utah
+dtype: object</code></pre>
+</div>
+</div>
+<div id="3a178e91" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CELL 2</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># str accessor (doesn't do anything by itself)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>&lt;pandas.core.strings.accessor.StringMethods at 0x14fa6b190&gt;</code></pre>
+</div>
+</div>
+<div id="47ed1854" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CELL 3</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str accessor with additional methods to perform string operations</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>0    [California,  Nevada]
+1                [Arizona]
+2                      NaN
+3          [Nevada,  Utah]
+dtype: object</code></pre>
+</div>
+</div>
+<div id="5c9378f9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CELL 4</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>s.<span class="bu">str</span>.split(<span class="st">';'</span>).explode()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>0    California
+0        Nevada
+1       Arizona
+2           NaN
+3        Nevada
+3          Utah
+dtype: object</code></pre>
+</div>
+</div>
+<p><br></p>
+<ol start="2" type="a">
+<li>Within your team, form pairs:
+<ul>
+<li>Person 1 explains to person 2 what is the output of CELL 3.</li>
+<li>Afterwards, person 2 explains to person 1 what is the output of CELL 4.</li>
+</ul></li>
+</ol>
+<p>Check in with your team. We’ll use some of this code later on.</p>
+</section>
+<section id="examine-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="examine-state-codes">6. Examine state codes</h2>
+<p>Our goal today is to <strong>find which states are reported in the dataset as having water conflicts</strong>.</p>
+<ol type="a">
+<li><p>Take a look at the non-NA values in the <code>State</code> column. HINT: <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.notna.html#pandas.Series.notna"><code>notna()</code> method for <code>pandas.Series</code></a>.</p></li>
+<li><p>What could be a challenge to finding the states that have reported having water conflicts (without repetition)?</p></li>
+</ol>
+</section>
+<section id="brainstorm" class="level2">
+<h2 class="anchored" data-anchor-id="brainstorm">7. Brainstorm</h2>
+<ol type="a">
+<li><p>Individually, <strong>write downm</strong> step-by-step instructions on how you would wrangle the data frame to obtain an array (without repetition) of the state codes in which a water conflict has been reported. Would you keep or remove NA values and why? It’s ok if you don’t know how to code each step - it’s way more important to have an idea of what you would like to do.</p></li>
+<li><p>Discuss your step-by-step instructions with your team.</p></li>
+</ol>
+<p>The next exercises will guide you through finding these unique state codes. There are <em>many</em> ways of extracting this information. The one presented here might not be the same way you thought about doing it - that’s ok! This one was designed to practice using the <code>.str</code> accessor in a <code>pandas.Series</code>.</p>
+</section>
+<section id="exploratory-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-wrangling">8. Exploratory wrangling</h2>
+<ol type="a">
+<li>Perform the following wrangling:
+<ol type="i">
+<li>select the <code>State</code> column and the rows corresponding to water conflicts occurring</li>
+<li>split the strings in the column by the delimiter <code>;</code><br>
+</li>
+<li>explode the resulting <code>pandas.Series</code> to have each element of a list as a separate row</li>
+<li>find the unique string values in the resulting <code>pandas.Series</code>, keeping the NAs</li>
+</ol></li>
+</ol>
+<p style="text-align: center;">
+<strong>CHECK IN WITH YOUR TEAM: IS EVERY STEP CLEAR?</strong>
+</p>
+<p style="text-align: center;">
+<strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
+</p>
+</section>
+<section id="find-unique-state-codes" class="level2">
+<h2 class="anchored" data-anchor-id="find-unique-state-codes">9. Find unique state codes</h2>
+<ol type="a">
+<li><p>Discuss with your team: Why do some state codes seem to be repeated? What would we need to do to get the correct strings?</p></li>
+<li><p>Update your code to obtain an array of codes (without repetition) of the states mentioned in the news articles about water conflicts in the Colorado River Basin. <strong>Hint:</strong> <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html">str.strip().</a></p></li>
+</ol>
+<p>Once your code works, rewrite it as a single method chain, with one method per line inside parentheses.</p>
+</section>
+<section id="visualize-data-exploration-discussion" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-data-exploration-discussion">10. Visualize data exploration &amp; discussion</h2>
+<ol type="a">
+<li><p>Create a bar plot showing the number of conflicts reported per state and write a description of these results. Include a bar for NA values.</p></li>
+<li><p>Using the <a href="https://www.sciencebase.gov/catalog/file/get/63acac09d34e92aad3ca1480?f=__disk__8b%2Fdb%2Fbc%2F8bdbbc1c61caf84651f2c7af6b08288fd4f8c63b&amp;transform=1&amp;allowOpen=true">dataset’s metadata</a>, what are possible reasons a state might be missing? How does this affect what we can claim for our array of states?</p></li>
+<li><p>Zoom out: every dataset you will work with was created by people, instruments or models, through choices about what to record and how.</p>
+<ul>
+<li><p>In this section, which data issues did you find only because you looked closely (for example, extra spaces or missing values)? What would have happened to your results if you hadn’t noticed them?</p></li>
+<li><p>What are a couple of checks you could make a habit of whenever you start working with a new dataset?</p></li>
+</ul></li>
+</ol>
+<p style="text-align: center;">
+<strong>END OF SESSION</strong>
 </p>
 <p style="text-align: center;">
 <strong>check git status -&gt; stage changes -&gt; check git status -&gt; commit with message -&gt; pull -&gt; push changes</strong>
