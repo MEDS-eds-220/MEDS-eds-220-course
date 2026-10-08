@@ -1,0 +1,262 @@
+---
+title: Conda environments code along key
+toc-title: In this key
+search: false
+---
+
+Instructor key for the [Conda environments](A-python-environments.qmd) code along. This page is not linked from the site navigation.
+
+Slides: [What are environments and what is Conda?]({{< var python-environments-slides >}})
+
+## Setup
+
+1. Open a terminal.
+
+## Examine environments
+
+```bash
+conda info --envs
+```
+
+This command shows all the Conda environments available on your computer and their location. 
+
+The asterisk next to the environment path indicates which environment is active.
+
+## Create a new environment
+
+```bash
+conda create --name test-env python
+```
+
+This creates a new environment called `test-env` and, within it, installs the most recent version of Python.
+
+When you run it, it gives you information about the packages that will be installed and asks whether to proceed. Type `y` and press enter to create the environment and install the packages.
+
+**Check:**
+
+```bash
+conda env list
+```
+
+## Activate environment
+
+```bash
+conda activate test-env
+```
+
+**Check:**
+
+```bash
+conda env list
+```
+
+## Check Python version
+
+```bash
+python -V
+```
+
+## See which packages are installed within the environment
+
+```bash
+conda list
+```
+
+## Check if a specific package is installed
+
+Check if pip is installed:
+
+```bash
+conda list pip
+```
+
+Check if numpy is installed:
+
+```bash
+conda list numpy
+```
+
+## Install package from the conda-forge channel
+
+```bash
+conda install --channel conda-forge numpy
+```
+
+**Checks:**
+
+Check if numpy is installed:
+
+```bash
+conda list numpy
+```
+
+Enter the Python interpreter and use numpy:
+
+```bash
+python
+```
+
+```python
+import numpy as np
+x = np.array([1,2,3])
+x*2
+```
+
+Press `Ctrl + D` to exit the Python interpreter.
+
+## Deactivate environment
+
+```bash
+conda deactivate
+```
+
+Returns to the base environment.
+
+**Check:**
+
+```bash
+conda env list
+```
+
+## Delete environment
+
+```bash
+conda remove --name test-env --all
+```
+
+**Check:**
+
+```bash
+conda env list
+```
+
+## Create a Conda environment with specific versions and channels
+
+```bash
+conda create --name my-numpy-env python=3.9.13 numpy=1.21.5 --channel conda-forge
+```
+
+**Check:**
+
+```bash
+python -V
+conda list numpy
+```
+
+Another example, with `rioxarray=0.17.0` and `numpy=1.26.4`:
+
+```bash
+conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge
+```
+
+## Export full environment specs
+
+Check which folder you are in (for example, Documents) before exporting.
+
+```bash
+conda env export > environment_ex.yml
+```
+
+Creates the `.yml` file in the directory you're in.
+
+**Check:**
+
+```bash
+ls
+less environment_ex.yml
+```
+
+Press `q` to exit.
+
+The file lists every dependency, and these may not be compatible across operating systems.
+
+## Export environment specs from history
+
+```bash
+conda env export --from-history --file environment_hist.yml
+```
+
+**Check:**
+
+```bash
+less environment_hist.yml
+```
+
+Press `q` to exit.
+
+## Delete the example environments
+
+```bash
+conda remove --name my-numpy-env --all
+conda remove --name my-env --all
+```
+
+**Check:**
+
+```bash
+conda env list
+```
+
+## Delete environment file
+
+```bash
+rm environment_ex.yml
+```
+
+## Exercise
+
+1. Create a Conda environment called `plot-env` with the most recent versions of Python and matplotlib (no need to specify a channel).
+2. Activate the environment and check which version of matplotlib is installed.
+3. Export the full environment specs as `environment_ex.yml` and take a look at it.
+4. Return to the base environment and remove the `plot-env` environment.
+5. Verify the environment was removed.
+6. Remove the `environment_ex.yml` file.
+7. Verify the file was removed.
+
+:::{.callout-tip collapse="true"}
+## Solution
+
+```bash
+# 1
+conda create --name plot-env python matplotlib
+
+# 2
+conda activate plot-env
+conda list matplotlib
+
+# 3
+conda env export > environment_ex.yml
+less environment_ex.yml   # press q to exit
+
+# 4
+conda deactivate
+conda remove --name plot-env --all
+
+# 5
+conda env list
+
+# 6
+rm environment_ex.yml
+
+# 7
+ls
+```
+:::
+
+## Create a Conda environment from an `environment.yml` file
+
+**Setup:**
+
+1. Download the `environment.yml` file from <https://github.com/carmengg/eds220-mpc/blob/main/environment.yml> and save it in a directory you know.
+2. In the terminal, go to that directory.
+
+```bash
+conda env create --name mpc-env -f environment.yml
+```
+
+**Check:**
+
+```bash
+conda activate mpc-env
+conda list planetary_computer
+```
