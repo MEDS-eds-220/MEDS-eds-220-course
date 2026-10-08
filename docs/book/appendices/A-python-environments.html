@@ -419,10 +419,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#conda-environments" id="toc-conda-environments" class="nav-link active" data-scroll-target="#conda-environments">Conda environments</a>
   <ul class="collapse">
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a></li>
   <li><a href="#environments-what-and-why" id="toc-environments-what-and-why" class="nav-link" data-scroll-target="#environments-what-and-why">Environments: what and why</a></li>
   <li><a href="#conda-environments-1" id="toc-conda-environments-1" class="nav-link" data-scroll-target="#conda-environments-1">Conda environments</a></li>
   <li><a href="#conda-channels" id="toc-conda-channels" class="nav-link" data-scroll-target="#conda-channels">Conda channels</a></li>
-  <li><a href="#pip" id="toc-pip" class="nav-link" data-scroll-target="#pip"><code>pip</code></a></li>
+  <li><a href="#what-about-pip" id="toc-what-about-pip" class="nav-link" data-scroll-target="#what-about-pip">What about <code>pip</code>?</a></li>
   <li><a href="#hands-on-environments" id="toc-hands-on-environments" class="nav-link" data-scroll-target="#hands-on-environments">Hands-on environments</a>
   <ul class="collapse">
   <li><a href="#list-environments" id="toc-list-environments" class="nav-link" data-scroll-target="#list-environments">1. List environments</a></li>
@@ -436,7 +437,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exporting-an-environment" id="toc-exporting-an-environment" class="nav-link" data-scroll-target="#exporting-an-environment">9. Exporting an environment</a></li>
   <li><a href="#importing-an-environment" id="toc-importing-an-environment" class="nav-link" data-scroll-target="#importing-an-environment">10. Importing an environment</a></li>
   </ul></li>
-  <li><a href="#conda-commands" id="toc-conda-commands" class="nav-link" data-scroll-target="#conda-commands">Conda commands</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">Wrapping up</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -449,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="conda-environments" class="level1">
 <h1>Conda environments</h1>
-<p>This hands-on lesson gives a brief introduction to Conda environments, focusing on practical usage. You can use this lesson as a standalone introduction to environments, ideally preceding the installation of the course-specific environment (see Setup section). The last section includes a table with the Conda commands used in this lesson for quick reference.</p>
+<p>This hands-on lesson gives a brief introduction to Conda environments, focusing on practical usage. You can use this lesson as a standalone introduction to environments, ideally preceding the installation of the course-specific environment (see the <a href="../../setup/setup-conda-env.html">Setup section</a>). The first section includes a table with the Conda commands used in this lesson for quick reference.</p>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>By the end of this lesson, students will be able to:</p>
@@ -459,6 +460,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Build Conda environments and install packages using the command line</li>
 <li>Generate and edit a <code>.yml</code> file with environment specifications to enhance project reproducibility</li>
 </ul>
+</section>
+<section id="conda-commands" class="level2">
+<h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
+<p>The following table includes the commands covered in this lesson’s exercises. Check out <a href="https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html">Conda’s cheatsheet</a> for more commands and tips.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 62%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>conda -V</code></td>
+<td style="text-align: left;">see your installed Conda version</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda env list</code></td>
+<td style="text-align: left;">list available Conda environments</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda create --name ENVNAME python</code></td>
+<td style="text-align: left;">create a new Python environment named <code>ENVNAME</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda remove --name ENVNAME --all</code></td>
+<td style="text-align: left;">delete <code>ENVNAME</code> environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda activate ENVNAME</code></td>
+<td style="text-align: left;">activate environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda deactivate</code></td>
+<td style="text-align: left;">deactivate active environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>python -V</code></td>
+<td style="text-align: left;">print Python version installed in active environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda list</code></td>
+<td style="text-align: left;">list installed packages in active environment</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda list PKGNAME</code></td>
+<td style="text-align: left;">check if <code>PKGNAME</code> package is installed in active environment</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda install PKGNAME</code></td>
+<td style="text-align: left;">install <code>PKGNAME</code> package in environment using your configured channels (the default channel in a standard Anaconda installation)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda install --channel CHANNELNAME PKGNAME</code></td>
+<td style="text-align: left;">install <code>PKGNAME</code> package in environment from <code>CHANNELNAME</code> channel</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda search PKGNAME</code></td>
+<td style="text-align: left;">search for <code>PKGNAME</code> package in your configured channels</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda search --channel CHANNELNAME PKGNAME</code></td>
+<td style="text-align: left;">search for <code>PKGNAME</code> package in <code>CHANNELNAME</code> channel</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda env export &gt; ENV.yml</code></td>
+<td style="text-align: left;">export environment specifications of currently active environment into <code>ENV.yml</code> file (includes all dependencies, build strings, and channels)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda env export --from-history &gt; ENV.yml</code></td>
+<td style="text-align: left;">export environment specifications of currently active environment into <code>ENV.yml</code> file (only packages explicitly installed, no dependencies or build strings)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>conda env create --name ENVNAME --file ENV.yml</code></td>
+<td style="text-align: left;">create an environment named <code>ENVNAME</code> from specifications in <code>ENV.yml</code> file</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="environments-what-and-why" class="level2">
 <h2 class="anchored" data-anchor-id="environments-what-and-why">Environments: what and why</h2>
@@ -472,14 +555,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The main reasons to create an environment for each of your projects are:</p>
 <ul>
 <li>To not interfere with your computer’s pre-installed Python</li>
-<li>Packages usually depend on other packages to work properly, this is called a <strong>package dependency</strong>. Dependencies across different packages need to be carefully managed and may potentially be different across projects.</li>
+<li>Packages usually depend on other packages to work properly; this is called a <strong>package dependency</strong>. Dependencies across different packages need to be carefully managed and may potentially be different across projects.</li>
 <li>Reproducibility! Being able to share your code and what it needs to run it with others</li>
 </ul>
 </section>
 <section id="conda-environments-1" class="level2">
 <h2 class="anchored" data-anchor-id="conda-environments-1">Conda environments</h2>
 <p><a href="https://conda.org">Conda</a> is an environment <em>and</em> package management system: it can both create and administer the environments <em>and</em> install compatible versions of software and their dependencies within an environment.</p>
-<p>Environments created with Conda are usually called <strong>Conda environments</strong>. A Conda environment doesn’t need to be a Python environment, Conda can manage packages for any programming language.</p>
+<p>Environments created with Conda are usually called <strong>Conda environments</strong>. A Conda environment doesn’t need to be a Python environment; Conda can manage packages for any programming language.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/appendices/images/appendix-A/conda-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
@@ -488,11 +571,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="conda-channels" class="level2">
 <h2 class="anchored" data-anchor-id="conda-channels">Conda channels</h2>
-<p><strong>Conda channels</strong> are the remote locations where packages are stored. Think of them as shops for getting packages. By default, packages are downloaded to your computer and updated from the <a href="https://repo.anaconda.com/pkgs/">conda default channel</a>. But there are others! <a href="https://conda-forge.org">Conda-forge</a> and <a href="https://bioconda.github.io">bioconda</a> are two popular ones. We can choose which Conda channel to install a package from.</p>
+<p><strong>Conda channels</strong> are the remote locations where packages are stored. Think of them as shops for getting packages.</p>
+<p>In a standard Anaconda installation, packages are downloaded to your computer and updated from the <a href="https://repo.anaconda.com/pkgs/">Conda default channel</a>. But there are others! <a href="https://conda-forge.org">Conda-forge</a> and <a href="https://bioconda.github.io">bioconda</a> are two popular ones.</p>
+<p>We can choose which Conda channel to install a package from. When we don’t specify a channel, Conda uses the channels listed in its configuration (you can check them with <code>conda config --show channels</code>), so other setups, like a shared server, may use conda-forge instead of the deafult channel. This lesson assumes a standard Anaconda installation.</p>
 </section>
-<section id="pip" class="level2">
-<h2 class="anchored" data-anchor-id="pip"><code>pip</code></h2>
-<p><code>pip</code> is a <em>package</em> management system <em>only</em> for Python. We can use it to install packages from the <a href="https://pypi.org">Python Package Index (PyPI)</a>. We can use <code>pip</code> inside a Conda environment when a package is not available from a Conda channel.</p>
+<section id="what-about-pip" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-pip">What about <code>pip</code>?</h2>
+<p><code>pip</code> is a <em>package</em> management system <em>only</em> for Python. We can use it to install packages from the <a href="https://pypi.org">Python Package Index (PyPI)</a>. We can use <code>pip</code> inside a Conda environment when a package is not available from a Conda channel. As a rule, install everything you can with Conda first and use <code>pip</code> only for what is left, always with the environment activated.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/appendices/images/appendix-A/pip-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
@@ -515,13 +600,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>What is my currently active environment?</strong></p>
 <ul>
 <li>When you run <code>conda env list</code>, the <strong>asterisk next to the environment path indicates which environment is active</strong>. In the previous example, I am using the base Python environment.</li>
-<li>The currently active environment also appears in the terminal in parenthesis at the beginning of each line, something like this:</li>
+<li>The currently active environment also appears in the terminal in parentheses at the beginning of each line, something like this:</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(base) my-computer:MEDS-eds-220-course galaz-garcia$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="create-new-python-environment" class="level3">
 <h3 class="anchored" data-anchor-id="create-new-python-environment">2. Create new Python environment</h3>
-<p>To create a new environment called <code>test-env</code> wiht a specific version of Python (in this case Python 3.11) we simply run:</p>
+<p>To create a new environment called <code>test-env</code> with a specific version of Python (in this case Python 3.11) we simply run:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>conda create --name test-env python=3.11</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>When you run this command, it will print out information about the packages that will be installed and ask you whether to proceed or not. Type <code>y</code> and press enter to create the environment and install the packages.</p>
 <p>If we don’t include a Python version, the command <code>conda create --name test-env python</code> will install the most recent version of Python.</p>
@@ -566,31 +651,33 @@ Check-in
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>#</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bzip2                     1.0.8                h6c40b1e_6  </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py312hecd8cb5_0  </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py311hecd8cb5_0  </span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sqlite                    3.45.3               h6c40b1e_0  </span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>[...]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <strong>name and version</strong> of each installed package in the environment appear in their respective columns. The ‘Build’ column shows a <strong>build string</strong> for each package. This string encodes important information about how the package was compiled, including any updates or changes made without altering the package version. It also reflects any compatibility or performance optimizations that were integrated during the build process.</p>
 <p>For example, the same package with the same version might have different builds (and therefore different build strings) depending on whether it was installed on macOS, Windows, or Linux. This difference arises because the package may need to be compiled differently to optimize performance and ensure compatibility with each operating system.</p>
-<p>The <strong>channel</strong> column shows the source from which the package was downloaded and installed. In this example the entries on this column are blank, signaling these packages were downloaded from the defeault Conda channel. We’ll see other channels appear in the next examples.</p>
+<p>The <strong>channel</strong> column shows the source from which the package was downloaded and installed. In this example the entries on this column are blank, signaling these packages were downloaded from the default Conda channel. We’ll see other channels appear in the next examples.</p>
 <p>We can also request information about a specific package. For example, if we run</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>conda list pip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>we obtain only the information about the <code>pip</code> package:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a># packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>#</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py312hecd8cb5_0  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We can use the same command to verify whether a package is installed. For example, if we run</p>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>pip                       24.2            py311hecd8cb5_0  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can use the same command to verify whether a package is installed. For example, because the <code>numpy</code> package is not installed in this environment, if we run</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>conda list numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>we will get empty columns:</p>
+<p>we will get empty columns</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a># packages in environment at /Users/galaz-garcia/opt/anaconda3/envs/test-env:</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>#</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a># Name                    Version                   Build  Channel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>because the <code>numpy</code> package is not intalled in this environment.</p>
+<p>or obtain the error message:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>CondaValueError: No packages match 'numpy'.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>depending on the Conda version you have.</p>
 </section>
 <section id="searching-for-and-installing-packages" class="level3">
 <h3 class="anchored" data-anchor-id="searching-for-and-installing-packages">5. Searching for and installing packages</h3>
 <p>Suppose we want to install <code>numpy</code> in our currently active environment <code>test-env</code>. To do this we can simply use the command:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>conda install numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>conda install numpy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Since we have not specified another channel, this command will install <code>numpy</code> from the default channel.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -605,41 +692,38 @@ Check-in
 <p>Verify that <code>numpy</code> is now installed.</p>
 </div>
 </div>
-<p>Now, suppose we want to install <code>rioxarray</code>, this is a Python package for raster data analysis. This is a relatively new package, so it might not be available from the default Conda channels. A sensible measure would be to first look if <code>rioxarray</code> is available in the defaults channels, which we can do by running:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>conda search rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, suppose we want to install <code>contextily</code>; this is a Python package for adding basemaps (like street or satellite map tiles) to our maps. It might not be available from the default Conda channels. A sensible measure would be to first look if <code>contextily</code> is available in the defaults channels, which we can do by running:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>conda search contextily</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The output will look similar to</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>No match found for: rioxarray. Search: *rioxarray*</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>PackagesNotFoundError: The following packages are not available from current channels:</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  - rioxarray</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>Current channels:</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/osx-64</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/noarch</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/osx-64</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/noarch</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>To search for alternate channels that may provide the Conda package you're</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>looking for, navigate to</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    https://anaconda.org</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>and use the search bar at the top of the page.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>As stated, <code>rioxarray</code> is not available on the default channels for my Conda installation. Notice a couple of the channels it is seraching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install <code>rioxarray</code> using <code>conda install rioxarray</code> we would have obtained an error message with similar information (you can try it if you want!).</p>
-<p>We may have better luck searching for <code>rioxarray</code> in the conda-forge channel, which we can do like this:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>conda search --channel conda-forge rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>No match found for: contextily. Search: *contextily*</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>PackagesNotFoundError: The following packages are not available from current channels:</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  - contextily</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>Current channels:</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/osx-arm64</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/main/noarch</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/osx-arm64</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  - https://repo.anaconda.com/pkgs/r/noarch</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>To search for alternate channels that may provide the Conda package you're</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>looking for, navigate to</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    https://anaconda.org</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>and use the search bar at the top of the page.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As stated, <code>contextily</code> is not available on the default channels for my Conda installation. Notice a couple of the channels it is searching on are specific to macOS (my current operating system). The last two channels are actually channels for R packages. If we had tried to install <code>contextily</code> using <code>conda install contextily</code> we would have obtained an error message with similar information (you can try it if you want!).</p>
+<p>We may have better luck searching for <code>contextily</code> in the conda-forge channel, which we can do like this:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>conda search --channel conda-forge contextily</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The result will be a list of available versions and builds of this package in the conda-forge channel:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a># Name                       Version           Build  Channel             </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.3            py_0  conda-forge         </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.4            py_0  conda-forge         </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>rioxarray                      0.0.5            py_0  conda-forge     </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>[...]</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>rioxarray                     0.16.0    pyhd8ed1ab_0  conda-forge         </span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>rioxarray                     0.17.0    pyhd8ed1ab_0  conda-forge   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Loading channels: done</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a># Name                       Version           Build  Channel             </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>contextily                     0.9.2            py_0  conda-forge         </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>[...]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>contextily                     1.7.1    pyhd8ed1ab_0  conda-forge            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -650,19 +734,19 @@ Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Do you see any versions of <code>rioxarray</code> with multiple builds?</p>
+<p>In your output, do you see any versions of <code>contextily</code> with multiple builds?</p>
 </div>
 </div>
-<p>Since we now know that we can find <code>rioxarray</code> in the conda-forge channel, we can go ahead and install it from this channel using the command</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>conda install --channel conda-forge rioxarray</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Since we now know that we can find <code>contextily</code> in the conda-forge channel, we can go ahead and install it from this channel using the command</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conda install --channel conda-forge contextily</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You’ll see a moving bar that says Conda is <strong>solving (the) environment</strong> - this is Conda doing its package management job! It means Conda is working on:</p>
 <ul>
 <li>finding the dependencies for the packages you are trying to install,</li>
 <li>finding versions of these dependencies that are compatible with each other,</li>
 <li>making sure these new packages are compatible with the packages already present in the environment,</li>
-<li>downgrade, upgrade, or remove packages as needed in the environment.</li>
+<li>downgrading, upgrading, or removing packages as needed in the environment.</li>
 </ul>
-<p>Overall, Conda tries to install what we need with the least disruption. <strong>Solving an environment can often take time</strong> but it is crucial so that the environment remains stable and functional.</p>
+<p>Overall, Conda tries to install what we need with the least disruption. <strong>Solving an environment is usually quick</strong>, but it can take longer when we mix channels or require many exact versions. Either way, it is crucial so that the environment remains stable and functional.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -674,19 +758,16 @@ Check-in
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Check whether <code>pandas</code> is installed in the environment.</li>
-<li>Which channels were used to install dependencies for <code>rioxarray</code>?</li>
+<li>Check whether <code>rasterio</code> is installed in the environment.</li>
+<li>Which channels were used to install dependencies for <code>contextily</code>?</li>
 </ol>
 </div>
 </div>
-<!--
-TO DO: should add something with pip here
--->
 </section>
 <section id="deactivate-environment" class="level3">
 <h3 class="anchored" data-anchor-id="deactivate-environment">6. Deactivate environment</h3>
 <p>To deactivate our current environment and return to our base environment we simply run</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conda deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>conda deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -704,15 +785,15 @@ Check-in
 <section id="delete-environment" class="level3">
 <h3 class="anchored" data-anchor-id="delete-environment">7. Delete environment</h3>
 <p>Since this was a test environment, we can go ahead and delete all of it using the command:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>conda remove --name test-env  --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>conda remove --name test-env --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It will ask you whether you want to proceed. Type <code>y</code> and press enter to go ahead and delete the environment.</p>
 <p>We can run <code>conda env list</code> to verify the <code>test-env</code> does not exist anymore.</p>
 </section>
 <section id="create-environment-one-liner" class="level3">
 <h3 class="anchored" data-anchor-id="create-environment-one-liner">8. Create environment (one liner)</h3>
-<p>We can also create a new environment by specifying the package versions and channel priorities. For example, to install the <code>numpy</code> and <code>rioxarray</code> versions we previously had in a new environment called <code>my-env</code> we run:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>conda create --name my-env rioxarray=0.17.0 numpy=1.26.4 --channel conda-forge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Notice we are explicitely requiring certain versions of our packages, and the <code>--channel conda-forge</code> option is asking Conda to prioritize getting the packages from conda-forge.</p>
+<p>We can also create a new environment by specifying the package versions and channel priorities. For example, to install the <code>numpy</code> and <code>contextily</code> versions we previously had in a new environment called <code>my-env</code> we run:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>conda create --name my-env contextily=1.7.1 numpy=2.4.6 --channel conda-forge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice we are explicitly requiring certain versions of our packages, and the <code>--channel conda-forge</code> option is asking Conda to prioritize getting the packages from conda-forge.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -723,7 +804,7 @@ Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Take a look at the dependencies that were installed with these two packages.</p>
+<p>Activate the environment and take a look at the dependencies that were installed with these two packages.</p>
 </div>
 </div>
 </section>
@@ -731,7 +812,7 @@ Check-in
 <h3 class="anchored" data-anchor-id="exporting-an-environment">9. Exporting an environment</h3>
 <p>One of the main goals of using an environment to manage the packages used in your project is being able to share the environment so that other people can rerun your code and reproduce your results.</p>
 <p>“Sharing the environment” means sharing instructions that Conda can use to recreate the environment you have. These instructions are, basically, a list of the packages installed in the environment, their versions, which channels were used to install them, and, optionally, build specifications.</p>
-<p>There are several ways of creating these instructions to reconstruct an environment depending on the level of cross-platform compatibility we are looking for. However, each of the following methods to export the environment specifications will generate a new <strong>YAML file</strong>. This file type with <code>.yml</code> extension is human-readable markup language that is commonly used for configuration in software applications.</p>
+<p>There are several ways of creating these instructions to reconstruct an environment depending on the level of cross-platform compatibility we are looking for. However, each of the following methods to export the environment specifications will generate a new <strong>YAML file</strong>. This file type with <code>.yml</code> extension is a human-readable markup language that is commonly used for configuration in software applications.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -749,21 +830,21 @@ Navigate to project directory
 <section id="platform-and-package-specific" class="level4">
 <h4 class="anchored" data-anchor-id="platform-and-package-specific">Platform and package specific</h4>
 <p>The first method to export the environment specifications is running</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>conda env export &gt; environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>conda env export &gt; environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <code>environment.yml</code> is the name of the YAML file that will have the environment specifications.</p>
 <p>Open the <code>environment.yml</code> file that was generated, it will look similar to this excerpt:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  - affine=2.4.0=pyhd8ed1ab_0</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  - attrs=24.2.0=pyh71513ae_0</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  [...]</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  - zlib=1.3.1=h87427d6_1</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  - zstd=1.5.6=h915ae27_0</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Here we can see the name of the environment, the channels used to install packages (in order of priority), and the package names, each with a version and build string. This ensures that the environment can be recreated exactly as it is on another system. This first method to export the environment specifications is the most detailed and it is both platform and package specific.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  - _openmp_mutex=4.5=8_kmp_llvm</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  - affine=3.0.1=pyhecae5ae_0</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  [...]</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  - zlib-ng=2.3.3=h31dac16_1</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  - zstd=1.5.7=hf451053_7</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here we can see the name of the environment, the channels used to install packages (in order of priority), and the package names, each with a version and build string. This ensures that the environment can be recreated exactly as it is on another machine with the same operating system. This first method to export the environment specifications is the most detailed and it is both platform and package specific.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -775,23 +856,24 @@ Delete <code>prefix</code> line before sharing environment
 </div>
 <div class="callout-body-container callout-body">
 <p>Notice the last line in the <code>environment.yml</code> file, this <code>prefix</code> indicates the absolute path to the environment’s installation on your local machine.</p>
-<p>You should <strong>delete the <code>prefix</code> line when sharing the environment file</strong>. Leaving it there is unnecessary and could cause confusion since it points to specific directroy in <em>your</em> local machine.</p>
+<p>You should <strong>delete the <code>prefix</code> line when sharing the environment file</strong>. Leaving it there is unnecessary and could cause confusion since it points to a specific directory in <em>your</em> local machine.</p>
 </div>
 </div>
 </section>
 <section id="cross-platform-compatible" class="level4">
 <h4 class="anchored" data-anchor-id="cross-platform-compatible">Cross-platform compatible</h4>
 <p>Our second method to export the environment specifications is to run</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>conda env export --from-history &gt; environment_hist.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Here I named the file <code>environment_hist.yml</code> to not overwrite the previous <code>environmnet.yml</code>, that way you can compare both of them. Open the <code>environment_hist.yml</code> file, it will look similar to this (much shorter than the previous one):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  - numpy=1.26.4</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  - rioxarray=0.17.0</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Adding the <code>--from-history</code> option tells Conda to only include packages that we explicitely installed (in this case <code>numpy=1.26.4</code> and <code>rioxarray=0.17.0</code>), <em>omitting any dependencies that were automatically installed and channel information</em>. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others. While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>conda env export --from-history &gt; environment_hist.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here I named the file <code>environment_hist.yml</code> to not overwrite the previous <code>environment.yml</code>, that way you can compare both of them. Open the <code>environment_hist.yml</code> file, it will look similar to this (much shorter than the previous one):</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  - numpy=2.4.6</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  - contextily=1.7.1</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Adding the <code>--from-history</code> option tells Conda to only include packages that we explicitly installed (in this case <code>contextily=1.7.1</code> and <code>numpy=2.4.6</code>), <em>omitting any dependencies that were automatically installed</em>. The channels it lists come from your Conda settings, not from where the packages were actually installed. This will create a minimal environment file that lists only the packages you explicitly installed, making it simpler and more portable for sharing with others.</p>
+<p>While this method ensures reproducibility of the core setup, Conda will resolve dependencies on its own and these might not be the same as your original environment. Be aware that <code>--from-history</code> may also leave out any packages installed with <code>pip</code>, so you would need to add those to the file by hand.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -802,14 +884,15 @@ Adding channels to <code>environment.yml</code> file
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In section 5 we saw that the <code>rioxarray</code> package is available on the conda-forge channel, but not the defaults channel. The output of <code>conda env export</code> with the <code>--from-history</code> option only includes the defaults channel, so we wouldn’t be able to recreate the environment with that file as is. Remember <strong>the <code>.yml</code> file can be manually modified</strong> and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Rememember to also delete the prefix line before sharing. The modified version of the <code>--from-history</code> output that will allow us to recreate the environment will be:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  - numpy=1.26.4</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  - rioxarray=0.17.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In section 5 we saw that the <code>contextily</code> package is available on the conda-forge channel, but not the defaults channel. The output of <code>conda env export</code> with the <code>--from-history</code> option only includes the defaults channel, so we wouldn’t be able to recreate the environment with that file as is. Remember <strong>the <code>.yml</code> file can be manually modified</strong> and we can edit it to include conda-forge as the first priority channel, followed by the defaults channel. Remember to also delete the prefix line before sharing. The modified version of the <code>--from-history</code> output that will allow us to recreate the environment will be:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>name: my-env</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  - defaults</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  - conda-forge</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  - numpy=2.4.6</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  - contextily=1.7.1</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>prefix: /Users/galaz-garcia/opt/anaconda3/envs/my-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p>Before moving to the last exercise, delete the <code>environment.yml</code> and <code>environment_hist.yml</code> files.</p>
@@ -818,10 +901,9 @@ Adding channels to <code>environment.yml</code> file
 <section id="importing-an-environment" class="level3">
 <h3 class="anchored" data-anchor-id="importing-an-environment">10. Importing an environment</h3>
 <p>For this last exercise, <a href="https://github.com/MEDS-eds-220/MEDS-eds-220-course/blob/main/eds220-env.yml">click here</a> and download the <code>eds220-env.yml</code> file in this repository. Move to a directory for a mock project and navigate to that directory in the terminal.</p>
-<!-- TO DO: Add brief discussion of what is in the environment file -->
 <p>To create an environment from specifications in a <code>.yml</code> file we run</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conda env create --name eds220-env --file eds220-env.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The <code>--name</code> option states how we want to name our environment (<code>eds220-env</code> in this case). If no <code>--name</code> option is given, Conda will name of the environment using the <code>name</code> field in the <code>environment.yml</code> file.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>conda env create --name eds220-env --file eds220-env.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>--name</code> option states how we want to name our environment (<code>eds220-env</code> in this case). If no <code>--name</code> option is given, Conda will name the environment using the <code>name</code> field in the <code>.yml</code> file.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -837,83 +919,17 @@ Check-in
 </div>
 </section>
 </section>
-<section id="conda-commands" class="level2">
-<h2 class="anchored" data-anchor-id="conda-commands">Conda commands</h2>
-<p>The following table includes the commands covered in this lesson’s exercises. Check out <a href="https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html">Conda’s cheatsheet</a> for more commands and tips.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 62%">
-<col style="width: 37%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Command</th>
-<th style="text-align: left;">What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>conda env list</code></td>
-<td style="text-align: left;">list available Conda environments</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda create --name ENVNAME python</code></td>
-<td style="text-align: left;">create a new Python environment named <code>ENVNAME</code></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda remove --name ENVNAME  --all</code></td>
-<td style="text-align: left;">delete <code>ENVNAME</code> environment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda activate ENVNAME</code></td>
-<td style="text-align: left;">activate environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda deactivate</code></td>
-<td style="text-align: left;">deactivate active environment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>python -V</code></td>
-<td style="text-align: left;">print Python version installed in active environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda list</code></td>
-<td style="text-align: left;">list installed packages in active environment</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda list PKGNAME</code></td>
-<td style="text-align: left;">check if <code>PKGNAME</code> package is installed in active environment</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda install PKGNAME</code></td>
-<td style="text-align: left;">install <code>PKGNAME</code> package in environment using environment channel priorities (generally just from defaults channel)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda install --channel CHANNELNAME PKGNAME</code></td>
-<td style="text-align: left;">install <code>PKGNAME</code> package in environment from from <code>CHANNELNAME</code> channel</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda search PKGNAME</code></td>
-<td style="text-align: left;">search for <code>PKGNAME</code> package in environment’s channels</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda search --channel CHANNELNAME PKGNAME</code></td>
-<td style="text-align: left;">search for <code>PKGNAME</code> package in <code>CHANNELNAME</code> channel</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda env export &gt; ENV.yml</code></td>
-<td style="text-align: left;">export environment specifications of currently active environmemt into <code>ENV.yml</code> file (includes all dependencies, buildstrings, and channels)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>conda env export --from-history &gt; ENV.yml</code></td>
-<td style="text-align: left;">export environment specifications of currently active environmemt into <code>ENV.yml</code> file (only packages explicitely installed, no dependencies, buildstrings, or channels)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>conda env create --name ENVNAME --file ENV.yml</code></td>
-<td style="text-align: left;">create an environment named <code>ENVNAME</code> from specifications in <code>ENV.yml</code> file</td>
-</tr>
-</tbody>
-</table>
+<section id="wrapping-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrapping-up">Wrapping up</h2>
+<p>In this lesson we went through the full life cycle of a Conda environment: we created one, installed packages from different channels, exported its specifications to a <code>.yml</code> file, and rebuilt an environment from one of those files.</p>
+<p>A few habits will save you headaches in your own projects:</p>
+<ul>
+<li>Create a separate environment for each project instead of installing everything in <code>base</code>.</li>
+<li>Check which environment is active before installing anything.</li>
+<li>Install with Conda first, and use <code>pip</code> only for packages Conda can’t find.</li>
+<li>Keep an <code>environment.yml</code> file in your project directory and update it when you add packages, so anyone (including future you!) can recreate your environment.</li>
+</ul>
+<p>You don’t need to memorize these commands: the <a href="#conda-commands">table at the top of this lesson</a> collects everything we used, and the more you use environments, the more natural they will feel.</p>
 
 
 </section>
