@@ -22,14 +22,14 @@ To exemplify some of the basic time series functionalities we will use data abou
 
 ![Aerial view of floods during September 2013 in Colorado. Photo by State of Colorado.](/book/images/lesson-7/co-2013-2.jpg)
 
-This data was obtained via the [National Oceanic and Atmosperic Administration (NOAA) Climate Data Online service](https://www.ncdc.noaa.gov/cdo-web/) and the resulting CSV that can be acceses at [this link](https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv). The following is a a short description of the columns we will work with (the full documentation can be accessed [here](https://www.ncei.noaa.gov/pub/data/cdo/documentation/PRECIP_HLY_documentation.pdf)):
+This data was obtained via the [National Oceanic and Atmospheric Administration (NOAA) Climate Data Online service](https://www.ncdc.noaa.gov/cdo-web/) and the resulting CSV can be accessed at [this link](https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv). The following is a short description of the columns we will work with (the full documentation can be accessed [here](https://www.ncei.noaa.gov/pub/data/cdo/documentation/PRECIP_HLY_documentation.pdf)):
 
 | Column | Description |
 |-| -----|
-| STATION | Identification number indentifying the station. |
+| STATION | Identification number identifying the station. |
 |STATION_NAME | Optional field, name identifying the station location.  |
-| DATE | this is the year of the record (4 digits), followed by month (2 digits), followed by day of the month (2 digits), followed by a space and ending with a time of observation that is a two digit indication of the local time hour, followed by a colon (:) followed by a two digit indication of the minute which for this dataset will always be 00. Note: The subsequent data value will be for the hour ending at the time specified here. Hour 00:00 will be listed as the first hour of each date, however since this data is by definition an accumulation of the previous 60 minutes, it actually occurred on the previous day.
-| HPCP | The amount of precipitation recorded at the station for the hour ending at the time specified for DATE above given in inches. The values 999.99 means the data value is missing. Hours with no precipitation are not shown. |
+| DATE | this is the year of the record (4 digits), followed by month (2 digits), followed by day of the month (2 digits), followed by a space and ending with a time of observation that is a two digit indication of the local time hour, followed by a colon (:) followed by a two digit indication of the minute which for this dataset will always be 00. Note: The subsequent data value will be for the hour ending at the time specified here. Hour 00:00 will be listed as the first hour of each date, however since this data is by definition an accumulation of the previous 60 minutes, it actually occurred on the previous day. |
+| HPCP | The amount of precipitation recorded at the station for the hour ending at the time specified for DATE above given in inches. The value 999.99 means the data value is missing. Hours with no precipitation are not shown. |
 
 
 ## Timestamps
@@ -58,7 +58,7 @@ pd.Series([pd.Timestamp(2020,10,18),
 ```
 
 <!--
-- NaT = not a time. `pd.NaT` = nd behaves similar as np.nan does for float data.
+- NaT = not a time. `pd.NaT` behaves similarly to how np.nan does for float data.
 -->
 
 ## Data exploration
@@ -81,17 +81,17 @@ There are a few things going on with this graph:
  
 1. Outliers: There are many jumps close to 1000. This is clearly not right and these are outliers. Looking at the column descriptions we can see 999.99 indicates the hourly precipitation data is missing.
 
-2. Indexing: The $x$-axis values are given by the index of the dataframe and not relative to time. 
+2. Indexing: The $x$-axis values are given by the index of the data frame and not relative to time. 
 
-3. Time range: We are only intersted in the precipitation data from 2013, this graph is trying to plot all our data.
+3. Time range: We are only interested in the precipitation data from 2013, but this graph is trying to plot all our data.
 
 Let's fix each one of these issues separately.
 
 ## Reading in missing data values
 
 The metadata states the missing values are indicated by the number 999.99. 
-We can use this information to reload the dataframe indicating 999.99 is the missing value. 
-To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicitate additional values that should be recognized as `NA`:
+We can use this information to reload the data frame indicating 999.99 is the missing value. 
+To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicate additional values that should be recognized as `NA`:
 
 ```{python}
 # Read in CSV indicating NA values based on metadata
@@ -111,7 +111,7 @@ precip.plot()
 This looks better and we can already see there is something going on close to the end of the time series. 
 
 ## Casting strings into dates
-Notice that the `DATE` column in our dataframe is not of type `datetime`. We can check this using the `dtypes` attribute for dataframes:
+Notice that the `DATE` column in our data frame is not of type `datetime`. We can check this using the `dtypes` attribute for data frames:
 ```{python}
 # Check whether DATE column is of type datetime
 precip.dtypes
@@ -124,8 +124,8 @@ Remember that the `object` dtype means that (most likely) all values in that col
 
 - `pandas.to_datetime()` input: a `pandas.Series` with strings that can be converted to dates
 - `pandas.to_datetime()` output: a `pandas.Series` with the strings converted to `datetime` objects
- 
- #### Example
+
+#### Example
 
 ```{python}
 # Convert DATE column to timestamps
@@ -153,17 +153,17 @@ precip.plot(x='DATE', y='HPCP')
 
 Notice the $x$-axis is now neatly organized into years. 
 
-Next, using our `DATE` column as the index will allows to perform operations with respect to time, including subsetting and resampling. 
+Next, using our `DATE` column as the index will allow us to perform operations with respect to time, including subsetting and resampling. 
 
 ```{python}
-# Set DATE coumn as index
+# Set DATE column as index
 precip = precip.set_index('DATE')
 
 # Inspect new index
 precip.head()
 ```
 
-Since we know the default behaviour of `plot()` is to use the index as the $x$-axis and make a line plot for each numeric column, we can simplify our plot making like this:
+Since we know the default behavior of `plot()` is to use the index as the $x$-axis and make a line plot for each numeric column, we can simplify our plot making like this:
 
 ```{python}
 precip.plot()
@@ -183,7 +183,7 @@ df = pandas.read_csv(file, index_col=['date_column'], parse_dates=['date_column'
 :::
 
 ## Subsetting by date
-`pandas` has great functionality to subset a dataframe when using a time index. 
+`pandas` has great functionality to subset a data frame when using a time index. 
 
 #### Example
 
@@ -212,21 +212,21 @@ df.resample(new_frequency).aggregator_function()
 ```
 where:
 
--  `new_frequency` is a string representing the new frequence to resample the data, for example `'D'` for day, `w` for week, `M` for month, `Y` for year, and
-- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `average()`. 
+-  `new_frequency` is a string representing the new frequency to resample the data, for example `'D'` for day, `'W'` for week, `'M'` for month, `'Y'` for year, and
+- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `mean()`. 
 
 The `resample()` method works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output. 
 
 #### Example
 
-Our 2013 precipitation data has hourly frequency, we want to resample it to daily frequency. 
+Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency. 
 
 ```{python}
 # Resample 2013 hourly data to daily frequency: no output
 precip.loc['2013'].resample('D')
 ```
 
-To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggreagate it using `sum()`:
+To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggregate it using `sum()`:
 
 ```{python}
 # Total daily precipitation in 2013
@@ -235,7 +235,7 @@ daily_precip_2013 = precip.loc['2013'].resample('D').sum()
 daily_precip_2013.head(3)
 ```
 
-Notice the index has now changed to be days in 2013. We should also rename the `HPCP` column since it is not longer hourly precipitation:
+Notice the index has now changed to be days in 2013. We should also rename the `HPCP` column since it is no longer hourly precipitation:
 
 ```{python}
 # Rename hourly precipitation column to match resample
@@ -243,7 +243,7 @@ daily_precip_2013 = daily_precip_2013.rename(columns={'HPCP':'daily_precipitatio
 daily_precip_2013.columns
 ```
 
- Finally, we can plot our data:
+Finally, we can plot our data:
 
 ```{python}
 daily_precip_2013.plot(ylabel='daily precipitation (in)', 
