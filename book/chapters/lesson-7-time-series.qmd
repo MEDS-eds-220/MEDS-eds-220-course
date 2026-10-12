@@ -5,7 +5,7 @@ fig-cap-location: margin
 
 # 6 Time series
 
-In this section we will learn some basic handling of time series. 
+In this section we will learn some basic handling of time series.
 
 This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Lesson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/) @wasser_earthlabearth_textbook_2024.
 
@@ -18,7 +18,7 @@ TODO
 
 ## About the data
 
-To exemplify some of the basic time series functionalities we will use data about hourly precipitation in the county of Boulder, Colorado from 2000 to 2014. In September 2013, an unusual weather pattern led to some of the most intense precipitation ever recorded in this region, causing [devastating floods throughout the Colorado Front Range](https://www.weather.gov/safety/flood-states-co). Our goal is to visualize precipitation data in 2013 and identify this unusual weather event.
+To exemplify some of the basic time series functionalities we will use data about hourly precipitation from four weather stations in the county of Boulder, Colorado from the beginning of 2000 to the end of 2013. In September 2013, an unusual weather pattern led to some of the most intense precipitation ever recorded in this region, causing [devastating floods throughout the Colorado Front Range](https://www.weather.gov/safety/flood-states-co). Our goal is to visualize precipitation data in 2013 and identify this unusual weather event.
 
 ![Aerial view of floods during September 2013 in Colorado. Photo by State of Colorado.](/book/images/lesson-7/co-2013-2.jpg)
 
@@ -30,6 +30,7 @@ This data was obtained via the [National Oceanic and Atmospheric Administration 
 |STATION_NAME | Optional field, name identifying the station location.  |
 | DATE | this is the year of the record (4 digits), followed by month (2 digits), followed by day of the month (2 digits), followed by a space and ending with a time of observation that is a two digit indication of the local time hour, followed by a colon (:) followed by a two digit indication of the minute which for this dataset will always be 00. Note: The subsequent data value will be for the hour ending at the time specified here. Hour 00:00 will be listed as the first hour of each date, however since this data is by definition an accumulation of the previous 60 minutes, it actually occurred on the previous day. |
 | HPCP | The amount of precipitation recorded at the station for the hour ending at the time specified for DATE above given in inches. The value 999.99 means the data value is missing. Hours with no precipitation are not shown. |
+| Measurement Flag | Left blank when no flag is needed. `[` and `]` mark the beginning and end of a period with missing data, and `{` and `}` mark the beginning and end of a deleted period (the data was received but was unreadable or clearly noise). Rows with these four flags have an HPCP value of 999.99. `g` is only used for day 1 of the month at hour 01:00, when the precipitation amount is zero. Since hours with no precipitation are not shown, almost all rows with an HPCP value of 0 have this flag. |
 
 
 ## Timestamps
@@ -40,21 +41,21 @@ The `pandas` library represents an instant in time using the `pandas.Timestamp` 
 import pandas as pd
 
 # Create a timestamp
-pd.Timestamp(year=2020, 
-             month=10, 
-             day=18, 
-             hour=12, 
-             minute=30, 
+pd.Timestamp(year=2020,
+             month=10,
+             day=18,
+             hour=12,
+             minute=30,
              second=15)
 ```
 
-When we store multiple `pandas.Timestamps` in a `pandas.Series` the data type of the column is set to `datetime64[ns]`:
+When we store multiple `pandas.Timestamps` in a `pandas.Series` the data type of the series is set to `datetime64[ns]`:
 
 ```{python}
-# Notice the data type of the column is datetime64
-pd.Series([pd.Timestamp(2020,10,18), 
-           pd.Timestamp(2020,10,17),
-           pd.Timestamp(2020,10,16)])
+# Notice the data type of the series is datetime64
+pd.Series([pd.Timestamp(2020, 10, 18),
+           pd.Timestamp(2020, 10, 17),
+           pd.Timestamp(2020, 10, 16)])
 ```
 
 <!--
@@ -65,23 +66,34 @@ pd.Series([pd.Timestamp(2020,10,18),
 
 Let's start by reading in the data and taking a look at it:
 ```{python}
-# Read in data 
+# Read in data
 URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'
 precip = pd.read_csv(URL)
 
-precip.head()
+precip
 ```
 
+Notice the data has records from more than one station. We can check which ones using the `unique()` method:
+
 ```{python}
-# Plot hourly precipitation in Boulder CO 
+# Check which stations are in the data
+precip['STATION_NAME'].unique()
+```
+
+So the data has hourly precipitation records from four stations in Boulder County. The rows are ordered by station first and then by date: all the records from the first station (2000 to 2013), followed by all the records from the second station, and so on. We will come back to this when we use the dates as the index. In this lesson, we will look at the total precipitation over all four stations.
+
+Let's take an initial look at hour data:
+
+```{python}
+# Plot hourly precipitation from all stations
 precip.plot()
 ```
 
 There are a few things going on with this graph:
- 
+
 1. Outliers: There are many jumps close to 1000. This is clearly not right and these are outliers. Looking at the column descriptions we can see 999.99 indicates the hourly precipitation data is missing.
 
-2. Indexing: The $x$-axis values are given by the index of the data frame and not relative to time. 
+2. Indexing: The $x$-axis values are given by the index of the data frame and not relative to time.
 
 3. Time range: We are only interested in the precipitation data from 2013, but this graph is trying to plot all our data.
 
@@ -89,18 +101,18 @@ Let's fix each one of these issues separately.
 
 ## Reading in missing data values
 
-The metadata states the missing values are indicated by the number 999.99. 
-We can use this information to reload the data frame indicating 999.99 is the missing value. 
-To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicate additional values that should be recognized as `NA`:
+The metadata states the missing values are indicated by the number 999.99.
+We can use this information to reload the data frame indicating 999.99 is the missing value.
+To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicate additional values that should be recognized as `NA`. Since 999.99 only means "missing" in the `HPCP` column, we pass a dictionary that applies it to that column only:
 
 ```{python}
-# Read in CSV indicating NA values based on metadata
-precip = pd.read_csv(URL, na_values=[999.99])
+# Read in CSV indicating NA values in HPCP column based on metadata
+precip = pd.read_csv(URL, na_values={'HPCP': [999.99]})
 
 precip.head()
 ```
 
-Notice that the first hourly precipitation value used to be 999.99 and it is now set to a `NaN`. Check the `na_values` parameter in the [`pd.read_csv()` documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) to learn more about which values are identified as `NA` by default. 
+Notice that the first hourly precipitation value used to be 999.99 and it is now set to a `NaN`. Check the `na_values` parameter in the [`pd.read_csv()` documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) to learn more about which values are identified as `NA` by default.
 
 We can try making our plot again:
 
@@ -110,6 +122,10 @@ precip.plot()
 
 This looks better and we can already see there is something going on close to the end of the time series. 
 
+<!-- 
+Remember the rows are ordered by station, so this plot goes through the years 2000 to 2013 four times, once for each station.
+ -->
+
 ## Casting strings into dates
 Notice that the `DATE` column in our data frame is not of type `datetime`. We can check this using the `dtypes` attribute for data frames:
 ```{python}
@@ -118,9 +134,9 @@ precip.dtypes
 ```
 
 <!--
-precip.DATE.apply(type).unique()
+precip['DATE'].apply(type).unique()
 -->
-Remember that the `object` dtype means that (most likely) all values in that column are strings. We can easily convert strings to datetime objects using the `pandas.to_datetime()` function:
+Remember that the `object` data type means that (most likely) all values in that column are strings. We can easily convert strings to datetime objects using the `pandas.to_datetime()` function:
 
 - `pandas.to_datetime()` input: a `pandas.Series` with strings that can be converted to dates
 - `pandas.to_datetime()` output: a `pandas.Series` with the strings converted to `datetime` objects
@@ -128,21 +144,21 @@ Remember that the `object` dtype means that (most likely) all values in that col
 #### Example
 
 ```{python}
-# Convert DATE column to timestamps
-pd.to_datetime(precip.DATE)
+# Preview DATE converted to timestamps
+pd.to_datetime(precip['DATE'])
 ```
 
 We can overwrite the `DATE` column with this output:
 
 ```{python}
 # Convert DATE column to timestamps
-precip.DATE = pd.to_datetime(precip.DATE)
+precip['DATE'] = pd.to_datetime(precip['DATE'])
 
 # Check DATE column data type is updated
 print(precip.dtypes)
 
 # Check new values
-precip.DATE.head()
+precip['DATE'].head()
 ```
 
 We can make another attempt at plotting our precipitation data:
@@ -153,11 +169,13 @@ precip.plot(x='DATE', y='HPCP')
 
 Notice the $x$-axis is now neatly organized into years. 
 
-Next, using our `DATE` column as the index will allow us to perform operations with respect to time, including subsetting and resampling. 
+<!-- However, the lines jump back and forth: `plot()` connects the points in the order of the rows, so the line goes from 2000 to 2013 for the first station, jumps back to 2000 for the next station, and so on. -->
+
+Next, using our `DATE` column as the index will allow us to perform operations with respect to time, including subsetting and resampling. We will also sort the index using `sort_index()`, so that the rows are in chronological order instead of grouped by station. This will remove some artifacts from our plot. In general, it is good practice to sort a time index, since many time series operations assume the dates are in order.
 
 ```{python}
-# Set DATE column as index
-precip = precip.set_index('DATE')
+# Set DATE column as index and sort rows chronologically
+precip = precip.set_index('DATE').sort_index()
 
 # Inspect new index
 precip.head()
@@ -174,16 +192,17 @@ precip.plot()
 
 If we already have information about our data frame and know which column we will use as the index, we can directly set the index when we load the data by using:
 ```python
-df = pandas.read_csv(file, index_col=['index_column'])
+df = pandas.read_csv(file, index_col='index_column')
 ```
 If we also need our index to be of type `datetime` and we have a known dates column, then we can also create a `datetime` index directly when loading the data:
 ```python
-df = pandas.read_csv(file, index_col=['date_column'], parse_dates=['date_column'])
+df = pandas.read_csv(file, index_col='date_column', parse_dates=['date_column'])
 ```
+If the rows in the file are not in chronological order, remember to add `sort_index()` after loading the data.
 :::
 
 ## Subsetting by date
-`pandas` has great functionality to subset a data frame when using a time index. 
+`pandas` has great functionality to subset a data frame when using a time index.
 
 #### Example
 
@@ -199,7 +218,7 @@ Or simply select data from a given year using `.loc[year]`:
 precip.loc['2013']
 ```
 
-We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data: 
+We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data:
 
 ```{python}
 precip.loc['2013'].plot()
@@ -212,44 +231,68 @@ df.resample(new_frequency).aggregator_function()
 ```
 where:
 
--  `new_frequency` is a string representing the new frequency to resample the data, for example `'D'` for day, `'W'` for week, `'M'` for month, `'Y'` for year, and
-- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `mean()`. 
+-  `new_frequency` is a string representing the new frequency to resample the data, for example `'D'` for day, `'W'` for week, `'MS'` or `'ME'` for month start and month end, `'YS'` or `'YE'` for year start and year end.
+- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `mean()`.
 
-The `resample()` method works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output. 
+The `resample()` method works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output.
+
+:::{.callout-note}
+## Month end or month start?
+`'ME'` stands for "month end" and `'MS'` for "month start". Both group the data by calendar month. The only difference is how each month is labeled: `'ME'` uses the last day of the month and `'MS'` uses the first day. For example, this is the total monthly precipitation for the first three months of 2013 with each option:
+
+```{python}
+# Monthly totals labeled by the last day of each month
+precip.loc['2013', 'HPCP'].resample('ME').sum().head(3)
+```
+
+```{python}
+# Monthly totals labeled by the first day of each month
+precip.loc['2013', 'HPCP'].resample('MS').sum().head(3)
+```
+
+The totals are the same, only the dates in the index change. In this course we will use `'ME'`. Similarly, `'YE'` and `'YS'` label each year by its last or first day.
+:::
 
 #### Example
 
-Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency. 
+Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency.
 
 ```{python}
 # Resample 2013 hourly data to daily frequency: no output
-precip.loc['2013'].resample('D')
+precip.loc['2013', 'HPCP'].resample('D')
 ```
 
-To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we will aggregate it using `sum()`:
+To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we aggregate it using `sum()`:
 
 ```{python}
-# Total daily precipitation in 2013
-daily_precip_2013 = precip.loc['2013'].resample('D').sum()
+# Total daily precipitation in 2013 (sum over all stations)
+daily_precip_2013 = precip.loc['2013', 'HPCP'].resample('D').sum()
 
 daily_precip_2013.head(3)
 ```
 
-Notice the index has now changed to be days in 2013. We should also rename the `HPCP` column since it is no longer hourly precipitation:
+A few things to notice here:
+
+
+<!-- - We select the `HPCP` column before resampling, using `.loc['2013', 'HPCP']`. If we resampled the whole data frame and called `sum()`, `pandas` would also "add up" the text columns, like `STATION`, by joining their strings together.
+ -->
+- Each daily value is the total precipitation from all the hourly records on that day, over the four stations.
+- `sum()` returns 0 for days without any records. Since hours with no precipitation are not recorded, this is the right value for dry days. A few days only have rows marking missing data, and these also show 0.
+
+The index has now changed to be days in 2013 and, since we selected a single column, the result is a `pandas.Series`. We should also rename the series since it is no longer hourly precipitation:
 
 ```{python}
-# Rename hourly precipitation column to match resample
-daily_precip_2013 = daily_precip_2013.rename(columns={'HPCP':'daily_precipitation'})
-daily_precip_2013.columns
+# Rename series to match resample
+daily_precip_2013 = daily_precip_2013.rename('daily_precipitation')
+daily_precip_2013.name
 ```
 
 Finally, we can plot our data:
 
 ```{python}
-daily_precip_2013.plot(ylabel='daily precipitation (in)', 
-                       xlabel=' ',
-                       title='Precipitation in Boulder, CO during 2013',
-                       legend=False)
+daily_precip_2013.plot(ylabel='daily precipitation (in)',
+                       xlabel='',
+                       title='Total precipitation over four stations in Boulder County, CO (2013)')
 ```
 
 ## Complete workflow
@@ -259,30 +302,28 @@ The previous code includes a lot of exploratory functions and trials. While it i
 ```{python}
 import pandas as pd
 
-'''
-Read in Boulder, CO hourly precipitation data 
-HPCP = hourly precipitation (unique numerical column in data frame)
-'''
+# Read in hourly precipitation data from four stations in Boulder County, CO
+# HPCP = hourly precipitation (unique numerical column in data frame)
 URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'
-precip = pd.read_csv(URL, 
-                    na_values=[999.99],  # Known from metadata
-                    index_col=['DATE'], 
-                    parse_dates=['DATE']
-                    )
+precip = (pd.read_csv(URL,
+                      na_values={'HPCP': [999.99]},  # Known from metadata
+                      index_col='DATE',
+                      parse_dates=['DATE'])
+          .sort_index()  # Rows in the file are ordered by station
+          )
 
 
-# Calculate daily total precipitation during 2013
-daily_precip_2013 = (precip.loc['2013']
+# Calculate daily total precipitation over all stations during 2013
+daily_precip_2013 = (precip.loc['2013', 'HPCP']
                             .resample('D')
                             .sum()
-                            .rename(columns={'HPCP':'daily_precipitation'})  
+                            .rename('daily_precipitation')
                             )
 
 # Plot time series
-daily_precip_2013.plot(ylabel='daily precipitation (in)', 
-                       xlabel=' ',
-                       title='Precipitation in Boulder, CO during 2013',
-                       legend=False)
+daily_precip_2013.plot(ylabel='daily precipitation (in)',
+                       xlabel='',
+                       title='Total precipitation over four stations in Boulder County, CO (2013)')
 ```
 
 <!-- TODO Add plot description. -->
