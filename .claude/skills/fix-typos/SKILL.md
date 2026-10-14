@@ -11,7 +11,7 @@ Proofread a single course page and fix mistakes without changing its teaching co
 ## 1. Find the file
 
 - The argument can be a path, a lesson number ("lesson 5", "5") or part of a name ("groupby", "basic plotting").
-- Resolve it against `book/chapters/` and the `book` sidebar in `_quarto.yml`. Lessons are either `book/chapters/lesson-N-name.qmd` or `book/chapters/lesson-N-name/lesson-N-name.qmd`.
+- Resolve it against the `book` sidebar and navbar in `_quarto.yml`, then search `book/chapters/`, `book/appendices/`, `discussion-sections/`, `assignments/` and `setup/`. Lessons are either `book/chapters/lesson-N-name.qmd` or `book/chapters/lesson-N-name/lesson-N-name.qmd`.
 - If the argument matches more than one file, or none, ask before continuing.
 - Never edit archived schedules (`week-by-week/week-by-week-YYYY.qmd`).
 

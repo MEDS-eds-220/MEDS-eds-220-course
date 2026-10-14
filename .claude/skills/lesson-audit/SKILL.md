@@ -29,7 +29,9 @@ If no path was given, ask which lesson to audit. If the file links to or depends
 
 EDS 217 did **not** cover `.iloc`, method chaining (it explicitly avoided it), `lambda`, `fig, ax`, `resample`/`rolling`, or anything geospatial. Its editor was Positron. The entrance survey (in `_planning/`, gitignored, never quote it) shows the students most want to write code from scratch.
 
-**The environment.** Read `eds220-env.yml` each time. As of Fall 2026 it pinned a 2023 stack (numpy 1.24, which keeps pandas on 2.x; geopandas 0.14; python 3.11). For every finding, say whether it affects students **now** or only **after the environment is updated**.
+**Other summer courses.** Students also take EDS 214 (reproducibility) and EDS 221 (programming in R). Their 2026 sites are `eds-214-reproducibility-m26/eds-214-reproducibility-m26.github.io`, `eds-221-programming-m26/eds-221-programming-m26.github.io` and `EDS-217-Essential-Python/EDS-217-Essential-Python.github.io` on GitHub, and may already be cloned in `_planning/summer-course-repos/`. When a page teaches git, the workbench, Quarto or reproducibility, search them for overlap so you can say what is review. For example, EDS 214 already had students create and resolve a merge conflict between Workbench and their laptop, and draw commit histories.
+
+**The environment.** Read `eds220-env.yml` each time. As of October 2026 it pins pandas 2.3.3, numpy 1.26.4 (which keeps pandas on 2.x), geopandas 1.1.4, xarray 2026.9.0, matplotlib 3.11.2 and Python 3.12. For every finding, say whether it affects students **now** or only **after the environment is updated**.
 
 **Earlier findings.** If `_planning/code-currency-audit.html` exists, read it first. It is a full-course audit from September 2026. Reuse its findings for this file, but check that each one is still present (line numbers shift, and some items are fixed). Don't report items that are already fixed.
 
@@ -66,6 +68,13 @@ EDS 217 did **not** cover `.iloc`, method chaining (it explicitly avoided it), `
    - missing explanations of the errors beginners actually hit (for example, `and`/`or` on a Series);
    - places that clash with what EDS 217 taught;
    - homework questions that depend on something the lesson doesn't teach.
+6. **Activities and setup steps that don't work as written.** For pages where students follow steps (git activities, setup tutorials, discussion sections), walk through each step and check that it produces the intended result. Look for:
+   - missing permissions or prerequisites (for example, pushing to a partner's repo without being added as a collaborator);
+   - steps that can silently do nothing, so the point of the activity is lost (for example, identical edits on two computers merge without a conflict);
+   - tools or environments that aren't available where the step runs: laptop vs workbench, whether the course environment must be activated first, whether a VSCode extension or command-line tool is installed;
+   - files a step creates that students shouldn't commit (for example, the `.html` and `_files/` that `quarto preview` writes).
+
+   Test git behavior in a throwaway repo inside `_planning/` when you can.
 
 ## How to verify
 
