@@ -16,20 +16,17 @@ This discussion section will guide you through exploring data about snowshoe har
 ## Setup
 
 :::{.callout-tip appearance="minimal"}
-1. Access the workbench-1 server.
 
-2. Navigate to the `eds220-discussion-sections` directory in the file navigation panel and the terminal.
+1. Create a new Python notebook inside your `eds220-discussion-sections` directory and rename it to `section-3-snowshoe-hares.ipynb`. Workbench or local are ok.
 
-3. Create a new Python notebook inside your `eds220-discussion-sections` directory and rename it to `section-3-snowshoe-hares.ipynb`. 
-
-4. Use the terminal to push this file to your remote repository. 
+2. Use the terminal to push this file to your remote repository. 
 :::
 
 ## General directions
 :::{.callout-tip appearance="minimal"}
 - Add comments as appropriate along your code.
 - Include markdown cells in between your code cells to add titles and information to each exercise.
-- You won't need to upload any data.
+- Download the data file from the link in exercise 3. If you are working on workbench-1, upload the file to the server.
 - Indications about when to commit and push changes are included. Commit every time you finish a major step! **Remember to write your commits in the imperative mood.**
 :::
 
@@ -38,7 +35,6 @@ For these exercises we will use data about [Snowshoe hares (*Lepus americanus*) 
 
 This dataset is stored in the [Environmental Data Initiative (EDI)](https://edirepository.org) data repository. This is a huge data repository committed to making data Findable, Accessible, Interoperable, and Reusable (FAIR). 
 It is the main repository for all the data associated with the [Long Term Ecological Research Network (LTER)](https://lternet.edu).
-
 
 ## 1. Archive exploration
 a. Take some time to look through the dataset's description in EDI and click around. Discuss the following questions with your team:
@@ -74,19 +70,7 @@ d. Do you need to add an attribution in the image description? Check the license
 
 ## 3. Data loading and preliminary exploration
 
-a. Back in your notebook, import the `55_Hare_Data_2012.txt` file from its URL using the `pandas.read_csv()` function. Store it in a variable named `hares`. 
-
-<!--
-```python
-import numpy as np
-import pandas as pd
-
-URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
-hares = pd.read_csv(URL)
-
-hares.head()
-```
--->
+a. Back in your notebook, import the `55_Hare_Data_2012.txt` file [available here]({{< var hares-data-folder >}}). Store it in a variable named `hares`. 
 
 b. Using `pandas` methods, obtain preliminary information and explore this data frame. Consider answering some of these questions:
 
@@ -95,7 +79,6 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 - What are the minimum and maximum values for the weight and hind feet measurements?
 - What are the unique values for some of the categorical columns?
 - An exploratory question about the data frame you come up with!
-
 
 <p style="text-align: center;">
 **CHECK IN WITH YOUR TEAM** 
@@ -112,30 +95,9 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 
 a. In the metadata section of the EDI repository, find the allowed values for the hares' sex. Create a small [table in a markdown cell](https://www.markdownguide.org/extended-syntax/#tables) showing the values and their definitions.
 
-<!--
-*Allowed values are:*
-
-| Value | Definition |
-| ------| ---------- |
-| f | female |
-| m | male |
-| m?| male not confirmed |
--->
-
 b. Get the number of times each unique sex non-NA value appears.
 
-<!--
-```python
-hares['sex'].value_counts()
-```
--->
-
 c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (b), this time adding the `dropna=False` parameter to `value_counts()`.
-<!--
-```python
-hares['sex'].value_counts(dropna=False)
-```
--->
 
 d. Discuss with your team the output of the unique value counts. In particular: 
     i. Do the values in the `sex` column correspond to the values declared in the metadata?
@@ -143,12 +105,6 @@ d. Discuss with your team the output of the unique value counts. In particular:
     iii. Are there seemingly repeated values? If so, what could be the cause?
 
 e. Write code to confirm your suspicions about d-iii.
-
-<!--
-```python
-hares['sex'].unique()
-```
--->
 
 <p style="text-align: center;">
 **commit, pull, and push changes**
@@ -160,35 +116,17 @@ a. Individually, write step-by-step instructions on how you would wrangle the `h
 
 b. Discuss your step-by-step instructions with your team.
 
-The next exercise will guide you through cleaning the sex codes. There are *many* ways of doing this. The one presented here might not be the same way you thought about doing it - that's ok! This one was designed to practice using the `numpy.select()` function.
+The next exercise asks you to clean the sex codes. There are *many* ways of doing this. Use the approach you came up with in your brainstorm, or try a different one!
 
 ## 6. Clean values
 
-a. Create a new column called `sex_simple` using the `numpy.select()` function so that 
+a. Create a new column called `sex_simple` where:
 
-- 'F', 'f', and 'f_' in the `sex` column get assigned to 'female', 
-- 'M', 'm', and 'm_' get assigned to 'male', and 
-- anything else gets assigned `np.nan`
-
-<!--
-```python
-conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
-              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
-
-choices = ['female', 
-            'male']
-
-hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
-hares.head()
-```
--->
+- `F`, `f`, and `f_` (f with a space)  in the `sex` column get assigned to 'female', 
+- `M`, `m`, and `m_` (m with a space) get assigned to 'male', and 
+- anything else gets assigned `NaN`.
 
 b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
-<!--
-```python
-hares['sex_simple'].value_counts(dropna=False)
-```
--->
 
 <p style="text-align: center;">
 **commit, pull, and push changes**
@@ -197,12 +135,6 @@ hares['sex_simple'].value_counts(dropna=False)
 ## 7. Calculate mean weight
 
 a. Use `groupby()` to calculate the mean weight by sex using the new column. 
-
-<!--
-```python
-hares.groupby('sex_simple')['weight'].mean()
-```
--->
 
 b. Write a full sentence explaining the results you obtained. Don't forget to include units.
 
@@ -218,27 +150,8 @@ In a new code cell, collect all the relevant code to create a streamlined workfl
 - Not include output from intermediate variables or checks.
 - Not include methods or functions that do not directly contribute to the analysis (even if they don't print anything ex: `df.head()`).
 - If appropriate, combine methods using method chaining instead of creating intermediate variables.
-- Comment your code following our class comments guidelines. 
+- Comment your code following our [class comments guidelines](/book/appendices/comments-guidelines.qmd). 
 - Use appropriate line breaks and indentation to make code readable.
-
-<!-- 
-```python
-# Load data from EDI data repository
-URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
-hares = pd.read_csv(URL)
-
-# Create new sex_simple column dropping the uncertain sex codes and 
-# simplifying codes without a question mark
-conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
-              (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
-choices = ['female', 'male']
-
-hares['sex_simple'] = np.select(conditions, choices, default=np.nan)
-
-# Calculate average hare weight by sex
-hares.groupby('sex_simple')['weight'].mean()
-```
--->
 
 <!--TODO: add explanation of why this is important-->
 
