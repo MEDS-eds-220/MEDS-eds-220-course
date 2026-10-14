@@ -285,12 +285,6 @@ Even if merge commits are not a big deal, the best practice is to keep your git 
 :::
 
 
-<!-- 
-NEXT TIME: merge conflicts with notebooks.
-https://www.reviewnb.com/git-jupyter-notebook-ultimate-guide
- -->
-
-
 ## Activity 3: create and resolve merge conflict in pairs
 
 For this activity, pair up with a partner and assign roles for team member 1 and 2. We will test if you're able to create and resolve a git merge conflict!
@@ -317,4 +311,69 @@ For this activity, pair up with a partner and assign roles for team member 1 and
 We won't be using any of these repositories later on. So:
 
 - delete all files from your local computer and the workbench associated with this activity, 
-- delete the `merge_test_YOURLASTNAME` repository on GitHub. 
+- delete the `merge_test_YOURLASTNAME` repository on GitHub.
+
+## What about notebooks?
+
+In this activity we used a Quarto file, but most of your work in this course is in Jupyter notebooks. Merge conflicts in notebooks are much harder to resolve, so the best strategy is to avoid them.
+
+### What a notebook looks like under the hood
+
+A `.ipynb` file is not a plain list of code lines like a `.qmd` or `.py` file. It is a text file in JSON format that stores every cell together with information about it. For example, this is how one code cell is saved:
+
+```json
+{
+ "cell_type": "code",
+ "execution_count": 3,
+ "id": "a1b2c3d4",
+ "metadata": {},
+ "outputs": [
+  {
+   "name": "stdout",
+   "output_type": "stream",
+   "text": [
+    "Subset has 3 rows.\n"
+   ]
+  }
+ ],
+ "source": [
+  "subset = df[df['C'] == 'w']\n",
+  "print(\"Subset has\", len(subset), \"rows.\")"
+ ]
+}
+```
+
+Your code is only the `source` part. Everything else can change even if you don't touch a single line of code:
+
+- **Execution counts**: the `execution_count` number changes every time you run a cell, and it depends on the order in which you run them.
+- **Outputs**: re-running a cell saves its new output. Anything that changes between runs (random numbers, warnings, file paths, the time) changes the file.
+- **Plots**: figures are saved inside the notebook as very long blocks of encoded text. Re-running a plotting cell can rewrite the whole block.
+- **Notebook metadata**: the notebook also stores which kernel and Python version were used. Opening and running it with a different kernel, for example on the workbench and then on your personal computer, can update this information.
+
+So, if you run the same notebook on two computers, git sees changes in both places even if you only edited the code on one of them. 
+
+### Conflicts in a notebook
+
+When a conflict does happen, git adds the `<<<<<<<`, `=======` and `>>>>>>>` markers inside the JSON. The file is then no longer a valid notebook, so VSCode may not be able to open it as one.
+
+To see what this looks like, you can [download and open a notebook that was broken by a git merge](https://github.com/carmengg/merge_test_GG/blob/main/merge_text.ipynb).
+
+There's software that can help you compare notebooks and resolve conflicts in them, for example [nbdime](https://nbdime.readthedocs.io/), a tool for diffing and merging Jupyter notebooks. In the course, we will focus on best practices to prevent a conflict.
+ 
+### Prevention rules
+
+- 🔄 **Pull before you start working and push when you stop.** This is the same rule as before, and it matters even more with notebooks.
+- 💻 **Work on a notebook in one place at a time.** Don't have the same notebook open and running on two computers. If you switch computers, commit and push on the first one, then pull on the second one before opening the notebook.
+- 🧹 **Clear outputs before committing while you work.** In VSCode, use the *Clear All Outputs* button, then save and commit. This removes most of the changes that are not about your code. 
+
+The exception is your final submission: homework notebooks must be submitted with all their outputs, so run all cells before your last commit.
+
+- 👥 **In a team, use one notebook per person.** If several people need to work on the same analysis, split it into separate notebooks instead of editing the same one.
+
+- 📄 **For shared work, use plain-text files such as Quarto documents (`.qmd`) or Python scripts (`.py`).** Notebooks are great for exploring data and presenting your results, but they are not the best format for code that several people edit at the same time.
+
+## Wrap up
+
+Merge conflicts are not errors. They are git asking you to decide what the code should look like when the same lines were changed in two places. 
+
+The most important habit to take away: **always `git pull` before you start working, and commit and push when you stop.** Most merge conflicts, in Quarto files and notebooks alike, can be avoided this way!
