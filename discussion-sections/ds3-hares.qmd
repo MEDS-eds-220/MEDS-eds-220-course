@@ -6,7 +6,7 @@ image: images/hare.jpg
 sidebar: false
 ---
 
-This discussion section will guide you through exploring data about snowshoe hares in the (*Lepus americanus*) in the Bonanza Creek Experimental Forest located in Alaska, USA. In this discussion section, you will:
+This discussion section will guide you through exploring data about snowshoe hares (*Lepus americanus*) in the Bonanza Creek Experimental Forest located in Alaska, USA. In this discussion section, you will:
 
 - Practice markdown syntax for creating tables and inserting images
 - Practice detecting and cleaning messy data
@@ -18,17 +18,17 @@ This discussion section will guide you through exploring data about snowshoe har
 :::{.callout-tip appearance="minimal"}
 1. Access the workbench-1 server.
 
-2. Navigate to the`eds220-discussion-sections` directory in the file navigation panel and the terminal.
+2. Navigate to the `eds220-discussion-sections` directory in the file navigation panel and the terminal.
 
 3. Create a new Python notebook inside your `eds220-discussion-sections` directory and rename it to `section-3-snowshoe-hares.ipynb`. 
 
-4. Use the terminal to push this file to you remote repository. 
+4. Use the terminal to push this file to your remote repository. 
 :::
 
 ## General directions
 :::{.callout-tip appearance="minimal"}
 - Add comments as appropriate along your code.
-- Include markdown cells in between your code cells to add titles and information to each exercise
+- Include markdown cells in between your code cells to add titles and information to each exercise.
 - You won't need to upload any data.
 - Indications about when to commit and push changes are included. Commit every time you finish a major step! **Remember to write your commits in the imperative mood.**
 :::
@@ -36,8 +36,8 @@ This discussion section will guide you through exploring data about snowshoe har
 ## About the data
 For these exercises we will use data about [Snowshoe hares (*Lepus americanus*) in the Bonanza Creek Experimental Forest @kielland_snowshoe_2017](https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-bnz.55.22). 
 
-This dataset is stored in the [Environmental Data Initiative (EDI)](https://edirepository.org) data repository. This is a huge data repository committed to make data Findable, Accessible, Interoperable, and Reusable (FAIR). 
-It is the main repository for all the data associated to the [Long Term Ecological Research Network (LTER)](https://lternet.edu).
+This dataset is stored in the [Environmental Data Initiative (EDI)](https://edirepository.org) data repository. This is a huge data repository committed to making data Findable, Accessible, Interoperable, and Reusable (FAIR). 
+It is the main repository for all the data associated with the [Long Term Ecological Research Network (LTER)](https://lternet.edu).
 
 
 ## 1. Archive exploration
@@ -59,14 +59,14 @@ a. Go to [this link](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Le
 
 b. Get the URL of the hare image. To do this:
 
-- hover over the image –> right click –> “Copy Image Address".
+- hover over the image –> right click –> "Copy Image Address".
 
-c. At the end of the markdown cell with the dataset description, use markdown sytanx to add the image from its URL:
+c. At the end of the markdown cell with the dataset description, use markdown syntax to add the image from its URL:
 ```default
 ![image description](URL-goes-here)
 ```
 
-d. Do you need to add an attribution in the image description? Check the license at the [bottom of wikimedia page](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
+d. Do you need to add an attribution in the image description? Check the license at the [bottom of the Wikimedia page](https://commons.wikimedia.org/wiki/File:SNOWSHOE_HARE_%28Lepus_americanus%29_%285-28-2015%29_quoddy_head,_washington_co,_maine_-01_%2818988734889%29.jpg).
 
 <p style="text-align: center;">
 **commit, pull, and push changes**
@@ -90,11 +90,11 @@ hares.head()
 
 b. Using `pandas` methods, obtain preliminary information and explore this data frame. Consider answering some of these questions:
 
-- What are the dimensions of the dataframe and what are the data types of the columns? Do the data types match what you would expect from each column?
+- What are the dimensions of the data frame and what are the data types of the columns? Do the data types match what you would expect from each column?
 - Are there any columns that have a significant number of NA values?
 - What are the minimum and maximum values for the weight and hind feet measurements?
 - What are the unique values for some of the categorical columns?
-- An explroatory question about the data frame you come up with!
+- An exploratory question about the data frame you come up with!
 
 
 <p style="text-align: center;">
@@ -110,7 +110,7 @@ b. Using `pandas` methods, obtain preliminary information and explore this data 
 
 ## 4. Detecting messy values
 
-a. In the metadata section of the EDI repository, find which are the allowed values for the hares' sex. Create a small [table in a markdown cell](https://www.markdownguide.org/extended-syntax/#tables) showing the values and their definitions.
+a. In the metadata section of the EDI repository, find the allowed values for the hares' sex. Create a small [table in a markdown cell](https://www.markdownguide.org/extended-syntax/#tables) showing the values and their definitions.
 
 <!--
 *Allowed values are:*
@@ -130,7 +130,7 @@ hares['sex'].value_counts()
 ```
 -->
 
-c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (a), this time adding the `dropna=False` parameter to `value_counts()`.
+c. Check the [documentation of `value_counts()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html). What is the purpose of the `dropna` parameter and what is its default value? Repeat step (b), this time adding the `dropna=False` parameter to `value_counts()`.
 <!--
 ```python
 hares['sex'].value_counts(dropna=False)
@@ -140,9 +140,9 @@ hares['sex'].value_counts(dropna=False)
 d. Discuss with your team the output of the unique value counts. In particular: 
     i. Do the values in the `sex` column correspond to the values declared in the metadata?
     ii. What could have been potential causes for multiple codes?
-    iii. Are there seemingly repated values? If so, what could be the cause?
+    iii. Are there seemingly repeated values? If so, what could be the cause?
 
-e. Write code to confirm your suspicions about c-iii.
+e. Write code to confirm your suspicions about d-iii.
 
 <!--
 ```python
@@ -186,7 +186,7 @@ hares.head()
 b. Check the counts of unique values (including NAs) in the new `sex_simple` column.
 <!--
 ```python
-hares['sex_simple'].value_counts()
+hares['sex_simple'].value_counts(dropna=False)
 ```
 -->
 
@@ -217,7 +217,7 @@ In a new code cell, collect all the relevant code to create a streamlined workfl
 - Only print the final results for mean weight by `sex_simple`. 
 - Not include output from intermediate variables or checks.
 - Not include methods or functions that do not directly contribute to the analysis (even if they don't print anything ex: `df.head()`).
-- If appropriate, combine methods using code chaining instead of creating intermediate variables.
+- If appropriate, combine methods using method chaining instead of creating intermediate variables.
 - Comment your code following our class comments guidelines. 
 - Use appropriate line breaks and indentation to make code readable.
 
@@ -227,8 +227,8 @@ In a new code cell, collect all the relevant code to create a streamlined workfl
 URL = 'https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-bnz.55.22&entityid=f01f5d71be949b8c700b6ecd1c42c701'
 hares = pd.read_csv(URL)
 
-# Create new sex_simpel column dropping the uncertain sex codes and 
-# simplifying codes without no question mark
+# Create new sex_simple column dropping the uncertain sex codes and 
+# simplifying codes without a question mark
 conditions = [(hares.sex=='F') | (hares.sex=='f') |(hares.sex=='f '),
               (hares.sex=='M') | (hares.sex=='m') |(hares.sex=='m ')]
 choices = ['female', 'male']
