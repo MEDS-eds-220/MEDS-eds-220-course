@@ -33,14 +33,14 @@ hares.head()
 hares.info()
 ```
 
-We can see from the `info()` display that most of these variables are of type `object` (most likely `strings`) and some continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
+We can see from the `info()` display that most of these variables are of type `object` (most likely `strings`) and some are continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
 
 ```{python}
 hares['date'] = pd.to_datetime(hares['date'])
 print(hares.date.dtype)
 ```
 
-## Examining hares age data
+## Examining hares' age data
 
 From the data's `info()` display we can see that the `age` column has 1269 non-NA rows. In this example we are interested in working with data from juvenile hares exclusively. So we will:
 
@@ -48,7 +48,7 @@ From the data's `info()` display we can see that the `age` column has 1269 non-N
 2. Filter for observations in which age is 'adult' or 'juvenile'
 3. Investigate the age distributions across time
 
-From the [dataset's metadata](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-bnz.55.22) we know there are three allowedd values in the `age` column: 
+From the [dataset's metadata](https://portal.edirepository.org/nis/metadataviewer?packageid=knb-lter-bnz.55.22) we know there are three allowed values in the `age` column: 
 
 - 'a' for 'adult', 
 - 'j' for 'juvenile', and 
@@ -84,12 +84,12 @@ hares_juv_adult['year'] = hares_juv_adult.date.dt.year
 # Create hares/year dataframe
 hares_per_year = (hares_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
                                  .reset_index(name='counts')       # Remove multi-index
-                                 .pivot(index='year', columns='age', values='counts')   # Pivot into long format
+                                 .pivot(index='year', columns='age', values='counts')   # Pivot into wide format
                                  )
 hares_per_year
 ```
 
-If  you are wondering, here `year` is the name of the dataframe's row index and `age` is the name of the column index. 
+If you are wondering, here `year` is the name of the data frame's row index and `age` is the name of the column index. 
 In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:
 
 ```{python}
@@ -124,7 +124,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see a diminishing trend in the number of juvenile hare trappings. The two exceptions are 2005, 2008, and 2011. 
+No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see a diminishing trend in the number of juvenile hare trappings. The three exceptions are 2005, 2008, and 2011. 
 
 <!-- In 2005 juvenile hare counts were 6 times higher than in 2004, and in 2008 counts were 8.8 times higher than in 2007. In 2011 the juvenile snowshoe hare count was 9.5 times higher than in 2010. -->
 
@@ -134,7 +134,7 @@ Consider the following question: In what ways could the data collection methods 
 :::
 
 
-<!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest to conduct the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1998, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest to maintain the number and location of traps constant over the years. -->
+<!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest conducting the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1998, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest keeping the number and location of traps constant over the years. -->
 
 ## Linear regression
 
@@ -152,11 +152,11 @@ print(f"Number of juvenile hares with hind foot and weight measurements: {len(ju
 juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
 ```
 
-We can see there seems to be a linear trend between the weight and hind foout length variables, though as the hind foot length increases the variability does too. 
+We can see there seems to be a linear trend between the weight and hind foot length variables, though as the hind foot length increases the variability does too. 
 
-Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a a great resource. 
+Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a great resource. 
 
-The trickiest part of fiting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
+The trickiest part of fitting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
 
 - input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes from having a single feature modeling the output data.
 - output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
@@ -173,7 +173,7 @@ y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
 print(f"Output data shape: {y.shape}")
 ```
 
-Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination or $R^2$, and the x-axis intercept and slope from our linear model. 
+Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination or $R^2$, and the y-intercept and slope from our linear model. 
 
 ```{python}
 # Fit model
@@ -185,7 +185,7 @@ print(f"Coefficient of determination (R^2): {R_sq}")
 
 # Retrieve intercept and slope
 intercept = model.intercept_
-print(f"x-axis intercept: {intercept}")
+print(f"y-intercept: {intercept}")
 
 slope = model.coef_[0]
 print(f"Slope: {slope}")
@@ -199,10 +199,10 @@ where
 
 - $x$ = input variable
 - $\hat{y}$ = **estimated $y$ value** at $x$ from the linear model 
-- $\beta_0$ = the **$x$-intercept** of the linear model, this is interpreted as the estimated average value when $x=0$
+- $\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value when $x=0$
 - $\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
 
-The **coefficient of determination**, $R^2$ is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line the variable $x$. 
+The **coefficient of determination**, $R^2$, is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line with the variable $x$. 
 
 
 We can use all this information to plot our linear model together with our data:
@@ -253,9 +253,9 @@ plt.show()
 # Exercise
 Answer the following questions:
 
-a. Does it make sense to interpret the $x$-axis intercept as an estimated measurement of weight?
+a. Does it make sense to interpret the $y$-intercept as an estimated measurement of weight?
 
-b. What is the estimated change in weight for each millimiter increase in hind foot length?
+b. What is the estimated change in weight for each millimeter increase in hind foot length?
 
 c. Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? What other variables could be worth exploring to model the weight?
 
