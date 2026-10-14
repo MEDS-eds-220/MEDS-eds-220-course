@@ -5,8 +5,6 @@ slides: "{{< var merge-conflicts-slides >}}"
 
 # Merge conflicts
 
-<!-- *This activity has been adapted to quarto and Jupyter notebooks from [Casey O’Hara’s git activity for EDS 211](https://docs.google.com/document/d/1ZLD7CQXCgCp2B1xXGlwoJHOB_dzWe088lOVsJmqA3eY/edit?usp=sharing) with information from [NCEAS Learning Hub 10  Collaborating using Git and GitHub & Merge Conflicts](https://learning.nceas.ucsb.edu/2023-10-coreR/session_10.html).* -->
-
 Git tracks changes by noting which lines of code have changed - you can only add, delete, or change (delete then add) a line at a time. When collaborating with others (or with yourself on different computers) on coding tasks, occasionally the same line may be changed simultaneously. This results in a merge conflict!
 
 
@@ -14,13 +12,15 @@ In this activity we will:
 
 1) Create and resolve a merge conflict individually on a Quarto file. 
 
-2) Resolve a git merge commit on a Quarto file.
+2) Complete a git merge commit on a Quarto file.
 
 3) Create and resolve merge conflicts on a Quarto file with a partner. 
 
 ![Illustration from the [Openscapes](https://www.openscapes.org/) blog [GitHub for supporting, contributing, and failing safely](https://www.openscapes.org/blog/2022/05/27/github-illustrated-series/) by Allison Horst and Julia Lowndes.](images/git-merge-conflicts/horst-git.png)
 
 ## Setup (everyone, individual)
+
+### Step 1: Create a GitHub repository
 
 1. Log in to GitHub.
 
@@ -40,9 +40,11 @@ In this activity we will:
 
     - No license.
 
-3. On your personal computer and using VSCode, clone your repository.
+### Step 2 (@ personal computer): Clone your repository and check your git configuration
 
-4. Verify your merge configuration by running this command in the terminal:
+1. Using VSCode, clone your repository.
+
+2. Verify your merge configuration by running this command in the terminal:
 
 ```bash
 git config --global --list
@@ -50,7 +52,7 @@ git config --global --list
 
 This command shows you all the settings git is using at the moment. Your output should look something like this:
 
-```bash
+```text
 user.name=carmengg
 user.email=c_galazgarcia@ucsb.edu
 credential.helper=cache --timeout=10000000
@@ -63,17 +65,25 @@ If you see `pull.rebase=false` it means you have the right configuration. Otherw
 git config --global pull.rebase false
 ```
 
+### Step 3 (@ personal computer): Check Quarto and VSCode extensions
+
+1. Verify that Quarto is installed by running this command in the terminal:
+
+```bash
+quarto --version
+```
+
+The output should be a version number. If you get an error like `command not found`, [install Quarto](https://quarto.org/docs/get-started/) before continuing.
+
+2. In VSCode, go to the extensions panel and verify you have the Python, Jupyter, and Quarto extensions installed. If any of them is missing, install it (see [Set up VSCode](/setup/setup-vscode.qmd)) and restart VSCode.
+
 ## Activity 1: merge conflict
 
 In this activity you will create a merge conflict with yourself. The setup is a common workflow: working on the same documents on two different computers. In our case, we will use the workbench as one computer, and your personal computer as the second one. 
 
-![](images/student-setup.png)
+![](images/student-setup.png){fig-alt="Diagram of the activity setup: workbench-1 and your personal computer each push to and pull from your GitHub repository."}
 
-### Step 1 (@ personal computer): Add the Quarto extension to VSCode
-
-1. Go to the extensions panel and verify you have the Quarto VSCode extension installed. If not, install it and restart VSCode. 
-
-### Step 2 (@ personal computer): Write some code
+### Step 1 (@ personal computer): Write some code
 
 1. Create a new Quarto document called `merge_test_YOURLASTNAME.qmd`.
 
@@ -90,11 +100,14 @@ jupyter: eds220-env
 import pandas as pd
 import numpy as np
 
+# Create a random number generator with a seed
+rng = np.random.default_rng(seed=42)
+
 # Create a test 10x3 dataframe
 df = pd.DataFrame({
     "A": np.arange(1, 11),
-    "B": np.random.randint(10, 100, size=10),
-    "C": np.random.choice(["w", "x", "y", "z"], size=10)
+    "B": rng.integers(10, 100, size=10),
+    "C": rng.choice(["w", "x", "y", "z"], size=10)
 })
 
 print(df)
@@ -102,7 +115,7 @@ print(df)
 # Select rows subset
 subset = df[df['C'] == 'w']
 
-print("Subset has ", len(subset), "rows.")
+print("Subset has", len(subset), "rows.")
 ```
 
 4. Examine the code, make sure you understand what it is doing! Preview the output by running 
@@ -114,7 +127,7 @@ quarto preview merge_test_YOURLASTNAME.qmd
 
 6. Go over to GitHub and look at your repository. Your Quarto file is now upstream!
 
-### Step 3 (@ workbench): Clone repo and update code
+### Step 2 (@ workbench): Clone repo and update code
 
 1. Clone the `merge_test_YOURLASTNAME` repository to your workbench-1 workspace. 
 
@@ -127,38 +140,33 @@ If the output is `false`, you are all set. If there is no output, run
 git config --global pull.rebase false
 ```
 
-3. Open the Quarto file and update the selection code to *select a different letter*.
+3. Open the Quarto file and update the selection code to *select a different letter*. Remember which letter you chose!
 
-4. Preview the output by running 
-```bash
-quarto preview merge_test_YOURLASTNAME.qmd
-```
+4. Save and try to pull. What does it tell you and why?
 
-5. Save and try to pull. What does it tell you and why?
+5. Commit, pull, and push your changes. Do your changes go through? Why or why not?
 
-6. Commit, pull, and push your changes. Do your changes go through? Why or why not?
+6. Go over to GitHub and look at your repository. Your updated Quarto file is now upstream!
 
-7. Go over to GitHub and look at your repository. Your updated Quarto file is now upstream!
-
-### Step 4 (@ personal computer): Update code without pulling changes
+### Step 3 (@ personal computer): Update code without pulling changes
 
 **Let's go back to the repo `merge_test_YOURLASTNAME` on your personal computer.**
 
 1. **Do not pull.** Not pulling when you re-engage with your work is a bad practice! But we need to do it in order to create the merge conflict. 😈
 
-2. Update the selection again to be a different letter. You may preview the output if you want. 
+2. Update the selection again, this time to a letter different from both the original one and the one you chose on the workbench. If both computers make the exact same change, git merges them without a conflict! You may preview the output if you want. 
 
 3. Save and commit your work, then try to pull again. What does it tell you? Read the message carefully!
 
 4. Congrats, you’ve created a merge conflict! 
 
-### Step 5 (@ personal computer): Resolve merge conflict
+### Step 4 (@ personal computer): Resolve merge conflict
 
 1. Don’t panic!
 
-2. Look at the Quarto document and identify where the conflict has occurred:
+2. Look at the Quarto document and identify where the conflict has occurred. It will look something like this:
 
-```bash
+```text
 <<<<<<< HEAD
 ### Your local changes
 =======
@@ -168,22 +176,28 @@ quarto preview merge_test_YOURLASTNAME.qmd
 
 3. Decide what to do with the code inside the `<<<<<<<` and `>>>>>>>`. Four options:
 
-    a. Keep your new code! 
-    b. Keep your upstream code! 
-    c. Combine the best parts of code from each!  
-    d. Delete it all and write something completely different! 
+    a. Keep your new code.
+    b. Keep your upstream code.
+    c. Combine the best parts of code from each.
+    d. Delete it all and write something completely different.
 
 4. Resolve the conflict. On VSCode you can use the IDE buttons at the top of the conflict:
 
-![](images/git-merge-conflicts/VSCode-merge-conflict.png)
+![](images/git-merge-conflicts/VSCode-merge-conflict.png){fig-alt="A merge conflict in VSCode. Above the conflict markers are the buttons Accept Current Change, Accept Incoming Change, Accept Both Changes and Compare Changes."}
 
 Or you can also manually edit the file by deleting the boundary lines around the merge conflict (the lines containing `<<<<<<<`, `=======`, and `>>>>>>>`).
 
 5. Once you are done resolving the conflict, save your work, commit (explaining how you resolved it), pull, and push.
 
-**NOTE: sometimes, multiple conflicts may have occurred in different places in the same script, or in separate scripts.** You must resolve them all before you can wrap up the merge conflict.
+**NOTE: sometimes, multiple conflicts may have occurred in different places in the same file, or in separate files.** You must resolve them all before you can wrap up the merge conflict.
 
 6. Celebrate! 🎉
+
+::: {.callout-note}
+## Stuck in the middle of a merge?
+
+If you get lost while resolving a merge conflict, you can cancel the merge by running `git merge --abort` in the terminal. This takes your files back to how they were before you pulled, so you can start over.
+:::
 
 ::: {.callout-tip}
 ## Always do `git pull` before starting to update your code!
@@ -191,12 +205,9 @@ Or you can also manually edit the file by deleting the boundary lines around the
 If you are your only collaborator, the safest way to avoid creating merge conflicts with yourself is to always run `git pull` when you start working locally. 
 :::
 
-<br>
-<br>
-
 ## Activity 2: merge without issues
 
-We don't necessarily get a merge conflict every time that a file is modified separately more than once. Sometimes git actually tries its best and is able to reconcile the two versions. Conflicts often happen when the same line of code is being updated. Here we'll see an example of a merge gone right.
+We don't necessarily get a merge conflict every time that a file is modified separately more than once. Sometimes git is able to reconcile the two versions. Conflicts often happen when the same line of code is being updated. Here we'll see an example of a merge without a conflict.
 
 ### Setup
 
@@ -223,13 +234,13 @@ Now we are sure we have the latest version of the file on both computers.
 
 ### Step 3 (@ workbench): Commit the merge
 
-There were no merge conflicts because git tried its best and managed to merge your code with the upstream code. However, git still needs to create a **merge commit message**. So, it opens a text editor where you can update the draft merge commit message. 
+There were no merge conflicts because git managed to merge your code with the upstream code. However, git still needs to create a **merge commit message**. So, it opens a text editor where you can update the draft merge commit message. 
 
 1. Make any updates to the git merge message. This is optional, you can just keep the default message. 
 
 2. If the text editor looks like this, you are in `Vim`:
 
-```bash
+```text
 Merge branch 'main' of https://github.com/carmengg/merge_test-DELETE
 # Please enter a commit message to explain why this merge is necessary,
 # especially if it merges an updated upstream into a topic branch.
@@ -250,7 +261,7 @@ c. Press `Enter`
 
 3. If the text editor looks like this, you are in `nano`:
 
-![](images/git-merge-conflicts/nano.png){width=60%}
+![](images/git-merge-conflicts/nano.png){width=60% fig-alt="The nano text editor showing the default merge commit message, with the keyboard shortcuts listed at the bottom."}
 
 Update the message if needed. To exit the editor:
 
@@ -259,6 +270,12 @@ b. Press `Enter` to confirm the file name.
 c. Exit the editor by pressing `CTRL + X`.
 
 4. Congrats! You merged without conflicts! 🎊
+
+::: {.callout-warning}
+## A merge without conflicts does not mean your code works
+
+Git combines changes line by line. It does not check whether the merged code runs or does what you want. After any merge, re-run your code to check that it still works.
+:::
 
 
 ::: {.callout-tip}
@@ -273,29 +290,27 @@ NEXT TIME: merge conflicts with notebooks.
 https://www.reviewnb.com/git-jupyter-notebook-ultimate-guide
  -->
 
-<br>
-<br>
-
 
 ## Activity 3: create and resolve merge conflict in pairs
 
 For this activity, pair up with a partner and assign roles for team member 1 and 2. We will test if you're able to create and resolve a git merge conflict!
 
-1. **Team member 1:** Send team member 2 the link to your `merge_test_YOURLASTNAME` GitHub repository.
+1. **Team member 1:** Add team member 2 as a collaborator to your `merge_test_YOURLASTNAME` repository. On GitHub, go to your repository's **Settings**, then **Collaborators**, click **Add people** and search for team member 2's GitHub username.
 
-2. **Team member 2:** Clone team member 1's repository to your local computer using VSCode. You already configured `pull.rebase` on your computer during the setup, so there is no need to do it again.
+2. **Team member 2:** Accept the invitation from the email GitHub sends you. You won't be able to push to team member 1's repository until you accept it.
 
-3. As a team, work to create a merge conflict that team member 1 can resolve. Decide:
+
+3. **Team member 2:** Clone team member 1's repository to your local computer using VSCode. You already configured `pull.rebase` on your computer during the setup, so there is no need to do it again.
+
+4. As a team, work to create a merge conflict that team member 1 can resolve. Decide:
 
 - Who needs to update what file?
 - When should each of you push or pull?
 
-4. Now try creating another merge conflict so that team member 2 can resolve it.
+5. Now try creating another merge conflict so that team member 2 can resolve it.
 
-5. Discuss: what are some best practices you can follow with a team to avoid having merge conflicts?
+6. Discuss: what are some best practices you can follow with a team to avoid having merge conflicts?
 
-<br>
-<br>
 
 ## Clean your workspace
 
