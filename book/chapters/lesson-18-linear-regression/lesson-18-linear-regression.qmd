@@ -1,16 +1,18 @@
 # Linear regression
 
-In this lesson we will learn how to perform a simple linear regression by examining the counts, weight, and size measurements of juvenile snowshoe hares (*Lepus americanus*) observed at the Bonanza Creek Experimental Forest from 1999 to 2012 @kielland_snowshoe_2017. 
+In this lesson we will learn how to perform a simple linear regression by examining the counts, weight, and size measurements of juvenile snowshoe hares (*Lepus americanus*) observed at the Bonanza Creek Experimental Forest from 1998 to 2012 @kielland_snowshoe_2017. 
 
 <!--TODO: include learning objectives -->
 
 ## About the data
 
-Size measurements, sex, and age of snowshoe hares were collected and made available by Dr. Knut Kielland and colleagues at the [Bonanza Creek Experimental Forest Long Term Ecological Research (LTER) site](https://www.lter.uaf.edu) located approximately 20 km southwest of Fairbanks, Alaska, USA. The data contains observations of 3380 snowshoe hares obtained by capture-recapture studies conducted yearly from 1999 to 2012 in three sampling sites: Bonanza Riparian, Bonanza Mature and Bonanza Black Spruce. 
+Size measurements, sex, and age of snowshoe hares were collected and made available by Dr. Knut Kielland and colleagues at the [Bonanza Creek Experimental Forest Long Term Ecological Research (LTER) site](https://www.lter.uaf.edu) located approximately 20 km southwest of Fairbanks, Alaska, USA. The data contains 3380 observations (captures) of snowshoe hares obtained by capture-recapture studies conducted yearly from 1998 to 2012 in three sampling sites: Bonanza Riparian, Bonanza Mature and Bonanza Black Spruce. 
 
 ![Photo credit: Jim Dau, [Alaska Department of Fish and Game.](https://www.adfg.alaska.gov/index.cfm?adfg=snowshoehare.main)](/book/images/lesson-18/snowshoehare_boards.jpg)
 
 ## Data exploration
+
+Download the `55_Hare_Data_2012.txt` file [available here]({{< var hares-data-folder >}}) and save it in a `data/` folder next to your notebook. If you are working on workbench-1, upload the file to the server. This is the same file you used in discussion section 3: a copy of `55_Hare_Data_2012.txt` from version 22 of the EDI data package.
 
 Let's start by loading the data and taking a very high-level look at it:
 
@@ -72,8 +74,10 @@ hares.loc[hares.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
 
 # Filter for confirmed observations of juvenile and adult hares
 hares_juv_adult = hares[hares.age.isin(['juvenile', 'adult'])].copy()
-print(f"Number of selected juvenile and adult hares: {len(hares_juv_adult)}")
+print(f"Number of juvenile and adult hare observations (captures): {len(hares_juv_adult)}")
 ```
+
+None of the observations from 1998 have a valid age, so from here on our data starts in 1999.
 
 To better understand our data we examine the distribution of hare age across years. Let's wrangle our data a bit to get there:
 
@@ -148,7 +152,7 @@ juveniles_weight_hindft = hares_juv_adult[(hares_juv_adult['hindft'].notna()) &
                                           (hares_juv_adult['age']=='juvenile')]
 
 
-print(f"Number of juvenile hares with hind foot and weight measurements: {len(juveniles_weight_hindft)}")
+print(f"Number of juvenile hare captures with hind foot and weight measurements: {len(juveniles_weight_hindft)}")
 juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
 ```
 
@@ -193,7 +197,7 @@ print(f"Slope: {slope}")
 
 Remember that the equation of the linear model is given by
 
-$$\hat{y} = \beta_0 + \beta_1 x, $$
+$$\hat{y} = \hat\beta_0 + \hat\beta_1 x, $$
 
 where
 
@@ -248,6 +252,43 @@ ax.set_ylabel('Weight (g)')
 # Show the plot
 plt.show()
 ```
+
+## Checking the residuals
+
+$R^2$ tells us how much of the variation the model explains, but not whether a straight line is the right shape for the data. To check this, we look at the **residuals**. A residual is the difference between an observed value and the value predicted by the model:
+
+$$e_i = y_i - \hat{y}_i.$$
+
+If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's calculate the residuals and plot them against the hind foot length:
+
+```{python}
+# Calculate residuals: observed minus predicted weight
+residuals = y - model.predict(X)
+
+fig, ax = plt.subplots(figsize=(8, 5))
+
+ax.scatter(x=juveniles_weight_hindft['hindft'],
+           y=residuals,
+           alpha=0.5,
+           color='#8FBC8F')
+
+# Reference line at 0
+ax.axhline(0, color="darkred", lw=2, linestyle="--")
+
+ax.set_title('Residuals of the linear model', {'fontsize':15})
+ax.set_xlabel('Hind foot length (mm)')
+ax.set_ylabel('Residual (g)')
+
+plt.show()
+```
+
+The residuals show three patterns:
+
+- **The spread grows with hind foot length.** For short hind feet most residuals are within about 100 g of 0, while for the longest hind feet many are more than 300 g away. This is the increasing variability we noticed in the first scatter plot. It means the model's predictions are less precise for larger juveniles.
+- **The residuals are not centered on 0 everywhere.** For hind feet shorter than about 100 mm most residuals are negative (the line overestimates weight), while for medium hind feet they are mostly positive (the line underestimates weight). This suggests that the relationship between hind foot length and weight is not exactly linear.
+- **For longer hind feet the residuals split into two groups**, one above and one below the line. This could mean that another variable also affects weight. Exercise (c) below asks you to think about which one.
+
+None of these patterns means the model is useless: the line still captures the overall trend. But they are a reminder that a single $R^2$ value doesn't tell the whole story, and that we should be careful when using the model to make predictions, especially for larger juveniles.
 
 :::{.callout-tip}
 # Exercise
