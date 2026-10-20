@@ -25,7 +25,7 @@ from sklearn.linear_model import LinearRegression
 ```
 
 ```{python}
-hares= pd.read_csv(os.path.join('data','knb-lter-bnz','55_Hare_Data_2012.txt'))
+hares= pd.read_csv(os.path.join('data','55_Hare_Data_2012.txt'))
 hares.head()
 ```
 
@@ -33,7 +33,7 @@ hares.head()
 hares.info()
 ```
 
-We can see from the `info()` display that most of these variables are of type `object` (most likely `strings`) and some are continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
+We can see from the `info()` display that most of these variables are of type `object` (most likely `str`) and some are continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
 
 ```{python}
 hares['date'] = pd.to_datetime(hares['date'])
@@ -81,7 +81,7 @@ To better understand our data we examine the distribution of hare age across yea
 # Extract year in which each observation happened
 hares_juv_adult['year'] = hares_juv_adult.date.dt.year
 
-# Create hares/year dataframe
+# Create hares/year data frame
 hares_per_year = (hares_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
                                  .reset_index(name='counts')       # Remove multi-index
                                  .pivot(index='year', columns='age', values='counts')   # Pivot into wide format
@@ -124,9 +124,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see a diminishing trend in the number of juvenile hare trappings. The three exceptions are 2005, 2008, and 2011. 
+No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see that the number of juvenile hare trappings dropped sharply from 1999 to 2002 and stayed lower for the rest of the study, with peaks in 2005, 2008, and 2011. 
 
-<!-- In 2005 juvenile hare counts were 6 times higher than in 2004, and in 2008 counts were 8.8 times higher than in 2007. In 2011 the juvenile snowshoe hare count was 9.5 times higher than in 2010. -->
+<!-- In 2005 juvenile hare counts were 6 times higher than in 2004, and in 2008 counts were 11.4 times higher than in 2007. In 2011 the juvenile snowshoe hare count was 6.7 times higher than in 2010. -->
 
 :::{.callout-tip}
 # Exercise
@@ -134,7 +134,7 @@ Consider the following question: In what ways could the data collection methods 
 :::
 
 
-<!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest conducting the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1998, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest keeping the number and location of traps constant over the years. -->
+<!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest conducting the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1999, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest keeping the number and location of traps constant over the years. -->
 
 ## Linear regression
 
@@ -173,7 +173,7 @@ y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
 print(f"Output data shape: {y.shape}")
 ```
 
-Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination or $R^2$, and the y-intercept and slope from our linear model. 
+Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination, or $R^2$, and the $y$-intercept and slope from our linear model. 
 
 ```{python}
 # Fit model
@@ -199,10 +199,10 @@ where
 
 - $x$ = input variable
 - $\hat{y}$ = **estimated $y$ value** at $x$ from the linear model 
-- $\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value when $x=0$
-- $\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
+- $\hat\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value of $y$ when $x=0$
+- $\hat\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
 
-The **coefficient of determination**, $R^2$, is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the amount of variation in the outcome variable $y$ that is explained by the least squares line with the variable $x$. 
+The **coefficient of determination**, $R^2$, is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the outcome variable $y$ that is explained by the least squares line with the variable $x$. 
 
 
 We can use all this information to plot our linear model together with our data:
@@ -240,7 +240,7 @@ r_squared = r'$R^2 =$' + str(round(R_sq,2))
 ax.text(80, 1100, r_squared, fontsize=10, horizontalalignment='center')        
 
 # Add a title and axis label
-ax.set_title('Relationship between hind foot length and weight of  \n juvenile snowshoe hares at Bonanza Creek Experimental Forest',
+ax.set_title('Relationship between hind foot length and weight of \n juvenile snowshoe hares at Bonanza Creek Experimental Forest',
              {'fontsize':15})
 ax.set_xlabel('Hind foot length (mm)')
 ax.set_ylabel('Weight (g)')
