@@ -76,7 +76,7 @@ obs.loc[obs.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
 
 # Filter for confirmed observations of juvenile and adult hares
 obs_juv_adult = obs[obs.age.isin(['juvenile', 'adult'])].copy()
-print(f"Number of juvenile and adult hare observations (captures): {len(obs_juv_adult)}")
+print("Number of juvenile and adult hare observations (captures):", len(obs_juv_adult))
 ```
 
 None of the observations from 1998 have a valid age, so from here on our data starts in 1999.
@@ -87,11 +87,8 @@ To better understand our data we examine the distribution of hare age across yea
 # Extract year in which each observation happened
 obs_juv_adult['year'] = obs_juv_adult.date.dt.year
 
-# Create observations/year data frame
-obs_per_year = (obs_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
-                                 .reset_index(name='counts')       # Remove multi-index
-                                 .pivot(index='year', columns='age', values='counts')   # Pivot into wide format
-                                 )
+# Count observations per year and age, then move age values into columns
+obs_per_year = obs_juv_adult.groupby(['year', 'age']).size().unstack()
 obs_per_year
 ```
 
@@ -128,54 +125,16 @@ For our analysis we want to investigate possible relations between hind foot len
 Let's take a look at our target data:
 
 ```{python}
-# Subset juvenile hares with hind foot and weight measurements
-juveniles_weight_hindft = obs_juv_adult[(obs_juv_adult['hindft'].notna()) & 
-                                          (obs_juv_adult['weight'].notna()) &
-                                          (obs_juv_adult['age']=='juvenile')]
+# Subset juvenile hares and drop rows missing hind foot or weight measurements
+juveniles_weight_hindft = obs_juv_adult[obs_juv_adult['age'] == 'juvenile'].dropna(subset=['hindft', 'weight'])
 
-
-print(f"Number of juvenile hare captures with hind foot and weight measurements: {len(juveniles_weight_hindft)}")
+print("Number of juvenile hare captures with hind foot and weight measurements:", len(juveniles_weight_hindft))
 juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
 ```
 
 We can see there seems to be a linear trend between the weight and hind foot length variables, though as the hind foot length increases the variability does too. 
 
-Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a great resource. 
-
-The trickiest part of fitting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
-
-- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes from having a single feature modeling the output data.
-- output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
-
-Let's select and reshape the input and output data accordingly:
-
-```{python}
-# x-values
-X = np.array(juveniles_weight_hindft['hindft']).reshape((-1, 1))   # Reshape to (n_samples, 1)
-print(f"Input data shape: {X.shape}")
-
-# y-values
-y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
-print(f"Output data shape: {y.shape}")
-```
-
-Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. From the `model` we extract the coefficient of determination, or $R^2$, and the $y$-intercept and slope from our linear model. 
-
-```{python}
-# Fit model
-model = LinearRegression().fit(X, y)
-
-# Calculate R^2
-R_sq = model.score(X, y)
-print(f"Coefficient of determination (R^2): {R_sq}")
-
-# Retrieve intercept and slope
-intercept = model.intercept_
-print(f"y-intercept: {intercept}")
-
-slope = model.coef_[0]
-print(f"Slope: {slope}")
-```
+Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. 
 
 Remember that the equation of the linear model is given by
 
@@ -188,51 +147,37 @@ where
 - $\hat\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value of $y$ when $x=0$
 - $\hat\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
 
-The **coefficient of determination**, $R^2$, is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the outcome variable $y$ that is explained by the least squares line with the variable $x$. 
+If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a great resource. 
 
+The trickiest part of fitting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
 
-We can use all this information to plot our linear model together with our data:
+- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes from having a single feature modeling the output data.
+- output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
+
+Let's select and reshape the input and output data accordingly:
 
 ```{python}
-#| code-fold: True
+# x-values
+X = np.array(juveniles_weight_hindft['hindft']).reshape((-1, 1))   # Reshape to (n_samples, 1)
+print("Input data shape:", X.shape)
 
+# y-values
+y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
+print("Output data shape:", y.shape)
+```
 
-fig, ax = plt.subplots(figsize=(8,6))
+Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. 
 
-ax.scatter(x=juveniles_weight_hindft['hindft'], 
-           y=juveniles_weight_hindft['weight'], 
-           alpha=0.5,
-           color='#8FBC8F')
+```{python}
+# Fit model
+model = LinearRegression().fit(X, y)
 
-# Define parameters of the regression line
-x_start = juveniles_weight_hindft['hindft'].min()
-x_end = juveniles_weight_hindft['hindft'].max()
+# Retrieve intercept and slope
+intercept = model.intercept_
+print("y-intercept:", intercept)
 
-# Plot the line
-ax.plot([x_start, x_end], 
-        [slope*x_start + intercept, slope*x_end + intercept],
-        color="darkred", 
-        lw=2, 
-        linestyle="--")
-
-# Add the parameters
-beta0 = r'$intercept = \hat\beta_0 =$'+ str(round(intercept,2))
-ax.text(80, 1300, beta0, fontsize=10, horizontalalignment='center')
-
-beta1 = r'$slope = \hat\beta_1 =$' + str(round(slope,2))
-ax.text(80, 1200, beta1, fontsize=10, horizontalalignment='center')
-
-r_squared = r'$R^2 =$' + str(round(R_sq,2))
-ax.text(80, 1100, r_squared, fontsize=10, horizontalalignment='center')        
-
-# Add a title and axis label
-ax.set_title('Relationship between hind foot length and weight of \n juvenile snowshoe hares at Bonanza Creek Experimental Forest',
-             {'fontsize':15})
-ax.set_xlabel('Hind foot length (mm)')
-ax.set_ylabel('Weight (g)')
-
-# Show the plot
-plt.show()
+slope = model.coef_[0]
+print("Slope:", slope)
 ```
 
 :::{.callout-tip}
@@ -243,10 +188,125 @@ a. Does it make sense to interpret the $y$-intercept as an estimated measurement
 
 b. What is the estimated change in weight for each millimeter increase in hind foot length?
 
-c. Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? What other variables could be worth exploring to model the weight?
-
-d. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
+c. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
 :::
+
+We can also look at the **coefficient of determination**, $R^2$. This is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the outcome variable $y$ that is explained by the least squares line with the variable $x$.  
+
+```{python}
+# Calculate R^2
+R_sq = model.score(X, y)
+print("R^2:", R_sq)
+```
+
+:::{.callout-tip}
+# Check-in
+Answer the following questions: 
+
+- Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? 
+
+- How would you further explore whether this model is a good fit for the data?
+:::
+
+
+A reasonable next step would be to plot our linear model together with our data. To do this, we need to add two layers to the same graph: the data points and the regression line.
+
+### `matplotlib`'s `fig` and `ax`
+
+To make visualizations where we add different layers to a graph and customize it, we will use the `matplotlib` Python library for creating visualizations. 
+We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
+
+Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
+The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  
+
+![Image source: [Getting Started with Matplotlib.](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
+
+To create a new blank figure:
+
+1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function
+2. Display the figure using `plt.show()`:
+
+```{python}
+# Initialize empty figure (fig) and axis (ax)
+fig, ax = plt.subplots()
+
+# Display figure
+plt.show()
+```
+
+Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+
+### Adding a layer
+
+When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
+The general syntax to plot data from a data frame `df` onto an axis is:
+```python
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Plot df on the ax axis
+df.plot(ax=ax,  # Add plot to axis
+        ...)    # Other arguments for plot function
+
+# Display figure
+plt.show()
+``` 
+
+The first layer that we want to add to our axis is the juvenile hares' data:
+
+```{python}
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Add scatter plot of juvenile hares' data to our figure's axis
+juveniles_weight_hindft.plot(kind='scatter', x='hindft', y='weight', ax=ax)
+
+# Display figure
+plt.show()
+```
+
+### Customization 
+
+Matplotlib allows for a lot of customization. 
+Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
+The following diagram shows some examples of elements in the axis that can be updated.
+
+![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
+
+Now let's add the regression line as a second layer and customize our graph. 
+To draw the line we use the axis's `plot()` method, `ax.plot(x_values, y_values)`, which connects the points given by the lists of $x$ and $y$ values. 
+A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, $\hat{y} = \hat\beta_0 + \hat\beta_1 x$:
+
+```{python}
+# Smallest and largest hind foot lengths
+x_start = juveniles_weight_hindft['hindft'].min()
+x_end = juveniles_weight_hindft['hindft'].max()
+
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Add data to axis
+juveniles_weight_hindft.plot(kind='scatter', 
+                             x='hindft', 
+                             y='weight', 
+                             alpha=0.5,     # Adjust transparency
+                             ax=ax)         # Add plot to axis
+
+# Add regression line to axis
+ax.plot([x_start, x_end], 
+        [intercept + slope*x_start, intercept + slope*x_end],
+        color='darkred')
+
+# Update axis
+ax.set_title('Hind foot length and weight of juvenile snowshoe hares')
+ax.set_xlabel('Hind foot length (mm)')
+ax.set_ylabel('Weight (g)')
+
+# Display figure
+plt.show()
+```
+
+
 
 ## Checking the residuals
 
@@ -254,26 +314,27 @@ $R^2$ tells us how much of the variation the model explains, but not whether a s
 
 $$e_i = y_i - \hat{y}_i.$$
 
-If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's calculate the residuals and plot them against the hind foot length:
+If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's calculate the residuals and plot them against the hind foot length. Since `residuals` is a NumPy array and not a column of our data frame, we plot them with the axis's `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:
 
 ```{python}
 # Calculate residuals: observed minus predicted weight
 residuals = y - model.predict(X)
 
-fig, ax = plt.subplots(figsize=(8, 5))
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
 
-ax.scatter(x=juveniles_weight_hindft['hindft'],
-           y=residuals,
-           alpha=0.5,
-           color='#8FBC8F')
+# Add residuals to axis
+ax.scatter(juveniles_weight_hindft['hindft'], residuals, alpha=0.5)
 
-# Reference line at 0
-ax.axhline(0, color="darkred", lw=2, linestyle="--")
+# Add reference line at 0
+ax.axhline(0, color='darkred', linestyle='--')
 
-ax.set_title('Residuals of the linear model', {'fontsize':15})
+# Update axis
+ax.set_title('Residuals of the linear model')
 ax.set_xlabel('Hind foot length (mm)')
 ax.set_ylabel('Residual (g)')
 
+# Display figure
 plt.show()
 ```
 
