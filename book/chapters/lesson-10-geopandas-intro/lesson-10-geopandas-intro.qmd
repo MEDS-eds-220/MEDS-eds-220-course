@@ -19,7 +19,7 @@ Wild pigs (*Sus scrofa*) are a destructive invasive species in California, causi
 In this lesson we will use simplified point data about wild pig sightings in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). 
 GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
 
-The data we will use today has been simplified from the complete *Sus scrofa* occurrencies data accessed through the GBIF website @gbiforg_user_occurrence_2023 . 
+The data we will use today has been simplified from the complete *Sus scrofa* occurrence data accessed through the GBIF website @gbiforg_user_occurrence_2023. 
 
 <!-- TODO: column descriptions -->
 <!-- TODO: add info about the CA shapefile -->
@@ -119,7 +119,7 @@ pigs.geom_type
 ```
 
 <!--
-This is a `shapely` point. `shapely` is another Python library that to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.
+This is a `shapely` point. `shapely` is another Python library used to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.
 -->
 
 ::: {.callout-tip}
@@ -180,14 +180,14 @@ print(ca_boundary.total_bounds)
 
 ## Data wrangling
 
-GeoPandas is conveniently built on top of `pandas`, so we may use everything we have learned about data selection, wrangling, and modification for a `pandas.DataFrame` to wrange `geopandas.GeoDataFrames`.
+GeoPandas is conveniently built on top of `pandas`, so we may use everything we have learned about data selection, wrangling, and modification for a `pandas.DataFrame` to wrangle `geopandas.GeoDataFrame`s.
 
 #### Example
 
-We only want to use recent data for wild pig observations. A quick check shows that this dataframe has data since 1818:
+We only want to use recent data for wild pig observations. A quick check shows that this data frame has data since 1818:
 
 ```{python}
-# Examine pig observation by year
+# Examine pig observations by year
 pigs['year'].value_counts().sort_index()
 ```
 
@@ -243,13 +243,13 @@ fig, ax = plt.subplots()
 plt.show()
 ```
 
-Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+Notice that `plt.subplots()` is a function that returns two objects. When we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint. 
 
 
 ### Adding a layer
 
 When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
-The general syntax to plot data from a dataframe `df` onto an axis is:
+The general syntax to plot data from a data frame `df` onto an axis is:
 ```python
 # Initialize empty figure and axis
 fig, ax = plt.subplots()
@@ -268,7 +268,7 @@ The first layer that we want to add to our axis is the `pigs_recent` point data.
 We can plot our data using `matplotlib` like this:
 
 ```{python}
-# Initialize empyt figure and axis
+# Initialize empty figure and axis
 fig, ax = plt.subplots()
 
 # Add pigs point plot to our figure's axis
@@ -281,14 +281,14 @@ plt.show()
 ### Customization 
 
 Matplotlib allows for a lot of customization. 
-Some of it can be done directly in the `plot()` method for the dataframe (like we've done when ploting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
+Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while the rest is done by updating attributes of the `ax` axis. 
 The following diagram shows some examples of elements in the axis that can be updated.
 
 ![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
 
 #### Example
 
-Some basic customization for our pigs data could looke like this:
+Some basic customization for our pigs data could look like this:
 
 ```{python}
 # Initialize empty figure
