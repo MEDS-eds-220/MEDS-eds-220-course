@@ -48,7 +48,7 @@ To facilitate our data wrangling we convert the `date` column to a `datetime` ty
 
 ```{python}
 obs['date'] = pd.to_datetime(obs['date'])
-print(obs.date.dtype)
+print(obs['date'].dtype)
 ```
 
 ## Examining hares' age data
@@ -78,11 +78,11 @@ Since the actual data has values that are not included in the metadata, this is 
 
 ```{python}
 # Update age values to juvenile and adult for observations where 'a' and 'j' are included
-obs.loc[obs.age.str.contains('j', case=False, na=False), 'age'] = 'juvenile'
-obs.loc[obs.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
+obs.loc[obs['age'].str.contains('j', case=False, na=False), 'age'] = 'juvenile'
+obs.loc[obs['age'].str.contains('a', case=False, na=False), 'age'] = 'adult'
 
 # Filter for confirmed observations of juvenile and adult hares
-obs_juv_adult = obs[obs.age.isin(['juvenile', 'adult'])].copy()
+obs_juv_adult = obs[obs['age'].isin(['juvenile', 'adult'])].copy()
 print("Number of juvenile and adult hare observations (captures):", len(obs_juv_adult))
 ```
 
@@ -92,7 +92,7 @@ To better understand our data we examine the distribution of hare age across yea
 
 ```{python}
 # Extract year in which each observation happened
-obs_juv_adult['year'] = obs_juv_adult.date.dt.year
+obs_juv_adult['year'] = obs_juv_adult['date'].dt.year
 
 # Count observations per year and age, then move age values into columns
 obs_per_year = obs_juv_adult.groupby(['year', 'age']).size().unstack()
@@ -280,11 +280,11 @@ print("Slope:", slope)
 # Exercise
 Answer the following questions:
 
-a. Does it make sense to interpret the $y$-intercept as an estimated measurement of weight?
+a. What would be the biological meaning of the $y$-intercept? Does it make sense to use it as such?
 
-b. What is the estimated change in weight for each millimeter increase in hind foot length?
+b. What is the estimated change in weight for each millimeter increase in hind foot length? Write your answer in a full sentence.
 
-c. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
+c. Estimate the weight of a juvenile hare with hind foot length of 90 mm. Is this a reasonable use of the model?
 :::
 
 We can also look at the **coefficient of determination**, $R^2$. This is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the response $y$ that is explained by the least squares line with the predictor $x$.  

@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>lesson-12-merge-data – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,10 +94,10 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -307,14 +310,14 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../book/chapters/merging-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Merging data</span></a>
+  <a href="../../../book/chapters/lesson-18-linear-regression/lesson-18-linear-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7 Linear regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../book/chapters/lesson-18-linear-regression/lesson-18-linear-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Linear regression</span></a>
+  <a href="../../../book/chapters/merging-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Merging data</span></a>
   </div>
 </li>
       </ul>
@@ -506,7 +509,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <h2 class="anchored" data-anchor-id="import-data">Import data</h2>
 <p>We will first import the countries shapefile and adapt it for wrangling purposes:</p>
 <div id="fd73ce8a" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
@@ -521,12 +524,12 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns for analysis</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> countries[[<span class="st">'admin'</span>, <span class="st">'type'</span>, <span class="st">'geometry'</span>]]</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>countries.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>countries.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -537,31 +540,31 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Zimbabwe</td>
 <td>Sovereign country</td>
 <td>POLYGON ((31.28789 -22.40205, 31.19727 -22.344...</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Zambia</td>
 <td>Sovereign country</td>
 <td>POLYGON ((30.39609 -15.64307, 30.25068 -15.643...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Yemen</td>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((53.08564 16.64839, 52.58145 16...</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>Vietnam</td>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((104.06396 10.39082, 104.08301 ...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>Venezuela</td>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((-60.82119 9.13838, -60.94141 9...</td>
@@ -573,8 +576,8 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 </div>
 <div id="83bdfe9b" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick view</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>countries.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick view</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>countries.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -585,16 +588,16 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 <p>Next, we import the Arctic communities data. Similar to how we previously used <code>pandas.read_csv()</code>, we can read in the Arctic communities GeoJSON data directly from the data repository using <code>geopandas.read_file()</code>:</p>
 <div id="3582c1bf" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Arctic communities data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Arctic communities data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3Aed7718ae-fb0d-43dd-9270-fbfe80bfc7a4'</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> gpd.read_file(URL)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>communities.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>communities.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -607,7 +610,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Udomlya</td>
 <td>32373</td>
 <td>RU</td>
@@ -615,7 +618,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <td>POINT (34.99250 57.87944)</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Valmiera</td>
 <td>26963</td>
 <td>LV</td>
@@ -623,7 +626,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <td>POINT (25.42751 57.54108)</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Ventspils</td>
 <td>42644</td>
 <td>LV</td>
@@ -631,7 +634,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <td>POINT (21.57288 57.38988)</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>Vec-Liepāja</td>
 <td>85260</td>
 <td>LV</td>
@@ -639,7 +642,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <td>POINT (21.01667 56.53333)</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>Tukums</td>
 <td>18348</td>
 <td>LV</td>
@@ -654,20 +657,20 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 <p>The CRS of the <code>communities</code> is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees.</p>
 <div id="6ff36d29" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(countries.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(countries.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:4326</code></pre>
 </div>
 </div>
 <p>Since the CRSs of our geospatila data match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:</p>
 <div id="34e9a7b3" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify CRSs match</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify CRSs match</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> countries.crs <span class="op">==</span> communities.crs</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>countries.plot(ax<span class="op">=</span>ax)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>communities.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'red'</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -678,13 +681,13 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </div>
 <p>Finally, we import the country names and codes CSV:</p>
 <div id="019b8bc3" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>country_names <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>,<span class="st">'country_names.csv'</span>))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>country_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>country_names <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>,<span class="st">'country_names.csv'</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>country_names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -694,82 +697,82 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>RU</td>
 <td>Russia</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>LV</td>
 <td>Latvia</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>EE</td>
 <td>Estonia</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>LT</td>
 <td>Lithuania</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>SE</td>
 <td>Sweden</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>BY</td>
 <td>Belarus</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
+<th data-quarto-table-cell-role="th">6</th>
 <td>FI</td>
 <td>Finland</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
+<th data-quarto-table-cell-role="th">7</th>
 <td>NO</td>
 <td>Norway</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
+<th data-quarto-table-cell-role="th">8</th>
 <td>DK</td>
 <td>Denmark</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>FO</td>
 <td>Faroe Islands</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
+<th data-quarto-table-cell-role="th">10</th>
 <td>IS</td>
 <td>Iceland</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>GB</td>
 <td>United Kingdom</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>AX</td>
 <td>Aland Islands</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>GL</td>
 <td>Greenland</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
+<th data-quarto-table-cell-role="th">14</th>
 <td>US</td>
 <td>United States of America</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
+<th data-quarto-table-cell-role="th">15</th>
 <td>CA</td>
 <td>Canada</td>
 </tr>
@@ -784,10 +787,10 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <h2 class="anchored" data-anchor-id="arctic-communities-by-country">Arctic communities by country</h2>
 <p>Next, we want to calculate the number of Arctic communities by country.</p>
 <div id="2cb4dcf3" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frame with number of communities per country</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frame with number of communities per country</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n_comms <span class="op">=</span> (communities.groupby(<span class="st">'country'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                      .size()</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                      .reset_index(name<span class="op">=</span><span class="st">'n_communities'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                      .reset_index(name<span class="op">=</span><span class="st">'n_communities'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s break this down:</p>
 <ul>
@@ -797,13 +800,13 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <li>By resetting the index we transform the <code>pandas.Series</code> into a <code>pandas.DataFrame</code>, the index is now a column named <code>country</code> and the values of the series are named <code>n_communities</code>.</li>
 </ul>
 <div id="843198de" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of Arctic communities per country</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n_comms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of Arctic communities per country</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>n_comms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -813,82 +816,82 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>AX</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>BY</td>
 <td>8</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>CA</td>
 <td>7</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>DK</td>
 <td>72</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>EE</td>
 <td>14</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>FI</td>
 <td>98</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
+<th data-quarto-table-cell-role="th">6</th>
 <td>FO</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
+<th data-quarto-table-cell-role="th">7</th>
 <td>GB</td>
 <td>96</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
+<th data-quarto-table-cell-role="th">8</th>
 <td>GL</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>IS</td>
 <td>5</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
+<th data-quarto-table-cell-role="th">10</th>
 <td>LT</td>
 <td>26</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>LV</td>
 <td>25</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>NO</td>
 <td>48</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>RU</td>
 <td>774</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
+<th data-quarto-table-cell-role="th">14</th>
 <td>SE</td>
 <td>133</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
+<th data-quarto-table-cell-role="th">15</th>
 <td>US</td>
 <td>115</td>
 </tr>
@@ -903,20 +906,20 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <h2 class="anchored" data-anchor-id="if-else-statements"><code>if</code>-<code>else</code> statements</h2>
 <p>Our goal is to merge the <code>n_comms</code> and the <code>countries</code> data frames. To merge two data frames they need to have at least one column in common. Currently our datasets do not have any columns in common:</p>
 <div id="784347ff" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>set()</code></pre>
 </div>
 </div>
 <p>The output <code>set()</code> represents the empty set. This might not be as informative, so let’s write a different information statement:</p>
 <div id="68393487" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>common_columns <span class="op">=</span> <span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>common_columns <span class="op">=</span> <span class="bu">set</span>(countries.columns).intersection(n_comms.columns)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if there are any common columns</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(common_columns) <span class="op">!=</span> <span class="dv">0</span>:</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Common columns: </span><span class="sc">{</span>common_columns<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No common columns"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No common columns"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>No common columns</code></pre>
 </div>
@@ -928,7 +931,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -967,10 +970,10 @@ def check_common_columns(df1, df2):
 <section id="merging-data-frames" class="level2">
 <h2 class="anchored" data-anchor-id="merging-data-frames">Merging data frames</h2>
 <p>We can use the <code>country_names</code> data frame to add the names countries into the <code>n_comms</code> data which, in turn, will allow us to merge that data frame with the <code>country_names</code> data. To merge dataframes we can use the <a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge"><code>pandas.merge()</code> function</a>. The basic syntax for it is:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>output_df <span class="op">=</span> pd.merge(left_df,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>output_df <span class="op">=</span> pd.merge(left_df,</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                     right_df, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     how <span class="op">=</span> type_of_join, </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                     on <span class="op">=</span> column_to_join)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                     on <span class="op">=</span> column_to_join)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>where</p>
 <ul>
 <li><code>output_df</code> is the dataframe resulting from the merge,</li>
@@ -988,16 +991,16 @@ def check_common_columns(df1, df2):
 </figure>
 </div>
 <div id="0ba4adf2" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n_comms <span class="op">=</span> pd.merge(n_comms,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>n_comms <span class="op">=</span> pd.merge(n_comms,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   country_names,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                   how<span class="op">=</span><span class="st">'left'</span>,</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                   on<span class="op">=</span><span class="st">'country'</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>n_comms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>n_comms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1008,97 +1011,97 @@ def check_common_columns(df1, df2):
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>AX</td>
 <td>1</td>
 <td>Aland Islands</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>BY</td>
 <td>8</td>
 <td>Belarus</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>CA</td>
 <td>7</td>
 <td>Canada</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>DK</td>
 <td>72</td>
 <td>Denmark</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>EE</td>
 <td>14</td>
 <td>Estonia</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>FI</td>
 <td>98</td>
 <td>Finland</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
+<th data-quarto-table-cell-role="th">6</th>
 <td>FO</td>
 <td>1</td>
 <td>Faroe Islands</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
+<th data-quarto-table-cell-role="th">7</th>
 <td>GB</td>
 <td>96</td>
 <td>United Kingdom</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
+<th data-quarto-table-cell-role="th">8</th>
 <td>GL</td>
 <td>1</td>
 <td>Greenland</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>IS</td>
 <td>5</td>
 <td>Iceland</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
+<th data-quarto-table-cell-role="th">10</th>
 <td>LT</td>
 <td>26</td>
 <td>Lithuania</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>LV</td>
 <td>25</td>
 <td>Latvia</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>NO</td>
 <td>48</td>
 <td>Norway</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>RU</td>
 <td>774</td>
 <td>Russia</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
+<th data-quarto-table-cell-role="th">14</th>
 <td>SE</td>
 <td>133</td>
 <td>Sweden</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
+<th data-quarto-table-cell-role="th">15</th>
 <td>US</td>
 <td>115</td>
 <td>United States of America</td>
@@ -1111,7 +1114,7 @@ def check_common_columns(df1, df2):
 </div>
 <p>We can reuse our function to check that <code>n_comms</code> and <code>countries</code> now have a common column on which we can merge them:</p>
 <div id="ce9b4fbb" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>check_common_columns(n_comms, countries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>check_common_columns(n_comms, countries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Common columns: {'admin'}</code></pre>
 </div>
@@ -1122,7 +1125,7 @@ def check_common_columns(df1, df2):
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1148,16 +1151,16 @@ arctic_countries = pd.merge(countries,
 <h2 class="anchored" data-anchor-id="reviewing-results">Reviewing results</h2>
 <p>Start by setting <code>'admin'</code> as our index:</p>
 <div id="d385bc22" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arctic_countries <span class="op">=</span> arctic_countries.set_index(<span class="st">'admin'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>arctic_countries <span class="op">=</span> arctic_countries.set_index(<span class="st">'admin'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice that the row for Aland Islands is not present in the merged dataframe:</p>
 <div id="e4c86645" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>arctic_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>arctic_countries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1176,105 +1179,105 @@ arctic_countries = pd.merge(countries,
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">United States of America</td>
+<th data-quarto-table-cell-role="th">United States of America</th>
 <td>Country</td>
 <td>MULTIPOLYGON (((-132.74687 56.52568, -132.7576...</td>
 <td>US</td>
 <td>115</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">United Kingdom</td>
+<th data-quarto-table-cell-role="th">United Kingdom</th>
 <td>Country</td>
 <td>MULTIPOLYGON (((-2.66768 51.62300, -2.74214 51...</td>
 <td>GB</td>
 <td>96</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Sweden</td>
+<th data-quarto-table-cell-role="th">Sweden</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((19.07646 57.83594, 18.99375 57...</td>
 <td>SE</td>
 <td>133</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Russia</td>
+<th data-quarto-table-cell-role="th">Russia</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((145.88154 43.45952, 145.89561 ...</td>
 <td>RU</td>
 <td>774</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Norway</td>
+<th data-quarto-table-cell-role="th">Norway</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((20.62217 69.03687, 20.49199 69...</td>
 <td>NO</td>
 <td>48</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Lithuania</td>
+<th data-quarto-table-cell-role="th">Lithuania</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((20.95781 55.27891, 20.89980 55...</td>
 <td>LT</td>
 <td>26</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Latvia</td>
+<th data-quarto-table-cell-role="th">Latvia</th>
 <td>Sovereign country</td>
 <td>POLYGON ((26.59355 55.66753, 26.54287 55.67241...</td>
 <td>LV</td>
 <td>25</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Iceland</td>
+<th data-quarto-table-cell-role="th">Iceland</th>
 <td>Sovereign country</td>
 <td>POLYGON ((-15.54312 66.22852, -15.42847 66.224...</td>
 <td>IS</td>
 <td>5</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Finland</td>
+<th data-quarto-table-cell-role="th">Finland</th>
 <td>Country</td>
 <td>MULTIPOLYGON (((24.15547 65.80527, 24.04902 65...</td>
 <td>FI</td>
 <td>98</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Estonia</td>
+<th data-quarto-table-cell-role="th">Estonia</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((27.35195 57.52812, 27.32656 57...</td>
 <td>EE</td>
 <td>14</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Greenland</td>
+<th data-quarto-table-cell-role="th">Greenland</th>
 <td>Country</td>
 <td>MULTIPOLYGON (((-29.95288 83.56484, -28.99199 ...</td>
 <td>GL</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Faroe Islands</td>
+<th data-quarto-table-cell-role="th">Faroe Islands</th>
 <td>Dependency</td>
 <td>MULTIPOLYGON (((-6.62319 61.80596, -6.64277 61...</td>
 <td>FO</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Denmark</td>
+<th data-quarto-table-cell-role="th">Denmark</th>
 <td>Country</td>
 <td>MULTIPOLYGON (((12.56875 55.78506, 12.57119 55...</td>
 <td>DK</td>
 <td>72</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">Canada</td>
+<th data-quarto-table-cell-role="th">Canada</th>
 <td>Sovereign country</td>
 <td>MULTIPOLYGON (((-132.65552 54.12749, -132.5640...</td>
 <td>CA</td>
 <td>7</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">Belarus</td>
+<th data-quarto-table-cell-role="th">Belarus</th>
 <td>Sovereign country</td>
 <td>POLYGON ((31.76338 52.10107, 31.57373 52.10811...</td>
 <td>BY</td>
@@ -1288,15 +1291,15 @@ arctic_countries = pd.merge(countries,
 </div>
 <p>The <code>values</code> attribute of a data frame returns <em>all</em> the values in the data frame as an array. We can verify the value ‘Aland Islands’ was <em>nowhere</em> in our original countries dataframe like this:</p>
 <div id="e87a4c56" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Aland Islands is nowhere in data frame</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">'Aland Islands'</span> <span class="kw">not</span> <span class="kw">in</span> countries.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check Aland Islands is nowhere in data frame</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">'Aland Islands'</span> <span class="kw">not</span> <span class="kw">in</span> countries.values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>The Aland Islands is an autonomous region of Finland and there is one Arctic community registered in this region. We will directly add one to Finland to not lose this piece of data:</p>
 <div id="b4291600" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.at[<span class="st">'Finland'</span>, <span class="st">'n_communities'</span>] <span class="op">+=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.at[<span class="st">'Finland'</span>, <span class="st">'n_communities'</span>] <span class="op">+=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="choropleth-map" class="level2">
@@ -1304,8 +1307,8 @@ arctic_countries = pd.merge(countries,
 <p>A <a href="https://en.wikipedia.org/wiki/Choropleth_map">choropleth map</a> is an efficient way to visualize aggregate data per region.</p>
 <p>Making a choropleth map from our polygons <code>GeoDataFrame</code> is easy; we just need to specify the <code>column</code> parameter in <code>plot()</code> and make it equal to the column with the values we want to plot in each country:</p>
 <div id="8f1a95e2" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.plot(column<span class="op">=</span><span class="st">'n_communities'</span>,</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                      legend<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>arctic_countries.plot(column<span class="op">=</span><span class="st">'n_communities'</span>,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                      legend<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1326,7 +1329,7 @@ arctic_countries = pd.merge(countries,
 </figure>
 </div>
 <p>Changing CRSs in GeoPandas is very simple using the <code>to_crs()</code> method for <code>geopandas.GeoDataFrame</code>s. The general syntax is:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>updated_geodf <span class="op">=</span> geodf.to_crs(new_crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>updated_geodf <span class="op">=</span> geodf.to_crs(new_crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>where:</p>
 <ul>
 <li><code>updated_geodf</code> is the output of the method, a new geodataframe (<code>to_crs()</code> does not work in place),</li>
@@ -1335,14 +1338,14 @@ arctic_countries = pd.merge(countries,
 </ul>
 <p>In our case:</p>
 <div id="e170a108" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to CRS optimized for Arctic region</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>arctic_countries <span class="op">=</span> arctic_countries.to_crs(<span class="st">'epsg:3413'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to CRS optimized for Arctic region</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>arctic_countries <span class="op">=</span> arctic_countries.to_crs(<span class="st">'epsg:3413'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now use the reprojected data to update our map:</p>
 <div id="b693db99" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the axis for a cleaner map</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
@@ -1367,7 +1370,7 @@ arctic_countries = pd.merge(countries,
 <span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Add title and subtitle for better context</span></span>
 <span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Distribution of Arctic Communities'</span>, fontsize<span class="op">=</span><span class="dv">18</span>, weight<span class="op">=</span><span class="st">'bold'</span>, pad<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1443,13 +1446,14 @@ arctic_countries = pd.merge(countries,
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
