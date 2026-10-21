@@ -1,0 +1,634 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "toc-title: In this lesson\n",
+        "fig-cap-location: margin\n",
+        "---\n",
+        "\n",
+        "# 6 Time series\n",
+        "\n",
+        "In this section we will learn some basic handling of time series.\n",
+        "\n",
+        "This lesson was adapted from [Dr. Sam Stevenson's lecture on Data quality control and outliers: 1D time series](https://github.com/samanthastevenson/EDS220_Fall2022/blob/main/Precipitation_QCexample_BoulderCO.ipynb) and [Earth Lab's Lesson 1. Work With Datetime Format in Python - Time Series Data](https://www.earthdatascience.org/courses/use-data-open-source-python/use-time-series-data-in-python/introduction-to-time-series-in-pandas-python/) @wasser_earthlabearth_textbook_2024.\n",
+        "\n",
+        "\n",
+        "<!--\n",
+        "TODO\n",
+        "## Learning objectives\n",
+        "\n",
+        "-->\n",
+        "\n",
+        "## About the data\n",
+        "\n",
+        "To exemplify some of the basic time series functionalities we will use data about hourly precipitation from four weather stations in the county of Boulder, Colorado from the beginning of 2000 to the end of 2013. In September 2013, an unusual weather pattern led to some of the most intense precipitation ever recorded in this region, causing [devastating floods throughout the Colorado Front Range](https://www.weather.gov/safety/flood-states-co). Our goal is to visualize precipitation data in 2013 and identify this unusual weather event.\n",
+        "\n",
+        "![Aerial view of floods during September 2013 in Colorado. Photo by State of Colorado.](/book/images/lesson-7/co-2013-2.jpg)\n",
+        "\n",
+        "This data was obtained via the [National Oceanic and Atmospheric Administration (NOAA) Climate Data Online service](https://www.ncdc.noaa.gov/cdo-web/) and the resulting CSV can be accessed at [this link](https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv). The following is a short description of the columns we will work with (the full documentation can be accessed [here](https://www.ncei.noaa.gov/pub/data/cdo/documentation/PRECIP_HLY_documentation.pdf)):\n",
+        "\n",
+        "| Column | Description |\n",
+        "|-| -----|\n",
+        "| STATION | Identification number identifying the station. |\n",
+        "|STATION_NAME | Optional field, name identifying the station location.  |\n",
+        "| DATE | this is the year of the record (4 digits), followed by month (2 digits), followed by day of the month (2 digits), followed by a space and ending with a time of observation that is a two digit indication of the local time hour, followed by a colon (:) followed by a two digit indication of the minute which for this dataset will always be 00. Note: The subsequent data value will be for the hour ending at the time specified here. Hour 00:00 will be listed as the first hour of each date, however since this data is by definition an accumulation of the previous 60 minutes, it actually occurred on the previous day. |\n",
+        "| HPCP | The amount of precipitation recorded at the station for the hour ending at the time specified for DATE above given in inches. The value 999.99 means the data value is missing. Hours with no precipitation are not shown. |\n",
+        "| Measurement Flag | Left blank when no flag is needed. `[` and `]` mark the beginning and end of a period with missing data, and `{` and `}` mark the beginning and end of a deleted period (the data was received but was unreadable or clearly noise). Rows with these four flags have an HPCP value of 999.99. `g` is only used for day 1 of the month at hour 01:00, when the precipitation amount is zero. Since hours with no precipitation are not shown, almost all rows with an HPCP value of 0 have this flag. |\n",
+        "\n",
+        "\n",
+        "## Timestamps\n",
+        "\n",
+        "The `pandas` library represents an instant in time using the `pandas.Timestamp` class. For example:"
+      ],
+      "id": "684b6050"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# Create a timestamp\n",
+        "pd.Timestamp(year=2020,\n",
+        "             month=10,\n",
+        "             day=18,\n",
+        "             hour=12,\n",
+        "             minute=30,\n",
+        "             second=15)"
+      ],
+      "id": "d1e7254a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "When we store multiple `pandas.Timestamps` in a `pandas.Series` the data type of the series is set to `datetime64[ns]`:"
+      ],
+      "id": "87ce2c93"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Notice the data type of the series is datetime64\n",
+        "pd.Series([pd.Timestamp(2020, 10, 18),\n",
+        "           pd.Timestamp(2020, 10, 17),\n",
+        "           pd.Timestamp(2020, 10, 16)])"
+      ],
+      "id": "d69818e6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "- NaT = not a time. `pd.NaT` behaves similarly to how np.nan does for float data.\n",
+        "-->\n",
+        "\n",
+        "## Data exploration\n",
+        "\n",
+        "Let's start by reading in the data and taking a look at it:"
+      ],
+      "id": "a2763d0a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Read in data\n",
+        "URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'\n",
+        "precip = pd.read_csv(URL)\n",
+        "\n",
+        "precip"
+      ],
+      "id": "eb00ae72",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice the data has records from more than one station. We can check which ones using the `unique()` method:"
+      ],
+      "id": "df47cff2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Check which stations are in the data\n",
+        "precip['STATION_NAME'].unique()"
+      ],
+      "id": "b0ee9882",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "So the data has hourly precipitation records from four stations in Boulder County. The rows are ordered by station first and then by date: all the records from the first station (2000 to 2013), followed by all the records from the second station, and so on. We will come back to this when we use the dates as the index. In this lesson, we will look at the total precipitation over all four stations.\n",
+        "\n",
+        "Let's take an initial look at hour data:"
+      ],
+      "id": "2aabe0ee"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Plot hourly precipitation from all stations\n",
+        "precip.plot()"
+      ],
+      "id": "416669c0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "There are a few things going on with this graph:\n",
+        "\n",
+        "1. Outliers: There are many jumps close to 1000. This is clearly not right and these are outliers. Looking at the column descriptions we can see 999.99 indicates the hourly precipitation data is missing.\n",
+        "\n",
+        "2. Indexing: The $x$-axis values are given by the index of the data frame and not relative to time.\n",
+        "\n",
+        "3. Time range: We are only interested in the precipitation data from 2013, but this graph is trying to plot all our data.\n",
+        "\n",
+        "Let's fix each one of these issues separately.\n",
+        "\n",
+        "## Reading in missing data values\n",
+        "\n",
+        "The metadata states the missing values are indicated by the number 999.99.\n",
+        "We can use this information to reload the data frame indicating 999.99 is the missing value.\n",
+        "To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicate additional values that should be recognized as `NA`. Since 999.99 only means \"missing\" in the `HPCP` column, we pass a dictionary that applies it to that column only:"
+      ],
+      "id": "317e1a5b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Read in CSV indicating NA values in HPCP column based on metadata\n",
+        "precip = pd.read_csv(URL, na_values={'HPCP': [999.99]})\n",
+        "\n",
+        "precip.head()"
+      ],
+      "id": "bfc4257b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice that the first hourly precipitation value used to be 999.99 and it is now set to a `NaN`. Check the `na_values` parameter in the [`pd.read_csv()` documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) to learn more about which values are identified as `NA` by default.\n",
+        "\n",
+        "We can try making our plot again:"
+      ],
+      "id": "8b580bcd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "precip.plot()"
+      ],
+      "id": "6bf1dbb5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "This looks better and we can already see there is something going on close to the end of the time series. \n",
+        "\n",
+        "<!-- \n",
+        "Remember the rows are ordered by station, so this plot goes through the years 2000 to 2013 four times, once for each station.\n",
+        " -->\n",
+        "\n",
+        "## Casting strings into dates\n",
+        "Notice that the `DATE` column in our data frame is not of type `datetime`. We can check this using the `dtypes` attribute for data frames:"
+      ],
+      "id": "50c8c234"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Check whether DATE column is of type datetime\n",
+        "precip.dtypes"
+      ],
+      "id": "e44feb9c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "precip['DATE'].apply(type).unique()\n",
+        "-->\n",
+        "Remember that the `object` data type means that (most likely) all values in that column are strings. We can easily convert strings to datetime objects using the `pandas.to_datetime()` function:\n",
+        "\n",
+        "- `pandas.to_datetime()` input: a `pandas.Series` with strings that can be converted to dates\n",
+        "- `pandas.to_datetime()` output: a `pandas.Series` with the strings converted to `datetime` objects\n",
+        "\n",
+        "#### Example"
+      ],
+      "id": "ed28be3b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Preview DATE converted to timestamps\n",
+        "pd.to_datetime(precip['DATE'])"
+      ],
+      "id": "f6c9b936",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can overwrite the `DATE` column with this output:"
+      ],
+      "id": "29ace1eb"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Convert DATE column to timestamps\n",
+        "precip['DATE'] = pd.to_datetime(precip['DATE'])\n",
+        "\n",
+        "# Check DATE column data type is updated\n",
+        "print(precip.dtypes)\n",
+        "\n",
+        "# Check new values\n",
+        "precip['DATE'].head()"
+      ],
+      "id": "5f4bc62c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can make another attempt at plotting our precipitation data:"
+      ],
+      "id": "55a33682"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "precip.plot(x='DATE', y='HPCP')"
+      ],
+      "id": "615e419d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice the $x$-axis is now neatly organized into years. \n",
+        "\n",
+        "<!-- However, the lines jump back and forth: `plot()` connects the points in the order of the rows, so the line goes from 2000 to 2013 for the first station, jumps back to 2000 for the next station, and so on. -->\n",
+        "\n",
+        "Next, using our `DATE` column as the index will allow us to perform operations with respect to time, including subsetting and resampling. We will also sort the index using `sort_index()`, so that the rows are in chronological order instead of grouped by station. This will remove some artifacts from our plot. In general, it is good practice to sort a time index, since many time series operations assume the dates are in order."
+      ],
+      "id": "f2578b4c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Set DATE column as index and sort rows chronologically\n",
+        "precip = precip.set_index('DATE').sort_index()\n",
+        "\n",
+        "# Inspect new index\n",
+        "precip.head()"
+      ],
+      "id": "da9ebc2e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Since we know the default behavior of `plot()` is to use the index as the $x$-axis and make a line plot for each numeric column, we can simplify our plot making like this:"
+      ],
+      "id": "9337000e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "precip.plot()"
+      ],
+      "id": "0c2d796f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::{.callout-note}\n",
+        "## Leverage `pandas.read_csv()` to set a known index\n",
+        "\n",
+        "If we already have information about our data frame and know which column we will use as the index, we can directly set the index when we load the data by using:\n",
+        "```python\n",
+        "df = pandas.read_csv(file, index_col='index_column')\n",
+        "```\n",
+        "If we also need our index to be of type `datetime` and we have a known dates column, then we can also create a `datetime` index directly when loading the data:\n",
+        "```python\n",
+        "df = pandas.read_csv(file, index_col='date_column', parse_dates=['date_column'])\n",
+        "```\n",
+        "If the rows in the file are not in chronological order, remember to add `sort_index()` after loading the data.\n",
+        ":::\n",
+        "\n",
+        "## Subsetting by date\n",
+        "`pandas` has great functionality to subset a data frame when using a time index.\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "We can use `.loc[year-month]` to select data from a specific year and month:"
+      ],
+      "id": "1c30d064"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select precipitation data from September 2013\n",
+        "precip.loc['2013-09']"
+      ],
+      "id": "f784eab0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Or simply select data from a given year using `.loc[year]`:"
+      ],
+      "id": "931b45a6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select 2013 precipitation data\n",
+        "precip.loc['2013']"
+      ],
+      "id": "c58849ed",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data:"
+      ],
+      "id": "def99258"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "precip.loc['2013'].plot()"
+      ],
+      "id": "5f05a3d8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Resample\n",
+        "Resampling a time series means converting a time series from one frequency to another. For example, monthly to yearly (downsampling) or weekly to daily (upsampling). We can resample with the [`resample()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html) method. The simplest use is to call\n",
+        "```python\n",
+        "df.resample(new_frequency).aggregator_function()\n",
+        "```\n",
+        "where:\n",
+        "\n",
+        "-  `new_frequency` is a string representing the new frequency to resample the data, for example `'D'` for day, `'W'` for week, `'MS'` or `'ME'` for month start and month end, `'YS'` or `'YE'` for year start and year end.\n",
+        "- `aggregator_function()` is the function we will use to aggregate the data into the new frequency. For example, `max()`, `min()`, `sum()`, or `mean()`.\n",
+        "\n",
+        "The `resample()` method works similarly to `groupby()` in the sense that you need to specify a way to aggregate the data to get any output.\n",
+        "\n",
+        ":::{.callout-note}\n",
+        "## Month end or month start?\n",
+        "`'ME'` stands for \"month end\" and `'MS'` for \"month start\". Both group the data by calendar month. The only difference is how each month is labeled: `'ME'` uses the last day of the month and `'MS'` uses the first day. For example, this is the total monthly precipitation for the first three months of 2013 with each option:"
+      ],
+      "id": "6ffaa44d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Monthly totals labeled by the last day of each month\n",
+        "precip.loc['2013', 'HPCP'].resample('ME').sum().head(3)"
+      ],
+      "id": "1a4d9f1c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Monthly totals labeled by the first day of each month\n",
+        "precip.loc['2013', 'HPCP'].resample('MS').sum().head(3)"
+      ],
+      "id": "f1bfdb68",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The totals are the same, only the dates in the index change. In this course we will use `'ME'`. Similarly, `'YE'` and `'YS'` label each year by its last or first day.\n",
+        ":::\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency."
+      ],
+      "id": "a8b940a6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Resample 2013 hourly data to daily frequency: no output\n",
+        "precip.loc['2013', 'HPCP'].resample('D')"
+      ],
+      "id": "3b2b45ea",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we aggregate it using `sum()`:"
+      ],
+      "id": "d8b5ad39"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Total daily precipitation in 2013 (sum over all stations)\n",
+        "daily_precip_2013 = precip.loc['2013', 'HPCP'].resample('D').sum()\n",
+        "\n",
+        "daily_precip_2013.head(3)"
+      ],
+      "id": "f6c89ff0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "A few things to notice here:\n",
+        "\n",
+        "\n",
+        "<!-- - We select the `HPCP` column before resampling, using `.loc['2013', 'HPCP']`. If we resampled the whole data frame and called `sum()`, `pandas` would also \"add up\" the text columns, like `STATION`, by joining their strings together.\n",
+        " -->\n",
+        "- Each daily value is the total precipitation from all the hourly records on that day, over the four stations.\n",
+        "- `sum()` returns 0 for days without any records. Since hours with no precipitation are not recorded, this is the right value for dry days. A few days only have rows marking missing data, and these also show 0.\n",
+        "\n",
+        "The index has now changed to be days in 2013 and, since we selected a single column, the result is a `pandas.Series`. We should also rename the series since it is no longer hourly precipitation:"
+      ],
+      "id": "00a766e5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Rename series to match resample\n",
+        "daily_precip_2013 = daily_precip_2013.rename('daily_precipitation')\n",
+        "daily_precip_2013.name"
+      ],
+      "id": "0a6ee57f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Finally, we can plot our data:"
+      ],
+      "id": "b5a5f932"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "daily_precip_2013.plot(ylabel='daily precipitation (in)',\n",
+        "                       xlabel='',\n",
+        "                       title='Total precipitation over four stations in Boulder County, CO (2013)')"
+      ],
+      "id": "1f285458",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Complete workflow\n",
+        "\n",
+        "The previous code includes a lot of exploratory functions and trials. While it is important to keep our data exploration documented, once we are certain of our data wrangling, we can streamline our analyses to only include the code that directly contributes to the output. Moving on, we will start to collect all our relevant code to create such complete workflows. For this lesson, the code below will produce the final graph:"
+      ],
+      "id": "ec068b32"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# Read in hourly precipitation data from four stations in Boulder County, CO\n",
+        "# HPCP = hourly precipitation (unique numerical column in data frame)\n",
+        "URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'\n",
+        "precip = (pd.read_csv(URL,\n",
+        "                      na_values={'HPCP': [999.99]},  # Known from metadata\n",
+        "                      index_col='DATE',\n",
+        "                      parse_dates=['DATE'])\n",
+        "          .sort_index()  # Rows in the file are ordered by station\n",
+        "          )\n",
+        "\n",
+        "\n",
+        "# Calculate daily total precipitation over all stations during 2013\n",
+        "daily_precip_2013 = (precip.loc['2013', 'HPCP']\n",
+        "                            .resample('D')\n",
+        "                            .sum()\n",
+        "                            .rename('daily_precipitation')\n",
+        "                            )\n",
+        "\n",
+        "# Plot time series\n",
+        "daily_precip_2013.plot(ylabel='daily precipitation (in)',\n",
+        "                       xlabel='',\n",
+        "                       title='Total precipitation over four stations in Boulder County, CO (2013)')"
+      ],
+      "id": "e1cb5ff5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!-- TODO Add plot description. -->\n",
+        "\n",
+        "## More info\n",
+        "\n",
+        "There is so much more to learn about time series data. These resources will allow you to dive deeper:\n",
+        "\n",
+        "📖 [`pandas` getting started tutorials - How to handle time series data with ease](https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#min-tut-09-timeseries)\n",
+        "\n",
+        "📖 [Time Series Chapter, Python for Data Analysis, Wes McKinney](https://wesmckinney.com/book/time-series)\n",
+        "\n",
+        "📖 [`pandas` User Guide - Time series/date functionality](https://pandas.pydata.org/docs/user_guide/timeseries.html)\n"
+      ],
+      "id": "c978a523"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "eds220-env",
+      "language": "python",
+      "display_name": "EDS-220 env",
+      "path": "/Users/carmengalazgarcia/Library/Jupyter/kernels/eds220-env"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

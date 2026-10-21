@@ -12,7 +12,7 @@ Size measurements, sex, and age of snowshoe hares were collected and made availa
 
 ## Data exploration
 
-Download the `55_Hare_Data_2012.txt` file [available here]({{< var hares-data-folder >}}) and save it in a `data/` folder next to your notebook. If you are working on workbench-1, upload the file to the server. This is the same file you used in discussion section 3: a copy of `55_Hare_Data_2012.txt` from version 22 of the EDI data package.
+Download the `55_Hare_Data_2012.txt` file [available here]({{< var hares-data-folder >}}) and save it in a `data/` folder next to your notebook. This is the same file used in discussion section 3: a copy of `55_Hare_Data_2012.txt` from version 22 of the EDI data package.
 
 Let's start by loading the data and taking a very high-level look at it:
 
@@ -27,19 +27,21 @@ from sklearn.linear_model import LinearRegression
 ```
 
 ```{python}
-hares= pd.read_csv(os.path.join('data','55_Hare_Data_2012.txt'))
-hares.head()
+obs = pd.read_csv(os.path.join('data','55_Hare_Data_2012.txt'))
+obs.head()
 ```
 
 ```{python}
-hares.info()
+obs.info()
 ```
 
-We can see from the `info()` display that most of these variables are of type `object` (most likely `str`) and some are continuous and categorical numerical variables. To facilitate our data wrangling we convert the `date` column to a `datetime` type:
+We can see from the `info()` display that most of these variables are of type `object` (most likely `str`), and these are expected to be categorical variables. Other columns as `weight` and `hindft` contain continuous numerical variables. 
+
+To facilitate our data wrangling we convert the `date` column to a `datetime` type:
 
 ```{python}
-hares['date'] = pd.to_datetime(hares['date'])
-print(hares.date.dtype)
+obs['date'] = pd.to_datetime(obs['date'])
+print(obs.date.dtype)
 ```
 
 ## Examining hares' age data
@@ -60,21 +62,21 @@ Let's see the data in this column:
 
 ```{python}
 # Examine unique values and counts in age column
-pd.DataFrame(hares['age'].value_counts(dropna=False))
+pd.DataFrame(obs['age'].value_counts(dropna=False))
 ```
 
 <br>
 
-This is the time to make a decision: since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. 
+Since the actual data has values that are not included in the metadata, this is the time to make a decision and document it. Since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. 
 
 ```{python}
 # Update age values to juvenile and adult for observations where 'a' and 'j' are included
-hares.loc[hares.age.str.contains('j', case=False, na=False), 'age'] = 'juvenile'
-hares.loc[hares.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
+obs.loc[obs.age.str.contains('j', case=False, na=False), 'age'] = 'juvenile'
+obs.loc[obs.age.str.contains('a', case=False, na=False), 'age'] = 'adult'
 
 # Filter for confirmed observations of juvenile and adult hares
-hares_juv_adult = hares[hares.age.isin(['juvenile', 'adult'])].copy()
-print(f"Number of juvenile and adult hare observations (captures): {len(hares_juv_adult)}")
+obs_juv_adult = obs[obs.age.isin(['juvenile', 'adult'])].copy()
+print(f"Number of juvenile and adult hare observations (captures): {len(obs_juv_adult)}")
 ```
 
 None of the observations from 1998 have a valid age, so from here on our data starts in 1999.
@@ -83,49 +85,26 @@ To better understand our data we examine the distribution of hare age across yea
 
 ```{python}
 # Extract year in which each observation happened
-hares_juv_adult['year'] = hares_juv_adult.date.dt.year
+obs_juv_adult['year'] = obs_juv_adult.date.dt.year
 
-# Create hares/year data frame
-hares_per_year = (hares_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
+# Create observations/year data frame
+obs_per_year = (obs_juv_adult.groupby(['year','age']).size()   # Note: size() counts all elements, including NAs
                                  .reset_index(name='counts')       # Remove multi-index
                                  .pivot(index='year', columns='age', values='counts')   # Pivot into wide format
                                  )
-hares_per_year
+obs_per_year
 ```
 
 If you are wondering, here `year` is the name of the data frame's row index and `age` is the name of the column index. 
 In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:
 
 ```{python}
-#| code-fold: True
-
-# Create figure + axes
-fig, ax = plt.subplots(figsize=(8, 5))
-
-hares_per_year[['juvenile', 'adult']].plot(    # Rearrange columns for stacking order
-    kind='bar',
-    stacked=True,
-    ax=ax,
-    edgecolor='black',
-    color=["#8FBC8F", "#4682B4"], 
-)
-
-# Labels, title, and legend
-ax.set_xlabel("Year")
-ax.set_ylabel("Count")
-ax.set_title("Juvenile and Adult Snowshoe Hares per Year \n at Bonanza Creek Experimental Forest (1999-2012)",
-             {'fontsize':15})
-ax.legend(title="Age class",
-         loc="upper right",   
-         bbox_to_anchor=(0.9, 0.9))
-
-# Axes and ticks
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.xticks(rotation=45)
-
-plt.tight_layout()
-plt.show()
+obs_per_year[['juvenile', 'adult']].plot(kind='bar',                  # Columns in stacking order
+                                         stacked=True,                # Stack the bars
+                                         color=['#8FBC8F', '#4682B4'],
+                                         title='Juvenile and adult snowshoe hare captures per year',
+                                         xlabel='Year',
+                                         ylabel='Number of captures');
 ```
 
 No observations of juvenile snowshoe hares were made during 2002, while the highest count was registered in 1999 (the first year of the study) with 126 observations. In the previous plot we can see that the number of juvenile hare trappings dropped sharply from 1999 to 2002 and stayed lower for the rest of the study, with peaks in 2005, 2008, and 2011. 
@@ -133,8 +112,11 @@ No observations of juvenile snowshoe hares were made during 2002, while the high
 <!-- In 2005 juvenile hare counts were 6 times higher than in 2004, and in 2008 counts were 11.4 times higher than in 2007. In 2011 the juvenile snowshoe hare count was 6.7 times higher than in 2010. -->
 
 :::{.callout-tip}
-# Exercise
-Consider the following question: In what ways could the data collection methods affect the results we see here?
+# Check-in
+Consider the following questions: 
+
+- In what ways could the data collection methods affect the results we see here?
+- Is there additional metadata you would need to better understand the data?
 :::
 
 
@@ -147,9 +129,9 @@ Let's take a look at our target data:
 
 ```{python}
 # Subset juvenile hares with hind foot and weight measurements
-juveniles_weight_hindft = hares_juv_adult[(hares_juv_adult['hindft'].notna()) & 
-                                          (hares_juv_adult['weight'].notna()) &
-                                          (hares_juv_adult['age']=='juvenile')]
+juveniles_weight_hindft = obs_juv_adult[(obs_juv_adult['hindft'].notna()) & 
+                                          (obs_juv_adult['weight'].notna()) &
+                                          (obs_juv_adult['age']=='juvenile')]
 
 
 print(f"Number of juvenile hare captures with hind foot and weight measurements: {len(juveniles_weight_hindft)}")
@@ -253,6 +235,19 @@ ax.set_ylabel('Weight (g)')
 plt.show()
 ```
 
+:::{.callout-tip}
+# Exercise
+Answer the following questions:
+
+a. Does it make sense to interpret the $y$-intercept as an estimated measurement of weight?
+
+b. What is the estimated change in weight for each millimeter increase in hind foot length?
+
+c. Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? What other variables could be worth exploring to model the weight?
+
+d. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
+:::
+
 ## Checking the residuals
 
 $R^2$ tells us how much of the variation the model explains, but not whether a straight line is the right shape for the data. To check this, we look at the **residuals**. A residual is the difference between an observed value and the value predicted by the model:
@@ -286,22 +281,10 @@ The residuals show three patterns:
 
 - **The spread grows with hind foot length.** For short hind feet most residuals are within about 100 g of 0, while for the longest hind feet many are more than 300 g away. This is the increasing variability we noticed in the first scatter plot. It means the model's predictions are less precise for larger juveniles.
 - **The residuals are not centered on 0 everywhere.** For hind feet shorter than about 100 mm most residuals are negative (the line overestimates weight), while for medium hind feet they are mostly positive (the line underestimates weight). This suggests that the relationship between hind foot length and weight is not exactly linear.
-- **For longer hind feet the residuals split into two groups**, one above and one below the line. This could mean that another variable also affects weight. Exercise (c) below asks you to think about which one.
+- **For longer hind feet the residuals split into two groups**, one above and one below the line. This could mean that another variable also affects weight. Exercise (c) above asks you to think about which one.
 
 None of these patterns means the model is useless: the line still captures the overall trend. But they are a reminder that a single $R^2$ value doesn't tell the whole story, and that we should be careful when using the model to make predictions, especially for larger juveniles.
 
-:::{.callout-tip}
-# Exercise
-Answer the following questions:
-
-a. Does it make sense to interpret the $y$-intercept as an estimated measurement of weight?
-
-b. What is the estimated change in weight for each millimeter increase in hind foot length?
-
-c. Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? What other variables could be worth exploring to model the weight?
-
-d. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
-:::
 
 <!--
 :::{.callout-tip}
