@@ -1,0 +1,735 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: 4 Updating data frames\n",
+        "toc-title: In this lesson\n",
+        "fig-cap-location: margin\n",
+        "---\n",
+        "\n",
+        "In this lesson we will introduce methods for updating a `pandas.DataFrame`. These include adding and removing columns and updating specific values. \n",
+        "\n",
+        "<!--\n",
+        "## Learning objectives\n",
+        "\n",
+        "**TODO**\n",
+        "\n",
+        "By the end of this lesson, students will be able to:\n",
+        "-->\n",
+        "\n",
+        "## About the data\n",
+        "\n",
+        "For this section we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. \n",
+        "\n",
+        "![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-5/penguins-logo.png)\n",
+        "\n",
+        "The dataset has 344 rows and 8 columns. We can see the head of the dataset below:"
+      ],
+      "id": "1e1f58a0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "\n",
+        "URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'\n",
+        "penguins = pd.read_csv(URL)\n",
+        "\n",
+        "penguins.head()"
+      ],
+      "id": "441113a0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Adding a single column...\n",
+        "\n",
+        "Let us start by importing the packages we will use in this lesson and loading the data:"
+      ],
+      "id": "59307052"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "\n",
+        "# Create a random number generator with a seed\n",
+        "rng = np.random.default_rng(seed=42)\n",
+        "\n",
+        "# Import data\n",
+        "URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'\n",
+        "penguins = pd.read_csv(URL)"
+      ],
+      "id": "fed368d4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        ":::{.callout-caution}\n",
+        "**TODO** Explain seed.\n",
+        ":::\n",
+        "-->\n",
+        "\n",
+        "### ...using dictionary-like syntax\n",
+        "The simplest syntax to add a new column to a `pandas.DataFrame` is \n",
+        "\n",
+        "```python\n",
+        "df['new_col_name'] = new_column_values\n",
+        "```\n",
+        "where the `new_column_values` could be: \n",
+        "\n",
+        "- a `pandas.Series` or a `numpy.array` of the same length as the data frame, or\n",
+        "- a single scalar.\n",
+        "\n",
+        "When the new values are a `pandas.Series`, `pandas` matches them to rows by index label, not by position, so rows with no matching label get `NaN`.\n",
+        "\n",
+        "If the column name exists, the existing column will be updated.\n",
+        "\n",
+        "Remember a `pandas.DataFrame` can be seen as a dictionary of its columns. This syntax for adding a new column to a `pandas.DataFrame` is the same as adding a new key-value pair to a dictionary:\n",
+        "```python\n",
+        "# Add a new key-value pair to a dictionary\n",
+        "dict[new_key] = new_value\n",
+        "```\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "We want to create a new column where the body mass is in kilograms instead of grams, then we need to divide each value in the `body_mass_g` column by 1000. "
+      ],
+      "id": "eeb11459"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Add new column body_mass_kg \n",
+        "penguins['body_mass_kg'] = penguins['body_mass_g']/1000\n",
+        "\n",
+        "# Confirm the new column is in the data frame\n",
+        "print(\"body_mass_kg is in the data frame's columns: \", 'body_mass_kg' in penguins.columns)\n",
+        "\n",
+        "# Look at the new column\n",
+        "penguins.head()"
+      ],
+      "id": "41ca6499",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### ...using the `assign()` method\n",
+        "\n",
+        "We can also create or update an existing column using the [`assign()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html) method for `pandas.DataFrames`. The general syntax is:\n",
+        "```python\n",
+        "df = df.assign(new_col_name=new_column_values)\n",
+        "```\n",
+        "Notice the new column names are not strings. We declare them as if we were creating variables.\n",
+        "\n",
+        "This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in place. This can be useful for chaining operations:"
+      ],
+      "id": "39134c0c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "(penguins.assign(bill_length_cm=penguins['bill_length_mm']/10)\n",
+        "        .plot(kind='scatter',\n",
+        "              x='bill_length_cm', \n",
+        "              y='body_mass_g')\n",
+        "    )"
+      ],
+      "id": "6af4acd4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Read a chain like this from top to bottom: each method acts on the output of the line before it. Here, `assign()` returns a new data frame with the `bill_length_cm` column, and `plot()` makes a scatter plot from that data frame. Wrapping the whole expression in parentheses lets us split it across several lines, one method per line, without Python raising a syntax error.\n",
+        "\n",
+        "### ...at a specific location\n",
+        "\n",
+        "The new column was added by default at the end of the data frame. If we want to create a new column and insert it at a particular position we can use the data frame method [`insert()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.insert.html):\n",
+        "```python\n",
+        "df.insert(loc=integer_index,  # Location of new column\n",
+        "          column='new_col_name', \n",
+        "          value=new_col_values)\n",
+        "```\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "Let's give each penguin observation a unique identifier as a three-digit number and add this column at the beginning of the data frame."
+      ],
+      "id": "da38ba4a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Create random 3-digit codes\n",
+        "codes = rng.choice(np.arange(100, 1000), size=len(penguins), replace=False)  # Sampling w/o replacement\n",
+        "\n",
+        "# Insert codes at the front of data frame\n",
+        "penguins.insert(loc=0,  # First position\n",
+        "                column='id_code',\n",
+        "                value=codes)\n",
+        "        \n",
+        "penguins.head()"
+      ],
+      "id": "abae277e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "Moving columns: pop, then insert\n",
+        "\n",
+        "df.insert(0, 'name', df.pop('name'))\n",
+        "https://stackoverflow.com/questions/35321812/move-column-in-pandas-dataframe\n",
+        "\n",
+        "Inserting at a particular location.\n",
+        "df.columns.get_loc()\n",
+        "-->\n",
+        "\n",
+        "\n",
+        "## Adding multiple columns\n",
+        "\n",
+        "We can also use the [`assign()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.assign.html) method to create or update multiple columns in the same call. The general syntax is:\n",
+        "```python\n",
+        "df = df.assign(new_col1_name=new_col1_values, \n",
+        "               new_col2_name=new_col2_values)\n",
+        "```\n",
+        "Remember this method does not modify the data frame, so you will need to reassign the output to the original data frame to update it.\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "Suppose we want to add these new columns: \n",
+        "\n",
+        "- flipper length converted from mm to cm, and\n",
+        "- a code representing the observer.\n",
+        "\n",
+        "We can add these columns to `penguins` using `assign()`:"
+      ],
+      "id": "9b26f479"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Create columns with observer codes and flipper length in cm\n",
+        "penguins = penguins.assign(flipper_length_cm=penguins['flipper_length_mm']/10, \n",
+        "                           observer=rng.choice(['A','B','C'],  # Sample with replacement\n",
+        "                                               size=len(penguins))\n",
+        "                          )\n",
+        "# Examine result\n",
+        "penguins.head()"
+      ],
+      "id": "bae3c1dc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Removing columns\n",
+        "\n",
+        "We can remove columns using the [`drop()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html) method for `pandas.DataFrames`. The syntax is:\n",
+        "```python\n",
+        "df = df.drop(columns=col_names)\n",
+        "```\n",
+        "where `col_names` can be a single column name (string) or a list of column names. Notice again that the `drop()` method does not modify the data frame in place, so you need to reassign the output.\n",
+        "\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "Now that we updated the units for flipper length and body mass, it makes sense to remove the previous columns to avoid duplicate information. We can do this using `drop()`:"
+      ],
+      "id": "407326bc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Remove duplicate length and mass measurements\n",
+        "penguins = penguins.drop(columns=['flipper_length_mm','body_mass_g'])\n",
+        "\n",
+        "# Confirm result\n",
+        "print(penguins.columns)"
+      ],
+      "id": "2eef9b97",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "## Reordering columns and updating names\n",
+        "-->\n",
+        "\n",
+        "<!--\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "**TODO**\n",
+        ":::\n",
+        "-->\n",
+        "\n",
+        "## Updating values\n",
+        "\n",
+        "Sometimes we want to update a specific value in our data frame. We'll review some methods and best practices to do that in this section. \n",
+        "\n",
+        "### A single value\n",
+        "We can access a single value in a `pandas.DataFrame` using the locators\n",
+        "\n",
+        "- [`at[]`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.at.html) to select by labels, or\n",
+        "- [`iat[]`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iat.html) to select by position. \n",
+        "\n",
+        "\n",
+        "The syntax for `at[]` is:\n",
+        "```python\n",
+        "df.at[single_index_value, 'column_name']\n",
+        "```\n",
+        "Think of `at[]` as the equivalent to `loc[]` when trying to access a single value.\n",
+        "\n",
+        "#### Example\n",
+        "For this example, let's first update the index of the data frame to be the `id_code` column:"
+      ],
+      "id": "018df6e6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "penguins = penguins.set_index('id_code')\n",
+        "penguins"
+      ],
+      "id": "e87b5dcd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "If we want to know the bill length of the penguin with ID 330, we can directly access that information using `at[]`:"
+      ],
+      "id": "e7a55d5b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Check bill length of penguin with ID 330\n",
+        "penguins.at[330, 'bill_length_mm']"
+      ],
+      "id": "d87cc2e7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We see that this bill length is an NA. Maybe we want to update it to 38.3 mm. We can do this with `at[]` too:"
+      ],
+      "id": "ea0fa32d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Correct bill length value of penguin with ID 330\n",
+        "penguins.at[330,'bill_length_mm'] = 38.3\n",
+        "\n",
+        "# Confirm value was updated\n",
+        "penguins.loc[330]"
+      ],
+      "id": "a717f99c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "If we want to access or update a single value by position we use the `iat[]` locator. The syntax for `iat[]` is:\n",
+        "```python\n",
+        "df.iat[index_integer_location, column_integer_location]\n",
+        "```\n",
+        "This is the same way you would index entries in a matrix. You may find it useful to think of `iat[]` as the equivalent of `iloc[]` to access a single value in the data frame.\n",
+        "\n",
+        "Obtaining the location of a specific column within the column list can be prone to error if we do it 'by hand'. If we need to obtain this index, we can dynamically get the location this way:\n",
+        "```python\n",
+        "penguins.columns.get_loc('column_name')\n",
+        "```\n",
+        "\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "a. Obtain the location of the `bill_length_mm` column.\n",
+        "\n",
+        "b. Use `iat[]` to access the same bill length value for the penguin with ID 330 and set it back to NA. Confirm your update using `iloc[]`. \n",
+        "\n",
+        "HINT: What would be an equivalent method to `penguins.columns.get_loc('column_name')` to get the location of a specific label in the index?\n",
+        ":::\n",
+        "\n",
+        "<!--"
+      ],
+      "id": "5026d842"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Set to NaN using iat\n",
+        "bill_length_index = penguins.columns.get_loc('bill_length_mm')\n",
+        "penguins.iat[3,bill_length_index] = np.nan\n",
+        "\n",
+        "# Confirm using iloc\n",
+        "penguins.iloc[3]"
+      ],
+      "id": "d003b466",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-->\n",
+        "\n",
+        "### Multiple values in a column\n",
+        "\n",
+        "What if we want to update multiple values in a column? We'll cover two cases: with a condition on the column values and by selecting a few values to update. \n",
+        "\n",
+        "\n",
+        "#### Using a condition \n",
+        "\n",
+        "Often, we need to create a new column where the new values depend on conditions on another column. \n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "We want to classify the Palmer penguins such that:\n",
+        "\n",
+        "- penguins with body mass less than 3 kg as small, \n",
+        "- penguins with body mass greater than or equal to 3 kg but less than 5 kg as medium, \n",
+        "- and those with body mass greater than or equal to 5 kg as large. \n",
+        "\n",
+        "One way to add this information in a new column is using the [`numpy.select()`](https://numpy.org/doc/stable/reference/generated/numpy.select.html) function:"
+      ],
+      "id": "b712c2d7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Create a list with the conditions\n",
+        "conditions = [penguins['body_mass_kg'] < 3, \n",
+        "              (3 <= penguins['body_mass_kg']) & (penguins['body_mass_kg'] < 5),\n",
+        "              5 <= penguins['body_mass_kg']]\n",
+        "\n",
+        "# Create a list with the choices\n",
+        "choices = [\"small\",\n",
+        "           \"medium\",\n",
+        "           \"large\"]\n",
+        "\n",
+        "# Add the selections using np.select\n",
+        "penguins['size'] = np.select(conditions, \n",
+        "                             choices, \n",
+        "                             default=None) # Value for anything outside conditions\n",
+        "\n",
+        "# Display the updated data frame to confirm the new column\n",
+        "penguins.head()"
+      ],
+      "id": "c19143d7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!-- \n",
+        "https://stackoverflow.com/questions/54653356/case-when-function-from-r-to-python\n",
+        "\n",
+        "Add np.where and pd.cut()\n",
+        "-->\n",
+        "\n",
+        "#### By selecting values\n",
+        "\n",
+        "When we only want to update some values in a column we can do this by selecting this data using `loc` (if selecting by labels) or `iloc` (if selecting by position). The general syntax for updating data with `loc` is:\n",
+        "```python\n",
+        "df.loc[row_selection, column_name] = new_values\n",
+        "```\n",
+        "where \n",
+        "\n",
+        "- `row_selection` specifies the rows we want to update, \n",
+        "- `column_name` is a single column name, and \n",
+        "- `new_values` is the new value or values we want. If using multiple values, then `new_values` must be of the same length as the number of rows selected. \n",
+        "\n",
+        "Using `loc[]` in assignment modifies the data frame directly without the need for reassignment.\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "We want to update the \"male\" values in the `sex` column to \"M\"."
+      ],
+      "id": "ade98974"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select rows with sex=male and simplify values in 'sex' column\n",
+        "penguins.loc[penguins['sex']=='male', 'sex'] = 'M'\n",
+        "\n",
+        "# Check changes in 'sex' column specifically\n",
+        "print(penguins['sex'].unique())"
+      ],
+      "id": "2cce9d84",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Best practices\n",
+        "\n",
+        "Suppose we want to similarly update the \"female\" values in the `sex` column to \"F\". This is an example of another way we might try to do it:"
+      ],
+      "id": "d18a6b12"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select rows where 'sex' is 'female' and then attempt to update 'sex' column values\n",
+        "penguins[penguins['sex']=='female']['sex'] = 'F' # This raises SettingWithCopyWarning"
+      ],
+      "id": "50b5bc6b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "When we select the data we want to update using **chained indexing** (two selection brackets `[][]`) instead of `loc[]` we get a `SettingWithCopyWarning`. With this warning, `pandas` is trying to alert us to a potential bug. In this case, the bug is that we actually did not update our data frame:"
+      ],
+      "id": "0ce63959"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Confirm values were updated\n",
+        "print(penguins['sex'].unique())"
+      ],
+      "id": "db1ff080",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-caution}\n",
+        "## Avoid chained indexing `[][]` and use `.loc[]`\n",
+        "The `SettingWithCopyWarning` often arises from chained indexing:\n",
+        "```python\n",
+        "df[df['col'] == value]['col2'] = new_value\n",
+        "```\n",
+        "In the words of the [`pandas` documentation](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/indexing.html#why-does-assignment-fail-when-using-chained-indexing):\n",
+        "\n",
+        "> assigning to the product of chained indexing has inherently unpredictable results.\n",
+        "\n",
+        "The best practice is to use `.loc[]` instead:\n",
+        "```python\n",
+        "df.loc[df['col'] == value,'col2'] = new_value\n",
+        "```\n",
+        "`.loc[]` is generally more readable and explicitly modifies the original data frame.\n",
+        "\n",
+        "Warnings in Python are intended to be helpful and can prevent unintended data modification errors! \n",
+        ":::\n",
+        "\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "Update the \"female\" values in the `penguins` data frame to \"F\". Don't use chained indexing. Confirm that the values in the column were updated.\n",
+        ":::\n",
+        "<!--"
+      ],
+      "id": "5e22fef7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# no chained indexing in assignment = no warning\n",
+        "penguins.loc[penguins['sex']=='female','sex'] = 'F'\n",
+        "\n",
+        "# notice the values were updated now\n",
+        "penguins.head()"
+      ],
+      "id": "e9b73c84",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-->\n",
+        "\n",
+        "To understand why the `SettingWithCopyWarning` pops up we need to understand that some `pandas` operations return a view to your data, while others return a copy of your data.\n",
+        "\n",
+        "- **Views** are actual subsets of the original data; when we update them, we are modifying the original data frame. \n",
+        "\n",
+        "- **Copies** are unique objects, independent of our original data frames. When we update a copy we are not modifying the original data frame. \n",
+        "\n",
+        "<!-- MAKE SOME DIAGRAMS LIKE DATAQUEST https://www.dataquest.io/blog/settingwithcopywarning/ -->\n",
+        "\n",
+        "![](/book/images/lesson-5/view-copy.png)\n",
+        "\n",
+        "Depending on what we are trying to do we might want to modify the original data frame or we might want to modify a copy. \n",
+        "\n",
+        "![](/book/images/lesson-5/modify-view-copy.png)\n",
+        "\n",
+        "`pandas` raises the `SettingWithCopyWarning` because it tries to balance memory efficiency with data integrity. By default, it avoids creating unnecessary copies, but sometimes it’s ambiguous whether a subset should be independent (a copy) or connected (a view).\n",
+        "\n",
+        "::: {.callout-important}\n",
+        "## Heads-up: pandas 3 and Copy-on-Write\n",
+        "This course uses `pandas` 2. Starting with `pandas` 3.0 (released January 2026), [Copy-on-Write](https://pandas.pydata.org/docs/user_guide/copy_on_write.html) is the default behavior. If you run this lesson's code with `pandas` 3 (for example, in a newer installation or on another platform), you will notice two differences:\n",
+        "\n",
+        "- Chained assignment like `df[df['col'] == value]['col2'] = new_value` still does not update the data frame, but the warning is called `ChainedAssignmentError` instead of `SettingWithCopyWarning`.\n",
+        "- Any subset of a data frame behaves like a copy. Modifying the subset never changes the original data frame, so you will not see a warning in the Biscoe island example below.\n",
+        "\n",
+        "The best practice is the same in both versions: to update values in a data frame, use `.loc[]`.\n",
+        ":::\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "We only want to use data from Biscoe island and, after doing some analyses, we want to add a new column to it:"
+      ],
+      "id": "149a2466"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select penguins from Biscoe island\n",
+        "biscoe = penguins[penguins['island']=='Biscoe']\n",
+        "\n",
+        "# ... Other analyses ...\n",
+        "\n",
+        "# Add a column\n",
+        "biscoe['sample_col'] = 100  # This raises SettingWithCopyWarning"
+      ],
+      "id": "8d843b17",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "`pandas` is trying to alert you that it is unsure about whether `biscoe` is a view or a copy and it's unclear whether any of our code will modify our dataset or not.\n",
+        "\n",
+        "To fix this we can **take control of the copy-view situation and explicitly ask for a copy of the dataset when subsetting the data**. Use the [`copy()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html) method to do this:"
+      ],
+      "id": "7eb5601d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Make sure you get an independent data frame that won't alter the original\n",
+        "biscoe = penguins[penguins['island']=='Biscoe'].copy()\n",
+        "\n",
+        "# Add a column, no warning\n",
+        "biscoe['sample_col'] = 100"
+      ],
+      "id": "24e71e9a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now we are sure we did not modify our initial data, but rather the `biscoe` data frame:"
+      ],
+      "id": "de8035be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Confirm the new column is in our subset data\n",
+        "biscoe.head()"
+      ],
+      "id": "a6df3d42",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Confirm that original data was not modified\n",
+        "print('sample_col' in penguins.columns)"
+      ],
+      "id": "3c9a60e4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The `SettingWithCopyWarning` can be tricky; there are also false positives and false negatives. Avoiding chained indexing and making a copy of your data frame subset when needed and possible will save you from the usual pitfalls! \n",
+        "\n",
+        "To learn more about the `SettingWithCopyWarning`, these are some articles that go into more depth:\n",
+        "\n",
+        "📖 [`pandas` Documentation - Returning a view versus a copy](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/indexing.html#returning-a-view-versus-a-copy)\n",
+        "\n",
+        "📖 [Real Python - SettingWithCopyWarning in pandas: Views vs Copies](https://realpython.com/pandas-settingwithcopywarning/)\n",
+        "\n",
+        "📖 [Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas](https://www.dataquest.io/blog/settingwithcopywarning/)"
+      ],
+      "id": "bba345f6"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "eds220-env",
+      "language": "python",
+      "display_name": "EDS-220 env",
+      "path": "/Users/carmengalazgarcia/Library/Jupyter/kernels/eds220-env"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

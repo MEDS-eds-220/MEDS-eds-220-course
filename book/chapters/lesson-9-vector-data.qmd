@@ -27,9 +27,9 @@ So each point would be a feature, each polygon is a feature, etc.
 ![Image Source: National Ecological Observatory Network (NEON)](/book/images/lesson-9/point_line_poly.png){width="65%"}
 
 
-Besides points, lines, and polygons, we can also encounter an additional type of vector data:
+Besides points, lines, and polygons, we can also encounter their "multi" versions:
 
-- **Multipolygons:** represent features made up of several polygons. Each polygon can be a separate, disconnected area, but together they form one feature. For example, a country with both mainland and island territories is often represented as a multipolygon. Multipolygons are useful for geographic entities that consist of multiple regions but need to be treated as a single unit in analysis.
+- **Multipoints, multilines, and multipolygons:** represent features made up of several points, lines, or polygons. Each part can be separate and disconnected, but together they form one feature. For example, a country with both mainland and island territories is often represented as a multipolygon. Multi-geometries are useful for geographic entities that consist of multiple parts but need to be treated as a single unit in analysis.
 
 
 In addition to the geospatial information stored, vector data can include **attributes** that describe each feature. 
@@ -71,19 +71,19 @@ Each shapefile can only hold one type of vector data. You cannot have, for examp
 
 ## GeoJSON
 
-[GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), which stands for Geographic JavaScript Object Notation, is an open format for encoding vector data (points, lines, polygons, and multipolygons) and their attributes. 
+[GeoJSON](https://en.wikipedia.org/wiki/GeoJSON) is an open format based on JavaScript Object Notation (JSON) for encoding vector data (points, lines, polygons, and their multi versions) and their attributes. 
 It is a popular format for web mapping applications. 
 The GeoJSON format uses a single file, with extension `.json` or `.geojson`. 
 
-While shapefiles can be in any coordinate reference system, the [GeoJSON specification](https://datatracker.ietf.org/doc/html/rfc7946) requires GeoJSON files to use the World Geodetic System 1984 (EPSG:4326/WGS84) CRS and all points must be expressed in longitude and latitude units of decimal degrees.
+While shapefiles can be in any coordinate reference system, the [GeoJSON specification](https://datatracker.ietf.org/doc/html/rfc7946) requires GeoJSON files to use the World Geodetic System 1984 (EPSG:4326/WGS84) CRS and all points must be expressed in longitude and latitude units of decimal degrees. 
+Coordinates in GeoJSON always go in the order longitude, latitude (that is, $x$, $y$), the opposite of how we usually say "lat/lon".
 
 Data in a GeoJSON is stored as attribute-value pairs (similar to Python dictionaries!) and lists. The following are examples of how points, lines, and polygons are represented as GeoJSON features:
 
 ![Source: Wikipedia](/book/images/lesson-9/geojson-vector-types.png){width="80%"}
 
-The following is an example of a full GeoJSON file. Notice that multiple types of geometries can be mixed within the same file:
-```python
-# Source: Wikipedia
+The following is an example of a full GeoJSON file (source: Wikipedia). Notice that multiple types of geometries can be mixed within the same file:
+```json
 {
   "type": "FeatureCollection",
   "features": [
@@ -137,6 +137,13 @@ The following is an example of a full GeoJSON file. Notice that multiple types o
 ```
 
 The website [https://geojson.io/](https://geojson.io/) is a nice tool to easily create GeoJSON files.
+
+## GeoPackage and GeoParquet
+
+Shapefiles have been around since the 1990s and come with some limitations: a single dataset is spread across several files, column names are cut to 10 characters, and each file can be at most 2 GB. 
+Two newer formats avoid these issues and are becoming widely used. 
+A [**GeoPackage**](https://www.geopackage.org/) (`.gpkg`) is an open standard from the Open Geospatial Consortium (OGC) that stores vector data, and even several datasets (called layers), in a single file. 
+[**GeoParquet**](https://geoparquet.org/) (`.parquet`) adds geospatial support to Apache Parquet, a compressed, column-based format designed to read large tabular datasets quickly, which makes it a good choice for big datasets and data stored in the cloud. 
 
 
 <!--

@@ -211,7 +211,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">7 Coordinate reference systems</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">9 Coordinate reference systems</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -309,13 +309,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-8-crs.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">7 Coordinate reference systems</span></a>
+ <span class="menu-text">9 Coordinate reference systems</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-9-vector-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8 Vector data formats</span></a>
+ <span class="menu-text">10 Vector data formats</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -429,7 +429,7 @@ window.Quarto = {
     <h2 id="toc-title">In this lesson</h2>
    
   <ul>
-  <li><a href="#coordinate-reference-systems" id="toc-coordinate-reference-systems" class="nav-link active" data-scroll-target="#coordinate-reference-systems">7 Coordinate reference systems</a>
+  <li><a href="#coordinate-reference-systems" id="toc-coordinate-reference-systems" class="nav-link active" data-scroll-target="#coordinate-reference-systems">9 Coordinate reference systems</a>
   <ul class="collapse">
   <li><a href="#how-to-create-a-crs" id="toc-how-to-create-a-crs" class="nav-link" data-scroll-target="#how-to-create-a-crs">How to create a CRS</a>
   <ul class="collapse">
@@ -439,41 +439,42 @@ window.Quarto = {
   <li><a href="#step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map" id="toc-step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map" class="nav-link" data-scroll-target="#step-4.-select-a-projection-to-flatten-a-portion-of-your-ellipsoid-and-make-a-map">Step 4. Select a projection to flatten a portion of your ellipsoid and make a map</a></li>
   <li><a href="#step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region" id="toc-step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region" class="nav-link" data-scroll-target="#step-5.-obtain-a-projected-crs-with-xy-coordinates-for-a-specific-region">Step 5. Obtain a projected CRS with <span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span> coordinates for a specific region</a></li>
   </ul></li>
+  <li><a href="#crs-codes" id="toc-crs-codes" class="nav-link" data-scroll-target="#crs-codes">CRS codes</a></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">7 Coordinate reference systems</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../book/chapters/lesson-8-crs.html">9 Coordinate reference systems</a></li></ol></nav></header>
 
 
 
 
 <section id="coordinate-reference-systems" class="level1">
-<h1>7 Coordinate reference systems</h1>
-<p>In this section we review what is a coordinate reference system (CRS). The materials here are meant to act as a refresher of the lesson on coordinate reference systems in <a href="https://eds-223-geospatial.github.io/course-materials/week2.html">week 2 of the EDS 223 - Geospatial Analysis &amp; Remote Sensing MEDS course</a>.</p>
+<h1>9 Coordinate reference systems</h1>
+<p>In this section we review what a coordinate reference system (CRS) is. The materials here are meant to act as a refresher of the lesson on coordinate reference systems in <a href="https://eds-223-geospatial.github.io/course-materials/week2.html">week 2 of the EDS 223 - Geospatial Analysis &amp; Remote Sensing MEDS course</a>.</p>
 <!--TODO: add learning objectives -->
 <section id="how-to-create-a-crs" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-create-a-crs">How to create a CRS</h2>
-<p>Since the Earth does not have lines and numbers etched on it, us humans need to create a system to locate places on its surface. A way to solve this is to create a <strong>coordinate reference system (CRS)</strong>. A CRS is, at its core, a way to represent places on the Earth as coordinates.</p>
-<p>To understand what are the components of a CRS it can be useful to think of the process we would undergo to match places on the Earth to coordinates that represent them.</p>
+<p>Since the Earth does not have lines and numbers etched on it, we humans need to create a system to locate places on its surface. A way to solve this is to create a <strong>coordinate reference system (CRS)</strong>. A CRS is, at its core, a way to represent places on the Earth as coordinates.</p>
+<p>To understand what the components of a CRS are, it can be useful to think of the process we would go through to match places on the Earth to coordinates that represent them.</p>
 <section id="step-1.-pick-an-ellipsoid" class="level3">
 <h3 class="anchored" data-anchor-id="step-1.-pick-an-ellipsoid">Step 1. Pick an ellipsoid</h3>
-<p>Think of the Earth. Our planet is not a perfect sphere. Besides its rugged surface with high mountains and deep ocean trenches, the shape of the Earth is not round. Due to the Earth’s rotation, the planet is slightly wider at the Equator. Thus, a sphere is not the best way to model the shape of the Earth. Instead, we use an <strong>ellipsoid</strong>. Think of an <a href="https://en.wikipedia.org/wiki/Ellipsoid">ellipsoid</a> as a sphere that has been flattened a bit, thus making it wider across one axis. This is the first step for creating a CRS: picking an ellipsoid, a.k.a picking a shape for the Earth. The ellipsoid used to represent the Earth’s shape has changed across time and it may also change depending on the application.</p>
+<p>Think of the Earth. Our planet is not a perfect sphere. Besides its rugged surface with high mountains and deep ocean trenches, its overall shape is not perfectly round either. Due to the Earth’s rotation, the planet is slightly wider at the Equator. Thus, a sphere is not the best way to model the shape of the Earth. Instead, we use an <strong>ellipsoid</strong>. Think of an <a href="https://en.wikipedia.org/wiki/Ellipsoid">ellipsoid</a> as a sphere that has been slightly flattened at the poles. This is the first step for creating a CRS: picking an ellipsoid, a.k.a. picking a shape for the Earth. The ellipsoid used to represent the Earth’s shape has changed across time and it may also change depending on the application.</p>
 <!--
 THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
 -->
 </section>
 <section id="step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.-align-the-ellipsoid-with-earths-locations-to-obtain-a-datum">Step 2. Align the ellipsoid with Earth’s locations to obtain a datum</h3>
-<p>The ellipsoid is an abstract mathematical object on which we can locate points on it by using angles. The coordinate system on the ellipsoid is (angles from <span class="math inline">\(x\)</span>, angles from <span class="math inline">\(y\)</span>).</p>
+<p>The ellipsoid is an abstract mathematical object on which we can locate points by using angles. The coordinate system on the ellipsoid uses two angles: latitude (north or south of the Equator) and longitude (east or west of the prime meridian).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/images/lesson-8/lat_lon_ellipsoid.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Latitude and longtide as angular coordinates on the ellipsoid. <a href="https://ltb.itc.utwente.nl/498/learningoutcome/show/59273">Image source: Coordinate systems and map projections - University of Twente</a></figcaption>
+<figcaption>Latitude and longitude as angular coordinates on the ellipsoid. <a href="https://ltb.itc.utwente.nl/498/learningoutcome/show/59273">Image source: Coordinate systems and map projections - University of Twente</a></figcaption>
 </figure>
 </div>
-<p>The next step to create a CRS is thus to make a decision on how to align the ellipsoid so that it’s surface corresponds to actual places on the Earth. We could think, for example, of:</p>
+<p>The next step to create a CRS is thus to make a decision on how to align the ellipsoid so that its surface corresponds to actual places on the Earth. We could think, for example, of:</p>
 <ul>
 <li>how to place the ellipsoid’s center relative to Earth’s mass center (is it the same or is it off?) or</li>
 <li>how to align the ellipsoid’s axes with the Earth (which meridian will be our prime meridian?).</li>
@@ -495,17 +496,17 @@ THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Geographers and cartographers have created and used <em>many</em> datums across time and applications. Sometimes datum refers both to a choice of ellipsoid <em>and</em> how to align it to the Earth. More importantly, <strong>different datums are used to increase the accuracy of representing different regions of Earth</strong>. At the <a href="http://wiki.gis.com/wiki/index.php/Datum_(geodesy)">GIS wiki</a> you can see a list of names of different datums optimized for different regions.</p>
+<p>Geographers and cartographers have created and used <em>many</em> datums across time and applications. A datum refers both to a choice of ellipsoid <em>and</em> how to align it to the Earth. More importantly, <strong>different datums are used to increase the accuracy of representing different regions of Earth</strong>. On <a href="https://en.wikipedia.org/wiki/Geodetic_datum#Examples">Wikipedia</a> you can see examples of datums optimized for different regions.</p>
 </div>
 </div>
 </section>
 <section id="step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth" class="level3">
 <h3 class="anchored" data-anchor-id="step-3.-obtain-a-geographic-crs-with-latlon-coordinates-for-all-the-earth">Step 3. Obtain a geographic CRS with lat/lon coordinates for all the Earth</h3>
-<p>At this point, we have successfully made a correspondence between the Earth’s surface and our ellipsoid. This means we can now use the latitude,longitude (lat/lon) coordinates of the ellipsoid to locate <em>any</em> point on the Earth’s surface. This is called a <strong>geographic CRS</strong>. Geographic coordinate reference systems use degrees of latitude and longitude to locate points on the Earth, still thinking of it as a 3D object.</p>
+<p>At this point, we have successfully made a correspondence between the Earth’s surface and our ellipsoid. This means we can now use the latitude, longitude (lat/lon) coordinates of the ellipsoid to locate <em>any</em> point on the Earth’s surface. This is called a <strong>geographic CRS</strong>. Geographic coordinate reference systems use degrees of latitude and longitude to locate points on the Earth, still thinking of it as a 3D object.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../book/images/lesson-8/lat_lon_on_earth.png" class="img-fluid figure-img" style="width:85.0%"></p>
-<figcaption>We use a geographic CRS to create angular coordiantes on the Earth (latitude and longitude) that allow us to locate any place</figcaption>
+<figcaption>We use a geographic CRS to create angular coordinates on the Earth (latitude and longitude) that allow us to locate any place</figcaption>
 </figure>
 </div>
 </section>
@@ -528,10 +529,10 @@ THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There are <em>many</em> ways to project an ellipsoid into a 2-dimensional region. However, <strong>no matter what projection we use, the area, distances, or angles of the actual regions on Earth will be distorted when we project.</strong> Ultimately, the choice of projection relies on whether we want to optimze calculations involving area, angle, or distance measurements, as well as aesthetics when creating a map.</p>
+<p>There are <em>many</em> ways to project an ellipsoid into a 2-dimensional region. However, <strong>no matter what projection we use, the area, distances, or angles of the actual regions on Earth will be distorted when we project.</strong> Ultimately, the choice of projection relies on whether we want to optimize calculations involving area, angle, or distance measurements, as well as aesthetics when creating a map.</p>
 </div>
 </div>
-<p>The following video, <em>Vox - Why all world maps are wrong</em>, does a great job at how projections work!</p>
+<p>The following video, <em>Vox - Why all world maps are wrong</em>, does a great job at explaining how projections work!</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <!--
 📖 [QGIS - A gentle introduction to GIS - Coordinate Reference Systems ](https://docs.qgis.org/3.28/en/docs/gentle_gis_introduction/coordinate_reference_systems.html)
@@ -546,31 +547,39 @@ THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
 <figcaption>A projected CRS gives planar coordinates.</figcaption>
 </figure>
 </div>
-<!-- 
-TODO
-## Common CRSs
-
-These are some commonly encountered geographic coordinate reference systems. 
-
-### WGS84
-The World Geodetic System 1984 (WGS84) is a geogprahic coordiante system used extensively. 
-This is the coordinate reference system used by global positioning systems (GPS). 
-It's coordinates longitude and latitude, are angular and measured in degrees, minutes, and seconds. 
-
-
-### NAD83
-
-
-### UTM
--->
+</section>
+</section>
+<section id="crs-codes" class="level2">
+<h2 class="anchored" data-anchor-id="crs-codes">CRS codes</h2>
+<p>There are thousands of CRSs in use. Listing every component of a CRS (ellipsoid, datum, projection, and units) each time we need to refer to one would be impractical. Instead, each CRS is usually identified by a short code. The most common codes come from the <a href="https://epsg.org/home.html">EPSG Geodetic Parameter Dataset</a>, a public registry of CRSs maintained by the International Association of Oil &amp; Gas Producers (IOGP). An <strong>EPSG code</strong> is written as <code>EPSG:</code> followed by a number, for example EPSG:4326. Python packages like <code>geopandas</code> use these codes to know exactly which CRS our data is in.</p>
+<p>These are some CRSs we will encounter often:</p>
+<ul>
+<li><p><strong>EPSG:4326 - WGS 84.</strong> The World Geodetic System 1984 (WGS 84) is a geographic CRS designed to work for the whole Earth. It is the CRS used by the Global Positioning System (GPS), and its coordinates are latitude and longitude in degrees.</p></li>
+<li><p><strong>EPSG:4269 - NAD83.</strong> The North American Datum of 1983 (NAD83) is a geographic CRS optimized for North America. Many US government datasets, like the ones from the US Census Bureau, use it.</p></li>
+<li><p><strong>EPSG:26911 - NAD83 / UTM zone 11N.</strong> This is a projected CRS built on the NAD83 datum. It uses the Universal Transverse Mercator (UTM) projection, which divides the Earth into 60 zones, each 6 degrees of longitude wide. Zone 11N covers most of Southern California, including Santa Barbara. Its coordinates are eastings and northings in meters.</p></li>
+</ul>
+<p>Notice that the name of a projected CRS usually starts with the name of the geographic CRS it is built on, followed by the projection.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Looking up a CRS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Websites like <a href="https://epsg.io/">epsg.io</a> and <a href="https://spatialreference.org/">spatialreference.org</a> let you search for a CRS by its code or name. For example, <a href="https://epsg.io/4326">epsg.io/4326</a> shows the details of WGS 84 and the area of the Earth where it can be used.</p>
+</div>
+</div>
 <!--
 ## Matching CRS
 
-- Which CRS to chose
+- Which CRS to choose
 
 ## Resources
 
-📖 [Choosing the Right Map Projection by  Michael Corey](https://source.opennews.org/articles/choosing-right-map-projection/)
+📖 [Choosing the Right Map Projection by Michael Corey](https://source.opennews.org/articles/choosing-right-map-projection/)
 
 📖 [NCEAS Overview of Coordinate Reference Systems (CRS) in R](https://www.nceas.ucsb.edu/sites/default/files/2020-04/OverviewCoordinateReferenceSystems.pdf)
 
@@ -580,7 +589,6 @@ TODO: wrap up
 -->
 
 
-</section>
 </section>
 </section>
 

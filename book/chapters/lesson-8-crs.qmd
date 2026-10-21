@@ -14,17 +14,17 @@ Since the Earth does not have lines and numbers etched on it, we humans need to 
 A way to solve this is to create a **coordinate reference system (CRS)**. 
 A CRS is, at its core, a way to represent places on the Earth as coordinates.
 
-To understand what the components of a CRS are, it can be useful to think of the process we would undergo to match places on the Earth to coordinates that represent them.
+To understand what the components of a CRS are, it can be useful to think of the process we would go through to match places on the Earth to coordinates that represent them.
 
 ### Step 1. Pick an ellipsoid
 
 Think of the Earth. 
 Our planet is not a perfect sphere. 
-Besides its rugged surface with high mountains and deep ocean trenches, the shape of the Earth is not round. 
+Besides its rugged surface with high mountains and deep ocean trenches, its overall shape is not perfectly round either. 
 Due to the Earth's rotation, the planet is slightly wider at the Equator. 
 Thus, a sphere is not the best way to model the shape of the Earth. 
 Instead, we use an **ellipsoid**. 
-Think of an [ellipsoid](https://en.wikipedia.org/wiki/Ellipsoid) as a sphere that has been flattened a bit, thus making it wider across one axis. 
+Think of an [ellipsoid](https://en.wikipedia.org/wiki/Ellipsoid) as a sphere that has been slightly flattened at the poles. 
 This is the first step for creating a CRS: picking an ellipsoid, a.k.a. picking a shape for the Earth. 
 The ellipsoid used to represent the Earth's shape has changed across time and it may also change depending on the application.
 
@@ -36,7 +36,7 @@ THIS IS A DIAGRAM OF BUMPY EARTH AND ELLIPSOID NEXT TO EACH OTHER
 ### Step 2. Align the ellipsoid with Earth's locations to obtain a datum
 
 The ellipsoid is an abstract mathematical object on which we can locate points by using angles. 
-The coordinate system on the ellipsoid is (angles from $x$, angles from $y$). 
+The coordinate system on the ellipsoid uses two angles: latitude (north or south of the Equator) and longitude (east or west of the prime meridian). 
 
 ![Latitude and longitude as angular coordinates on the ellipsoid. [Image source: Coordinate systems and map projections - University of Twente](https://ltb.itc.utwente.nl/498/learningoutcome/show/59273)](/book/images/lesson-8/lat_lon_ellipsoid.jpg){width=50%}
 
@@ -53,9 +53,9 @@ Generally speaking, a **geodetic datum**, or just a **datum**, is how we are ali
 ::: {.callout-caution}
 ## Datums may change across time and applications
 Geographers and cartographers have created and used *many* datums across time and applications. 
-Sometimes datum refers both to a choice of ellipsoid *and* how to align it to the Earth. 
+A datum refers both to a choice of ellipsoid *and* how to align it to the Earth. 
 More importantly, **different datums are used to increase the accuracy of representing different regions of Earth**. 
-At the [GIS wiki](http://wiki.gis.com/wiki/index.php/Datum_(geodesy)) you can see a list of names of different datums optimized for different regions. 
+On [Wikipedia](https://en.wikipedia.org/wiki/Geodetic_datum#Examples) you can see examples of datums optimized for different regions. 
 :::
 
 ### Step 3. Obtain a geographic CRS with lat/lon coordinates for all the Earth
@@ -99,23 +99,35 @@ These new coordinates are usually called **eastings**, when referring to the eas
 
 ![A projected CRS gives planar coordinates.](/book/images/lesson-8/projected_crs.png){width="80%"}
 
-<!-- 
-TODO
-## Common CRSs
+## CRS codes
 
-These are some commonly encountered geographic coordinate reference systems. 
+There are thousands of CRSs in use. 
+Listing every component of a CRS (ellipsoid, datum, projection, and units) each time we need to refer to one would be impractical. 
+Instead, each CRS is usually identified by a short code. 
+The most common codes come from the [EPSG Geodetic Parameter Dataset](https://epsg.org/home.html), a public registry of CRSs maintained by the International Association of Oil & Gas Producers (IOGP). 
+An **EPSG code** is written as `EPSG:` followed by a number, for example EPSG:4326. 
+Python packages like `geopandas` use these codes to know exactly which CRS our data is in.
 
-### WGS84
-The World Geodetic System 1984 (WGS84) is a geographic coordinate system used extensively. 
-This is the coordinate reference system used by global positioning systems (GPS). 
-Its coordinates, longitude and latitude, are angular and measured in degrees, minutes, and seconds. 
+These are some CRSs we will encounter often:
 
+- **EPSG:4326 - WGS 84.** The World Geodetic System 1984 (WGS 84) is a geographic CRS designed to work for the whole Earth. 
+It is the CRS used by the Global Positioning System (GPS), and its coordinates are latitude and longitude in degrees.
 
-### NAD83
+- **EPSG:4269 - NAD83.** The North American Datum of 1983 (NAD83) is a geographic CRS optimized for North America. 
+Many US government datasets, like the ones from the US Census Bureau, use it. 
 
+- **EPSG:26911 - NAD83 / UTM zone 11N.** This is a projected CRS built on the NAD83 datum. 
+It uses the Universal Transverse Mercator (UTM) projection, which divides the Earth into 60 zones, each 6 degrees of longitude wide. 
+Zone 11N covers most of Southern California, including Santa Barbara. 
+Its coordinates are eastings and northings in meters.
 
-### UTM
--->
+Notice that the name of a projected CRS usually starts with the name of the geographic CRS it is built on, followed by the projection.
+
+::: {.callout-tip}
+## Looking up a CRS
+Websites like [epsg.io](https://epsg.io/) and [spatialreference.org](https://spatialreference.org/) let you search for a CRS by its code or name. 
+For example, [epsg.io/4326](https://epsg.io/4326) shows the details of WGS 84 and the area of the Earth where it can be used.
+:::
 
 <!--
 ## Matching CRS

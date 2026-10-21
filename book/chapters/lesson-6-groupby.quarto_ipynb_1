@@ -1,0 +1,446 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: 5 Grouping\n",
+        "toc-title: In this lesson\n",
+        "fig-cap-location: margin\n",
+        "---\n",
+        "\n",
+        "<!-- TODO: improve introduction -->\n",
+        "In this lesson we will go over the split-apply-combine strategy and the `groupby()` function.\n",
+        "\n",
+        "This lesson is based on the [R lesson on summary statistics using group-by and summarize](https://learning.nceas.ucsb.edu/2023-06-delta/session_11.html#summary-statistics-using-group_by-and-summarize) @do-linh_open_2023 co-developed at the NCEAS Learning Hub.\n",
+        "\n",
+        "## Learning objectives\n",
+        "\n",
+        "By the end of this lesson, students will be able to: \n",
+        "\n",
+        "- Understand and apply the Split-Apply-Combine strategy to analyze grouped data.\n",
+        "- Use `groupby()` to split a `pandas.DataFrame` by one or more columns.\n",
+        "- Calculate summary statistics for groups in a `pandas.DataFrame`.\n",
+        "- Use method chaining for readable data analysis.\n",
+        "- Explain how `groupby()` handles NA values and choose between `count()` and `size()` to count observations in each group.\n",
+        "\n",
+        "## About the data\n",
+        "\n",
+        "For this lesson we will use the Palmer Penguins dataset @palmerpenguins developed by Drs. Allison Horst, Alison Hill and Kristen Gorman. This dataset contains size measurements for three penguin species in the Palmer Archipelago, Antarctica during 2007, 2008, and 2009. \n",
+        "\n",
+        "![The Palmer Archipelago penguins. Artwork by Dr. Allison Horst.](/book/images/lesson-5/penguins-logo.png)\n",
+        "\n",
+        "The dataset has 344 rows and 8 columns. \n",
+        "Let's start by loading the data:"
+      ],
+      "id": "25ccf2a1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "\n",
+        "# Load Palmer penguins data\n",
+        "URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'\n",
+        "penguins = pd.read_csv(URL)\n",
+        "\n",
+        "penguins.head()"
+      ],
+      "id": "792ecd89",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Summary statistics\n",
+        "\n",
+        "It is easy to get summary statistics for each column in a `pandas.DataFrame` by using methods such as:\n",
+        "\n",
+        "- `sum()`: sum values in each column,\n",
+        "- `count()`: count non-NA values in each column,\n",
+        "- `size()`: count the number of values in a column (including NA values),\n",
+        "- `min()` and `max()`: get the minimum and maximum value in each column,  \n",
+        "- `mean()` and `median()`: get the mean and median value in each column,\n",
+        "- `std()` and `var()`: get the standard deviation and variance in each column.\n",
+        "\n",
+        "#### Example"
+      ],
+      "id": "589a29a4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Get the number of non-NA values in each column \n",
+        "penguins.count()"
+      ],
+      "id": "2daadb49",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Get minimum value in each column with numerical values\n",
+        "penguins.select_dtypes('number').min()"
+      ],
+      "id": "0a752dd5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "TO DO:\n",
+        "Add a note about select_dtypes\n",
+        "-->\n",
+        "\n",
+        "## Grouping\n",
+        "\n",
+        "Our penguins data is naturally split into different groups: there are three different species, two sexes (with some missing values), and three islands. Often, we want to calculate a certain statistic for each group. For example, suppose we want to calculate the average flipper length per species. How would we do this \"by hand\"?\n",
+        "\n",
+        "0. We start with our data and notice there are multiple species in the `species` column.\n",
+        "\n",
+        "1. We split our original table to group all observations from the same species together.\n",
+        "\n",
+        "2. We calculate the average flipper length for each of the groups we formed.\n",
+        "\n",
+        "3. Then we combine the values for average flipper length per species into a single table.\n",
+        "\n",
+        "This is known as the **Split-Apply-Combine strategy**. This strategy follows the three steps we explained above:\n",
+        "\n",
+        "1. **Split**: Split the data into logical groups (e.g. species, sex, island, etc.)\n",
+        "\n",
+        "2. **Apply**: Calculate some summary statistic on each group (e.g. average flipper length by species, number of individuals per island, body mass by sex, etc.)\n",
+        "\n",
+        "3. **Combine**: Combine the statistic calculated on each group back together.\n",
+        "\n",
+        ":::{.column-page}\n",
+        "![Split-apply-combine to calculate mean flipper length](/book/images/lesson-6/split-apply-combine-penguins-diagram.png)\n",
+        ":::\n",
+        "\n",
+        "For a `pandas.DataFrame` or `pandas.Series`, we can use the [`groupby()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html) method to split (i.e. group) the data into different categories. \n",
+        "\n",
+        "The general syntax for `groupby()` is\n",
+        "\n",
+        "```python\n",
+        "df.groupby(columns_to_group_by).summary_method()\n",
+        "```\n",
+        "Most often,\n",
+        "`columns_to_group_by` is a single column name (a string) or a list of column names. The unique values of the column (or columns) will be used as the groups of the data frame.\n",
+        "\n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "If we don't use `groupby()` and directly apply the `mean()` method to our flipper length column, we obtain the average of all the values in the column:"
+      ],
+      "id": "cdf8f6d2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "penguins['flipper_length_mm'].mean()"
+      ],
+      "id": "63099db8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To get the mean flipper length by species we first group our dataset by the species column's values. However, if we just use the `groupby()` method without specifying what we wish to calculate on each group, not much happens up front:"
+      ],
+      "id": "ba01770e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "penguins.groupby('species')['flipper_length_mm']"
+      ],
+      "id": "909ee792",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We get a `GroupBy` object, which is an intermediate step. It doesn't perform the actual calculations until we specify an operation:"
+      ],
+      "id": "44e5c976"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Average flipper length per species\n",
+        "penguins.groupby('species')['flipper_length_mm'].mean()"
+      ],
+      "id": "177821d5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Let's recap what happened in that line (the `.` can be read as \"and then...\"):\n",
+        "\n",
+        "- start with the `penguins` data frame, and then...\n",
+        "- use `groupby()` to group the data frame by `species` values, and then...\n",
+        "- select the `'flipper_length_mm'` column, and then...\n",
+        "- calculate the `mean()` of this column with respect to the groups.\n",
+        "\n",
+        "Notice that the name of the series is the same as the column on which we calculated the summary statistic. We can easily update this using the `rename()` method:"
+      ],
+      "id": "01c49718"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Average flipper length per species\n",
+        "avg_flipper = (penguins.groupby('species')\n",
+        "                        ['flipper_length_mm']\n",
+        "                        .mean()\n",
+        "                        .rename('mean_flipper_length')\n",
+        "                        .sort_values(ascending=False)\n",
+        "                        )\n",
+        "avg_flipper"
+      ],
+      "id": "2e8614d7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<!--\n",
+        "To choose a new name for the result, we can use the `agg()` method with a **named aggregation**. The general syntax is\n",
+        "\n",
+        "```python\n",
+        "df.groupby(columns_to_group_by).agg(new_column_name=('column', 'summary_method'))\n",
+        "```\n",
+        "\n",
+        "The result is a data frame with one column for each named aggregation:\n",
+        "\n",
+        "```python\n",
+        "# Average flipper length per species\n",
+        "avg_flipper_species = (penguins.groupby('species')\n",
+        "                        .agg(mean_flipper_length=('flipper_length_mm', 'mean'))\n",
+        "                        .sort_values('mean_flipper_length', ascending=False)\n",
+        "                        )\n",
+        "avg_flipper_species\n",
+        "```\n",
+        "\n",
+        "Since the result is a data frame, we need to say which column to sort by in `sort_values()`.\n",
+        "\n",
+        "With `agg()` we can also calculate several summary statistics at once:\n",
+        "\n",
+        "```python\n",
+        "# Several summary statistics per species\n",
+        "penguins.groupby('species').agg(mean_flipper_length=('flipper_length_mm', 'mean'),\n",
+        "                                max_body_mass=('body_mass_g', 'max'),\n",
+        "                                n_penguins=('species', 'size'))\n",
+        "```\n",
+        "-->\n",
+        "\n",
+        "We can also group by combinations of columns. \n",
+        "\n",
+        "#### Example\n",
+        "\n",
+        "Suppose we want to know the mean flipper length, this time by examining separately penguin species surveyed on each island. "
+      ],
+      "id": "0122e3d4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Average flipper length per species and island\n",
+        "avg_flipper_species_island = (penguins.groupby(['species','island'])\n",
+        "                                ['flipper_length_mm']\n",
+        "                                .mean()\n",
+        "                                .rename('mean_flipper_length')\n",
+        "                                .sort_values(ascending=False)\n",
+        "                                )\n",
+        "avg_flipper_species_island"
+      ],
+      "id": "59108ca8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Grouping and NA values\n",
+        "\n",
+        "Notice first that 11 penguins have no recorded sex. We can check this using:\n",
+        "\n",
+        "- `size`: returns the number of observations in a `pandas.Series`\n",
+        "- `count()`: returns the number of non-NA observations in the series"
+      ],
+      "id": "1a36d5a6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Number of NA observations\n",
+        "penguins['sex'].size - penguins['sex'].count()"
+      ],
+      "id": "78438b23",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "By default, `groupby()` leaves out the rows where the grouping column has NA values. When we group by `sex` and count the number of observations (rows) we are left with, the 11 NA values are not included:"
+      ],
+      "id": "694b5e26"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "penguins.groupby('sex').size()"
+      ],
+      "id": "018f1d6a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To keep the NA values as their own group, we use the `dropna=False` parameter:"
+      ],
+      "id": "58475331"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "penguins.groupby('sex', dropna=False).size()"
+      ],
+      "id": "162eb7fe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Check-ins\n",
+        "\n",
+        ":::{.callout-tip }\n",
+        "## Check-in\n",
+        "We are interested in knowing the number of penguins surveyed on each island in different years.\n",
+        "\n",
+        "1. Run\n",
+        "\n",
+        "   ```python\n",
+        "   penguins.groupby(['island','year']).count()\n",
+        "   ```\n",
+        "\n",
+        "   and\n",
+        "\n",
+        "   ```python\n",
+        "   penguins.groupby(['island','year']).size()\n",
+        "   ```\n",
+        "\n",
+        "2. Discuss the differences between each output. What method would give you the number of penguins surveyed on each island and year combination?\n",
+        ":::\n",
+        "\n",
+        "\n",
+        "<!---\n",
+        "When we use `count()` we get the count of non-NA values for each column across each combination of island and year.\n",
+        "\n",
+        "The counts for a given combination of island and year are not the same in every column: `count()` skips NA values, so columns with missing data have lower counts. \n",
+        "\n",
+        "To count the number of rows in each group, regardless of NA values, we use the `size()` method.\n",
+        "\n",
+        "--->\n",
+        "\n",
+        "Let's say we want to plot the surveyed population per year and island. We could then use method chaining to do this:"
+      ],
+      "id": "998fe72f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "(penguins.groupby(['island','year'])\n",
+        "         .size()\n",
+        "         .sort_values()\n",
+        "         .plot(kind='barh',\n",
+        "                title='Penguins surveyed at the Palmer Archipelago',\n",
+        "                xlabel='Number of penguins',\n",
+        "                ylabel='Island, Year')\n",
+        "         )"
+      ],
+      "id": "f35c1261",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::{.callout-tip }\n",
+        "## Check-in\n",
+        "\n",
+        "(1) Use the `max()` method to calculate the maximum value of a penguin's body mass by year and species.\n",
+        "\n",
+        "<!--\n",
+        "```python\n",
+        "(penguins.groupby(['year','species'])\n",
+        "        ['body_mass_g'].max()\n",
+        "        .rename('max_body_mass')\n",
+        "        )\n",
+        "```\n",
+        "-->\n",
+        "\n",
+        "(2) Use (1) to display the highest body masses per year and species as a bar plot in descending order.\n",
+        "\n",
+        "<!--\n",
+        "```python\n",
+        "(penguins.groupby(['year','species'])\n",
+        "        ['body_mass_g']\n",
+        "        .max()\n",
+        "        .sort_values()\n",
+        "        .plot(kind='barh')\n",
+        "        )\n",
+        "```\n",
+        "-->\n",
+        ":::"
+      ],
+      "id": "c17de105"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "eds220-env",
+      "language": "python",
+      "display_name": "EDS-220 env",
+      "path": "/Users/carmengalazgarcia/Library/Jupyter/kernels/eds220-env"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
