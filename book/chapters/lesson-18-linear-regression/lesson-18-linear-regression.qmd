@@ -2,7 +2,15 @@
 
 In this lesson we will learn how to perform a simple linear regression by examining the counts, weight, and size measurements of juvenile snowshoe hares (*Lepus americanus*) observed at the Bonanza Creek Experimental Forest from 1998 to 2012 @kielland_snowshoe_2017. 
 
-<!--TODO: include learning objectives -->
+## Learning objectives
+
+By the end of this lesson, students will be able to:
+
+- Explore a dataset's values against its metadata and document data cleaning decisions.
+- Create plots with multiple layers using `matplotlib`'s `fig` and `ax`.
+- Fit a simple linear regression with `statsmodels` using a formula.
+- Interpret the intercept, slope and $R^2$ of a linear regression model.
+- Use residuals to assess whether a linear model is a good description of the data.
 
 ## About the data
 
@@ -118,6 +126,92 @@ Consider the following questions:
 
 <!-- While these are absolute counts, these numbers are also impacted by effort. Moving forward I would suggest conducting the trappings on the same dates every year and space these times across different seasons. For example the first two weeks of each month every year. I imagine juveniles are mostly present during Spring, but with climate change it is possible Spring weather does not come at the same dates in 2012 as in 1999, so there might be a risk of undercounting if the counts are done during a fixed period of time every year. I would also suggest keeping the number and location of traps constant over the years. -->
 
+## Plotting with `matplotlib`
+
+### `matplotlib`'s `fig` and `ax`
+
+Later in this lesson we will want to plot our linear model together with our data. To make visualizations where we add different layers to a graph and customize it, we will use the `matplotlib` Python library for creating visualizations. 
+We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
+
+Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
+The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  
+
+![Image source: [Getting Started with Matplotlib.](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
+
+To create a new blank figure:
+
+1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function
+2. Display the figure using `plt.show()`:
+
+```{python}
+# Initialize empty figure (fig) and axis (ax)
+fig, ax = plt.subplots()
+
+# Display figure
+plt.show()
+```
+
+Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+
+### Adding a layer
+
+When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
+The general syntax to plot data from a data frame `df` onto an axis is:
+```python
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Plot df on the ax axis
+df.plot(ax=ax,  # Add plot to axis
+        ...)    # Other arguments for plot function
+
+# Display figure
+plt.show()
+``` 
+
+For example, let's add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axis:
+
+```{python}
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Add scatter plot of hares' data to our figure's axis
+obs_juv_adult.plot(kind='scatter', x='hindft', y='weight', ax=ax)
+
+# Display figure
+plt.show()
+```
+
+### Customization 
+
+Matplotlib allows for a lot of customization. 
+Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
+The following diagram shows some examples of elements in the axis that can be updated.
+
+![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
+
+For example, we can update the title and axis labels of our previous plot like this:
+
+```{python}
+# Initialize empty figure and axis
+fig, ax = plt.subplots()
+
+# Add data to axis
+obs_juv_adult.plot(kind='scatter', 
+                   x='hindft', 
+                   y='weight', 
+                   alpha=0.5,     # Adjust transparency
+                   ax=ax)         # Add plot to axis
+
+# Update axis
+ax.set_title('Hind foot length and weight of snowshoe hares')
+ax.set_xlabel('Hind foot length (mm)')
+ax.set_ylabel('Weight (g)')
+
+# Display figure
+plt.show()
+```
+
 ## Linear regression
 
 For our analysis we want to investigate possible relations between hind foot length and weight for juvenile hares.
@@ -130,6 +224,8 @@ juveniles_weight_hindft = obs_juv_adult[obs_juv_adult['age'] == 'juvenile'].drop
 print("Number of juvenile hare captures with hind foot and weight measurements:", len(juveniles_weight_hindft))
 juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
 ```
+
+Remember from our bar plot that the number of captures changed a lot from year to year: our regression combines juveniles from all years, and almost a third of them (79 of 265) were captured in 1999.
 
 We can see there seems to be a linear trend between the weight and hind foot length variables, though as the hind foot length increases the variability does too. 
 
@@ -210,7 +306,7 @@ Answer the following questions:
 <!-- 
 We can also get all of this information at once with the model's `summary()` method, which prints with tons of information:
 
-```{python}
+```python
 model.summary()
 ```
  -->
@@ -218,69 +314,6 @@ model.summary()
 
 A reasonable next step would be to plot our linear model together with our data. To do this, we need to add two layers to the same graph: the data points and the regression line.
 
-### `matplotlib`'s `fig` and `ax`
-
-To make visualizations where we add different layers to a graph and customize it, we will use the `matplotlib` Python library for creating visualizations. 
-We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
-
-Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
-The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  
-
-![Image source: [Getting Started with Matplotlib.](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
-
-To create a new blank figure:
-
-1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function
-2. Display the figure using `plt.show()`:
-
-```{python}
-# Initialize empty figure (fig) and axis (ax)
-fig, ax = plt.subplots()
-
-# Display figure
-plt.show()
-```
-
-Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
-
-### Adding a layer
-
-When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
-The general syntax to plot data from a data frame `df` onto an axis is:
-```python
-# Initialize empty figure and axis
-fig, ax = plt.subplots()
-
-# Plot df on the ax axis
-df.plot(ax=ax,  # Add plot to axis
-        ...)    # Other arguments for plot function
-
-# Display figure
-plt.show()
-``` 
-
-The first layer that we want to add to our axis is the juvenile hares' data:
-
-```{python}
-# Initialize empty figure and axis
-fig, ax = plt.subplots()
-
-# Add scatter plot of juvenile hares' data to our figure's axis
-juveniles_weight_hindft.plot(kind='scatter', x='hindft', y='weight', ax=ax)
-
-# Display figure
-plt.show()
-```
-
-### Customization 
-
-Matplotlib allows for a lot of customization. 
-Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
-The following diagram shows some examples of elements in the axis that can be updated.
-
-![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
-
-Now let's add the regression line as a second layer and customize our graph. 
 To draw the line we use the axis's `plot()` method, `ax.plot(x_values, y_values)`, which connects the points given by the lists of $x$ and $y$ values. 
 A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, $\hat{y} = \hat\beta_0 + \hat\beta_1 x$:
 
@@ -372,6 +405,10 @@ None of these patterns means the model is useless: the line still captures the o
 - For longer hind feet, the residuals split into two groups. Looking at the columns in our data, which variables could explain these groups?
 - Each row in our data is a capture, and some hares were captured more than once. Are two captures of the same hare independent observations? How could this affect our model?
 :::
+
+## Wrap-up
+
+In this lesson we fit a simple linear regression of juvenile snowshoe hare weight on hind foot length. Before modeling, we explored the data and documented how we handled the `age` values that didn't match the metadata. We then used `statsmodels` to estimate the intercept and slope, measured the fit with $R^2$, and plotted the fitted line with `matplotlib`. Finally, the residuals showed that while the line captures the overall trend, the spread grows with hind foot length and other variables may also affect weight. Fitting a model is only the first step: checking it against the data tells us how far we can trust it!
 
 
 <!--
