@@ -19,11 +19,10 @@ Let's start by loading the data and taking a very high-level look at it:
 
 ```{python}
 import os
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.linear_model import LinearRegression
+import statsmodels.formula.api as smf
 ```
 
 ```{python}
@@ -134,49 +133,50 @@ juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)
 
 We can see there seems to be a linear trend between the weight and hind foot length variables, though as the hind foot length increases the variability does too. 
 
-Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) model from the [`scikit-learn`](https://scikit-learn.org/stable/index.html) library. 
+Let's investigate whether a linear model is an adequate way to describe this data. To do this we will use the [`statsmodels`](https://www.statsmodels.org/stable/index.html) library, which has tools for fitting statistical models. At the top of the notebook we imported it as `smf`.
 
-Remember that the equation of the linear model is given by
+Remember that in statistical notation the linear regression model is 
+
+$$y = \beta_0 + \beta_1 x + \epsilon,$$ 
+
+where $x$ = the **predictor** variable, $y$ is the **response** variable, and  $\epsilon \sim Normal(0, \sigma)$. Once we estimate the coefficients from the data, the equation of the fitted line is
 
 $$\hat{y} = \hat\beta_0 + \hat\beta_1 x, $$
 
 where
 
-- $x$ = input variable
-- $\hat{y}$ = **estimated $y$ value** at $x$ from the linear model 
-- $\hat\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value of $y$ when $x=0$
-- $\hat\beta_1$ = the **slope** of the linear model, this is the estimated difference in the predicted value $\hat{y}$ per unit of $x$.
+- $\hat{y}$ = the **estimated value of the response** $y$ at $x$ from the linear model 
+- $\hat\beta_0$ = the **$y$-intercept** of the linear model, this is interpreted as the estimated average value of the response when the predictor is $x=0$
+- $\hat\beta_1$ = the **slope** of the linear model, this is the estimated difference in the response $\hat{y}$ per unit of the predictor $x$.
 
 If you need a refresher about how a linear regression works, [click here](https://openintrostat.github.io/ims/model-slr.html) for a great resource. 
 
-The trickiest part of fitting the model is to get the data in the required shape. From the [`LinearRegression` documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html) we see that:
+To fit the model we use the [`ols()`](https://www.statsmodels.org/stable/generated/statsmodels.formula.api.ols.html) function, short for **ordinary least squares**, the method that finds the line that minimizes the sum of the squared vertical distances between the data points and the line. It takes two arguments:
 
-- input data (the x-values, independent variable, or training data) shape should be `(n_samples, 1)`. The 1 comes from having a single feature modeling the output data.
-- output data (the y-values, dependent variable, or target data) shape should be `(n_samples,)`.
+- a **formula** of the form `'response ~ predictor'`, a string that we can read as "response explained by predictor". The names in the formula are the names of the columns in our data frame. 
+- `data`: the data frame with those columns.
 
-Let's select and reshape the input and output data accordingly:
+`ols()` sets up the model, and calling `fit()` on it estimates the coefficients:
 
 ```{python}
-# x-values
-X = np.array(juveniles_weight_hindft['hindft']).reshape((-1, 1))   # Reshape to (n_samples, 1)
-print("Input data shape:", X.shape)
-
-# y-values
-y = np.array(juveniles_weight_hindft['weight'])    # Shape is (n_samples,)
-print("Output data shape:", y.shape)
+# Fit model: weight explained by hind foot length
+model = smf.ols('weight ~ hindft', data=juveniles_weight_hindft).fit()
 ```
 
-Next, we create a `LinearRegression` instance and fit it to our data to create a `model`. 
+The estimated coefficients are stored in the model's `params` attribute, a `pandas.Series` whose index has the names of the coefficients:
 
 ```{python}
-# Fit model
-model = LinearRegression().fit(X, y)
+model.params
+```
 
+The `Intercept` value is $\hat\beta_0$ and the `hindft` value is $\hat\beta_1$, the slope for the hind foot length. Let's save them in variables to use them later:
+
+```{python}
 # Retrieve intercept and slope
-intercept = model.intercept_
+intercept = model.params['Intercept']
 print("y-intercept:", intercept)
 
-slope = model.coef_[0]
+slope = model.params['hindft']
 print("Slope:", slope)
 ```
 
@@ -191,22 +191,29 @@ b. What is the estimated change in weight for each millimeter increase in hind f
 c. How would you use the linear model to estimate the weight of a juvenile hare with hind foot length of 90 mm?
 :::
 
-We can also look at the **coefficient of determination**, $R^2$. This is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the outcome variable $y$ that is explained by the least squares line with the variable $x$.  
+We can also look at the **coefficient of determination**, $R^2$. This is between 0 and 1, with $R^2=1$ describing a perfect fit of the model to the data. The $R^2$ value is interpreted as the proportion of variance in the response $y$ that is explained by the least squares line with the predictor $x$.  
+
+This value is stored in the model's `rsquared` attribute:
 
 ```{python}
-# Calculate R^2
-R_sq = model.score(X, y)
-print("R^2:", R_sq)
+print("R^2:", model.rsquared)
 ```
 
 :::{.callout-tip}
 # Check-in
 Answer the following questions: 
 
-- Does a linear model of weight with respect to hind foot length account completely for the change in the dependent variable? 
+- Does a linear model of weight with respect to hind foot length account completely for the change in the response? 
 
 - How would you further explore whether this model is a good fit for the data?
 :::
+<!-- 
+We can also get all of this information at once with the model's `summary()` method, which prints with tons of information:
+
+```{python}
+model.summary()
+```
+ -->
 
 
 A reasonable next step would be to plot our linear model together with our data. To do this, we need to add two layers to the same graph: the data points and the regression line.
@@ -310,21 +317,35 @@ plt.show()
 
 ## Checking the residuals
 
-$R^2$ tells us how much of the variation the model explains, but not whether a straight line is the right shape for the data. To check this, we look at the **residuals**. A residual is the difference between an observed value and the value predicted by the model:
+$R^2$ tells us how much of the variation the model explains, but not whether a straight line is the right shape for the data. One check for this is looking at the **residuals**. A residual is the difference between an observed value and the value predicted by the model:
 
 $$e_i = y_i - \hat{y}_i.$$
 
-If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's calculate the residuals and plot them against the hind foot length. Since `residuals` is a NumPy array and not a column of our data frame, we plot them with the axis's `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:
+The residuals are the $\epsilon$ in our model equation, so the model assumes they are normally distributed around 0, with the same standard deviation $\sigma$ for every value of the predictor. `statsmodels` calculates the residuals for us and stores them in the model's `resid` attribute. 
 
 ```{python}
-# Calculate residuals: observed minus predicted weight
-residuals = y - model.predict(X)
+model.resid
+```
 
+Let's start with a histogram to see their distribution:
+
+```{python}
+model.resid.plot(kind='hist', 
+                 bins=30, 
+                 title='Distribution of residuals', 
+                 xlabel='Residual (g)')
+```
+
+The residuals are centered near 0 and roughly bell-shaped, but with a long tail of negative residuals: some hares weigh much less than the line predicts. Let's see where these residuals come from.
+
+If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axis's `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:
+
+```{python}
 # Initialize empty figure and axis
 fig, ax = plt.subplots()
 
 # Add residuals to axis
-ax.scatter(juveniles_weight_hindft['hindft'], residuals, alpha=0.5)
+ax.scatter(juveniles_weight_hindft['hindft'], model.resid, alpha=0.5)
 
 # Add reference line at 0
 ax.axhline(0, color='darkred', linestyle='--')
@@ -342,9 +363,15 @@ The residuals show three patterns:
 
 - **The spread grows with hind foot length.** For short hind feet most residuals are within about 100 g of 0, while for the longest hind feet many are more than 300 g away. This is the increasing variability we noticed in the first scatter plot. It means the model's predictions are less precise for larger juveniles.
 - **The residuals are not centered on 0 everywhere.** For hind feet shorter than about 100 mm most residuals are negative (the line overestimates weight), while for medium hind feet they are mostly positive (the line underestimates weight). This suggests that the relationship between hind foot length and weight is not exactly linear.
-- **For longer hind feet the residuals split into two groups**, one above and one below the line. This could mean that another variable also affects weight. Exercise (c) above asks you to think about which one.
+- **For longer hind feet the residuals split into two groups**, one above and one below the line. This could mean that another variable also affects weight.
 
 None of these patterns means the model is useless: the line still captures the overall trend. But they are a reminder that a single $R^2$ value doesn't tell the whole story, and that we should be careful when using the model to make predictions, especially for larger juveniles.
+
+:::{.callout-tip}
+# Check-in
+- For longer hind feet, the residuals split into two groups. Looking at the columns in our data, which variables could explain these groups?
+- Each row in our data is a capture, and some hares were captured more than once. Are two captures of the same hare independent observations? How could this affect our model?
+:::
 
 
 <!--
