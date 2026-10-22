@@ -30,7 +30,7 @@
         "\n",
         "Let's start by loading the data and taking a very high-level look at it:\n"
       ],
-      "id": "10a23849"
+      "id": "cce433af"
     },
     {
       "cell_type": "code",
@@ -42,7 +42,7 @@
         "\n",
         "import statsmodels.formula.api as smf"
       ],
-      "id": "1d8cc1b7",
+      "id": "a0fa8399",
       "execution_count": null,
       "outputs": []
     },
@@ -53,7 +53,7 @@
         "obs = pd.read_csv(os.path.join('data','55_Hare_Data_2012.txt'))\n",
         "obs.head()"
       ],
-      "id": "55b2e207",
+      "id": "aed31233",
       "execution_count": null,
       "outputs": []
     },
@@ -63,7 +63,7 @@
       "source": [
         "obs.info()"
       ],
-      "id": "c063cbda",
+      "id": "8e2980fa",
       "execution_count": null,
       "outputs": []
     },
@@ -75,7 +75,7 @@
         "\n",
         "To facilitate our data wrangling we convert the `date` column to a `datetime` type:"
       ],
-      "id": "3601a0ae"
+      "id": "86207db4"
     },
     {
       "cell_type": "code",
@@ -84,7 +84,7 @@
         "obs['date'] = pd.to_datetime(obs['date'])\n",
         "print(obs['date'].dtype)"
       ],
-      "id": "667c4276",
+      "id": "5865b0c6",
       "execution_count": null,
       "outputs": []
     },
@@ -108,7 +108,7 @@
         "\n",
         "Let's see the data in this column:"
       ],
-      "id": "665dcdce"
+      "id": "aa4f6ebd"
     },
     {
       "cell_type": "code",
@@ -117,7 +117,7 @@
         "# Examine unique values and counts in age column\n",
         "pd.DataFrame(obs['age'].value_counts(dropna=False))"
       ],
-      "id": "c88a79fc",
+      "id": "dacccdd5",
       "execution_count": null,
       "outputs": []
     },
@@ -129,7 +129,7 @@
         "\n",
         "Since the actual data has values that are not included in the metadata, this is the time to make a decision and document it. Since the metadata states that 'a' indicates adult and 'j' indicates juvenile, we will only keep observations that have 'a' or 'j' (either capitalized or not) as part of the age value. "
       ],
-      "id": "5b5e96dd"
+      "id": "c8b10017"
     },
     {
       "cell_type": "code",
@@ -143,7 +143,7 @@
         "obs_juv_adult = obs[obs['age'].isin(['juvenile', 'adult'])].copy()\n",
         "print(\"Number of juvenile and adult hare observations (captures):\", len(obs_juv_adult))"
       ],
-      "id": "e852be17",
+      "id": "58a54b6f",
       "execution_count": null,
       "outputs": []
     },
@@ -155,7 +155,7 @@
         "\n",
         "To better understand our data we examine the distribution of hare age across years. Let's wrangle our data a bit to get there:"
       ],
-      "id": "30f1f64b"
+      "id": "02b9091a"
     },
     {
       "cell_type": "code",
@@ -168,7 +168,7 @@
         "obs_per_year = obs_juv_adult.groupby(['year', 'age']).size().unstack()\n",
         "obs_per_year"
       ],
-      "id": "a72d1fea",
+      "id": "840d0f52",
       "execution_count": null,
       "outputs": []
     },
@@ -179,7 +179,7 @@
         "If you are wondering, here `year` is the name of the data frame's row index and `age` is the name of the column index. \n",
         "In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:"
       ],
-      "id": "224a9ec6"
+      "id": "ed529212"
     },
     {
       "cell_type": "code",
@@ -192,7 +192,7 @@
         "                                         xlabel='Year',\n",
         "                                         ylabel='Number of captures');"
       ],
-      "id": "90da8211",
+      "id": "a9fbada2",
       "execution_count": null,
       "outputs": []
     },
@@ -232,7 +232,7 @@
         "1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function\n",
         "2. Display the figure using `plt.show()`:"
       ],
-      "id": "f0166410"
+      "id": "791086e6"
     },
     {
       "cell_type": "code",
@@ -244,7 +244,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "abe2a373",
+      "id": "9193e53b",
       "execution_count": null,
       "outputs": []
     },
@@ -272,7 +272,7 @@
         "\n",
         "For example, let's add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axis:"
       ],
-      "id": "da19d7d9"
+      "id": "051a8b97"
     },
     {
       "cell_type": "code",
@@ -287,7 +287,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "315e464b",
+      "id": "e9ff6765",
       "execution_count": null,
       "outputs": []
     },
@@ -305,7 +305,7 @@
         "\n",
         "For example, we can update the title and axis labels of our previous plot like this:"
       ],
-      "id": "b5a66c1c"
+      "id": "6ef2f665"
     },
     {
       "cell_type": "code",
@@ -329,7 +329,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "afe90d70",
+      "id": "63976d5a",
       "execution_count": null,
       "outputs": []
     },
@@ -342,7 +342,7 @@
         "For our analysis we want to investigate possible relations between hind foot length and weight for juvenile hares.\n",
         "Let's take a look at our target data:"
       ],
-      "id": "e914ec2e"
+      "id": "ec8efab8"
     },
     {
       "cell_type": "code",
@@ -354,7 +354,7 @@
         "print(\"Number of juvenile hare captures with hind foot and weight measurements:\", len(juveniles_weight_hindft))\n",
         "juveniles_weight_hindft.plot.scatter(x='hindft', y='weight', alpha=0.5)"
       ],
-      "id": "255e3a7d",
+      "id": "e3d7aa6c",
       "execution_count": null,
       "outputs": []
     },
@@ -391,7 +391,7 @@
         "\n",
         "`ols()` sets up the model, and calling `fit()` on it estimates the coefficients:"
       ],
-      "id": "9e0082c5"
+      "id": "3e65d8ce"
     },
     {
       "cell_type": "code",
@@ -400,7 +400,7 @@
         "# Fit model: weight explained by hind foot length\n",
         "model = smf.ols('weight ~ hindft', data=juveniles_weight_hindft).fit()"
       ],
-      "id": "33f14801",
+      "id": "e8234a1a",
       "execution_count": null,
       "outputs": []
     },
@@ -410,7 +410,7 @@
       "source": [
         "The estimated coefficients are stored in the model's `params` attribute, a `pandas.Series` whose index has the names of the coefficients:"
       ],
-      "id": "44321d68"
+      "id": "0bf1e2fe"
     },
     {
       "cell_type": "code",
@@ -418,7 +418,7 @@
       "source": [
         "model.params"
       ],
-      "id": "75e3911e",
+      "id": "0bf965e3",
       "execution_count": null,
       "outputs": []
     },
@@ -428,7 +428,7 @@
       "source": [
         "The `Intercept` value is $\\hat\\beta_0$ and the `hindft` value is $\\hat\\beta_1$, the slope for the hind foot length. Let's save them in variables to use them later:"
       ],
-      "id": "d9cf2a88"
+      "id": "99f6cdd7"
     },
     {
       "cell_type": "code",
@@ -441,7 +441,7 @@
         "slope = model.params['hindft']\n",
         "print(\"Slope:\", slope)"
       ],
-      "id": "afc6e1c3",
+      "id": "aed14eae",
       "execution_count": null,
       "outputs": []
     },
@@ -464,7 +464,7 @@
         "\n",
         "This value is stored in the model's `rsquared` attribute:"
       ],
-      "id": "f3f521ef"
+      "id": "91c34dc6"
     },
     {
       "cell_type": "code",
@@ -472,7 +472,7 @@
       "source": [
         "print(\"R^2:\", model.rsquared)"
       ],
-      "id": "c8e8dca1",
+      "id": "f9f56f0e",
       "execution_count": null,
       "outputs": []
     },
@@ -502,7 +502,7 @@
         "To draw the line we use the axis's `plot()` method, `ax.plot(x_values, y_values)`, which connects the points given by the lists of $x$ and $y$ values. \n",
         "A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, $\\hat{y} = \\hat\\beta_0 + \\hat\\beta_1 x$:"
       ],
-      "id": "280258fe"
+      "id": "22c22728"
     },
     {
       "cell_type": "code",
@@ -535,7 +535,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "3e3fc7ca",
+      "id": "d2db11a4",
       "execution_count": null,
       "outputs": []
     },
@@ -551,7 +551,7 @@
         "\n",
         "The residuals are the $\\epsilon$ in our model equation, so the model assumes they are normally distributed around 0, and that they spread out about the same amount for short and long hind feet. `statsmodels` calculates the residuals for us and stores them in the model's `resid` attribute. "
       ],
-      "id": "220126c6"
+      "id": "af9c7074"
     },
     {
       "cell_type": "code",
@@ -559,7 +559,7 @@
       "source": [
         "model.resid"
       ],
-      "id": "f7a9a8cd",
+      "id": "4e254765",
       "execution_count": null,
       "outputs": []
     },
@@ -569,7 +569,7 @@
       "source": [
         "Let's start with a histogram to see their distribution:"
       ],
-      "id": "0c1dd74c"
+      "id": "939addfd"
     },
     {
       "cell_type": "code",
@@ -580,7 +580,7 @@
         "                 title='Distribution of residuals', \n",
         "                 xlabel='Residual (g)')"
       ],
-      "id": "a2c0bd94",
+      "id": "ad885e87",
       "execution_count": null,
       "outputs": []
     },
@@ -592,7 +592,7 @@
         "\n",
         "If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axis's `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:"
       ],
-      "id": "b15ce749"
+      "id": "61c4399c"
     },
     {
       "cell_type": "code",
@@ -615,7 +615,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "4b553042",
+      "id": "e4c984fc",
       "execution_count": null,
       "outputs": []
     },
@@ -650,7 +650,7 @@
         ":::\n",
         "-->"
       ],
-      "id": "8ab4de67"
+      "id": "b063f1d0"
     }
   ],
   "metadata": {

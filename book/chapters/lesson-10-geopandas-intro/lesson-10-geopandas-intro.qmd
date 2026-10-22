@@ -21,17 +21,18 @@ GBIF is an international network and data platform that provides open access to 
 
 The data we will use today has been simplified from the complete *Sus scrofa* occurrence data accessed through the GBIF website @gbiforg_user_occurrence_2023. 
 
+We will also use a shapefile with the boundary of the state of California, which has a single feature: the outline of the state. 
+We will use it as a base layer for our maps, to see where the wild pig sightings are located within California.
+
+Both datasets are in the `gbif_sus_scrofa_california` and `ca_state_boundary` folders of the course's [shared data folder]({{< var shared-data-folder >}}).
+
 <!-- TODO: column descriptions -->
-<!-- TODO: add info about the CA shapefile -->
+<!-- TODO: add the source of the CA state boundary data -->
 
 ## Reproducible file paths
-In this lesson we will introduce three Python packages:
+In this lesson we will introduce the `geopandas` @jordahl_geopandasgeopandas_2020 Python packages. `geopandas` extends `pandas` to work with geospatial data. This is the main package we will be working with in the next few lessons.
 
-- `geopandas` @jordahl_geopandasgeopandas_2020: a package that extends `pandas` to work with geospatial data. This is the main package we will be working with in the next few lessons.
-- `os`: a package that provides functions for interacting with the operating system, allowing us to perform tasks like file manipulation in a platform-independent way.
-- `matplotlib` @Hunter:2007: one of the most popular and widely used Python libraries for data visualization.
-
-Let's start by importing these packages:
+Let's start by importing the necessary packages and our data:
 
 ```{python}
 import os
@@ -39,41 +40,23 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 ```
 
-To import our data we will first use the `os` package to create a reproducible file path:
 
 ```{python}
 fp = os.path.join('data','gbif_sus_scrofa_california','gbif_sus_scrofa_california.shp')
-fp
-```
-
-Using the `os.path.join()` function allows us to create file paths that work on any operating system. Each operating system uses a different way to separate folders in a path (e.g., Windows uses backslashes `\`, while macOS and Linux use forward slashes `/`). By using `os.path.join()`, Python automatically handles the correct separator for the operating system you're working on. This avoids errors and makes your code more portable.
-
-We can then use this file path to read in a shapefile with `geopandas` by using the `geopandas.read_file()` function:
-
-```{python}
 pigs = gpd.read_file(fp)
 pigs.head()
+```
+
+```{python}
+fp = os.path.join('data','ca_state_boundary','ca_state_boundary.shp')
+ca_boundary = gpd.read_file(fp)
+ca_boundary
 ```
 
 ::: {.callout-caution}
 ## One shapefile = multiple files
 Although the parameter for `geopandas.read_file()` is only the file with `.shp` extension, remember that we need to have at least the `.shx` and `.dbf` files in the same directory as the `.shp` to read in the data. 
 :::
-
-::: {.callout-tip}
-## Check-in
-Create a file path using `os.path.join()` to import the shapefile of the California state boundary as a `geopandas.GeoDataFrame`. Once imported, take a look at the data.
-:::
-
-<!--
-```{python}
-#| include: false
-
-fp = os.path.join('data','ca_state_boundary','ca_state_boundary.shp')
-ca_boundary = gpd.read_file(fp)
-ca_boundary
-```
--->
 
 ## `GeoSeries` and `GeoDataFrame`
 
@@ -139,7 +122,7 @@ We can think of the **coordinate reference system (CRS)** as the instructions to
 pigs.crs
 ```
 
-The CRS for our data is the World Geodetic System 1984 (WGS84), represented by the code EPSG:4326. It uses latitude and longitude in degrees to represent places on Earth. This is a very popular CRS, used by Google Earth, GPS systems, and many web-based mapping tools, including Google Maps and OpenStreetMap. We can obtain more information about our CRS by accessing other attributes:
+The CRS for our data is the World Geodetic System 1984 (WGS84), represented by the code EPSG:4326. It uses latitude and longitude in degrees to represent places on Earth. This is a very popular CRS: it is used by GPS and Google Earth, and web-based mapping tools like Google Maps and OpenStreetMap store their coordinates in it. We can obtain more information about our CRS by accessing other attributes:
 
 ```{python}
 # Examine CRS details
@@ -163,6 +146,7 @@ pigs.total_bounds
 ```
 
 These four numbers represent the `minx`, `miny`, `maxx`, `maxy` values for the bounds of the entire geo-dataframe. 
+Notice that the $x$ values are longitudes and the $y$ values are latitudes: even though the CRS information above lists latitude first, `geopandas` always stores points as ($x$, $y$) = (longitude, latitude).
 
 ::: {.callout-tip}
 ## Check-in
@@ -204,11 +188,20 @@ print('Total number of observations: ' , len(pigs))
 print('Number of observations since 2020: ' , len(pigs_recent))
 ```
 
-## Create a map
+## Visualizing our data
+
+### `explore()`
+
+To explore our data interactively, we can use the `explore()` method. 
+This creates an interactive map where we can zoom in and out, move around, and hover over each feature to see its attributes:
+
+```{python}
+pigs_recent.explore()
+```
 
 ### `plot()`
 
-Similarly to a `pandas.DataFrame`, a `geopandas.GeoDataFrame` has a `plot()` method that we can call directly to create a quick view of our data. 
+Similarly to a `pandas.DataFrame`, a `geopandas.GeoDataFrame` has a `plot()` method that we can call directly to create a quick, static view of our data.
 The geospatial information of the `geopandas.GeoDataFrame` will be used to create the axes of the plot.
 
 #### Example
@@ -219,88 +212,40 @@ Let's take a quick look at our recent pigs data:
 pigs_recent.plot()
 ```
 
-### `matplotlib`'s `fig` and `ax`
+### Using `matplotlib`
 
-Going forward, we will make more complex visualizations where we add different layers to a graph and customize it. 
-To do this, we will use the `matplotlib` Python library for creating visualizations. 
-We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.
-
-Matplotlib graphs the data in a **figure** which can have one or more **axes**. 
-The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  
-
-![Image source: [Getting Started with Matplotlib.](https://www.skytowner.com/explore/getting_started_with_matplotlib)](/book/images/lesson-10/matplotlib_figure_axes_axis.png)
-
-To create a new blank figure:
-
-1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function
-2. Display the figure using `plt.show()`:
-
-```{python}
-# Initialize empty figure (fig) and axis (ax)
-fig, ax = plt.subplots()
-
-# Display figure
-plt.show()
-```
-
-Notice that `plt.subplots()` is a function that returns two objects. When we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint. 
-
-
-### Adding a layer
-
-When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
-The general syntax to plot data from a data frame `df` onto an axis is:
-```python
-# Initialize empty figure and axis
-fig, ax = plt.subplots()
-
-# Plot df on the ax axis
-df.plot(ax=ax,  # Add plot to axis
-        ...)    # Other arguments for plot function
-
-# Display figure
-plt.show()
-``` 
+Going forward, we will make more complex visualizations where we add different layers to a map and customize it. 
+To do this, we will use the `matplotlib` via its `pyplot` interface for creating visualizations. You can review the `matplotlib` basics in this [previous lesson](/book/chapters/lesson-18-linear-regression/lesson-18-linear-regression.qmd)
 
 #### Example
 
-The first layer that we want to add to our axis is the `pigs_recent` point data. 
+When using matplotlib, it can be useful to think of creating a plot as adding layers to an axes. In this cae, the first layer that we want to add to our axes is the `pigs_recent` point data. 
 We can plot our data using `matplotlib` like this:
 
 ```{python}
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Add pigs point plot to our figure's axis
+# Add pigs point plot to our figure's axes
 pigs_recent.plot(ax=ax)
 
 # Display figure
 plt.show()
 ```
 
-### Customization 
-
-Matplotlib allows for a lot of customization. 
-Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while the rest is done by updating attributes of the `ax` axis. 
-The following diagram shows some examples of elements in the axis that can be updated.
-
-![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
-
-#### Example
-
-Some basic customization for our pigs data could look like this:
+Then some simple customization for our pigs data could look like this:
 
 ```{python}
 # Initialize empty figure
 fig, ax = plt.subplots()
 
-# Add data to axis
-pigs_recent.plot(ax=ax,         # Add plot to axis
+# Add data to axes
+pigs_recent.plot(ax=ax,         # Add plot to axes
                  alpha=0.5,     # Adjust transparency
                  color='brown'  # Update point color
                  )
 
-# Update axis 
+# Update axes 
 ax.set_title('Reported "Sus scrofa" sightings in CA (2020-2023)')
 ax.set_xlabel('Longitude')
 ax.set_ylabel('Latitude')
@@ -311,7 +256,7 @@ plt.show()
 
 ::: {.callout-tip}
 ## Check-in 
-1. Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!
+1. Add the California state boundary to the plot so the boundary appears behind the points as below. Before plotting, check that both layers have the same CRS using `pigs_recent.crs == ca_boundary.crs`. Don't forget to customize your graph!
 
 2. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?
 

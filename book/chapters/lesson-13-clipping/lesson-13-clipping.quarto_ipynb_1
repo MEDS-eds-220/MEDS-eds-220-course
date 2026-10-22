@@ -7,7 +7,7 @@
         "<!--\n",
         "Ignore specific warnings in render"
       ],
-      "id": "2a39328d"
+      "id": "1c890cff"
     },
     {
       "cell_type": "code",
@@ -20,7 +20,7 @@
         "warnings.filterwarnings(\"ignore\", category=ShapelyDeprecationWarning) \n",
         "warnings.filterwarnings(\"ignore\", message=\"is_categorical_dtype is deprecated\")"
       ],
-      "id": "1da175d7",
+      "id": "1f7380e3",
       "execution_count": null,
       "outputs": []
     },
@@ -66,7 +66,7 @@
         "<!--\n",
         "Reading in states shapefile from a different directory"
       ],
-      "id": "cdf38c49"
+      "id": "522a3da5"
     },
     {
       "cell_type": "code",
@@ -98,7 +98,7 @@
         "                                   'ne_10m_roads.shp')\n",
         "                                   )"
       ],
-      "id": "3bf7ac31",
+      "id": "8c2cd78d",
       "execution_count": null,
       "outputs": []
     },
@@ -145,7 +145,7 @@
         "\n",
         "<!--"
       ],
-      "id": "be6bf324"
+      "id": "a4c3cf21"
     },
     {
       "cell_type": "code",
@@ -154,7 +154,7 @@
         "for df in [states, places, roads]:\n",
         "    df.columns = df.columns.str.lower()"
       ],
-      "id": "446258dc",
+      "id": "10f7becb",
       "execution_count": null,
       "outputs": []
     },
@@ -170,7 +170,7 @@
         "Let's start by taking taking a look at our `states` geo-dataframe. \n",
         "Since this is a geospatial dataset, exploration should include *at least* checking the head of the dataset, plotting the data, and looking at its CRS."
       ],
-      "id": "a333e024"
+      "id": "3bdda3a5"
     },
     {
       "cell_type": "code",
@@ -180,7 +180,7 @@
         "\n",
         "states.head(3)"
       ],
-      "id": "c8f173b9",
+      "id": "638750cf",
       "execution_count": null,
       "outputs": []
     },
@@ -190,7 +190,7 @@
       "source": [
         "states.plot()"
       ],
-      "id": "eb78132e",
+      "id": "d0a2900b",
       "execution_count": null,
       "outputs": []
     },
@@ -200,7 +200,7 @@
       "source": [
         "For this lesson, we are intersted in plotting data only Alaska, se let's select this data:"
       ],
-      "id": "495fc837"
+      "id": "fe6f876a"
     },
     {
       "cell_type": "code",
@@ -209,7 +209,7 @@
         "alaska = states[states.name =='Alaska']\n",
         "alaska.plot()"
       ],
-      "id": "62dc555a",
+      "id": "9bb59eb5",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +223,7 @@
         "\n",
         "![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3338/)](/book/images/lesson-13/epsg_3338.png)"
       ],
-      "id": "25f13781"
+      "id": "4f9f98bf"
     },
     {
       "cell_type": "code",
@@ -236,7 +236,7 @@
         "print('Is this CRS projected? ', alaska.crs.is_projected)\n",
         "alaska.crs"
       ],
-      "id": "2339b3f5",
+      "id": "605de05b",
       "execution_count": null,
       "outputs": []
     },
@@ -246,7 +246,7 @@
       "source": [
         "alaska.plot()"
       ],
-      "id": "bb6ee2ea",
+      "id": "1550c668",
       "execution_count": null,
       "outputs": []
     },
@@ -258,7 +258,7 @@
         "\n",
         "Let's now explore the populated places data. "
       ],
-      "id": "345437e1"
+      "id": "4ff1cc6f"
     },
     {
       "cell_type": "code",
@@ -268,7 +268,7 @@
         "\n",
         "places.head(3)"
       ],
-      "id": "67db8e97",
+      "id": "2f8eb46e",
       "execution_count": null,
       "outputs": []
     },
@@ -278,7 +278,7 @@
       "source": [
         "places.plot()"
       ],
-      "id": "c631fa49",
+      "id": "62f73166",
       "execution_count": null,
       "outputs": []
     },
@@ -291,7 +291,7 @@
         "\n",
         "Let's see what happens when we try to plot this data on top of Alaska:"
       ],
-      "id": "d45366cf"
+      "id": "04c977f1"
     },
     {
       "cell_type": "code",
@@ -305,7 +305,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "53847a52",
+      "id": "d18909bb",
       "execution_count": null,
       "outputs": []
     },
@@ -320,7 +320,7 @@
         "\n",
         "Here, `alaska` and `places` have different CRSs, leading to unexpected results when plotting them together:"
       ],
-      "id": "9ed519d1"
+      "id": "7cf161af"
     },
     {
       "cell_type": "code",
@@ -328,7 +328,7 @@
       "source": [
         "alaska.crs == places.crs"
       ],
-      "id": "dae25bc0",
+      "id": "1001ff8c",
       "execution_count": null,
       "outputs": []
     },
@@ -344,7 +344,7 @@
         "\n",
         "<!--"
       ],
-      "id": "a98519eb"
+      "id": "3364a9c8"
     },
     {
       "cell_type": "code",
@@ -354,7 +354,7 @@
         "places = places.to_crs(alaska.crs)\n",
         "assert alaska.crs == places.crs"
       ],
-      "id": "f5d64990",
+      "id": "4ce30bd3",
       "execution_count": null,
       "outputs": []
     },
@@ -368,7 +368,7 @@
         "\n",
         "Let's check that map again:"
       ],
-      "id": "946b19ba"
+      "id": "4504cd32"
     },
     {
       "cell_type": "code",
@@ -381,7 +381,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "031b08db",
+      "id": "3294e0d8",
       "execution_count": null,
       "outputs": []
     },
@@ -410,7 +410,7 @@
         "\n",
         "In our case:"
       ],
-      "id": "83ec7666"
+      "id": "ca8422ad"
     },
     {
       "cell_type": "code",
@@ -424,7 +424,7 @@
         "ak_places.plot(ax=ax, color='red')\n",
         "plt.show()"
       ],
-      "id": "73584527",
+      "id": "a141efb2",
       "execution_count": null,
       "outputs": []
     },
@@ -436,7 +436,7 @@
         "\n",
         "Now we move on to our roads dataset. "
       ],
-      "id": "1ca11551"
+      "id": "b30280bf"
     },
     {
       "cell_type": "code",
@@ -446,7 +446,7 @@
         "\n",
         "roads.head(3)"
       ],
-      "id": "c671408c",
+      "id": "ad80c14e",
       "execution_count": null,
       "outputs": []
     },
@@ -456,7 +456,7 @@
       "source": [
         "roads.plot()"
       ],
-      "id": "1e566272",
+      "id": "cc13005a",
       "execution_count": null,
       "outputs": []
     },
@@ -467,7 +467,7 @@
         "You may have already noticed that the `roads` data is not in the same CRS as the `alaska` polygons, so these geo-datasets shound't interact until they're in the same CRS. \n",
         "Before jumping right into reprojecting and clipping, we will subset the data to select only US roads:"
       ],
-      "id": "7824497f"
+      "id": "9b094378"
     },
     {
       "cell_type": "code",
@@ -476,7 +476,7 @@
         "usa_roads = roads[roads.sov_a3 == 'USA']\n",
         "usa_roads.plot()"
       ],
-      "id": "ec8208f1",
+      "id": "f4275e9f",
       "execution_count": null,
       "outputs": []
     },
@@ -497,7 +497,7 @@
         "\n",
         "We will now compose functions to clip `usa_roads` using the `alaska` multipolygon. Notice we are using the ouput of `usa_roads.to_crs(alaska.crs)` directly and thus not changing the `usa_roads` geo-dataframe or creating new variables:"
       ],
-      "id": "d08c0fe6"
+      "id": "41149e15"
     },
     {
       "cell_type": "code",
@@ -512,7 +512,7 @@
         "ak_roads.plot(ax=ax, color='red')\n",
         "plt.show()"
       ],
-      "id": "565e3962",
+      "id": "67adc634",
       "execution_count": null,
       "outputs": []
     },
@@ -541,7 +541,7 @@
         "```\n",
         "In our case:"
       ],
-      "id": "c691d413"
+      "id": "c15eb370"
     },
     {
       "cell_type": "code",
@@ -551,7 +551,7 @@
         "print(type(bbox))\n",
         "bbox"
       ],
-      "id": "634c2ef2",
+      "id": "4dd3d3fe",
       "execution_count": null,
       "outputs": []
     },
@@ -570,7 +570,7 @@
         "\n",
         "Notice that the bounding box is not a geodataframe, it is a stand alone, abstract polygon without any geospatial information. To interpret this polygon as something on the Earth's surface we need to wrap it into a geo-datfrane abd assign it a CRS:"
       ],
-      "id": "82088e8c"
+      "id": "f4b4ce3c"
     },
     {
       "cell_type": "code",
@@ -582,7 +582,7 @@
         "print(type(ak_bbox))\n",
         "ak_bbox"
       ],
-      "id": "f9a35132",
+      "id": "16a1d0ae",
       "execution_count": null,
       "outputs": []
     },
@@ -592,7 +592,7 @@
       "source": [
         "We can now clip the roads using Alaska's bounding box:"
       ],
-      "id": "601f935b"
+      "id": "ef30c933"
     },
     {
       "cell_type": "code",
@@ -600,7 +600,7 @@
       "source": [
         "ak_complete_roads = gpd.clip(usa_roads.to_crs(ak_bbox.crs), ak_bbox)"
       ],
-      "id": "b997302d",
+      "id": "3af87eb8",
       "execution_count": null,
       "outputs": []
     },
@@ -610,7 +610,7 @@
       "source": [
         "Notice the difference between the two clipping methods:"
       ],
-      "id": "0b4c417a"
+      "id": "3ffcb40a"
     },
     {
       "cell_type": "code",
@@ -626,7 +626,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "9fa59f09",
+      "id": "d819bf68",
       "execution_count": null,
       "outputs": []
     },
@@ -638,7 +638,7 @@
         "\n",
         "Finally, we can put all our data together in the same map:"
       ],
-      "id": "4a7a10a8"
+      "id": "6055d00b"
     },
     {
       "cell_type": "code",
@@ -674,7 +674,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "13ef2cd8",
+      "id": "a448adad",
       "execution_count": null,
       "outputs": []
     },
@@ -706,7 +706,7 @@
         "-->\n",
         ":::\n"
       ],
-      "id": "363fda01"
+      "id": "c10e4eb3"
     }
   ],
   "metadata": {

@@ -217,7 +217,7 @@
         "### Create an `xarray.DataArray`\n",
         "We want to create an `xarray.DataArray` that includes the information from our previous example about measuring temperature across three days as an `xarray.DataArray`. First, we import the required libraries:"
       ],
-      "id": "4c1d0abe"
+      "id": "3ef4666a"
     },
     {
       "cell_type": "code",
@@ -228,7 +228,7 @@
         "import pandas as pd\n",
         "import xarray as xr   "
       ],
-      "id": "e5c472d1",
+      "id": "f4c94b2d",
       "execution_count": null,
       "outputs": []
     },
@@ -241,7 +241,7 @@
         "The underlying data in the `xarray.DataArray` is a `numpy.array` that holds the variable values. \n",
         "So we can start by making a `numpy.array` with our mock temperature data:"
       ],
-      "id": "24da286b"
+      "id": "81b56be4"
     },
     {
       "cell_type": "code",
@@ -253,7 +253,7 @@
         "                      np.ones((5,5))*2]).astype(int)\n",
         "temp_data"
       ],
-      "id": "ebc6f444",
+      "id": "c5534683",
       "execution_count": null,
       "outputs": []
     },
@@ -291,7 +291,7 @@
         "\n",
         "We add the dimensions as a tuple of strings and coordinates as a dictionary:"
       ],
-      "id": "982115c2"
+      "id": "9034c594"
     },
     {
       "cell_type": "code",
@@ -305,7 +305,7 @@
         "          'lat':np.arange(70, 20, -10),\n",
         "          'lon':np.arange(60, 110, 10)}  "
       ],
-      "id": "c60bcb24",
+      "id": "4b34cc4f",
       "execution_count": null,
       "outputs": []
     },
@@ -317,7 +317,7 @@
         "\n",
         "Next, we add the attributes (metadata) for our temperature data as a dictionary:"
       ],
-      "id": "0854332f"
+      "id": "44142950"
     },
     {
       "cell_type": "code",
@@ -328,7 +328,7 @@
         "          'standard_name':'air_temperature',\n",
         "          'units':'degree_c'}"
       ],
-      "id": "3bc691e6",
+      "id": "50d47dfb",
       "execution_count": null,
       "outputs": []
     },
@@ -340,7 +340,7 @@
         "\n",
         "Finally, we put all these pieces together (data, dimensions, coordinates, and attributes) to create an `xarray.DataArray`:"
       ],
-      "id": "6c9afe09"
+      "id": "8089e509"
     },
     {
       "cell_type": "code",
@@ -353,7 +353,7 @@
         "                    attrs = attrs)\n",
         "temp"
       ],
-      "id": "5e74cb9b",
+      "id": "0aede2b6",
       "execution_count": null,
       "outputs": []
     },
@@ -364,7 +364,7 @@
         "We can also update the variable’s attributes after creating the object. \n",
         "Notice that each of the coordinates is also an `xarray.DataArray`, so we can add attributes to them."
       ],
-      "id": "9f43c91e"
+      "id": "da2986cc"
     },
     {
       "cell_type": "code",
@@ -383,7 +383,7 @@
         "temp.lon.attrs['units'] = 'degree_E'\n",
         "temp"
       ],
-      "id": "8cfacc01",
+      "id": "62354414",
       "execution_count": null,
       "outputs": []
     },
@@ -420,7 +420,7 @@
         "\n",
         "- by integer: the exact same as a `numpy.array`. Use the locator brackets `[]` and use the integer location of the data you need to retrieve it:"
       ],
-      "id": "a18ce189"
+      "id": "b1c1e723"
     },
     {
       "cell_type": "code",
@@ -429,7 +429,7 @@
         "# Access dimensions by position, then use integers for indexing\n",
         "temp[0,3,2]"
       ],
-      "id": "22b51a94",
+      "id": "f43f66e4",
       "execution_count": null,
       "outputs": []
     },
@@ -439,7 +439,7 @@
       "source": [
         "- by label: same as `pandas`. We use the `.loc[]` locator to lookup a specific coordinate at each position (which represents a dimension):"
       ],
-      "id": "7c3656da"
+      "id": "a34b5e94"
     },
     {
       "cell_type": "code",
@@ -448,7 +448,7 @@
         "# Access dimensions by position, then use labels for indexing\n",
         "temp.loc['2022-09-01', 40, 80]"
       ],
-      "id": "f8f5ac71",
+      "id": "84084f99",
       "execution_count": null,
       "outputs": []
     },
@@ -465,7 +465,7 @@
         "\n",
         "- by integer: we specify the integer location of the data we want along each dimension:"
       ],
-      "id": "084a5c07"
+      "id": "532402ad"
     },
     {
       "cell_type": "code",
@@ -474,7 +474,7 @@
         "# Acess dimensions by name, then use integers for indexing\n",
         "temp.isel(time=0, lon=2, lat=3)"
       ],
-      "id": "f3f36991",
+      "id": "db9e8cd0",
       "execution_count": null,
       "outputs": []
     },
@@ -484,7 +484,7 @@
       "source": [
         "- by label: we use the coordinate values we want to get!"
       ],
-      "id": "bb934be8"
+      "id": "4dea0196"
     },
     {
       "cell_type": "code",
@@ -493,7 +493,7 @@
         "# Access dimensions by name, then use labels for indexing\n",
         "temp.sel(time='2022-09-01', lat=40, lon=80)"
       ],
-      "id": "de0c0a78",
+      "id": "a2e4dada",
       "execution_count": null,
       "outputs": []
     },
@@ -505,7 +505,7 @@
         "This is because operations on an `xarray.DataArray` always return another `xarray.DataArray`. \n",
         "In particular, operations returning scalar values will also produce `xarray` objects, so we need to cast them as numbers manually using the `xarray.DataArray` [item() method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.item.html):"
       ],
-      "id": "c59d8a72"
+      "id": "368f259e"
     },
     {
       "cell_type": "code",
@@ -513,7 +513,7 @@
       "source": [
         "temp.sel(time='2022-09-01', lat=40, lon=80).item()"
       ],
-      "id": "2d280b4a",
+      "id": "d93a8bac",
       "execution_count": null,
       "outputs": []
     },
@@ -528,7 +528,7 @@
         "<!--One of the advantages of `xarray.DataArray` is that, if we choose to, it can carry over attributes when doing calculations.-->\n",
         "For example, we can calculate the average temperature at each weather station over time and obtain a new `xarray.DataArray`. \n"
       ],
-      "id": "333a59de"
+      "id": "3793f2ef"
     },
     {
       "cell_type": "code",
@@ -539,7 +539,7 @@
         "avg_temp.attrs = {'title':'Average temperature over three days'}\n",
         "avg_temp"
       ],
-      "id": "46bd6958",
+      "id": "ed972ea2",
       "execution_count": null,
       "outputs": []
     },
@@ -558,7 +558,7 @@
         "Following our previous example, we can create an `xarray.DataSet` by combining the temperature data with the average temperature data. \n",
         "We also add some attributes that now describe the whole dataset, not only each variable. "
       ],
-      "id": "12ea6312"
+      "id": "5f0fbceb"
     },
     {
       "cell_type": "code",
@@ -578,7 +578,7 @@
         "                           attrs = attrs\n",
         "                           )"
       ],
-      "id": "c45420fd",
+      "id": "748eb536",
       "execution_count": null,
       "outputs": []
     },
@@ -595,7 +595,7 @@
         "\n",
         "+ `aveg_temp` is a variable that only uses two dimensions (latitude and longitude)."
       ],
-      "id": "f8bc7ee3"
+      "id": "36d2b32b"
     },
     {
       "cell_type": "code",
@@ -603,7 +603,7 @@
       "source": [
         "temp_dataset"
       ],
-      "id": "84636315",
+      "id": "4985e61b",
       "execution_count": null,
       "outputs": []
     },
@@ -626,7 +626,7 @@
         "check\n",
         "```"
       ],
-      "id": "9cafbef7"
+      "id": "4cdff5ab"
     },
     {
       "cell_type": "code",
@@ -636,7 +636,7 @@
         "check = xr.open_dataset('temp_dataset.nc')\n",
         "check"
       ],
-      "id": "aaab477e",
+      "id": "60b1c853",
       "execution_count": null,
       "outputs": []
     }

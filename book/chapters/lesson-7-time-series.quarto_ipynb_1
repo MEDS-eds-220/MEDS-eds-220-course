@@ -43,7 +43,7 @@
         "\n",
         "The `pandas` library represents an instant in time using the `pandas.Timestamp` class. For example:"
       ],
-      "id": "77acc22a"
+      "id": "f2125212"
     },
     {
       "cell_type": "code",
@@ -59,7 +59,7 @@
         "             minute=30,\n",
         "             second=15)"
       ],
-      "id": "54e60ca6",
+      "id": "d10172cc",
       "execution_count": null,
       "outputs": []
     },
@@ -69,7 +69,7 @@
       "source": [
         "When we store multiple `pandas.Timestamps` in a `pandas.Series` the data type of the series is set to `datetime64[ns]`:"
       ],
-      "id": "dca8fc77"
+      "id": "d82e2e18"
     },
     {
       "cell_type": "code",
@@ -80,7 +80,7 @@
         "           pd.Timestamp(2020, 10, 17),\n",
         "           pd.Timestamp(2020, 10, 16)])"
       ],
-      "id": "466fb0a4",
+      "id": "0874d69e",
       "execution_count": null,
       "outputs": []
     },
@@ -96,7 +96,7 @@
         "\n",
         "Let's start by reading in the data and taking a look at it:"
       ],
-      "id": "7dbc58e7"
+      "id": "f0ed9cc7"
     },
     {
       "cell_type": "code",
@@ -108,7 +108,7 @@
         "\n",
         "precip"
       ],
-      "id": "957ca2c3",
+      "id": "81682511",
       "execution_count": null,
       "outputs": []
     },
@@ -118,7 +118,7 @@
       "source": [
         "Notice the data has records from more than one station. We can check which ones using the `unique()` method:"
       ],
-      "id": "f4642177"
+      "id": "91552a70"
     },
     {
       "cell_type": "code",
@@ -127,7 +127,7 @@
         "# Check which stations are in the data\n",
         "precip['STATION_NAME'].unique()"
       ],
-      "id": "647f958c",
+      "id": "9e866531",
       "execution_count": null,
       "outputs": []
     },
@@ -139,7 +139,7 @@
         "\n",
         "Let's take an initial look at hour data:"
       ],
-      "id": "2c120131"
+      "id": "cf3dd4fc"
     },
     {
       "cell_type": "code",
@@ -148,7 +148,7 @@
         "# Plot hourly precipitation from all stations\n",
         "precip.plot()"
       ],
-      "id": "ae4e7a9c",
+      "id": "ea0a255d",
       "execution_count": null,
       "outputs": []
     },
@@ -172,7 +172,7 @@
         "We can use this information to reload the data frame indicating 999.99 is the missing value.\n",
         "To do this, we add the `na_values` parameter to the `pandas.read_csv()` function to indicate additional values that should be recognized as `NA`. Since 999.99 only means \"missing\" in the `HPCP` column, we pass a dictionary that applies it to that column only:"
       ],
-      "id": "94124d5d"
+      "id": "66331cc5"
     },
     {
       "cell_type": "code",
@@ -183,7 +183,7 @@
         "\n",
         "precip.head()"
       ],
-      "id": "91488400",
+      "id": "0bf48554",
       "execution_count": null,
       "outputs": []
     },
@@ -195,7 +195,7 @@
         "\n",
         "We can try making our plot again:"
       ],
-      "id": "b95da3fc"
+      "id": "a2dfe157"
     },
     {
       "cell_type": "code",
@@ -203,7 +203,7 @@
       "source": [
         "precip.plot()"
       ],
-      "id": "9e343bfe",
+      "id": "64283e47",
       "execution_count": null,
       "outputs": []
     },
@@ -220,7 +220,7 @@
         "## Casting strings into dates\n",
         "Notice that the `DATE` column in our data frame is not of type `datetime`. We can check this using the `dtypes` attribute for data frames:"
       ],
-      "id": "224cf604"
+      "id": "f0a760e4"
     },
     {
       "cell_type": "code",
@@ -229,7 +229,7 @@
         "# Check whether DATE column is of type datetime\n",
         "precip.dtypes"
       ],
-      "id": "1830aed4",
+      "id": "0f9ca160",
       "execution_count": null,
       "outputs": []
     },
@@ -247,7 +247,7 @@
         "\n",
         "#### Example"
       ],
-      "id": "e639ab90"
+      "id": "d9f61366"
     },
     {
       "cell_type": "code",
@@ -256,7 +256,7 @@
         "# Preview DATE converted to timestamps\n",
         "pd.to_datetime(precip['DATE'])"
       ],
-      "id": "0efe4a21",
+      "id": "ebdfd540",
       "execution_count": null,
       "outputs": []
     },
@@ -266,7 +266,7 @@
       "source": [
         "We can overwrite the `DATE` column with this output:"
       ],
-      "id": "34f0be0d"
+      "id": "72f23beb"
     },
     {
       "cell_type": "code",
@@ -281,7 +281,7 @@
         "# Check new values\n",
         "precip['DATE'].head()"
       ],
-      "id": "1d2feb17",
+      "id": "ba5d7447",
       "execution_count": null,
       "outputs": []
     },
@@ -291,7 +291,7 @@
       "source": [
         "We can make another attempt at plotting our precipitation data:"
       ],
-      "id": "99ed2b1d"
+      "id": "20f56505"
     },
     {
       "cell_type": "code",
@@ -299,7 +299,7 @@
       "source": [
         "precip.plot(x='DATE', y='HPCP')"
       ],
-      "id": "8f06455f",
+      "id": "559a47d3",
       "execution_count": null,
       "outputs": []
     },
@@ -313,7 +313,7 @@
         "\n",
         "Next, using our `DATE` column as the index will allow us to perform operations with respect to time, including subsetting and resampling. We will also sort the index using `sort_index()`, so that the rows are in chronological order instead of grouped by station. This will remove some artifacts from our plot. In general, it is good practice to sort a time index, since many time series operations assume the dates are in order."
       ],
-      "id": "de500c2c"
+      "id": "82c2b6d7"
     },
     {
       "cell_type": "code",
@@ -325,7 +325,7 @@
         "# Inspect new index\n",
         "precip.head()"
       ],
-      "id": "8edffe4b",
+      "id": "e3732b3b",
       "execution_count": null,
       "outputs": []
     },
@@ -335,7 +335,7 @@
       "source": [
         "Since we know the default behavior of `plot()` is to use the index as the $x$-axis and make a line plot for each numeric column, we can simplify our plot making like this:"
       ],
-      "id": "03a0cf8a"
+      "id": "a5951463"
     },
     {
       "cell_type": "code",
@@ -343,7 +343,7 @@
       "source": [
         "precip.plot()"
       ],
-      "id": "7209543d",
+      "id": "83eb3b61",
       "execution_count": null,
       "outputs": []
     },
@@ -372,7 +372,7 @@
         "\n",
         "We can use `.loc[year-month]` to select data from a specific year and month:"
       ],
-      "id": "6f2f5cfd"
+      "id": "a942fcf6"
     },
     {
       "cell_type": "code",
@@ -381,7 +381,7 @@
         "# Select precipitation data from September 2013\n",
         "precip.loc['2013-09']"
       ],
-      "id": "5ab81a79",
+      "id": "a3a756a2",
       "execution_count": null,
       "outputs": []
     },
@@ -391,7 +391,7 @@
       "source": [
         "Or simply select data from a given year using `.loc[year]`:"
       ],
-      "id": "ee1b8e13"
+      "id": "fd96272e"
     },
     {
       "cell_type": "code",
@@ -400,7 +400,7 @@
         "# Select 2013 precipitation data\n",
         "precip.loc['2013']"
       ],
-      "id": "7775662a",
+      "id": "67a794e3",
       "execution_count": null,
       "outputs": []
     },
@@ -410,7 +410,7 @@
       "source": [
         "We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data:"
       ],
-      "id": "86f392dd"
+      "id": "db69f077"
     },
     {
       "cell_type": "code",
@@ -418,7 +418,7 @@
       "source": [
         "precip.loc['2013'].plot()"
       ],
-      "id": "e91a908a",
+      "id": "2c4a4131",
       "execution_count": null,
       "outputs": []
     },
@@ -442,7 +442,7 @@
         "## Month end or month start?\n",
         "`'ME'` stands for \"month end\" and `'MS'` for \"month start\". Both group the data by calendar month. The only difference is how each month is labeled: `'ME'` uses the last day of the month and `'MS'` uses the first day. For example, this is the total monthly precipitation for the first three months of 2013 with each option:"
       ],
-      "id": "b577d286"
+      "id": "905e120d"
     },
     {
       "cell_type": "code",
@@ -451,7 +451,7 @@
         "# Monthly totals labeled by the last day of each month\n",
         "precip.loc['2013', 'HPCP'].resample('ME').sum().head(3)"
       ],
-      "id": "a11dd7e0",
+      "id": "c025ed4b",
       "execution_count": null,
       "outputs": []
     },
@@ -462,7 +462,7 @@
         "# Monthly totals labeled by the first day of each month\n",
         "precip.loc['2013', 'HPCP'].resample('MS').sum().head(3)"
       ],
-      "id": "8ddd81f8",
+      "id": "ef3cfb40",
       "execution_count": null,
       "outputs": []
     },
@@ -477,7 +477,7 @@
         "\n",
         "Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency."
       ],
-      "id": "c8c50291"
+      "id": "5d6947ce"
     },
     {
       "cell_type": "code",
@@ -486,7 +486,7 @@
         "# Resample 2013 hourly data to daily frequency: no output\n",
         "precip.loc['2013', 'HPCP'].resample('D')"
       ],
-      "id": "35358347",
+      "id": "03033f57",
       "execution_count": null,
       "outputs": []
     },
@@ -496,7 +496,7 @@
       "source": [
         "To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we aggregate it using `sum()`:"
       ],
-      "id": "d9e30695"
+      "id": "be901686"
     },
     {
       "cell_type": "code",
@@ -507,7 +507,7 @@
         "\n",
         "daily_precip_2013.head(3)"
       ],
-      "id": "e8d1e197",
+      "id": "3ae1a50c",
       "execution_count": null,
       "outputs": []
     },
@@ -525,7 +525,7 @@
         "\n",
         "The index has now changed to be days in 2013 and, since we selected a single column, the result is a `pandas.Series`. We should also rename the series since it is no longer hourly precipitation:"
       ],
-      "id": "a8f202cb"
+      "id": "a0f46537"
     },
     {
       "cell_type": "code",
@@ -535,7 +535,7 @@
         "daily_precip_2013 = daily_precip_2013.rename('daily_precipitation')\n",
         "daily_precip_2013.name"
       ],
-      "id": "86abc15f",
+      "id": "f3f84604",
       "execution_count": null,
       "outputs": []
     },
@@ -545,7 +545,7 @@
       "source": [
         "Finally, we can plot our data:"
       ],
-      "id": "c6abc1d8"
+      "id": "557c8550"
     },
     {
       "cell_type": "code",
@@ -555,7 +555,7 @@
         "                       xlabel='',\n",
         "                       title='Total precipitation over four stations in Boulder County, CO (2013)')"
       ],
-      "id": "a19b6c90",
+      "id": "1f584b3e",
       "execution_count": null,
       "outputs": []
     },
@@ -567,7 +567,7 @@
         "\n",
         "The previous code includes a lot of exploratory functions and trials. While it is important to keep our data exploration documented, once we are certain of our data wrangling, we can streamline our analyses to only include the code that directly contributes to the output. Moving on, we will start to collect all our relevant code to create such complete workflows. For this lesson, the code below will produce the final graph:"
       ],
-      "id": "c12b1dd1"
+      "id": "188735db"
     },
     {
       "cell_type": "code",
@@ -598,7 +598,7 @@
         "                       xlabel='',\n",
         "                       title='Total precipitation over four stations in Boulder County, CO (2013)')"
       ],
-      "id": "b17ff0a7",
+      "id": "da608512",
       "execution_count": null,
       "outputs": []
     },
@@ -618,7 +618,7 @@
         "\n",
         "📖 [`pandas` User Guide - Time series/date functionality](https://pandas.pydata.org/docs/user_guide/timeseries.html)\n"
       ],
-      "id": "3b36a633"
+      "id": "f9e57512"
     }
   ],
   "metadata": {

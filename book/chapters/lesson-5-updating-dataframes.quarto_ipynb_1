@@ -28,7 +28,7 @@
         "\n",
         "The dataset has 344 rows and 8 columns. We can see the head of the dataset below:"
       ],
-      "id": "1e1f58a0"
+      "id": "8831bf8c"
     },
     {
       "cell_type": "code",
@@ -44,7 +44,7 @@
         "\n",
         "penguins.head()"
       ],
-      "id": "441113a0",
+      "id": "5f8a7b0f",
       "execution_count": null,
       "outputs": []
     },
@@ -56,7 +56,7 @@
         "\n",
         "Let us start by importing the packages we will use in this lesson and loading the data:"
       ],
-      "id": "59307052"
+      "id": "f8d06eb5"
     },
     {
       "cell_type": "code",
@@ -72,7 +72,7 @@
         "URL = 'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'\n",
         "penguins = pd.read_csv(URL)"
       ],
-      "id": "fed368d4",
+      "id": "e23610d2",
       "execution_count": null,
       "outputs": []
     },
@@ -111,7 +111,7 @@
         "\n",
         "We want to create a new column where the body mass is in kilograms instead of grams, then we need to divide each value in the `body_mass_g` column by 1000. "
       ],
-      "id": "eeb11459"
+      "id": "60e12355"
     },
     {
       "cell_type": "code",
@@ -126,7 +126,7 @@
         "# Look at the new column\n",
         "penguins.head()"
       ],
-      "id": "41ca6499",
+      "id": "acaf7188",
       "execution_count": null,
       "outputs": []
     },
@@ -144,7 +144,7 @@
         "\n",
         "This way of creating a new column, unlike the dictionary-like syntax, does not modify the data frame in place. This can be useful for chaining operations:"
       ],
-      "id": "39134c0c"
+      "id": "33ada982"
     },
     {
       "cell_type": "code",
@@ -156,7 +156,7 @@
         "              y='body_mass_g')\n",
         "    )"
       ],
-      "id": "6af4acd4",
+      "id": "ad64741f",
       "execution_count": null,
       "outputs": []
     },
@@ -179,7 +179,7 @@
         "\n",
         "Let's give each penguin observation a unique identifier as a three-digit number and add this column at the beginning of the data frame."
       ],
-      "id": "da38ba4a"
+      "id": "4bb34d21"
     },
     {
       "cell_type": "code",
@@ -195,7 +195,7 @@
         "        \n",
         "penguins.head()"
       ],
-      "id": "abae277e",
+      "id": "c9c073d2",
       "execution_count": null,
       "outputs": []
     },
@@ -232,7 +232,7 @@
         "\n",
         "We can add these columns to `penguins` using `assign()`:"
       ],
-      "id": "9b26f479"
+      "id": "2c84383e"
     },
     {
       "cell_type": "code",
@@ -246,7 +246,7 @@
         "# Examine result\n",
         "penguins.head()"
       ],
-      "id": "bae3c1dc",
+      "id": "38918726",
       "execution_count": null,
       "outputs": []
     },
@@ -267,7 +267,7 @@
         "\n",
         "Now that we updated the units for flipper length and body mass, it makes sense to remove the previous columns to avoid duplicate information. We can do this using `drop()`:"
       ],
-      "id": "407326bc"
+      "id": "50e9b115"
     },
     {
       "cell_type": "code",
@@ -279,7 +279,7 @@
         "# Confirm result\n",
         "print(penguins.columns)"
       ],
-      "id": "2eef9b97",
+      "id": "a95f894c",
       "execution_count": null,
       "outputs": []
     },
@@ -318,7 +318,7 @@
         "#### Example\n",
         "For this example, let's first update the index of the data frame to be the `id_code` column:"
       ],
-      "id": "018df6e6"
+      "id": "f2f0bcf1"
     },
     {
       "cell_type": "code",
@@ -327,7 +327,7 @@
         "penguins = penguins.set_index('id_code')\n",
         "penguins"
       ],
-      "id": "e87b5dcd",
+      "id": "c21b9097",
       "execution_count": null,
       "outputs": []
     },
@@ -337,7 +337,7 @@
       "source": [
         "If we want to know the bill length of the penguin with ID 330, we can directly access that information using `at[]`:"
       ],
-      "id": "e7a55d5b"
+      "id": "81c41d98"
     },
     {
       "cell_type": "code",
@@ -346,7 +346,7 @@
         "# Check bill length of penguin with ID 330\n",
         "penguins.at[330, 'bill_length_mm']"
       ],
-      "id": "d87cc2e7",
+      "id": "baa55ba9",
       "execution_count": null,
       "outputs": []
     },
@@ -356,7 +356,7 @@
       "source": [
         "We see that this bill length is an NA. Maybe we want to update it to 38.3 mm. We can do this with `at[]` too:"
       ],
-      "id": "ea0fa32d"
+      "id": "1a812284"
     },
     {
       "cell_type": "code",
@@ -368,7 +368,7 @@
         "# Confirm value was updated\n",
         "penguins.loc[330]"
       ],
-      "id": "a717f99c",
+      "id": "4d9f08ff",
       "execution_count": null,
       "outputs": []
     },
@@ -398,7 +398,7 @@
         "\n",
         "<!--"
       ],
-      "id": "5026d842"
+      "id": "74d6c91d"
     },
     {
       "cell_type": "code",
@@ -411,7 +411,7 @@
         "# Confirm using iloc\n",
         "penguins.iloc[3]"
       ],
-      "id": "d003b466",
+      "id": "75d40cc3",
       "execution_count": null,
       "outputs": []
     },
@@ -440,7 +440,7 @@
         "\n",
         "One way to add this information in a new column is using the [`numpy.select()`](https://numpy.org/doc/stable/reference/generated/numpy.select.html) function:"
       ],
-      "id": "b712c2d7"
+      "id": "b250bfb4"
     },
     {
       "cell_type": "code",
@@ -464,7 +464,7 @@
         "# Display the updated data frame to confirm the new column\n",
         "penguins.head()"
       ],
-      "id": "c19143d7",
+      "id": "ffee8ae9",
       "execution_count": null,
       "outputs": []
     },
@@ -496,7 +496,7 @@
         "\n",
         "We want to update the \"male\" values in the `sex` column to \"M\"."
       ],
-      "id": "ade98974"
+      "id": "8dcf6917"
     },
     {
       "cell_type": "code",
@@ -508,7 +508,7 @@
         "# Check changes in 'sex' column specifically\n",
         "print(penguins['sex'].unique())"
       ],
-      "id": "2cce9d84",
+      "id": "d1173ced",
       "execution_count": null,
       "outputs": []
     },
@@ -520,7 +520,7 @@
         "\n",
         "Suppose we want to similarly update the \"female\" values in the `sex` column to \"F\". This is an example of another way we might try to do it:"
       ],
-      "id": "d18a6b12"
+      "id": "198694df"
     },
     {
       "cell_type": "code",
@@ -529,7 +529,7 @@
         "# Select rows where 'sex' is 'female' and then attempt to update 'sex' column values\n",
         "penguins[penguins['sex']=='female']['sex'] = 'F' # This raises SettingWithCopyWarning"
       ],
-      "id": "50b5bc6b",
+      "id": "33ac4a75",
       "execution_count": null,
       "outputs": []
     },
@@ -539,7 +539,7 @@
       "source": [
         "When we select the data we want to update using **chained indexing** (two selection brackets `[][]`) instead of `loc[]` we get a `SettingWithCopyWarning`. With this warning, `pandas` is trying to alert us to a potential bug. In this case, the bug is that we actually did not update our data frame:"
       ],
-      "id": "0ce63959"
+      "id": "a153309a"
     },
     {
       "cell_type": "code",
@@ -548,7 +548,7 @@
         "# Confirm values were updated\n",
         "print(penguins['sex'].unique())"
       ],
-      "id": "db1ff080",
+      "id": "8c1ebbe9",
       "execution_count": null,
       "outputs": []
     },
@@ -581,7 +581,7 @@
         ":::\n",
         "<!--"
       ],
-      "id": "5e22fef7"
+      "id": "5d5da19d"
     },
     {
       "cell_type": "code",
@@ -593,7 +593,7 @@
         "# notice the values were updated now\n",
         "penguins.head()"
       ],
-      "id": "e9b73c84",
+      "id": "ee76e8d1",
       "execution_count": null,
       "outputs": []
     },
@@ -633,7 +633,7 @@
         "\n",
         "We only want to use data from Biscoe island and, after doing some analyses, we want to add a new column to it:"
       ],
-      "id": "149a2466"
+      "id": "94eebee5"
     },
     {
       "cell_type": "code",
@@ -647,7 +647,7 @@
         "# Add a column\n",
         "biscoe['sample_col'] = 100  # This raises SettingWithCopyWarning"
       ],
-      "id": "8d843b17",
+      "id": "6f6eaeb9",
       "execution_count": null,
       "outputs": []
     },
@@ -659,7 +659,7 @@
         "\n",
         "To fix this we can **take control of the copy-view situation and explicitly ask for a copy of the dataset when subsetting the data**. Use the [`copy()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html) method to do this:"
       ],
-      "id": "7eb5601d"
+      "id": "5560b768"
     },
     {
       "cell_type": "code",
@@ -671,7 +671,7 @@
         "# Add a column, no warning\n",
         "biscoe['sample_col'] = 100"
       ],
-      "id": "24e71e9a",
+      "id": "081c8ac3",
       "execution_count": null,
       "outputs": []
     },
@@ -681,7 +681,7 @@
       "source": [
         "Now we are sure we did not modify our initial data, but rather the `biscoe` data frame:"
       ],
-      "id": "de8035be"
+      "id": "0b1b9f9a"
     },
     {
       "cell_type": "code",
@@ -690,7 +690,7 @@
         "# Confirm the new column is in our subset data\n",
         "biscoe.head()"
       ],
-      "id": "a6df3d42",
+      "id": "2c7a3a47",
       "execution_count": null,
       "outputs": []
     },
@@ -701,7 +701,7 @@
         "# Confirm that original data was not modified\n",
         "print('sample_col' in penguins.columns)"
       ],
-      "id": "3c9a60e4",
+      "id": "f5ab16c2",
       "execution_count": null,
       "outputs": []
     },
@@ -719,7 +719,7 @@
         "\n",
         "📖 [Dataquest - SettingwithCopyWarning: How to Fix This Warning in Pandas](https://www.dataquest.io/blog/settingwithcopywarning/)"
       ],
-      "id": "bba345f6"
+      "id": "813dbcd0"
     }
   ],
   "metadata": {

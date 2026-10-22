@@ -23,7 +23,7 @@
         "\n",
         "Let's start by importing the necessary libraries:"
       ],
-      "id": "393e999d"
+      "id": "5b3cfdb3"
     },
     {
       "cell_type": "code",
@@ -44,7 +44,7 @@
         "\n",
         "from IPython.display import Image "
       ],
-      "id": "c17d7288",
+      "id": "5e6d6af3",
       "execution_count": null,
       "outputs": []
     },
@@ -54,7 +54,7 @@
       "source": [
         "Then import and select the Thomas Fire within the fire perimeters data:"
       ],
-      "id": "f7a1f462"
+      "id": "aa6bf5a7"
     },
     {
       "cell_type": "code",
@@ -70,7 +70,7 @@
         "print(thomas_fire.crs)\n",
         "thomas_fire.plot()"
       ],
-      "id": "73fbaf63",
+      "id": "eda18100",
       "execution_count": null,
       "outputs": []
     },
@@ -84,7 +84,7 @@
         "\n",
         "Our bounding box will come from the Thomas Fire perimeter. Notice we use method chaining to reproject and extract the bounds."
       ],
-      "id": "a3b4bf2b"
+      "id": "b2f9c64c"
     },
     {
       "cell_type": "code",
@@ -96,7 +96,7 @@
         "                                    )\n",
         "thomas_fire_bbox"
       ],
-      "id": "53ab03a7",
+      "id": "32e57046",
       "execution_count": null,
       "outputs": []
     },
@@ -106,7 +106,7 @@
       "source": [
         "Next, we connect to the Microsoft Planetary Computer data catalog and perform the search. The collection ID for the National Terrestrial Ecosystems data is `gap`:"
       ],
-      "id": "e1b865b7"
+      "id": "1221f69c"
     },
     {
       "cell_type": "code",
@@ -127,7 +127,7 @@
         "print(f\"Returned {len(items)} Items\")\n",
         "items"
       ],
-      "id": "3735267d",
+      "id": "891514fc",
       "execution_count": null,
       "outputs": []
     },
@@ -137,7 +137,7 @@
       "source": [
         "There is a single item in the search, so let's go ahead and select it and view its pre-rendered image:"
       ],
-      "id": "708c5a55"
+      "id": "4bf12950"
     },
     {
       "cell_type": "code",
@@ -149,7 +149,7 @@
         "# Display pre-rendered image\n",
         "Image(url=item.assets['rendered_preview'].href, width=600)"
       ],
-      "id": "fb4d49f7",
+      "id": "3311dcef",
       "execution_count": null,
       "outputs": []
     },
@@ -161,7 +161,7 @@
         "\n",
         "At this point, we can also import the CSV file with the class labels:"
       ],
-      "id": "73646355"
+      "id": "28e877c5"
     },
     {
       "cell_type": "code",
@@ -172,7 +172,7 @@
         "                                  )\n",
         "labels.head()"
       ],
-      "id": "aee99099",
+      "id": "61c97b89",
       "execution_count": null,
       "outputs": []
     },
@@ -186,7 +186,7 @@
         "\n",
         "Next, we can go ahead an open the raster:"
       ],
-      "id": "e9256d10"
+      "id": "441621fa"
     },
     {
       "cell_type": "code",
@@ -196,7 +196,7 @@
         "lulc = rioxr.open_rasterio(item.assets['data'].href)\n",
         "lulc"
       ],
-      "id": "713f8952",
+      "id": "16cda59d",
       "execution_count": null,
       "outputs": []
     },
@@ -206,7 +206,7 @@
       "source": [
         "Notice that `band` is a dimension of length 1. We can go ahead and \"squeeze\" the raster to simplify it:"
       ],
-      "id": "c316aac3"
+      "id": "30b2938e"
     },
     {
       "cell_type": "code",
@@ -216,7 +216,7 @@
         "lulc = lulc.squeeze().drop_vars('band')\n",
         "print(\"Sizes of dimensions:\", dict(lulc.sizes))"
       ],
-      "id": "0d429a40",
+      "id": "32579182",
       "execution_count": null,
       "outputs": []
     },
@@ -226,7 +226,7 @@
       "source": [
         "Next, let's look at how the raster is locatd with respect to the Thomas Fire perimeter and the CA state boundary:"
       ],
-      "id": "f7b01f31"
+      "id": "c08bfd75"
     },
     {
       "cell_type": "code",
@@ -251,7 +251,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "d3d4aa1d",
+      "id": "06e9eebc",
       "execution_count": null,
       "outputs": []
     },
@@ -268,7 +268,7 @@
         "1. Clip the raster using the fire perimeter bounding box using [`rio.clip_box()`](https://corteva.github.io/rioxarray/html/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) and then\n",
         "2. Clip the simplified raster to the fire perimeter using [`rio.clip()`](https://corteva.github.io/rioxarray/html/rioxarray.html#rioxarray.raster_array.RasterArray.clip). "
       ],
-      "id": "175e8860"
+      "id": "d088ce1d"
     },
     {
       "cell_type": "code",
@@ -297,7 +297,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "4517a833",
+      "id": "adb09803",
       "execution_count": null,
       "outputs": []
     },
@@ -309,7 +309,7 @@
         "\n",
         "Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However, as we previously saw, our raster's data type is `uint16` (16 bits unsigned integer). The cast issue appears since `np.nan` is a float (decimal number) and it cannot be casted as a `uint16`. To make sure the clipping function fills in any pixels with the adequate no-data value, let's manually set it:"
       ],
-      "id": "ffa2b5ae"
+      "id": "e44d2994"
     },
     {
       "cell_type": "code",
@@ -321,7 +321,7 @@
         "lulc = lulc.rio.write_nodata(0)\n",
         "print('Updated no-data value: ', lulc.rio.nodata)"
       ],
-      "id": "e32828e1",
+      "id": "e88f7ba3",
       "execution_count": null,
       "outputs": []
     },
@@ -331,7 +331,7 @@
       "source": [
         "This way, the `rio.clip()` function will know what values to assign to pixels outside the fire perimeter. Let's try clipping again, this time using method chaining:"
       ],
-      "id": "d2ba5865"
+      "id": "94082923"
     },
     {
       "cell_type": "code",
@@ -344,7 +344,7 @@
         "# Examine results\n",
         "lulc_clip.plot()                                  "
       ],
-      "id": "a2cfb780",
+      "id": "540feef5",
       "execution_count": null,
       "outputs": []
     },
@@ -385,7 +385,7 @@
         "\n",
         "<!--"
       ],
-      "id": "15d03ba7"
+      "id": "0440abad"
     },
     {
       "cell_type": "code",
@@ -398,7 +398,7 @@
         "\n",
         "pix_counts = pix_counts[pix_counts['code']!=0]  # Remove no-data pixels"
       ],
-      "id": "f3e8dff4",
+      "id": "9652dc4b",
       "execution_count": null,
       "outputs": []
     },
@@ -412,7 +412,7 @@
         "\n",
         "<!--"
       ],
-      "id": "dc399371"
+      "id": "a194d3f4"
     },
     {
       "cell_type": "code",
@@ -422,7 +422,7 @@
         "                   right=pix_counts, \n",
         "                   on='code')"
       ],
-      "id": "9a9edc2e",
+      "id": "b2776a78",
       "execution_count": null,
       "outputs": []
     },
@@ -436,7 +436,7 @@
         "\n",
         "<!--"
       ],
-      "id": "c5880ddd"
+      "id": "5b735420"
     },
     {
       "cell_type": "code",
@@ -445,7 +445,7 @@
         "area_per_pixel = 30**2  # In meters^2\n",
         "classes.iloc[43:47].n_pixels.sum() * area_per_pixel / 1000**2"
       ],
-      "id": "189c32af",
+      "id": "d11c36f1",
       "execution_count": null,
       "outputs": []
     },
@@ -461,7 +461,7 @@
         "\n",
         "<!--"
       ],
-      "id": "e425bc1d"
+      "id": "2c26005e"
     },
     {
       "cell_type": "code",
@@ -472,7 +472,7 @@
         "classes['percentage'] = classes.n_pixels/total_pixels * 100\n",
         "classes = classes.sort_values(by='percentage', ascending=False)"
       ],
-      "id": "a2393311",
+      "id": "1ae0dcef",
       "execution_count": null,
       "outputs": []
     },
@@ -490,7 +490,7 @@
         "```\n",
         "-->"
       ],
-      "id": "6b636c96"
+      "id": "7b525d8f"
     },
     {
       "cell_type": "code",
@@ -540,7 +540,7 @@
         "# Show the plot\n",
         "plt.show()"
       ],
-      "id": "1c454f07",
+      "id": "da6d92cb",
       "execution_count": null,
       "outputs": []
     },
@@ -559,7 +559,7 @@
         "Access the labels for the item and used them to recreate the `labels` `pandas.DataFrame` we imported from the CSV. \n",
         ":::"
       ],
-      "id": "0786be93"
+      "id": "4063d6e3"
     }
   ],
   "metadata": {

@@ -25,10 +25,15 @@
         "In this lesson we will use simplified point data about wild pig sightings in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). \n",
         "GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. \n",
         "\n",
-        "The data we will use today has been simplified from the complete *Sus scrofa* occurrencies data accessed through the GBIF website @gbiforg_user_occurrence_2023 . \n",
+        "The data we will use today has been simplified from the complete *Sus scrofa* occurrence data accessed through the GBIF website @gbiforg_user_occurrence_2023. \n",
+        "\n",
+        "We will also use a shapefile with the boundary of the state of California, which has a single feature: the outline of the state. \n",
+        "We will use it as a base layer for our maps, to see where the wild pig sightings are located within California.\n",
+        "\n",
+        "Both datasets are in the `gbif_sus_scrofa_california` and `ca_state_boundary` folders of the course's [shared data folder]({{< var shared-data-folder >}}).\n",
         "\n",
         "<!-- TODO: column descriptions -->\n",
-        "<!-- TODO: add info about the CA shapefile -->\n",
+        "<!-- TODO: add the source of the CA state boundary data -->\n",
         "\n",
         "## Reproducible file paths\n",
         "In this lesson we will introduce three Python packages:\n",
@@ -39,7 +44,7 @@
         "\n",
         "Let's start by importing these packages:"
       ],
-      "id": "a805f346"
+      "id": "d0ef8eb2"
     },
     {
       "cell_type": "code",
@@ -49,7 +54,7 @@
         "import geopandas as gpd\n",
         "import matplotlib.pyplot as plt"
       ],
-      "id": "72de01f2",
+      "id": "9af32973",
       "execution_count": null,
       "outputs": []
     },
@@ -59,7 +64,7 @@
       "source": [
         "To import our data we will first use the `os` package to create a reproducible file path:"
       ],
-      "id": "efc0ce1a"
+      "id": "e534c65d"
     },
     {
       "cell_type": "code",
@@ -68,7 +73,7 @@
         "fp = os.path.join('data','gbif_sus_scrofa_california','gbif_sus_scrofa_california.shp')\n",
         "fp"
       ],
-      "id": "ece3fa04",
+      "id": "ef85dc49",
       "execution_count": null,
       "outputs": []
     },
@@ -80,7 +85,7 @@
         "\n",
         "We can then use this file path to read in a shapefile with `geopandas` by using the `geopandas.read_file()` function:"
       ],
-      "id": "c02e31d0"
+      "id": "747d36b8"
     },
     {
       "cell_type": "code",
@@ -89,7 +94,7 @@
         "pigs = gpd.read_file(fp)\n",
         "pigs.head()"
       ],
-      "id": "349212a8",
+      "id": "e0376180",
       "execution_count": null,
       "outputs": []
     },
@@ -109,7 +114,7 @@
         "\n",
         "<!--"
       ],
-      "id": "ceb63e68"
+      "id": "56a4c46e"
     },
     {
       "cell_type": "code",
@@ -121,7 +126,7 @@
         "ca_boundary = gpd.read_file(fp)\n",
         "ca_boundary"
       ],
-      "id": "e13bad29",
+      "id": "a2699c4b",
       "execution_count": null,
       "outputs": []
     },
@@ -144,7 +149,7 @@
         "\n",
         "First, notice that the rightmost column of the `pigs` geo-dataframe is a column named `geometry` whose values indicate points:"
       ],
-      "id": "cfae78e5"
+      "id": "52b687c1"
     },
     {
       "cell_type": "code",
@@ -152,7 +157,7 @@
       "source": [
         "pigs.head(3)"
       ],
-      "id": "faab95bf",
+      "id": "c8d6769d",
       "execution_count": null,
       "outputs": []
     },
@@ -162,7 +167,7 @@
       "source": [
         "As usual, we can check the type of our objects using the `type` Python function:"
       ],
-      "id": "344b6aa9"
+      "id": "33930556"
     },
     {
       "cell_type": "code",
@@ -177,7 +182,7 @@
         "# Check the data type of the gbifID column\n",
         "print(type(pigs.gbifID))"
       ],
-      "id": "33fd3ab7",
+      "id": "b35ce5cd",
       "execution_count": null,
       "outputs": []
     },
@@ -187,7 +192,7 @@
       "source": [
         "The data type of the geometry column is also reflected when we look at the data types of the values in each column:"
       ],
-      "id": "abe748c0"
+      "id": "970179de"
     },
     {
       "cell_type": "code",
@@ -196,7 +201,7 @@
         "# Check the data type of each column\n",
         "pigs.dtypes"
       ],
-      "id": "fc47bf53",
+      "id": "ba463a6f",
       "execution_count": null,
       "outputs": []
     },
@@ -206,7 +211,7 @@
       "source": [
         "We can also check the type of each element in the geometry column using the `geom_type` attribute of a `geopandas.GeoDataFrame`:"
       ],
-      "id": "710fa457"
+      "id": "af2418b0"
     },
     {
       "cell_type": "code",
@@ -214,7 +219,7 @@
       "source": [
         "pigs.geom_type"
       ],
-      "id": "cfabe592",
+      "id": "5c194107",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +228,7 @@
       "metadata": {},
       "source": [
         "<!--\n",
-        "This is a `shapely` point. `shapely` is another Python library that to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.\n",
+        "This is a `shapely` point. `shapely` is another Python library used to construct and modify points, lines, and polygons. We will talk more about it in the next lessons.\n",
         "-->\n",
         "\n",
         "::: {.callout-tip}\n",
@@ -239,7 +244,7 @@
         "\n",
         "<!--TODO: add the other information about CRS as in the in-class notebook and csv to geodf lesson -->"
       ],
-      "id": "479b113c"
+      "id": "d85907c5"
     },
     {
       "cell_type": "code",
@@ -248,7 +253,7 @@
         "# Access the CRS of the GeoDataFrame\n",
         "pigs.crs"
       ],
-      "id": "6f0beb13",
+      "id": "ec33229b",
       "execution_count": null,
       "outputs": []
     },
@@ -256,9 +261,9 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "The CRS for our data is the World Geodetic System 1984 (WGS84), represented by the code EPSG:4326. It uses latitude and longitude in degrees to represent places on Earth. This is a very popular CRS, used by Google Earth, GPS systems, and many web-based mapping tools, including Google Maps and OpenStreetMap. We can obtain more information about our CRS by accessing other attributes:"
+        "The CRS for our data is the World Geodetic System 1984 (WGS84), represented by the code EPSG:4326. It uses latitude and longitude in degrees to represent places on Earth. This is a very popular CRS: it is used by GPS and Google Earth, and web-based mapping tools like Google Maps and OpenStreetMap store their coordinates in it. We can obtain more information about our CRS by accessing other attributes:"
       ],
-      "id": "c4f0fc13"
+      "id": "ca3c9ff4"
     },
     {
       "cell_type": "code",
@@ -270,7 +275,7 @@
         "print('Is geographic?: ', pigs.crs.is_geographic)\n",
         "print('Is projected?: ', pigs.crs.is_projected)"
       ],
-      "id": "122474a2",
+      "id": "8b535722",
       "execution_count": null,
       "outputs": []
     },
@@ -286,7 +291,7 @@
         "\n",
         "We access the extent of a `geopandas.GeoDataFrame` using the `total_bounds` attribute:"
       ],
-      "id": "5d11f886"
+      "id": "8ae6fb3b"
     },
     {
       "cell_type": "code",
@@ -295,7 +300,7 @@
         "# Obtain the geographic extent of the geo-dataframe\n",
         "pigs.total_bounds"
       ],
-      "id": "63b99d41",
+      "id": "482f7e76",
       "execution_count": null,
       "outputs": []
     },
@@ -304,6 +309,7 @@
       "metadata": {},
       "source": [
         "These four numbers represent the `minx`, `miny`, `maxx`, `maxy` values for the bounds of the entire geo-dataframe. \n",
+        "Notice that the $x$ values are longitudes and the $y$ values are latitudes: even though the CRS information above lists latitude first, `geopandas` always stores points as ($x$, $y$) = (longitude, latitude).\n",
         "\n",
         "::: {.callout-tip}\n",
         "## Check-in\n",
@@ -312,7 +318,7 @@
         "\n",
         "<!--"
       ],
-      "id": "8b0d6492"
+      "id": "76e7df32"
     },
     {
       "cell_type": "code",
@@ -323,7 +329,7 @@
         "print('CRS: ', ca_boundary.crs, '\\n')\n",
         "print(ca_boundary.total_bounds)"
       ],
-      "id": "fc5c15f5",
+      "id": "fbbed839",
       "execution_count": null,
       "outputs": []
     },
@@ -335,22 +341,22 @@
         "\n",
         "## Data wrangling\n",
         "\n",
-        "GeoPandas is conveniently built on top of `pandas`, so we may use everything we have learned about data selection, wrangling, and modification for a `pandas.DataFrame` to wrange `geopandas.GeoDataFrames`.\n",
+        "GeoPandas is conveniently built on top of `pandas`, so we may use everything we have learned about data selection, wrangling, and modification for a `pandas.DataFrame` to wrangle `geopandas.GeoDataFrame`s.\n",
         "\n",
         "#### Example\n",
         "\n",
-        "We only want to use recent data for wild pig observations. A quick check shows that this dataframe has data since 1818:"
+        "We only want to use recent data for wild pig observations. A quick check shows that this data frame has data since 1818:"
       ],
-      "id": "37ad711e"
+      "id": "d8d8741c"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
-        "# Examine pig observation by year\n",
+        "# Examine pig observations by year\n",
         "pigs['year'].value_counts().sort_index()"
       ],
-      "id": "66aed2ac",
+      "id": "2b4c21ec",
       "execution_count": null,
       "outputs": []
     },
@@ -360,7 +366,7 @@
       "source": [
         "We can use our usual data selection to get data from 2020 onwards:"
       ],
-      "id": "0cca3a96"
+      "id": "a6ffb0d3"
     },
     {
       "cell_type": "code",
@@ -375,7 +381,7 @@
         "# Check length of new dataframe\n",
         "print('Number of observations since 2020: ' , len(pigs_recent))"
       ],
-      "id": "1c26569c",
+      "id": "a3996507",
       "execution_count": null,
       "outputs": []
     },
@@ -394,7 +400,7 @@
         "\n",
         "Let's take a quick look at our recent pigs data:"
       ],
-      "id": "5b1e398f"
+      "id": "15083443"
     },
     {
       "cell_type": "code",
@@ -402,7 +408,29 @@
       "source": [
         "pigs_recent.plot()"
       ],
-      "id": "03cff220",
+      "id": "23e800e9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### `explore()`\n",
+        "\n",
+        "The `plot()` method creates a static map. \n",
+        "To explore our data interactively, we can use the `explore()` method instead. \n",
+        "This creates an interactive map where we can zoom in and out, move around, and hover over each feature to see its attributes:"
+      ],
+      "id": "0fc5c58e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "pigs_recent.explore()"
+      ],
+      "id": "62b8328b",
       "execution_count": null,
       "outputs": []
     },
@@ -414,7 +442,7 @@
         "\n",
         "Going forward, we will make more complex visualizations where we add different layers to a graph and customize it. \n",
         "To do this, we will use the `matplotlib` Python library for creating visualizations. \n",
-        "We can interact with `matplotlib` via its `pyplot` interface, which we imported at the top of the notebook.\n",
+        "We can interact with `matplotlib` via its `pyplot` interface, which we imported at the start of the lesson.\n",
         "\n",
         "Matplotlib graphs the data in a **figure** which can have one or more **axes**. \n",
         "The axes is *only* the area specified by the $x$ axis and $y$ axis and what is plotted in it, while the figure can include multiple axes in it.  \n",
@@ -426,19 +454,19 @@
         "1. Initialize a new figure and axes by calling `pyplot`'s `subplots()` function\n",
         "2. Display the figure using `plt.show()`:"
       ],
-      "id": "5f115e9b"
+      "id": "ca8ad7ac"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
-        "# Initialize empty figure (fig) and axis (ax)\n",
+        "# Initialize empty figure (fig) and axes (ax)\n",
         "fig, ax = plt.subplots()\n",
         "\n",
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "7e9e6d41",
+      "id": "9675ffdb",
       "execution_count": null,
       "outputs": []
     },
@@ -446,19 +474,19 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. \n",
+        "Notice that `plt.subplots()` is a function that returns two objects. When we call it, we get a figure `fig` with a single empty axes `ax`. We can think of this step as setting a new blank canvas on which we will paint. \n",
         "\n",
         "\n",
         "### Adding a layer\n",
         "\n",
-        "When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.\n",
-        "The general syntax to plot data from a dataframe `df` onto an axis is:\n",
+        "When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axes.\n",
+        "The general syntax to plot data from a data frame `df` onto an axes is:\n",
         "```python\n",
-        "# Initialize empty figure and axis\n",
+        "# Initialize empty figure and axes\n",
         "fig, ax = plt.subplots()\n",
         "\n",
-        "# Plot df on the ax axis\n",
-        "df.plot(ax=ax,  # Add plot to axis\n",
+        "# Plot df on the ax axes\n",
+        "df.plot(ax=ax,  # Add plot to axes\n",
         "        ...)    # Other arguments for plot function\n",
         "\n",
         "# Display figure\n",
@@ -467,25 +495,25 @@
         "\n",
         "#### Example\n",
         "\n",
-        "The first layer that we want to add to our axis is the `pigs_recent` point data. \n",
+        "The first layer that we want to add to our axes is the `pigs_recent` point data. \n",
         "We can plot our data using `matplotlib` like this:"
       ],
-      "id": "ba179d95"
+      "id": "d37013aa"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
-        "# Initialize empyt figure and axis\n",
+        "# Initialize empty figure and axes\n",
         "fig, ax = plt.subplots()\n",
         "\n",
-        "# Add pigs point plot to our figure's axis\n",
+        "# Add pigs point plot to our figure's axes\n",
         "pigs_recent.plot(ax=ax)\n",
         "\n",
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "3adac9de",
+      "id": "9b49ff62",
       "execution_count": null,
       "outputs": []
     },
@@ -496,16 +524,16 @@
         "### Customization \n",
         "\n",
         "Matplotlib allows for a lot of customization. \n",
-        "Some of it can be done directly in the `plot()` method for the dataframe (like we've done when ploting data using `pandas`), while other is done by updating attributes of the `ax` axis. \n",
-        "The following diagram shows some examples of elements in the axis that can be updated.\n",
+        "Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while the rest is done by updating attributes of the `ax` axes. \n",
+        "The following diagram shows some examples of elements in the axes that can be updated.\n",
         "\n",
         "![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width=\"70%\"}\n",
         "\n",
         "#### Example\n",
         "\n",
-        "Some basic customization for our pigs data could looke like this:"
+        "Some basic customization for our pigs data could look like this:"
       ],
-      "id": "8f1780d9"
+      "id": "a3074e53"
     },
     {
       "cell_type": "code",
@@ -514,13 +542,13 @@
         "# Initialize empty figure\n",
         "fig, ax = plt.subplots()\n",
         "\n",
-        "# Add data to axis\n",
-        "pigs_recent.plot(ax=ax,         # Add plot to axis\n",
+        "# Add data to axes\n",
+        "pigs_recent.plot(ax=ax,         # Add plot to axes\n",
         "                 alpha=0.5,     # Adjust transparency\n",
         "                 color='brown'  # Update point color\n",
         "                 )\n",
         "\n",
-        "# Update axis \n",
+        "# Update axes \n",
         "ax.set_title('Reported \"Sus scrofa\" sightings in CA (2020-2023)')\n",
         "ax.set_xlabel('Longitude')\n",
         "ax.set_ylabel('Latitude')\n",
@@ -528,7 +556,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "096b7796",
+      "id": "0d0c6367",
       "execution_count": null,
       "outputs": []
     },
@@ -538,13 +566,13 @@
       "source": [
         "::: {.callout-tip}\n",
         "## Check-in \n",
-        "1. Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!\n",
+        "1. Add the California state boundary to the plot so the boundary appears behind the points as below. Before plotting, check that both layers have the same CRS using `pigs_recent.crs == ca_boundary.crs`. Don't forget to customize your graph!\n",
         "\n",
         "2. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?\n",
         "\n",
         "3. Discuss with a partner: what are some possible biases or limitations in GBIF species occurrence data (e.g., spatial coverage, sampling effort, data quality)?"
       ],
-      "id": "fd2b8ab3"
+      "id": "6fa49ae5"
     },
     {
       "cell_type": "code",
@@ -574,7 +602,7 @@
         "# Display figure\n",
         "plt.show()"
       ],
-      "id": "78faa4bd",
+      "id": "024dbd2f",
       "execution_count": null,
       "outputs": []
     },
@@ -584,7 +612,7 @@
       "source": [
         ":::"
       ],
-      "id": "dbb04817"
+      "id": "ebba9017"
     }
   ],
   "metadata": {

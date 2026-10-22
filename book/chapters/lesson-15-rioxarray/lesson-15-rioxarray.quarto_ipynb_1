@@ -23,7 +23,7 @@
         "\n",
         "Let's start by loading the libraries we will use: "
       ],
-      "id": "e34a05f0"
+      "id": "11d3de0a"
     },
     {
       "cell_type": "code",
@@ -38,7 +38,7 @@
         "\n",
         "import rioxarray as rioxr"
       ],
-      "id": "74511ea7",
+      "id": "d53ba481",
       "execution_count": null,
       "outputs": []
     },
@@ -49,7 +49,7 @@
         "There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://corteva.github.io/rioxarray/html/getting_started/getting_started.html). \n",
         "Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to import the raster file as an `xarray.DataArray` and make sure all our geospatial data gets loaded correctly:"
       ],
-      "id": "79f72296"
+      "id": "611a5d2f"
     },
     {
       "cell_type": "code",
@@ -60,7 +60,7 @@
         "nir = rioxr.open_rasterio(fp)\n",
         "nir"
       ],
-      "id": "ddd35ff4",
+      "id": "26addea3",
       "execution_count": null,
       "outputs": []
     },
@@ -70,7 +70,7 @@
       "source": [
         "Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordiantes for each dimension, and some attributes. We can also directly access some of these attribues:"
       ],
-      "id": "8a85c61f"
+      "id": "5ce65340"
     },
     {
       "cell_type": "code",
@@ -79,7 +79,7 @@
         "print('Shape: ', nir.shape)\n",
         "print('Data type: ', nir.dtype, '\\n')"
       ],
-      "id": "df5086d6",
+      "id": "f7014ca3",
       "execution_count": null,
       "outputs": []
     },
@@ -89,7 +89,7 @@
       "source": [
         "Using the `.values` attribute we can retrieve the underlying `numpy.array` holding the values of the variable:"
       ],
-      "id": "fe23ff33"
+      "id": "7d435b3e"
     },
     {
       "cell_type": "code",
@@ -98,7 +98,7 @@
         "print(type(nir.values))\n",
         "nir.values"
       ],
-      "id": "b28f30f5",
+      "id": "02871beb",
       "execution_count": null,
       "outputs": []
     },
@@ -108,7 +108,7 @@
       "source": [
         "We can also plot our data:"
       ],
-      "id": "152e40d5"
+      "id": "1a4df03b"
     },
     {
       "cell_type": "code",
@@ -116,7 +116,7 @@
       "source": [
         "nir.plot()"
       ],
-      "id": "5849a354",
+      "id": "f78ed1ae",
       "execution_count": null,
       "outputs": []
     },
@@ -134,7 +134,7 @@
         "\n",
         "Notice that our raster has an unnecessary extra dimension: band."
       ],
-      "id": "57512ea2"
+      "id": "d2d4f345"
     },
     {
       "cell_type": "code",
@@ -142,7 +142,7 @@
       "source": [
         "print(\"Sizes of dimensions:\", dict(nir.sizes))"
       ],
-      "id": "b9a570cc",
+      "id": "ec09c672",
       "execution_count": null,
       "outputs": []
     },
@@ -161,7 +161,7 @@
         "\n",
         "Let's do this:"
       ],
-      "id": "031a07f1"
+      "id": "337ad668"
     },
     {
       "cell_type": "code",
@@ -178,7 +178,7 @@
         "nir = nir.drop('band')\n",
         "print(nir.dims, nir.coords)"
       ],
-      "id": "00733071",
+      "id": "c386052c",
       "execution_count": null,
       "outputs": []
     },
@@ -191,7 +191,7 @@
         "Remember an **accessor** in Python let's us access a different set of properties of an object. We have previously used accesors like `.str` and `.dt` in `pandas` to work with strings and dates. In this lesson, we will use the `.rio` accessor for an `xarray.DataArray` to access its raster properties. \n",
         "For example, we can access the number of bands, height, width, spatial bounding box, and CRS:"
       ],
-      "id": "3ef27d0b"
+      "id": "fea4b9e8"
     },
     {
       "cell_type": "code",
@@ -207,7 +207,7 @@
         "\n",
         "print('CRS: ', nir.rio.crs)"
       ],
-      "id": "d2b9e9f7",
+      "id": "a64f018b",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +223,7 @@
         "\n",
         "Let's now import the RGB raster:"
       ],
-      "id": "8357ab8c"
+      "id": "3489e866"
     },
     {
       "cell_type": "code",
@@ -234,7 +234,7 @@
         "rgb = rioxr.open_rasterio(fp)\n",
         "rgb"
       ],
-      "id": "2a88b828",
+      "id": "895d5f57",
       "execution_count": null,
       "outputs": []
     },
@@ -262,7 +262,7 @@
         "Finally, let's plot this raster.\n",
         "Since it has three bands, we can plot it as an image using the `.plot.imshow()` method, which will interpret the three bands of the object as RGB."
       ],
-      "id": "7eed1a1f"
+      "id": "901f446e"
     },
     {
       "cell_type": "code",
@@ -274,7 +274,7 @@
         "                aspect=rgb_aspect_ratio  # Ratio of width/height\n",
         "                )"
       ],
-      "id": "b30ce846",
+      "id": "34be9692",
       "execution_count": null,
       "outputs": []
     },
@@ -287,7 +287,7 @@
         "Our area of interest (AOI) for this lesson is a smaller region that includes only a few blocks around the NCEAS building. \n",
         "This is outlined in a GeoJSON file:"
       ],
-      "id": "faab3cbc"
+      "id": "c00f90f1"
     },
     {
       "cell_type": "code",
@@ -297,7 +297,7 @@
         "aoi = gpd.read_file(fp)\n",
         "aoi.plot()"
       ],
-      "id": "6fef8338",
+      "id": "a826e059",
       "execution_count": null,
       "outputs": []
     },
@@ -307,7 +307,7 @@
       "source": [
         "Remember: **if two geospatial sets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:"
       ],
-      "id": "40a909f0"
+      "id": "d23763ae"
     },
     {
       "cell_type": "code",
@@ -318,7 +318,7 @@
         "print('nir CRS: ', nir.rio.crs)\n",
         "print('rgb CRS: ', rgb.rio.crs)"
       ],
-      "id": "bc52d6a2",
+      "id": "215380e4",
       "execution_count": null,
       "outputs": []
     },
@@ -328,7 +328,7 @@
       "source": [
         "So let's reproject:"
       ],
-      "id": "4ec25e62"
+      "id": "a84b1279"
     },
     {
       "cell_type": "code",
@@ -338,7 +338,7 @@
         "aoi = aoi.to_crs(rgb.rio.crs)\n",
         "print('Matched CRS?',  aoi.crs == rgb.rio.crs)"
       ],
-      "id": "bcb290bf",
+      "id": "c61687fc",
       "execution_count": null,
       "outputs": []
     },
@@ -348,7 +348,7 @@
       "source": [
         "And plot them together:"
       ],
-      "id": "0e635257"
+      "id": "5f263285"
     },
     {
       "cell_type": "code",
@@ -360,7 +360,7 @@
         "aoi.plot(ax=ax, alpha=0.6)\n",
         "plt.show()"
       ],
-      "id": "31280290",
+      "id": "d0c01594",
       "execution_count": null,
       "outputs": []
     },
@@ -370,7 +370,7 @@
       "source": [
         "To clip the raster using the AOI polygon we use the `.rio.clip_box()` method:"
       ],
-      "id": "4784b612"
+      "id": "d36be9eb"
     },
     {
       "cell_type": "code",
@@ -380,7 +380,7 @@
         "rgb_small = rgb.rio.clip_box(*aoi.total_bounds)\n",
         "nir_small = nir.rio.clip_box(*aoi.total_bounds)"
       ],
-      "id": "dec54178",
+      "id": "c029d619",
       "execution_count": null,
       "outputs": []
     },
@@ -395,7 +395,7 @@
         "\n",
         "Let's check our clipped data:\n"
       ],
-      "id": "bffa45e6"
+      "id": "6af058ae"
     },
     {
       "cell_type": "code",
@@ -407,7 +407,7 @@
         "\n",
         "nir_small.plot()"
       ],
-      "id": "837476e1",
+      "id": "0ae64a13",
       "execution_count": null,
       "outputs": []
     },
@@ -452,7 +452,7 @@
         "\n",
         "First, let's select the red band:"
       ],
-      "id": "4d03e69d"
+      "id": "970eb316"
     },
     {
       "cell_type": "code",
@@ -462,7 +462,7 @@
         "red = rgb_small.sel(band=1)\n",
         "red"
       ],
-      "id": "697c0818",
+      "id": "33e389f1",
       "execution_count": null,
       "outputs": []
     },
@@ -473,7 +473,7 @@
         "We can perform raster calculations using the same arithmetic we use for `numpy.array`s (because, underneath it all, that's what they are). \n",
         "So our NDVI calculation is as follows:"
       ],
-      "id": "e9c5f381"
+      "id": "ff07f627"
     },
     {
       "cell_type": "code",
@@ -482,7 +482,7 @@
         "ndvi = (nir - red)/(nir + red)\n",
         "ndvi.plot()"
       ],
-      "id": "ecabbd80",
+      "id": "c5da43bb",
       "execution_count": null,
       "outputs": []
     },
@@ -496,7 +496,7 @@
         "The `uint8` (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. \n",
         "In particular, calculations don't return what what we are used to when working with intgers ([they're done module 256](https://en.wikipedia.org/wiki/Modular_arithmetic)):"
       ],
-      "id": "d5c20934"
+      "id": "ac200ecb"
     },
     {
       "cell_type": "code",
@@ -504,7 +504,7 @@
       "source": [
         "np.uint8(150) + np.uint8(150)"
       ],
-      "id": "40a3b723",
+      "id": "3e8345e8",
       "execution_count": null,
       "outputs": []
     },
@@ -526,7 +526,7 @@
         "\n",
         "To be able to perform the calculation successfully, we will need to udpate the data type of our rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations:"
       ],
-      "id": "fc02374a"
+      "id": "44b4030b"
     },
     {
       "cell_type": "code",
@@ -563,7 +563,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "b2950614",
+      "id": "d6638c93",
       "execution_count": null,
       "outputs": []
     },
@@ -573,7 +573,7 @@
       "source": [
         "Remember that plants will always have positive NDVI values between 0.2 and 1. Can you spot the Santa Barbara Courthouse?\n"
       ],
-      "id": "e64f5ef3"
+      "id": "5ff92caa"
     }
   ],
   "metadata": {

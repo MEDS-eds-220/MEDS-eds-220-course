@@ -53,7 +53,7 @@
         "<!--https://github.com/NCEAS/msai4earth-esa/blob/main/examples/naip_example/access_naip.ipynb-->\n",
         "First, load the necessary packages:"
       ],
-      "id": "db8be151"
+      "id": "e0ec328d"
     },
     {
       "cell_type": "code",
@@ -70,7 +70,7 @@
         "\n",
         "from IPython.display import Image  # To nicely display images"
       ],
-      "id": "0e91df2f",
+      "id": "bfc18418",
       "execution_count": null,
       "outputs": []
     },
@@ -81,7 +81,7 @@
         "### Access\n",
         "We use the `Client` function from the `pystac_client` package to access the catalog:"
       ],
-      "id": "f8ee0930"
+      "id": "cc1c9f4e"
     },
     {
       "cell_type": "code",
@@ -93,7 +93,7 @@
         "    modifier=planetary_computer.sign_inplace,\n",
         ")"
       ],
-      "id": "11be4211",
+      "id": "96f49262",
       "execution_count": null,
       "outputs": []
     },
@@ -106,7 +106,7 @@
         "### Catalog Exploration\n",
         "Let's check out some of the catalog's metadata:"
       ],
-      "id": "aa28acd8"
+      "id": "353ba452"
     },
     {
       "cell_type": "code",
@@ -116,7 +116,7 @@
         "print('Title:', catalog.title)\n",
         "print('Description:', catalog.description)"
       ],
-      "id": "25c0a13a",
+      "id": "75b167d0",
       "execution_count": null,
       "outputs": []
     },
@@ -126,7 +126,7 @@
       "source": [
         "We can access its collections by using the `get_collections()` method:"
       ],
-      "id": "a7b10324"
+      "id": "6ab6afad"
     },
     {
       "cell_type": "code",
@@ -134,7 +134,7 @@
       "source": [
         "catalog.get_collections()"
       ],
-      "id": "5ada1083",
+      "id": "6fbdfdbe",
       "execution_count": null,
       "outputs": []
     },
@@ -148,7 +148,7 @@
         "\n",
         "Let's try getting the collections from the catalog again:"
       ],
-      "id": "6c6b51db"
+      "id": "96ab74ef"
     },
     {
       "cell_type": "code",
@@ -163,7 +163,7 @@
         "for i in range(10):\n",
         "    print('-', collections[i].id)"
       ],
-      "id": "9b20d41a",
+      "id": "d235a3dc",
       "execution_count": null,
       "outputs": []
     },
@@ -175,7 +175,7 @@
         "The NAIP catalog's ID is `'naip'`. \n",
         "We can select a single collection for exploration using the `get_child()` method for the catalog and the collection ID as the parameter:"
       ],
-      "id": "ed18ecea"
+      "id": "b6d770e7"
     },
     {
       "cell_type": "code",
@@ -184,7 +184,7 @@
         "naip_collection = catalog.get_child('naip')\n",
         "naip_collection"
       ],
-      "id": "2ae32b90",
+      "id": "662fa4a4",
       "execution_count": null,
       "outputs": []
     },
@@ -208,7 +208,7 @@
         "In this lesson we will look for the NAIP scenes over Santa Barbara from 2018 to 2023. \n",
         "We'll use the GeoJSON method to define the area of interest:"
       ],
-      "id": "dded10d7"
+      "id": "c33dff16"
     },
     {
       "cell_type": "code",
@@ -238,7 +238,7 @@
         "    datetime = time_range)\n",
         "search"
       ],
-      "id": "a347216e",
+      "id": "2a13f95d",
       "execution_count": null,
       "outputs": []
     },
@@ -248,7 +248,7 @@
       "source": [
         "To get the items found in the search (or check if there were any matches in the search) we use the `item_collection()` method:"
       ],
-      "id": "941c77ee"
+      "id": "e26058c8"
     },
     {
       "cell_type": "code",
@@ -258,7 +258,7 @@
         "items = search.item_collection()\n",
         "len(items)"
       ],
-      "id": "317820c2",
+      "id": "dd792bbf",
       "execution_count": null,
       "outputs": []
     },
@@ -268,7 +268,7 @@
       "source": [
         "This output tells us there were three items in the catalog that matched our search!"
       ],
-      "id": "fdb53edc"
+      "id": "bf75eddf"
     },
     {
       "cell_type": "code",
@@ -276,7 +276,7 @@
       "source": [
         "items"
       ],
-      "id": "82ae0347",
+      "id": "f3709089",
       "execution_count": null,
       "outputs": []
     },
@@ -288,7 +288,7 @@
         "<!--https://pystac.readthedocs.io/en/stable/api/pystac.html#pystac.Item-->\n",
         "Let's get the first item in the search:"
       ],
-      "id": "538baa5f"
+      "id": "a68d9031"
     },
     {
       "cell_type": "code",
@@ -298,7 +298,7 @@
         "item = items[0]\n",
         "type(item)"
       ],
-      "id": "0fd51f54",
+      "id": "d273e17c",
       "execution_count": null,
       "outputs": []
     },
@@ -310,7 +310,7 @@
         "The item does not contain the data itself, but rather metadata and assets that contain links to access the actual data.\n",
         "Some of the metadata:"
       ],
-      "id": "98ccd155"
+      "id": "21348f37"
     },
     {
       "cell_type": "code",
@@ -320,7 +320,7 @@
         "print('ID:' , item.id)\n",
         "item.properties"
       ],
-      "id": "fe623ea2",
+      "id": "7a3ad86a",
       "execution_count": null,
       "outputs": []
     },
@@ -331,7 +331,7 @@
         "Just as the item properties, the item assets are given in a dictionary, with each value being a [`pystac.asset`](https://pystac.readthedocs.io/en/stable/api/asset.html)\n",
         "Let's check the assets in the `item`:"
       ],
-      "id": "578bffbf"
+      "id": "7c88b011"
     },
     {
       "cell_type": "code",
@@ -339,7 +339,7 @@
       "source": [
         "item.assets"
       ],
-      "id": "2527fd29",
+      "id": "10d9d2a5",
       "execution_count": null,
       "outputs": []
     },
@@ -350,7 +350,7 @@
         "for key in item.assets.keys():\n",
         "    print(key, '--', item.assets[key].title)"
       ],
-      "id": "9ff2cd41",
+      "id": "7ed6aec3",
       "execution_count": null,
       "outputs": []
     },
@@ -361,7 +361,7 @@
         "Notice each asset has an `href`, which is a link to the data. \n",
         "For example, we can use the URL for the `'rendered_preview'` asset to plot it:"
       ],
-      "id": "794f33ed"
+      "id": "cdbf4655"
     },
     {
       "cell_type": "code",
@@ -370,7 +370,7 @@
         "# Plot rendered preview\n",
         "Image(url=item.assets['rendered_preview'].href, width=500)"
       ],
-      "id": "ef64f0b5",
+      "id": "3a8c7c5b",
       "execution_count": null,
       "outputs": []
     },
@@ -383,7 +383,7 @@
         "Again, we access this data via its URL. \n",
         "This time, we open it using `rioxr.open_rasterio()` directly:"
       ],
-      "id": "191b5de6"
+      "id": "b1395970"
     },
     {
       "cell_type": "code",
@@ -392,7 +392,7 @@
         "sb = rioxr.open_rasterio(item.assets['image'].href)\n",
         "sb"
       ],
-      "id": "d15549f5",
+      "id": "959d9827",
       "execution_count": null,
       "outputs": []
     },
@@ -403,7 +403,7 @@
         "Notice this raster has four bands (red, green, blue, nir), so we cannot use the `.plot.imshow()` method directly (as this function only works when we have three bands). \n",
         "Thus we need select the bands we want to plot (RGB) before plotting:"
       ],
-      "id": "fddcec5d"
+      "id": "ca4acdd8"
     },
     {
       "cell_type": "code",
@@ -416,7 +416,7 @@
         "# Select R,G,B bands and plot\n",
         "sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)"
       ],
-      "id": "77191925",
+      "id": "ca57e969",
       "execution_count": null,
       "outputs": []
     },
@@ -440,7 +440,7 @@
         "\n",
         "<!--"
       ],
-      "id": "9fabaf3b"
+      "id": "69d9b7cc"
     },
     {
       "cell_type": "code",
@@ -455,7 +455,7 @@
         "\n",
         "dem = rioxr.open_rasterio(items[0].assets['data'].href)"
       ],
-      "id": "306842a3",
+      "id": "e7a299c8",
       "execution_count": null,
       "outputs": []
     },
@@ -470,7 +470,7 @@
         "\n",
         "Let's take a look at our elevation raster over Santa Barbara:"
       ],
-      "id": "4a1a20f3"
+      "id": "eb9748d6"
     },
     {
       "cell_type": "code",
@@ -478,7 +478,7 @@
       "source": [
         "dem.plot()"
       ],
-      "id": "b7a663f7",
+      "id": "dc664ee4",
       "execution_count": null,
       "outputs": []
     },
@@ -509,7 +509,7 @@
         "\n",
         "Our call looks like this:"
       ],
-      "id": "88b7443d"
+      "id": "c778b86e"
     },
     {
       "cell_type": "code",
@@ -519,7 +519,7 @@
         "dem_coarse = dem.coarsen(x=20,y=20).max()\n",
         "dem_coarse"
       ],
-      "id": "e52b8ddf",
+      "id": "d0cc9d73",
       "execution_count": null,
       "outputs": []
     },
@@ -532,7 +532,7 @@
         "print(f\"coarse resolution: {dem_coarse.rio.width}x{dem_coarse.rio.height}\")\n",
         "dem_coarse.plot()"
       ],
-      "id": "aafbf1de",
+      "id": "ea40c012",
       "execution_count": null,
       "outputs": []
     },
@@ -554,7 +554,7 @@
         "\n",
         "![](/book/images/lesson-16/sb-and-aoi-mpc.png)\n"
       ],
-      "id": "25c3af86"
+      "id": "bea26ad1"
     },
     {
       "cell_type": "code",
@@ -566,7 +566,7 @@
         "                crs='epsg:4326')\n",
         "aoi.plot()"
       ],
-      "id": "4d91ffd9",
+      "id": "4e775fcc",
       "execution_count": null,
       "outputs": []
     },
@@ -581,7 +581,7 @@
         "print('matched crs?',  aoi.crs == sb.rio.crs)\n",
         "aoi.crs"
       ],
-      "id": "2b4031a5",
+      "id": "ee301286",
       "execution_count": null,
       "outputs": []
     },
@@ -600,7 +600,7 @@
         "sb.sel(band=[1,2,3]).plot.imshow(ax=ax)\n",
         "aoi.plot(ax=ax, color='red', alpha=0.6)"
       ],
-      "id": "4d68691c",
+      "id": "631075fd",
       "execution_count": null,
       "outputs": []
     },
@@ -630,7 +630,7 @@
         "\n",
         "<!--"
       ],
-      "id": "c2c3f6df"
+      "id": "4b597943"
     },
     {
       "cell_type": "code",
@@ -638,7 +638,7 @@
       "source": [
         "from shapely import Polygon"
       ],
-      "id": "f1f33f47",
+      "id": "cb11f397",
       "execution_count": null,
       "outputs": []
     },
@@ -657,7 +657,7 @@
         "5. one option is two copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`\n",
         "6. instead, we will create our region of index by just *copy-pasting the list of points* and storing it as a variable:"
       ],
-      "id": "4c7c77fa"
+      "id": "37d66761"
     },
     {
       "cell_type": "code",
@@ -670,7 +670,7 @@
         "          [-119.6967885126002, 34.426300194372274],\n",
         "          [-119.70608227128903, 34.426300194372274]]"
       ],
-      "id": "fd211cde",
+      "id": "b8564852",
       "execution_count": null,
       "outputs": []
     },
@@ -680,7 +680,7 @@
       "source": [
         "We can then create a new `geopandas.GeoDataFrame`:"
       ],
-      "id": "922cebd6"
+      "id": "036ac556"
     },
     {
       "cell_type": "code",
@@ -691,7 +691,7 @@
         "                           crs='epsg:4326')\n",
         "aoi"
       ],
-      "id": "183fdd07",
+      "id": "9ff4634b",
       "execution_count": null,
       "outputs": []
     },
@@ -706,7 +706,7 @@
         "- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.\n",
         "-->"
       ],
-      "id": "e9aeae77"
+      "id": "4a6b9d8c"
     }
   ],
   "metadata": {

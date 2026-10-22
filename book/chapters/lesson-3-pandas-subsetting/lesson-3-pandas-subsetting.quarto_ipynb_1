@@ -31,7 +31,7 @@
         "\n",
         "The annual bird species richness estimates are in a CSV file with 13 columns and 14 rows, which you can [access the data here](https://github.com/MEDS-eds-220/MEDS-eds-220-course/tree/main/book/chapters/lesson-3-pandas-subsetting/data). You can see the first three rows below."
       ],
-      "id": "6f3622de"
+      "id": "9e4f6cef"
     },
     {
       "cell_type": "code",
@@ -46,7 +46,7 @@
         "# See the first three rows\n",
         "df.head(3)"
       ],
-      "id": "208fc5aa",
+      "id": "c4da0ecb",
       "execution_count": null,
       "outputs": []
     },
@@ -64,7 +64,7 @@
         "\n",
         "To read in a CSV file into our Python workspace we will first use the `os` package to create a reproducible file path:"
       ],
-      "id": "c1847206"
+      "id": "445aac1d"
     },
     {
       "cell_type": "code",
@@ -76,7 +76,7 @@
         "fp = os.path.join('data','wetlands_seasonal_bird_diversity.csv')\n",
         "fp"
       ],
-      "id": "1064a3a4",
+      "id": "084b2efc",
       "execution_count": null,
       "outputs": []
     },
@@ -90,7 +90,7 @@
         "\n",
         "We can then use this file path to read in a CSV with `pandas` by using the `pandas.read_csv` function:"
       ],
-      "id": "134cde29"
+      "id": "57d0ee3b"
     },
     {
       "cell_type": "code",
@@ -99,7 +99,7 @@
         "# Read in file, argument is the file path\n",
         "df = pd.read_csv(fp)"
       ],
-      "id": "db03fa7d",
+      "id": "a9129198",
       "execution_count": null,
       "outputs": []
     },
@@ -109,7 +109,7 @@
       "source": [
         "Next, we obtain some high-level information about this data frame: "
       ],
-      "id": "73a87ba0"
+      "id": "9dddf6a9"
     },
     {
       "cell_type": "code",
@@ -118,7 +118,7 @@
         "# Print data frame's first five rows \n",
         "df.head()"
       ],
-      "id": "d934c8eb",
+      "id": "e25baa3b",
       "execution_count": null,
       "outputs": []
     },
@@ -129,7 +129,7 @@
         "# Print data frame's last five rows \n",
         "df.tail()"
       ],
-      "id": "502babc6",
+      "id": "e5aec4de",
       "execution_count": null,
       "outputs": []
     },
@@ -140,7 +140,7 @@
         "# Print data frame's column names\n",
         "df.columns"
       ],
-      "id": "5ae22877",
+      "id": "dabe1a18",
       "execution_count": null,
       "outputs": []
     },
@@ -151,7 +151,7 @@
         "# List the data types of each column\n",
         "df.dtypes"
       ],
-      "id": "73e8d0e5",
+      "id": "2ab907f7",
       "execution_count": null,
       "outputs": []
     },
@@ -162,7 +162,7 @@
         "# Print data frame's shape: output is a tuple (# rows, # columns)\n",
         "df.shape"
       ],
-      "id": "4ea41702",
+      "id": "209cc3bd",
       "execution_count": null,
       "outputs": []
     },
@@ -182,7 +182,7 @@
         "#### Example \n",
         " Suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:"
       ],
-      "id": "795e47d2"
+      "id": "f227f7a9"
     },
     {
       "cell_type": "code",
@@ -194,7 +194,7 @@
         "# Print first five elements in this column\n",
         "mul_spring.head()"
       ],
-      "id": "85b5ca27",
+      "id": "5aee2f11",
       "execution_count": null,
       "outputs": []
     },
@@ -204,7 +204,7 @@
       "source": [
         "Since we only selected a single column, `mul_spring` is a `pandas.Series`:"
       ],
-      "id": "5be7bb7f"
+      "id": "5a8125ce"
     },
     {
       "cell_type": "code",
@@ -213,7 +213,7 @@
         "# Check the type of the output\n",
         "print(type(mul_spring))"
       ],
-      "id": "e1e8be7f",
+      "id": "6b1b6fb8",
       "execution_count": null,
       "outputs": []
     },
@@ -233,7 +233,7 @@
         "\n",
         "For example, to see the head of the `MUL_spring` column we would do:"
       ],
-      "id": "2135ed8d"
+      "id": "6d282a30"
     },
     {
       "cell_type": "code",
@@ -241,7 +241,7 @@
       "source": [
         "df.MUL_spring.head()"
       ],
-      "id": "cd8b2afb",
+      "id": "d041e2eb",
       "execution_count": null,
       "outputs": []
     },
@@ -278,7 +278,7 @@
         "#### Example\n",
         "If we want to look at the species in the Tijuana Estuary during winter and fall, then we can select these columns like this:"
       ],
-      "id": "4694a276"
+      "id": "cec1c59f"
     },
     {
       "cell_type": "code",
@@ -287,7 +287,7 @@
         "# Select columns with names \"TJE_winter\" and \"TJE_fall\"\n",
         "tje_wf = df[['TJE_winter','TJE_fall']]"
       ],
-      "id": "b01db798",
+      "id": "23c96f3f",
       "execution_count": null,
       "outputs": []
     },
@@ -301,7 +301,7 @@
         "## Check-in\n",
         "What is the type and shape of the `tje_wf` output? Verify your answer."
       ],
-      "id": "1043edd4"
+      "id": "2fa0f2ed"
     },
     {
       "cell_type": "code",
@@ -315,7 +315,7 @@
         "# Check the shape of the selection\n",
         "print((tje_wf.shape))"
       ],
-      "id": "d34d29b6",
+      "id": "3b6221c4",
       "execution_count": null,
       "outputs": []
     },
@@ -343,7 +343,7 @@
         "\n",
         "Let's select the slice of columns that covers all data from Carpinteria Salt Marsh and Mugu Lagoon. This corresponds to all columns between `CSM_winter` and `MUL_fall`."
       ],
-      "id": "cf9146da"
+      "id": "5a362c8a"
     },
     {
       "cell_type": "code",
@@ -353,7 +353,7 @@
         "csm_mul = df.loc[:,'CSM_winter':'MUL_fall']\n",
         "csm_mul.head()"
       ],
-      "id": "707ef476",
+      "id": "026fd3c4",
       "execution_count": null,
       "outputs": []
     },
@@ -380,7 +380,7 @@
         "\n",
         "Suppose we are interested in all data after 2020. We can select these rows in this way:"
       ],
-      "id": "aac1d040"
+      "id": "9de67ad9"
     },
     {
       "cell_type": "code",
@@ -390,7 +390,7 @@
         "post_2020 = df[df['year']>2020]\n",
         "post_2020"
       ],
-      "id": "db333a6c",
+      "id": "c1aa76c2",
       "execution_count": null,
       "outputs": []
     },
@@ -400,7 +400,7 @@
       "source": [
         "Let's break down what is happening here. The condition for our rows is `df['year']>2020`, this is a `pandas.Series` with boolean values (`True` or `False`) indicating which rows satisfy the condition year>2020:"
       ],
-      "id": "db60d1f7"
+      "id": "8402f73e"
     },
     {
       "cell_type": "code",
@@ -412,7 +412,7 @@
         "# Print the boolean series\n",
         "df['year']>2020"
       ],
-      "id": "22e74ccf",
+      "id": "65195155",
       "execution_count": null,
       "outputs": []
     },
@@ -433,7 +433,7 @@
         "\n",
         "Suppose we want to look at data from years 2012 to 2015 (including both years). One way of doing this is to use the `between` method in our condition:"
       ],
-      "id": "625f8de6"
+      "id": "62039e27"
     },
     {
       "cell_type": "code",
@@ -442,7 +442,7 @@
         "subset = df[df['year'].between(2012, 2015)]\n",
         "subset"
       ],
-      "id": "6f042ce1",
+      "id": "5fc2a91d",
       "execution_count": null,
       "outputs": []
     },
@@ -495,7 +495,7 @@
         "\n",
         "Let's select rows in which the Carpinteria Salt Marsh has more than 50 species registered in winter *or* fall:"
       ],
-      "id": "cd77abeb"
+      "id": "4edb0d7d"
     },
     {
       "cell_type": "code",
@@ -503,7 +503,7 @@
       "source": [
         "df[ (df['CSM_winter']>50) | (df['CSM_fall']>50)]"
       ],
-      "id": "08a3a0c6",
+      "id": "14b7d699",
       "execution_count": null,
       "outputs": []
     },
@@ -515,7 +515,7 @@
         "\n",
         "Let's select rows in which both the Carpinteria Salt Marsh and the San Dieguito Wetland have more than 60 reported bird species during spring:"
       ],
-      "id": "8594f20d"
+      "id": "95aa15f2"
     },
     {
       "cell_type": "code",
@@ -523,7 +523,7 @@
       "source": [
         "df[ (df['CSM_spring']>60) & (df['SDW_spring']>60)]"
       ],
-      "id": "ea9ed20a",
+      "id": "52f54c65",
       "execution_count": null,
       "outputs": []
     },
@@ -545,7 +545,7 @@
         "\n",
         "Our `post_2020` subset kept the original row labels from `df`: 11, 12, and 13."
       ],
-      "id": "5cdaa3e8"
+      "id": "0d7ec2cb"
     },
     {
       "cell_type": "code",
@@ -554,7 +554,7 @@
         "# Select the first row by position\n",
         "post_2020.iloc[0]"
       ],
-      "id": "8af2d2d2",
+      "id": "290d2d2c",
       "execution_count": null,
       "outputs": []
     },
@@ -565,7 +565,7 @@
         "# Select the same row by its label\n",
         "post_2020.loc[11]"
       ],
-      "id": "2ca7255f",
+      "id": "14e0c177",
       "execution_count": null,
       "outputs": []
     },
@@ -575,7 +575,7 @@
       "source": [
         "Both return the 2021 row. `iloc` counts positions starting from 0, while `loc` uses the labels in the index. That's why `post_2020.loc[0]` raises a `KeyError`: there is no row labeled 0 in `post_2020`."
       ],
-      "id": "52329769"
+      "id": "0739c6c7"
     },
     {
       "cell_type": "code",
@@ -586,7 +586,7 @@
         "# Show only the last line of error messages\n",
         "%xmode Minimal"
       ],
-      "id": "2bbc83c7",
+      "id": "a0a235ae",
       "execution_count": null,
       "outputs": []
     },
@@ -598,7 +598,7 @@
         "# There is no row with label 0\n",
         "post_2020.loc[0]"
       ],
-      "id": "a7028b00",
+      "id": "5baccc99",
       "execution_count": null,
       "outputs": []
     },
@@ -611,7 +611,7 @@
         "# Restore the default error messages\n",
         "%xmode Context"
       ],
-      "id": "1698e078",
+      "id": "207d82ac",
       "execution_count": null,
       "outputs": []
     },
@@ -636,7 +636,7 @@
         "\n",
         "Let's select the winter surveys for Mugu Lagoon and the Tijuana Estuary after 2020:"
       ],
-      "id": "52ef8a31"
+      "id": "87b48fd4"
     },
     {
       "cell_type": "code",
@@ -644,7 +644,7 @@
       "source": [
         "df.loc[df['year']>2020, ['MUL_winter','TJE_winter']]"
       ],
-      "id": "06c83f8d",
+      "id": "f780d4d3",
       "execution_count": null,
       "outputs": []
     },
@@ -672,7 +672,7 @@
         "\n",
         "Suppose we want to select rows 3-7 (including 7) and columns 3 and 4:"
       ],
-      "id": "33fbd543"
+      "id": "fd48ed8c"
     },
     {
       "cell_type": "code",
@@ -680,7 +680,7 @@
       "source": [
         "df.iloc[3:8, [3,4]]"
       ],
-      "id": "990d92d7",
+      "id": "74a53044",
       "execution_count": null,
       "outputs": []
     },
@@ -715,7 +715,7 @@
         "\n",
         "Suppose we want to access the 9th column in the data frame - then we want to select a column *by position*. In this case, the 9th column is the data at San Dieguito Wetland during spring and the 9th position corresponds to the index 8. We can select this column by position using the `iloc` selection:"
       ],
-      "id": "9a063c88"
+      "id": "a18d9fdf"
     },
     {
       "cell_type": "code",
@@ -727,7 +727,7 @@
         "sdw_spring = df.iloc[:,8]\n",
         "sdw_spring.head()"
       ],
-      "id": "e0fe61dc",
+      "id": "e33db63a",
       "execution_count": null,
       "outputs": []
     },
@@ -772,7 +772,7 @@
         "\n",
         "📖 [Python for Data Analysis, 3E - Getting started with pandas](https://wesmckinney.com/book/pandas-basics)"
       ],
-      "id": "f168d267"
+      "id": "b68849d8"
     }
   ],
   "metadata": {

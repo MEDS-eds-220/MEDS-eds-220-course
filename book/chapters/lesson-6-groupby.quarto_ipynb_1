@@ -34,7 +34,7 @@
         "The dataset has 344 rows and 8 columns. \n",
         "Let's start by loading the data:"
       ],
-      "id": "25ccf2a1"
+      "id": "28eaa3d3"
     },
     {
       "cell_type": "code",
@@ -49,7 +49,7 @@
         "\n",
         "penguins.head()"
       ],
-      "id": "792ecd89",
+      "id": "d18cb7e7",
       "execution_count": null,
       "outputs": []
     },
@@ -70,7 +70,7 @@
         "\n",
         "#### Example"
       ],
-      "id": "589a29a4"
+      "id": "0ca48842"
     },
     {
       "cell_type": "code",
@@ -79,7 +79,7 @@
         "# Get the number of non-NA values in each column \n",
         "penguins.count()"
       ],
-      "id": "2daadb49",
+      "id": "30a821fe",
       "execution_count": null,
       "outputs": []
     },
@@ -90,7 +90,7 @@
         "# Get minimum value in each column with numerical values\n",
         "penguins.select_dtypes('number').min()"
       ],
-      "id": "0a752dd5",
+      "id": "adfd8167",
       "execution_count": null,
       "outputs": []
     },
@@ -142,7 +142,7 @@
         "\n",
         "If we don't use `groupby()` and directly apply the `mean()` method to our flipper length column, we obtain the average of all the values in the column:"
       ],
-      "id": "cdf8f6d2"
+      "id": "1e3e41f3"
     },
     {
       "cell_type": "code",
@@ -150,7 +150,7 @@
       "source": [
         "penguins['flipper_length_mm'].mean()"
       ],
-      "id": "63099db8",
+      "id": "fc00efa6",
       "execution_count": null,
       "outputs": []
     },
@@ -160,7 +160,7 @@
       "source": [
         "To get the mean flipper length by species we first group our dataset by the species column's values. However, if we just use the `groupby()` method without specifying what we wish to calculate on each group, not much happens up front:"
       ],
-      "id": "ba01770e"
+      "id": "6eb990d6"
     },
     {
       "cell_type": "code",
@@ -168,7 +168,7 @@
       "source": [
         "penguins.groupby('species')['flipper_length_mm']"
       ],
-      "id": "909ee792",
+      "id": "88ee456c",
       "execution_count": null,
       "outputs": []
     },
@@ -178,7 +178,7 @@
       "source": [
         "We get a `GroupBy` object, which is an intermediate step. It doesn't perform the actual calculations until we specify an operation:"
       ],
-      "id": "44e5c976"
+      "id": "78a64b09"
     },
     {
       "cell_type": "code",
@@ -187,7 +187,7 @@
         "# Average flipper length per species\n",
         "penguins.groupby('species')['flipper_length_mm'].mean()"
       ],
-      "id": "177821d5",
+      "id": "23ae2e71",
       "execution_count": null,
       "outputs": []
     },
@@ -204,7 +204,7 @@
         "\n",
         "Notice that the name of the series is the same as the column on which we calculated the summary statistic. We can easily update this using the `rename()` method:"
       ],
-      "id": "01c49718"
+      "id": "b2d7080f"
     },
     {
       "cell_type": "code",
@@ -219,7 +219,7 @@
         "                        )\n",
         "avg_flipper"
       ],
-      "id": "2e8614d7",
+      "id": "a34abbef",
       "execution_count": null,
       "outputs": []
     },
@@ -263,7 +263,7 @@
         "\n",
         "Suppose we want to know the mean flipper length, this time by examining separately penguin species surveyed on each island. "
       ],
-      "id": "0122e3d4"
+      "id": "01aaec6e"
     },
     {
       "cell_type": "code",
@@ -278,7 +278,7 @@
         "                                )\n",
         "avg_flipper_species_island"
       ],
-      "id": "59108ca8",
+      "id": "12ab64b2",
       "execution_count": null,
       "outputs": []
     },
@@ -293,7 +293,7 @@
         "- `size`: returns the number of observations in a `pandas.Series`\n",
         "- `count()`: returns the number of non-NA observations in the series"
       ],
-      "id": "1a36d5a6"
+      "id": "fc855634"
     },
     {
       "cell_type": "code",
@@ -302,7 +302,7 @@
         "# Number of NA observations\n",
         "penguins['sex'].size - penguins['sex'].count()"
       ],
-      "id": "78438b23",
+      "id": "77ce2d1a",
       "execution_count": null,
       "outputs": []
     },
@@ -312,7 +312,7 @@
       "source": [
         "By default, `groupby()` leaves out the rows where the grouping column has NA values. When we group by `sex` and count the number of observations (rows) we are left with, the 11 NA values are not included:"
       ],
-      "id": "694b5e26"
+      "id": "b6a306a2"
     },
     {
       "cell_type": "code",
@@ -320,7 +320,7 @@
       "source": [
         "penguins.groupby('sex').size()"
       ],
-      "id": "018f1d6a",
+      "id": "8e1a0fd9",
       "execution_count": null,
       "outputs": []
     },
@@ -330,7 +330,7 @@
       "source": [
         "To keep the NA values as their own group, we use the `dropna=False` parameter:"
       ],
-      "id": "58475331"
+      "id": "88ccd2eb"
     },
     {
       "cell_type": "code",
@@ -338,7 +338,7 @@
       "source": [
         "penguins.groupby('sex', dropna=False).size()"
       ],
-      "id": "162eb7fe",
+      "id": "fddbefd9",
       "execution_count": null,
       "outputs": []
     },
@@ -379,7 +379,7 @@
         "\n",
         "Let's say we want to plot the surveyed population per year and island. We could then use method chaining to do this:"
       ],
-      "id": "998fe72f"
+      "id": "96c3bfdc"
     },
     {
       "cell_type": "code",
@@ -394,7 +394,7 @@
         "                ylabel='Island, Year')\n",
         "         )"
       ],
-      "id": "f35c1261",
+      "id": "31d0228d",
       "execution_count": null,
       "outputs": []
     },
@@ -430,7 +430,7 @@
         "-->\n",
         ":::"
       ],
-      "id": "c17de105"
+      "id": "0786ad9f"
     }
   ],
   "metadata": {

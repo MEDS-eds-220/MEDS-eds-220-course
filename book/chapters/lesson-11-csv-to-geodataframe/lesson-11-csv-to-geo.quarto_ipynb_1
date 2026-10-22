@@ -42,7 +42,7 @@
         "\n",
         "Let's start by importing packages and updating viewing options:"
       ],
-      "id": "bcba15f6"
+      "id": "c94d6f7d"
     },
     {
       "cell_type": "code",
@@ -59,7 +59,7 @@
         "# Display all columns when looking at dataframes\n",
         "pd.set_option(\"display.max.columns\", None)"
       ],
-      "id": "68fd0bec",
+      "id": "7c8c8cac",
       "execution_count": null,
       "outputs": []
     },
@@ -69,7 +69,7 @@
       "source": [
         "Next, we import the power plants dataset.  In this lesson, we have downloaded the data into a `data/` folder in the same level as our notebook."
       ],
-      "id": "e9ef9c61"
+      "id": "32528b4c"
     },
     {
       "cell_type": "code",
@@ -87,7 +87,7 @@
         "\n",
         "power_plants.head(3)"
       ],
-      "id": "e50fcc1f",
+      "id": "a0de7e70",
       "execution_count": null,
       "outputs": []
     },
@@ -102,7 +102,7 @@
         "To do so we will use the longitude and latitude columns in the CSV, these indicate the location of the power plants in the NAD83 CRS (EPSG:4269).\n",
         "We can use this information to create a new `geopandas.GeoDataFrame` from the `pandas.DataFrame` using the `geopandas` function [`points_from_xy()`](https://geopandas.org/en/stable/docs/reference/api/geopandas.points_from_xy.html):"
       ],
-      "id": "85481433"
+      "id": "01d29f27"
     },
     {
       "cell_type": "code",
@@ -118,7 +118,7 @@
         "                                crs='EPSG:4269'  # Specify CRS\n",
         "                                )"
       ],
-      "id": "50677629",
+      "id": "570cecae",
       "execution_count": null,
       "outputs": []
     },
@@ -128,7 +128,7 @@
       "source": [
         "Let's check that we now have a `geometry` column:"
       ],
-      "id": "fc0b5c2b"
+      "id": "f28bd97c"
     },
     {
       "cell_type": "code",
@@ -136,7 +136,7 @@
       "source": [
         "power_plants['geometry']"
       ],
-      "id": "7b1c7396",
+      "id": "bc18fc57",
       "execution_count": null,
       "outputs": []
     },
@@ -146,7 +146,7 @@
       "source": [
         "With the `geometry` column and CRS, we can plot our dataset:"
       ],
-      "id": "ed8a1950"
+      "id": "64ed1b38"
     },
     {
       "cell_type": "code",
@@ -154,7 +154,7 @@
       "source": [
         "power_plants.plot()  "
       ],
-      "id": "3141ebc5",
+      "id": "75ff710a",
       "execution_count": null,
       "outputs": []
     },
@@ -167,7 +167,7 @@
         "So far, we have printed variables using string concatenation inside the `print()` function. \n",
         "This means that we write commas between every string and variable we want to print, and then the `print()` function concatenates these into a single string. For example:"
       ],
-      "id": "aaa62e39"
+      "id": "c861cebb"
     },
     {
       "cell_type": "code",
@@ -175,7 +175,7 @@
       "source": [
         "print('CRS: ', power_plants.crs)"
       ],
-      "id": "1c233947",
+      "id": "13ccda59",
       "execution_count": null,
       "outputs": []
     },
@@ -191,7 +191,7 @@
         "where `replace` can be a variable, an expression, or a function or method call. \n",
         "For example:"
       ],
-      "id": "270b7fc8"
+      "id": "235428e7"
     },
     {
       "cell_type": "code",
@@ -201,7 +201,7 @@
         "print(f\"ellipsoid: {power_plants.crs.ellipsoid}\")\n",
         "print(f\"datum: {power_plants.crs.datum}\")"
       ],
-      "id": "c0864eef",
+      "id": "a264b83b",
       "execution_count": null,
       "outputs": []
     },
@@ -213,7 +213,7 @@
         "\n",
         "One of the advantages of using f-strings is that they offer customization for formatting the output:"
       ],
-      "id": "3ad11f99"
+      "id": "d2d2761d"
     },
     {
       "cell_type": "code",
@@ -223,7 +223,7 @@
         "print(f\"{'Is the CRS geographic?:':<25} {power_plants.crs.is_geographic}\")\n",
         "print(f\"{'Is the CRS projected?:':<25} {power_plants.crs.is_projected}\")"
       ],
-      "id": "66f22d93",
+      "id": "a551d7b5",
       "execution_count": null,
       "outputs": []
     },
@@ -247,7 +247,7 @@
         "\n",
         "Let's import the TIGER shapefile"
       ],
-      "id": "cd533635"
+      "id": "313ccfab"
     },
     {
       "cell_type": "code",
@@ -262,7 +262,7 @@
         "\n",
         "states.head(3)"
       ],
-      "id": "65064dfa",
+      "id": "876013e1",
       "execution_count": null,
       "outputs": []
     },
@@ -272,7 +272,7 @@
       "source": [
         "and obtain some preliminary geospatial information about the states geodataframe:"
       ],
-      "id": "f6441249"
+      "id": "3d4fb8c7"
     },
     {
       "cell_type": "code",
@@ -281,7 +281,7 @@
         "print(states.crs)\n",
         "states.plot()"
       ],
-      "id": "f3c0d377",
+      "id": "a27377f2",
       "execution_count": null,
       "outputs": []
     },
@@ -293,7 +293,7 @@
         "\n",
         " It can be easier to work with the codes as numbers instead of strings, so let's update the corresponding columns in the states geo-dataframe. We start by checking the data type of the `region`, `division`, and `statefp` columns:"
       ],
-      "id": "f61c10a0"
+      "id": "d74c9758"
     },
     {
       "cell_type": "code",
@@ -305,7 +305,7 @@
         "for column in code_cols: \n",
         "    print(f\"{column} is string dtype? {is_string_dtype(states[column])}\")"
       ],
-      "id": "83946471",
+      "id": "f202be22",
       "execution_count": null,
       "outputs": []
     },
@@ -337,7 +337,7 @@
         "## `assert`\n",
         "Next, we update the data type of the code columns to be integers. This time, we check the data type of the column using the `is_numeric_dtype()` function inside an **`assert`** statement:"
       ],
-      "id": "9312b606"
+      "id": "e7f84f40"
     },
     {
       "cell_type": "code",
@@ -348,7 +348,7 @@
         "    states[column] = states[column].astype('int')\n",
         "    assert is_numeric_dtype(states[column])  # Check conversion"
       ],
-      "id": "f684fb88",
+      "id": "c955a8a9",
       "execution_count": null,
       "outputs": []
     },
@@ -358,7 +358,7 @@
       "source": [
         "The `assert` keyword does nothing if the expression next to it evaluates to `True` and raises an `AssertionError` exception and stops your code form running any further. For example, "
       ],
-      "id": "d6b23f68"
+      "id": "c50f3589"
     },
     {
       "cell_type": "code",
@@ -371,7 +371,7 @@
         "# Raises an error if statement is False\n",
         "assert 2+2 == 3"
       ],
-      "id": "f75f8840",
+      "id": "1b50b286",
       "execution_count": null,
       "outputs": []
     },
@@ -407,7 +407,7 @@
         "\n",
         "Let's go ahead and select the data:"
       ],
-      "id": "a6265adf"
+      "id": "a1f3d7c4"
     },
     {
       "cell_type": "code",
@@ -416,7 +416,7 @@
         "# Select contiguous US states\n",
         "contiguous = states[(states.region!=9) & (~states.statefp.isin([2,15]))]"
       ],
-      "id": "265c3c12",
+      "id": "6319cada",
       "execution_count": null,
       "outputs": []
     },
@@ -436,7 +436,7 @@
         "Select the data in the `power_plants` data frame for the contiguous US states. \n",
         "<!--"
       ],
-      "id": "3907fe85"
+      "id": "033588bb"
     },
     {
       "cell_type": "code",
@@ -444,7 +444,7 @@
       "source": [
         "power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Alaska'])]"
       ],
-      "id": "bb476ff2",
+      "id": "ba414598",
       "execution_count": null,
       "outputs": []
     },
@@ -459,7 +459,7 @@
         "\n",
         "Before we plot our data, let's make sure they are in the same CRS:"
       ],
-      "id": "c6853c6a"
+      "id": "c91d1ad5"
     },
     {
       "cell_type": "code",
@@ -467,7 +467,7 @@
       "source": [
         "contiguous.crs == power_plants.crs"
       ],
-      "id": "145152ac",
+      "id": "18c81a98",
       "execution_count": null,
       "outputs": []
     },
@@ -509,7 +509,7 @@
         "                  \n",
         "plt.show()"
       ],
-      "id": "fdd69fdb",
+      "id": "887078c8",
       "execution_count": null,
       "outputs": []
     },
@@ -542,7 +542,7 @@
         "Often, we need to iterate simultaneously over two lists (or other iterables). \n",
         "The `zip()` function in Python allows you to combine two or more lists (or other iterables) so that you can iterate over their elements in pairs. When used with a `for` loop, it lets you process elements from each list together, like this example:\n"
       ],
-      "id": "af37396d"
+      "id": "95f06212"
     },
     {
       "cell_type": "code",
@@ -560,7 +560,7 @@
         "for num, letter in zip(numbers, letters):\n",
         "    print(num, letter)"
       ],
-      "id": "623dca4a",
+      "id": "640229d0",
       "execution_count": null,
       "outputs": []
     },
@@ -570,7 +570,7 @@
       "source": [
         "Let's see a practical application of `for` loops and `zip()` with `matplotlib` subplots. A common situation when code gets repeated is when creating subplots. For example:"
       ],
-      "id": "523f3fbe"
+      "id": "d45f2ec0"
     },
     {
       "cell_type": "code",
@@ -584,7 +584,7 @@
         "\n",
         "plt.show()"
       ],
-      "id": "7273c84d",
+      "id": "c3666b2a",
       "execution_count": null,
       "outputs": []
     },
@@ -619,7 +619,7 @@
         "\n",
         "4. Recreate the following plot:"
       ],
-      "id": "96621ef3"
+      "id": "5caf4d64"
     },
     {
       "cell_type": "code",
@@ -653,7 +653,7 @@
         "plt.tight_layout()\n",
         "plt.show()"
       ],
-      "id": "242839be",
+      "id": "41343d09",
       "execution_count": null,
       "outputs": []
     },
@@ -710,7 +710,7 @@
         "\n",
         "Going back to our power plants data frame, let's create a function that will give us the top 3 primary energy sources for a given state:"
       ],
-      "id": "269b5f95"
+      "id": "b59a65ff"
     },
     {
       "cell_type": "code",
@@ -735,7 +735,7 @@
         "                                )\n",
         "    return top_sources"
       ],
-      "id": "0b3bed84",
+      "id": "ac1accba",
       "execution_count": null,
       "outputs": []
     },
@@ -745,7 +745,7 @@
       "source": [
         "We may now reuse this function as much as we want!"
       ],
-      "id": "e0a85b6f"
+      "id": "52bf77d8"
     },
     {
       "cell_type": "code",
@@ -755,7 +755,7 @@
         "for state in ['New Jersey', 'New York', 'Pennsylvania']:\n",
         "    print(state, ': ', top3_sources(state, power_plants))"
       ],
-      "id": "5b09e0ca",
+      "id": "754709c4",
       "execution_count": null,
       "outputs": []
     },
@@ -765,7 +765,7 @@
       "source": [
         "Let's do one more example and create a function that will produce a plot given a list of primary sources and a state name:\n"
       ],
-      "id": "ab030734"
+      "id": "02be711f"
     },
     {
       "cell_type": "code",
@@ -796,7 +796,7 @@
         "    plt.tight_layout()\n",
         "    plt.show()"
       ],
-      "id": "f6f96884",
+      "id": "ca354a90",
       "execution_count": null,
       "outputs": []
     },
@@ -806,7 +806,7 @@
       "source": [
         "We can now use our functions to produce plots for any state:"
       ],
-      "id": "d62a0266"
+      "id": "0403cc07"
     },
     {
       "cell_type": "code",
@@ -816,7 +816,7 @@
         "                         top3_sources('New Jersey', power_plants),\n",
         "                         power_plants)"
       ],
-      "id": "e3d08361",
+      "id": "1e536c0c",
       "execution_count": null,
       "outputs": []
     },
@@ -862,7 +862,7 @@
         "-->\n",
         ":::"
       ],
-      "id": "f52788b7"
+      "id": "a51bf7a7"
     }
   ],
   "metadata": {
