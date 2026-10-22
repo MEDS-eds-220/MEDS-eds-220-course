@@ -144,38 +144,38 @@ To create a new blank figure:
 2. Display the figure using `plt.show()`:
 
 ```{python}
-# Initialize empty figure (fig) and axis (ax)
+# Initialize empty figure (fig) and axes (ax)
 fig, ax = plt.subplots()
 
 # Display figure
 plt.show()
 ```
 
-Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axis `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
+Notice that `plt.subplots()` is a function that returns two objects, when we call it, we get a figure `fig` with a single empty axes `ax`. We can think of this step as setting a new blank canvas on which we will paint upon. 
 
 ### Adding a layer
 
-When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axis.
-The general syntax to plot data from a data frame `df` onto an axis is:
+When using `matplotlib`, it can be useful to think of creating a plot as adding layers to an axes.
+The general syntax to plot data from a data frame `df` onto an axes is:
 ```python
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Plot df on the ax axis
-df.plot(ax=ax,  # Add plot to axis
+# Plot df on the ax axes
+df.plot(ax=ax,  # Add plot to axes
         ...)    # Other arguments for plot function
 
 # Display figure
 plt.show()
 ``` 
 
-For example, let's add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axis:
+For example, let's add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axes:
 
 ```{python}
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Add scatter plot of hares' data to our figure's axis
+# Add scatter plot of hares' data to our figure's axes
 obs_juv_adult.plot(kind='scatter', x='hindft', y='weight', ax=ax)
 
 # Display figure
@@ -185,25 +185,25 @@ plt.show()
 ### Customization 
 
 Matplotlib allows for a lot of customization. 
-Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while other is done by updating attributes of the `ax` axis. 
-The following diagram shows some examples of elements in the axis that can be updated.
+Some of it can be done directly in the `plot()` method for the data frame (like we've done when plotting data using `pandas`), while other is done by updating attributes of the `ax` axes. 
+The following diagram shows some examples of elements in the axes that can be updated.
 
 ![Image source: Matplotlib documentation.](/book/images/lesson-10/anatomy.png){width="70%"}
 
 For example, we can update the title and axis labels of our previous plot like this:
 
 ```{python}
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Add data to axis
+# Add data to axes
 obs_juv_adult.plot(kind='scatter', 
                    x='hindft', 
                    y='weight', 
                    alpha=0.5,     # Adjust transparency
-                   ax=ax)         # Add plot to axis
+                   ax=ax)         # Add plot to axes
 
-# Update axis
+# Update axes
 ax.set_title('Hind foot length and weight of snowshoe hares')
 ax.set_xlabel('Hind foot length (mm)')
 ax.set_ylabel('Weight (g)')
@@ -314,7 +314,7 @@ model.summary()
 
 A reasonable next step would be to plot our linear model together with our data. To do this, we need to add two layers to the same graph: the data points and the regression line.
 
-To draw the line we use the axis's `plot()` method, `ax.plot(x_values, y_values)`, which connects the points given by the lists of $x$ and $y$ values. 
+To draw the line we use the axes' `plot()` method, `ax.plot(x_values, y_values)`, which connects the points given by the lists of $x$ and $y$ values. 
 A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, $\hat{y} = \hat\beta_0 + \hat\beta_1 x$:
 
 ```{python}
@@ -322,22 +322,22 @@ A straight line only needs two points, so we use the smallest and largest hind f
 x_start = juveniles_weight_hindft['hindft'].min()
 x_end = juveniles_weight_hindft['hindft'].max()
 
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Add data to axis
+# Add data to axes
 juveniles_weight_hindft.plot(kind='scatter', 
                              x='hindft', 
                              y='weight', 
                              alpha=0.5,     # Adjust transparency
-                             ax=ax)         # Add plot to axis
+                             ax=ax)         # Add plot to axes
 
-# Add regression line to axis
+# Add regression line to axes
 ax.plot([x_start, x_end], 
         [intercept + slope*x_start, intercept + slope*x_end],
         color='darkred')
 
-# Update axis
+# Update axes
 ax.set_title('Hind foot length and weight of juvenile snowshoe hares')
 ax.set_xlabel('Hind foot length (mm)')
 ax.set_ylabel('Weight (g)')
@@ -371,19 +371,19 @@ model.resid.plot(kind='hist',
 
 The residuals are centered near 0 and roughly bell-shaped, but with a long tail of negative residuals: some hares weigh much less than the line predicts. Let's see where these residuals come from.
 
-If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axis's `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:
+If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of $x$. Let's plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axes' `scatter()` method, `ax.scatter(x_values, y_values)`. We also add a horizontal reference line at 0 with `ax.axhline()`:
 
 ```{python}
-# Initialize empty figure and axis
+# Initialize empty figure and axes
 fig, ax = plt.subplots()
 
-# Add residuals to axis
+# Add residuals to axes
 ax.scatter(juveniles_weight_hindft['hindft'], model.resid, alpha=0.5)
 
 # Add reference line at 0
 ax.axhline(0, color='darkred', linestyle='--')
 
-# Update axis
+# Update axes
 ax.set_title('Residuals of the linear model')
 ax.set_xlabel('Hind foot length (mm)')
 ax.set_ylabel('Residual (g)')

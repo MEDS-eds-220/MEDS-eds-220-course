@@ -379,7 +379,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-10-geopandas-intro/lesson-10-geopandas-intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9 <code>geopandas</code></span></a>
+ <span class="menu-text">11 <code>geopandas</code></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -551,14 +551,14 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="data-exploration">Data exploration</h2>
 <p>Download the <code>55_Hare_Data_2012.txt</code> file <a href="https://drive.google.com/drive/folders/12YKDO0_P3PQcL2drS6jvcx-7uq2zyJKR">available here</a> and save it in a <code>data/</code> folder next to your notebook. This is the same file used in discussion section 3: a copy of <code>55_Hare_Data_2012.txt</code> from version 22 of the EDI data package.</p>
 <p>Let’s start by loading the data and taking a very high-level look at it:</p>
-<div id="6f6f7148" class="cell" data-execution_count="1">
+<div id="45656d5a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="746d38ae" class="cell" data-execution_count="2">
+<div id="b004d3ed" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>,<span class="st">'55_Hare_Data_2012.txt'</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obs.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
@@ -677,7 +677,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="e229f0da" class="cell" data-execution_count="3">
+<div id="7890f93a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>obs.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -705,7 +705,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 <p>We can see from the <code>info()</code> display that most of these variables are of type <code>object</code> (most likely <code>str</code>), and these are expected to be categorical variables. Other columns as <code>weight</code> and <code>hindft</code> contain continuous numerical variables.</p>
 <p>To facilitate our data wrangling we convert the <code>date</code> column to a <code>datetime</code> type:</p>
-<div id="378cafea" class="cell" data-execution_count="4">
+<div id="d45ca66f" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>obs[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(obs[<span class="st">'date'</span>])</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(obs[<span class="st">'date'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -728,7 +728,7 @@ memory usage: 369.8+ KB</code></pre>
 <li>‘m’ for ‘mortality’.</li>
 </ul>
 <p>Let’s see the data in this column:</p>
-<div id="77ca338d" class="cell" data-execution_count="5">
+<div id="ef35fbd7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine unique values and counts in age column</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(obs[<span class="st">'age'</span>].value_counts(dropna<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -879,7 +879,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 <p><br></p>
 <p>Since the actual data has values that are not included in the metadata, this is the time to make a decision and document it. Since the metadata states that ‘a’ indicates adult and ‘j’ indicates juvenile, we will only keep observations that have ‘a’ or ‘j’ (either capitalized or not) as part of the age value.</p>
-<div id="04d59b94" class="cell" data-execution_count="6">
+<div id="651f59c0" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update age values to juvenile and adult for observations where 'a' and 'j' are included</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>obs.loc[obs[<span class="st">'age'</span>].<span class="bu">str</span>.contains(<span class="st">'j'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>), <span class="st">'age'</span>] <span class="op">=</span> <span class="st">'juvenile'</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>obs.loc[obs[<span class="st">'age'</span>].<span class="bu">str</span>.contains(<span class="st">'a'</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>), <span class="st">'age'</span>] <span class="op">=</span> <span class="st">'adult'</span></span>
@@ -893,7 +893,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 <p>None of the observations from 1998 have a valid age, so from here on our data starts in 1999.</p>
 <p>To better understand our data we examine the distribution of hare age across years. Let’s wrangle our data a bit to get there:</p>
-<div id="8c030e15" class="cell" data-execution_count="7">
+<div id="17c72255" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract year in which each observation happened</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>obs_juv_adult[<span class="st">'year'</span>] <span class="op">=</span> obs_juv_adult[<span class="st">'date'</span>].dt.year</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -995,7 +995,7 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 </div>
 <p>If you are wondering, here <code>year</code> is the name of the data frame’s row index and <code>age</code> is the name of the column index. In this format it is easy to create a stacked bar plot to examine the occurrence of juvenile and adult hares:</p>
-<div id="9bb720b3" class="cell" data-execution_count="8">
+<div id="d2c42d2d" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>obs_per_year[[<span class="st">'juvenile'</span>, <span class="st">'adult'</span>]].plot(kind<span class="op">=</span><span class="st">'bar'</span>,                  <span class="co"># Columns in stacking order</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                         stacked<span class="op">=</span><span class="va">True</span>,                <span class="co"># Stack the bars</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                         color<span class="op">=</span>[<span class="st">'#8FBC8F'</span>, <span class="st">'#4682B4'</span>],</span>
@@ -1048,8 +1048,8 @@ memory usage: 369.8+ KB</code></pre>
 <li>Initialize a new figure and axes by calling <code>pyplot</code>’s <code>subplots()</code> function</li>
 <li>Display the figure using <code>plt.show()</code>:</li>
 </ol>
-<div id="2c5e66bd" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure (fig) and axis (ax)</span></span>
+<div id="2ea3afe5" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure (fig) and axes (ax)</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display figure</span></span>
@@ -1062,26 +1062,26 @@ memory usage: 369.8+ KB</code></pre>
 </div>
 </div>
 </div>
-<p>Notice that <code>plt.subplots()</code> is a function that returns two objects, when we call it, we get a figure <code>fig</code> with a single empty axis <code>ax</code>. We can think of this step as setting a new blank canvas on which we will paint upon.</p>
+<p>Notice that <code>plt.subplots()</code> is a function that returns two objects, when we call it, we get a figure <code>fig</code> with a single empty axes <code>ax</code>. We can think of this step as setting a new blank canvas on which we will paint upon.</p>
 </section>
 <section id="adding-a-layer" class="level3">
 <h3 class="anchored" data-anchor-id="adding-a-layer">Adding a layer</h3>
-<p>When using <code>matplotlib</code>, it can be useful to think of creating a plot as adding layers to an axis. The general syntax to plot data from a data frame <code>df</code> onto an axis is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axis</span></span>
+<p>When using <code>matplotlib</code>, it can be useful to think of creating a plot as adding layers to an axes. The general syntax to plot data from a data frame <code>df</code> onto an axes is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axes</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot df on the ax axis</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>df.plot(ax<span class="op">=</span>ax,  <span class="co"># Add plot to axis</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot df on the ax axes</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>df.plot(ax<span class="op">=</span>ax,  <span class="co"># Add plot to axes</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        ...)    <span class="co"># Other arguments for plot function</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Display figure</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>For example, let’s add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axis:</p>
-<div id="da4784bb" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axis</span></span>
+<p>For example, let’s add a scatter plot of the hind foot length and weight of all the juvenile and adult captures to our axes:</p>
+<div id="80094aa2" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axes</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add scatter plot of hares' data to our figure's axis</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add scatter plot of hares' data to our figure's axes</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>obs_juv_adult.plot(kind<span class="op">=</span><span class="st">'scatter'</span>, x<span class="op">=</span><span class="st">'hindft'</span>, y<span class="op">=</span><span class="st">'weight'</span>, ax<span class="op">=</span>ax)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display figure</span></span>
@@ -1097,7 +1097,7 @@ memory usage: 369.8+ KB</code></pre>
 </section>
 <section id="customization" class="level3">
 <h3 class="anchored" data-anchor-id="customization">Customization</h3>
-<p>Matplotlib allows for a lot of customization. Some of it can be done directly in the <code>plot()</code> method for the data frame (like we’ve done when plotting data using <code>pandas</code>), while other is done by updating attributes of the <code>ax</code> axis. The following diagram shows some examples of elements in the axis that can be updated.</p>
+<p>Matplotlib allows for a lot of customization. Some of it can be done directly in the <code>plot()</code> method for the data frame (like we’ve done when plotting data using <code>pandas</code>), while other is done by updating attributes of the <code>ax</code> axes. The following diagram shows some examples of elements in the axes that can be updated.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../../book/images/lesson-10/anatomy.png" class="img-fluid figure-img" style="width:70.0%"></p>
@@ -1105,18 +1105,18 @@ memory usage: 369.8+ KB</code></pre>
 </figure>
 </div>
 <p>For example, we can update the title and axis labels of our previous plot like this:</p>
-<div id="2b24e100" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axis</span></span>
+<div id="195c70c6" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axes</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data to axis</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data to axes</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>obs_juv_adult.plot(kind<span class="op">=</span><span class="st">'scatter'</span>, </span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                   x<span class="op">=</span><span class="st">'hindft'</span>, </span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                   y<span class="op">=</span><span class="st">'weight'</span>, </span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                   alpha<span class="op">=</span><span class="fl">0.5</span>,     <span class="co"># Adjust transparency</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                   ax<span class="op">=</span>ax)         <span class="co"># Add plot to axis</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                   ax<span class="op">=</span>ax)         <span class="co"># Add plot to axes</span></span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axis</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axes</span></span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Hind foot length and weight of snowshoe hares'</span>)</span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Hind foot length (mm)'</span>)</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Weight (g)'</span>)</span>
@@ -1136,7 +1136,7 @@ memory usage: 369.8+ KB</code></pre>
 <section id="linear-regression" class="level2">
 <h2 class="anchored" data-anchor-id="linear-regression">Linear regression</h2>
 <p>For our analysis we want to investigate possible relations between hind foot length and weight for juvenile hares. Let’s take a look at our target data:</p>
-<div id="26ce7511" class="cell" data-execution_count="12">
+<div id="4ee68686" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset juvenile hares and drop rows missing hind foot or weight measurements</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>juveniles_weight_hindft <span class="op">=</span> obs_juv_adult[obs_juv_adult[<span class="st">'age'</span>] <span class="op">==</span> <span class="st">'juvenile'</span>].dropna(subset<span class="op">=</span>[<span class="st">'hindft'</span>, <span class="st">'weight'</span>])</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1173,12 +1173,12 @@ memory usage: 369.8+ KB</code></pre>
 <li><code>data</code>: the data frame with those columns.</li>
 </ul>
 <p><code>ols()</code> sets up the model, and calling <code>fit()</code> on it estimates the coefficients:</p>
-<div id="4593a189" class="cell" data-execution_count="13">
+<div id="ed406893" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model: weight explained by hind foot length</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.ols(<span class="st">'weight ~ hindft'</span>, data<span class="op">=</span>juveniles_weight_hindft).fit()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The estimated coefficients are stored in the model’s <code>params</code> attribute, a <code>pandas.Series</code> whose index has the names of the coefficients:</p>
-<div id="44b0b578" class="cell" data-execution_count="14">
+<div id="282d02f8" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model.params</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>Intercept   -352.771986
@@ -1187,7 +1187,7 @@ dtype: float64</code></pre>
 </div>
 </div>
 <p>The <code>Intercept</code> value is <span class="math inline">\(\hat\beta_0\)</span> and the <code>hindft</code> value is <span class="math inline">\(\hat\beta_1\)</span>, the slope for the hind foot length. Let’s save them in variables to use them later:</p>
-<div id="2df8a167" class="cell" data-execution_count="15">
+<div id="d56aa5e2" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve intercept and slope</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>intercept <span class="op">=</span> model.params[<span class="st">'Intercept'</span>]</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y-intercept:"</span>, intercept)</span>
@@ -1219,7 +1219,7 @@ Slope: 10.092239638623006</code></pre>
 </div>
 <p>We can also look at the <strong>coefficient of determination</strong>, <span class="math inline">\(R^2\)</span>. This is between 0 and 1, with <span class="math inline">\(R^2=1\)</span> describing a perfect fit of the model to the data. The <span class="math inline">\(R^2\)</span> value is interpreted as the proportion of variance in the response <span class="math inline">\(y\)</span> that is explained by the least squares line with the predictor <span class="math inline">\(x\)</span>.</p>
 <p>This value is stored in the model’s <code>rsquared</code> attribute:</p>
-<div id="9be986c0" class="cell" data-execution_count="16">
+<div id="009efee1" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"R^2:"</span>, model.rsquared)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R^2: 0.3871164783665738</code></pre>
@@ -1250,28 +1250,28 @@ model.summary()
 ```
  -->
 <p>A reasonable next step would be to plot our linear model together with our data. To do this, we need to add two layers to the same graph: the data points and the regression line.</p>
-<p>To draw the line we use the axis’s <code>plot()</code> method, <code>ax.plot(x_values, y_values)</code>, which connects the points given by the lists of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values. A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, <span class="math inline">\(\hat{y} = \hat\beta_0 + \hat\beta_1 x\)</span>:</p>
-<div id="d7f04e0a" class="cell" data-execution_count="17">
+<p>To draw the line we use the axes’ <code>plot()</code> method, <code>ax.plot(x_values, y_values)</code>, which connects the points given by the lists of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values. A straight line only needs two points, so we use the smallest and largest hind foot lengths and calculate their estimated weights with the equation of the linear model, <span class="math inline">\(\hat{y} = \hat\beta_0 + \hat\beta_1 x\)</span>:</p>
+<div id="8b9f9300" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Smallest and largest hind foot lengths</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>x_start <span class="op">=</span> juveniles_weight_hindft[<span class="st">'hindft'</span>].<span class="bu">min</span>()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>x_end <span class="op">=</span> juveniles_weight_hindft[<span class="st">'hindft'</span>].<span class="bu">max</span>()</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axis</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axes</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data to axis</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data to axes</span></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>juveniles_weight_hindft.plot(kind<span class="op">=</span><span class="st">'scatter'</span>, </span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                             x<span class="op">=</span><span class="st">'hindft'</span>, </span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                             y<span class="op">=</span><span class="st">'weight'</span>, </span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>                             alpha<span class="op">=</span><span class="fl">0.5</span>,     <span class="co"># Adjust transparency</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                             ax<span class="op">=</span>ax)         <span class="co"># Add plot to axis</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                             ax<span class="op">=</span>ax)         <span class="co"># Add plot to axes</span></span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add regression line to axis</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add regression line to axes</span></span>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>ax.plot([x_start, x_end], </span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>        [intercept <span class="op">+</span> slope<span class="op">*</span>x_start, intercept <span class="op">+</span> slope<span class="op">*</span>x_end],</span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">'darkred'</span>)</span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axis</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axes</span></span>
 <span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Hind foot length and weight of juvenile snowshoe hares'</span>)</span>
 <span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Hind foot length (mm)'</span>)</span>
 <span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Weight (g)'</span>)</span>
@@ -1292,7 +1292,7 @@ model.summary()
 <p><span class="math inline">\(R^2\)</span> tells us how much of the variation the model explains, but not whether a straight line is the right shape for the data. One check for this is looking at the <strong>residuals</strong>. A residual is the difference between an observed value and the value predicted by the model:</p>
 <p><span class="math display">\[e_i = y_i - \hat{y}_i.\]</span></p>
 <p>The residuals are the <span class="math inline">\(\epsilon\)</span> in our model equation, so the model assumes they are normally distributed around 0, and that they spread out about the same amount for short and long hind feet. <code>statsmodels</code> calculates the residuals for us and stores them in the model’s <code>resid</code> attribute.</p>
-<div id="352024c1" class="cell" data-execution_count="18">
+<div id="4240dfce" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>model.resid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>108    -523.850209
@@ -1310,7 +1310,7 @@ Length: 265, dtype: float64</code></pre>
 </div>
 </div>
 <p>Let’s start with a histogram to see their distribution:</p>
-<div id="c70160f5" class="cell" data-execution_count="19">
+<div id="b859547a" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>model.resid.plot(kind<span class="op">=</span><span class="st">'hist'</span>, </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                 bins<span class="op">=</span><span class="dv">30</span>, </span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                 title<span class="op">=</span><span class="st">'Distribution of residuals'</span>, </span>
@@ -1324,18 +1324,18 @@ Length: 265, dtype: float64</code></pre>
 </div>
 </div>
 <p>The residuals are centered near 0 and roughly bell-shaped, but with a long tail of negative residuals: some hares weigh much less than the line predicts. Let’s see where these residuals come from.</p>
-<p>If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of <span class="math inline">\(x\)</span>. Let’s plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axis’s <code>scatter()</code> method, <code>ax.scatter(x_values, y_values)</code>. We also add a horizontal reference line at 0 with <code>ax.axhline()</code>:</p>
-<div id="4a08fffa" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axis</span></span>
+<p>If a linear model describes the data well, the residuals should be scattered randomly around 0, with about the same spread for every value of <span class="math inline">\(x\)</span>. Let’s plot them against the hind foot length. Since the residuals are not a column of our data frame, we plot them with the axes’ <code>scatter()</code> method, <code>ax.scatter(x_values, y_values)</code>. We also add a horizontal reference line at 0 with <code>ax.axhline()</code>:</p>
+<div id="b13bddc1" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty figure and axes</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add residuals to axis</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add residuals to axes</span></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>ax.scatter(juveniles_weight_hindft[<span class="st">'hindft'</span>], model.resid, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add reference line at 0</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'darkred'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axis</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Update axes</span></span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Residuals of the linear model'</span>)</span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Hind foot length (mm)'</span>)</span>
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Residual (g)'</span>)</span>

@@ -16,18 +16,33 @@ Wild pigs (*Sus scrofa*) are a destructive invasive species in California, causi
 
 ![Wild pig in Santa Teresa Park, CA. [Photo by Don DeBold](https://www.flickr.com/photos/ddebold/52936296848)](/book/images/lesson-10/wild_pig.png){width="70%"}
 
-In this lesson we will use simplified point data about wild pig sightings in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). 
-GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiativeslike iNaturalist, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
+In this lesson we will use simplified point data about wild pig occurrence records in California from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org). 
+GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives like iNaturalist, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
 
 The data we will use today has been simplified from the complete *Sus scrofa* occurrence data accessed through the GBIF website @gbiforg_user_occurrence_2023. 
+This data is shared under a [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) license: we can use and share it as long as we credit the source and don't use it for commercial purposes.
+
+Each row in the data is one occurrence record. 
+The column names were shortened to fit the 10-character limit of shapefile column names:
+
+| Column | Description |
+|--------|-------------|
+| `gbifID` | Unique identifier of the record in GBIF. The full record is at `https://www.gbif.org/occurrence/` followed by this ID. |
+| `species` | Scientific name of the species |
+| `state` | State where the record was made |
+| `individual` | Number of individuals recorded |
+| `day`, `month`, `year` | Date of the record |
+| `inst` | Code of the institution that provided the record, for example a museum or a citizen science platform |
+| `collection` | Code of the collection within that institution |
+| `catalogNum` | Identifier of the record in the institution's catalog |
+| `identified` | Person or institution who identified the species |
+| `geometry` | Location of the record |
 
 We will also use a shapefile with the boundary of the state of California, which has a single feature: the outline of the state. 
-We will use it as a base layer for our maps, to see where the wild pig sightings are located within California.
+This boundary comes from the US Census Bureau's 2016 TIGER/Line shapefiles @us_census_bureau_tiger_2016 and was converted to a different CRS for this lesson. 
+We will use it as a base layer for our maps, to see where the wild pig records are located within California.
 
 Both datasets are in the `gbif_sus_scrofa_california` and `ca_state_boundary` folders of the course's [shared data folder]({{< var shared-data-folder >}}).
-
-<!-- TODO: column descriptions -->
-<!-- TODO: add the source of the CA state boundary data -->
 
 ## `geopandas`
 In this lesson we will introduce the `geopandas` @jordahl_geopandasgeopandas_2020 Python package. `geopandas` extends `pandas` to work with geospatial data. This is the main package we will be working with in the next few lessons.
@@ -85,7 +100,7 @@ print(type(pigs))
 print(type(pigs.geometry))
 
 # Check the data type of the gbifID column
-print(type(pigs.gbifID))
+print(type(pigs['gbifID']))
 ```
 
 The data type of the geometry column is also reflected when we look at the data types of the values in each column:
@@ -146,7 +161,7 @@ pigs.total_bounds
 ```
 
 These four numbers represent the `minx`, `miny`, `maxx`, `maxy` values for the bounds of the entire geo-dataframe. 
-Notice that the $x$ values are longitudes and the $y$ values are latitudes: even though the CRS information above lists latitude first, `geopandas` always stores points as ($x$, $y$) = (longitude, latitude).
+Notice that the $x$ values are longitudes and the $y$ values are latitudes: even though the CRS information above lists latitude first, `geopandas` follows the convention ($x$, $y$) = (longitude, latitude).
 
 ::: {.callout-tip}
 ## Check-in
@@ -160,6 +175,47 @@ Print the CRS and extent of the California state boundary.
 print('CRS: ', ca_boundary.crs, '\n')
 print(ca_boundary.total_bounds)
 ```
+-->
+
+
+## `explore()`
+
+To explore our data interactively, we can use the `explore()` method. 
+This creates an interactive map where we can zoom in and out, move around, and hover over each feature to see its attributes:
+
+```{python}
+pigs.explore()
+```
+
+::: {.callout-tip}
+## Check-in
+Zoom into a few points on the map. Each point is drawn as an exact location.
+
+1. Think about how the location of a wild pig record was obtained: an iNaturalist observation taken with a phone today vs. a museum specimen collected in the 1930s. How exact do you think each location is?
+2. What extra information about each point would you want to have to use this data to decide whether to close a trail or not?
+:::
+
+<!--
+Instructor notes: 877 of 1,046 longitudes have 6 decimals, but 7 have only 1 decimal (~10 km) and 1 has 2 decimals. Those 8 are museum records (SBMNH 1929-1930, SDNHM, UCLA). pigs_recent has at least 3 decimals.
+Decimal places are only a rough guide: trailing zeros are dropped, and coordinates can look precise without being so. For example, the "1818" MVZ records have 6 decimals but GBIF lists a coordinate uncertainty of 9,569 m.
+iNaturalist can also obscure locations on purpose (not checked for these records).
+The full GBIF download has a coordinateUncertaintyInMeters column, which our simplified copy dropped. That's the "extra information" for Q2.
+Statewide map: fine. Choosing a trail: not without uncertainty information.
+-->
+
+::: {.callout-tip}
+## Check-in
+Records without a geometry are *silently* left out of maps like the one above. 
+
+1. Which records do you think are most likely to be missing coordinates? Check your guess with `pigs[pigs.geometry.isna()]`.
+2. Describe a situation where these records would still be relevant to an analysis.
+:::
+
+<!--
+Instructor notes: 26 records have no geometry, all museum specimens (CCBER 13, HSU 7, LACM 3, FMNH, CAS, UMZM), mostly from the 1960s-1980s (plus two from 1932 and four with no year).
+Older collections often recorded a place name rather than coordinates, and not all have been georeferenced since.
+Leaving them out shifts any map of all records toward recent, citizen-science observations. It doesn't affect pigs_recent (no missing geometries since 2020).
+Q2 example situations: reconstructing when and where wild pigs spread historically (the specimens still have locality descriptions and dates); counting records per year or per institution; studying a rare species where every record counts; a project that georeferences old museum records from their locality text.
 -->
 
 
@@ -186,7 +242,7 @@ pigs['year'].value_counts().sort_index()
 ::: {.callout-tip}
 ## Check-in
 1. Does the earliest year match your prediction? Do you trust it? 
-2. Run `pigs[pigs.year == 1818]`. What do these records have in common? How much do you trust the year now, and where could you check it?
+2. Run `pigs[pigs['year'] == 1818]`. What do these records have in common? How much do you trust the year now, and where could you check it?
 :::
 
 <!--
@@ -201,7 +257,7 @@ In this analysis, we will use data from 2020 onwards. We can use our usual data 
 
 ```{python}
 # Select data from 2020 onwards
-pigs_recent = pigs[pigs.year>=2020]
+pigs_recent = pigs[pigs['year'] >= 2020]
 
 # Check length of original dataframe
 print('Total number of observations: ' , len(pigs))
@@ -210,32 +266,9 @@ print('Total number of observations: ' , len(pigs))
 print('Number of observations since 2020: ' , len(pigs_recent))
 ```
 
+Notice that this selection also leaves out the records without a year, since a missing value is never greater than or equal to 2020.
+
 ## Visualizing our data
-
-### `explore()`
-
-To explore our data interactively, we can use the `explore()` method. 
-This creates an interactive map where we can zoom in and out, move around, and hover over each feature to see its attributes:
-
-```{python}
-pigs_recent.explore()
-```
-
-::: {.callout-tip}
-## Check-in
-Zoom into a few points on the map. Each point is drawn as an exact location.
-
-1. Think about how the location of a wild pig record was obtained: an iNaturalist observation taken with a phone today vs. a museum specimen collected in the 1930s. How exact do you think each location is?
-2. Is the precision of our data good enough to map pigs across California? Would it be good enough to decide which trail in a park to close? What extra information about each point would you want to have?
-:::
-
-<!--
-Instructor notes: 877 of 1,046 longitudes have 6 decimals, but 7 have only 1 decimal (~10 km) and 1 has 2 decimals. Those 8 are museum records (SBMNH 1929-1930, SDNHM, UCLA). pigs_recent has at least 3 decimals.
-Decimal places are only a rough guide: trailing zeros are dropped, and coordinates can look precise without being so. For example, the "1818" MVZ records have 6 decimals but GBIF lists a coordinate uncertainty of 9,569 m.
-iNaturalist can also obscure locations on purpose (not checked for these records).
-The full GBIF download has a coordinateUncertaintyInMeters column, which our simplified copy dropped. That's the "extra information" for Q2.
-Statewide map: fine. Choosing a trail: not without uncertainty information.
--->
 
 ### `plot()`
 
@@ -253,11 +286,11 @@ pigs_recent.plot()
 ### Using `matplotlib`
 
 Going forward, we will make more complex visualizations where we add different layers to a map and customize it. 
-To do this, we will use the `matplotlib` via its `pyplot` interface for creating visualizations. You can review the `matplotlib` basics in this [previous lesson](/book/chapters/lesson-18-linear-regression/lesson-18-linear-regression.qmd)
+To do this, we will use `matplotlib` via its `pyplot` interface for creating visualizations. You can review the `matplotlib` basics in this [previous lesson](/book/chapters/lesson-18-linear-regression/lesson-18-linear-regression.qmd).
 
 #### Example
 
-When using matplotlib, it can be useful to think of creating a plot as adding layers to an axes. In this cae, the first layer that we want to add to our axes is the `pigs_recent` point data. 
+When using matplotlib, it can be useful to think of creating a plot as adding layers to an axes. In this case, the first layer that we want to add to our axes is the `pigs_recent` point data. 
 We can plot our data using `matplotlib` like this:
 
 ```{python}
@@ -292,21 +325,6 @@ ax.set_ylabel('Latitude')
 plt.show()
 ```
 
-::: {.callout-tip}
-## Check-in
-Records without a geometry are *silently* left out of our maps. 
-
-1. Which records do you think are most likely to be missing coordinates? Check your guess with `pigs[pigs.geometry.isna()]`.
-2. Describe a situation where these records would still be relevant to an analysis.
-:::
-
-<!--
-Instructor notes: 26 records have no geometry, all museum specimens (CCBER 13, HSU 7, LACM 3, FMNH, CAS, UMZM), mostly from the 1960s-1980s (plus two from 1932 and four with no year).
-Older collections often recorded a place name rather than coordinates, and not all have been georeferenced since.
-Leaving them out shifts any map of all records toward recent, citizen-science observations. It doesn't affect pigs_recent (no missing geometries since 2020).
-Q2 example situations: reconstructing when and where wild pigs spread historically (the specimens still have locality descriptions and dates); counting records per year or per institution; studying a rare species where every record counts; a project that georeferences old museum records from their locality text.
--->
-
 ## Exercises
 
 ::: {.callout-tip}
@@ -314,8 +332,6 @@ Q2 example situations: reconstructing when and where wild pigs spread historical
 1. Add the California state boundary to the plot so the boundary appears behind the points as below. Before plotting, check that both layers have the same CRS using `pigs_recent.crs == ca_boundary.crs`. Don't forget to customize your graph!
 
 2. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?
-
-3. Discuss with a partner: what are some possible biases or limitations in GBIF species occurrence data (e.g., spatial coverage, sampling effort, data quality)?
 
 ```{python}
 #| echo: false
