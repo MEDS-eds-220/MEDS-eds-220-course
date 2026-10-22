@@ -20,7 +20,7 @@ In this lesson we will use simplified point data about wild pig occurrence recor
 GBIF is an international network and data platform that provides open access to biodiversity data from around the world. By aggregating data from multiple sources, including museums, research institutions, and citizen science initiatives like iNaturalist, GBIF enables scientists, policymakers, and the public to explore and analyze species distribution and environmental trends. 
 
 The data we will use today has been simplified from the complete *Sus scrofa* occurrence data accessed through the GBIF website @gbiforg_user_occurrence_2023. 
-This data is shared under a [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) license: we can use and share it as long as we credit the source and don't use it for commercial purposes.
+This data is shared under a [Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) license.
 
 Each row in the data is one occurrence record. 
 The column names were shortened to fit the 10-character limit of shapefile column names:
@@ -231,7 +231,6 @@ Before selecting the data, let's look at which years it covers.
 ::: {.callout-tip}
 ## Check-in
 Before running the next cell, write down your prediction: when do you expect the earliest wild pig record in our data to be? 
-Think about when wild pigs arrived in California and who could have recorded them back then.
 :::
 
 ```{python}
@@ -266,7 +265,7 @@ print('Total number of observations: ' , len(pigs))
 print('Number of observations since 2020: ' , len(pigs_recent))
 ```
 
-Notice that this selection also leaves out the records without a year, since a missing value is never greater than or equal to 2020.
+Notice that this selection also leaves out the records without a year.
 
 ## Visualizing our data
 
@@ -329,9 +328,12 @@ plt.show()
 
 ::: {.callout-tip}
 ## Exercise 1
-1. Add the California state boundary to the plot so the boundary appears behind the points as below. Before plotting, check that both layers have the same CRS using `pigs_recent.crs == ca_boundary.crs`. Don't forget to customize your graph!
 
-2. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?
+1. Check that both layers have the same CRS using `pigs_recent.crs == ca_boundary.crs`.
+
+2. Add the California state boundary to the plot so the boundary appears behind the points as below. Don't forget to customize your graph!
+
+3. Write a short caption for your map describing the spatial distribution of observations. What patterns or clusters do you notice?
 
 ```{python}
 #| echo: false
