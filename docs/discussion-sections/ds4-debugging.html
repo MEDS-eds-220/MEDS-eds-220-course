@@ -228,14 +228,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#general-directions" id="toc-general-directions" class="nav-link" data-scroll-target="#general-directions">General directions</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
-  <li><a href="#load-the-data-and-commit-to-an-expectation" id="toc-load-the-data-and-commit-to-an-expectation" class="nav-link" data-scroll-target="#load-the-data-and-commit-to-an-expectation">1. Load the data and commit to an expectation</a></li>
+  <li><a href="#load-the-data-and-agree-on-an-expectation" id="toc-load-the-data-and-agree-on-an-expectation" class="nav-link" data-scroll-target="#load-the-data-and-agree-on-an-expectation">1. Load the data and agree on an expectation</a></li>
   <li><a href="#a-worked-example" id="toc-a-worked-example" class="nav-link" data-scroll-target="#a-worked-example">2. A worked example</a></li>
-  <li><a href="#guided-practice" id="toc-guided-practice" class="nav-link" data-scroll-target="#guided-practice">3. Guided practice</a></li>
-  <li><a href="#on-your-own" id="toc-on-your-own" class="nav-link" data-scroll-target="#on-your-own">4. On your own</a></li>
-  <li><a href="#bugs-that-do-not-raise-errors" id="toc-bugs-that-do-not-raise-errors" class="nav-link" data-scroll-target="#bugs-that-do-not-raise-errors">5. Bugs that do not raise errors</a></li>
-  <li><a href="#assertions-and-guards" id="toc-assertions-and-guards" class="nav-link" data-scroll-target="#assertions-and-guards">6. Assertions and guards</a></li>
-  <li><a href="#asking-for-help" id="toc-asking-for-help" class="nav-link" data-scroll-target="#asking-for-help">7. Asking for help</a></li>
-  <li><a href="#collect-your-code" id="toc-collect-your-code" class="nav-link" data-scroll-target="#collect-your-code">8. Collect your code</a></li>
+  <li><a href="#on-your-own" id="toc-on-your-own" class="nav-link" data-scroll-target="#on-your-own">3. On your own</a></li>
+  <li><a href="#bugs-that-do-not-raise-errors" id="toc-bugs-that-do-not-raise-errors" class="nav-link" data-scroll-target="#bugs-that-do-not-raise-errors">4. Bugs that do not raise errors</a></li>
+  <li><a href="#assertions-and-guards" id="toc-assertions-and-guards" class="nav-link" data-scroll-target="#assertions-and-guards">5. Assertions and guards</a></li>
+  <li><a href="#constructing-minimal-reproducible-examples" id="toc-constructing-minimal-reproducible-examples" class="nav-link" data-scroll-target="#constructing-minimal-reproducible-examples">6. Constructing minimal reproducible examples</a></li>
+  <li><a href="#collect-your-code" id="toc-collect-your-code" class="nav-link" data-scroll-target="#collect-your-code">7. Collect your code</a></li>
   <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
   </ul>
 </nav>
@@ -263,10 +262,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Every data scientist writes code that does not work, and professional developers spend between twenty and forty percent of their working time finding out why. Debugging is a skill distinct from programming, which means that strong programmers are not automatically strong debuggers and that the skill has to be practiced on its own terms. In this discussion section, you will:</p>
+<p>Every data scientist writes code that does not work, and a substantial share of any working programmer’s time goes into finding out why. Debugging is a skill distinct from programming and from data science itself, which means that strong programmers are not automatically strong debuggers and that the skill has to be practiced on its own terms. In this discussion section, you will:</p>
 <ul>
 <li>Read a Python traceback and locate the line that caused the error</li>
 <li>Apply a systematic debugging protocol instead of changing code at random</li>
+<li>Use documentation and error-message searches as part of that protocol</li>
 <li>Recognize silent bugs, which produce wrong results without raising any error</li>
 <li>Keep a debugging log, so that a hard-won fix is not lost by next week</li>
 <li>Write assertions that make bugs announce themselves early</li>
@@ -280,23 +280,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Keep this open for the whole section
+<span class="screen-reader-only">Important</span>Keep this panel visible throughout the whole section
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Debugging has two stages, and they ask different questions. Work through them in order, because a program that does not run cannot be checked for correctness.</p>
 <p><strong>Stage 1. Does the code run?</strong> If not, you have a <strong>loud bug</strong>, and the traceback is telling you where to look.</p>
-<p><strong>Stage 2. Is the answer right?</strong> If the code runs but the result is wrong, you have a <strong>silent bug</strong>, and nothing will tell you except your own expectations.</p>
+<p><strong>Stage 2. Is the answer right?</strong> If the code runs but the result is wrong, you have a <strong>silent bug</strong>. Nothing will notify you about this except checking the result against your own expectations and understanding.</p>
 <p>Inside either stage, the loop is the same six steps.</p>
 <ol type="1">
 <li><strong>Read the error</strong>, or state the mismatch. Note the error <em>type</em>, the <em>message</em>, and the last line of the traceback that points at <strong>your</strong> code.</li>
 <li><strong>Look at the data.</strong> Check <code>.shape</code>, <code>.dtypes</code>, <code>.columns</code>, and <code>.head()</code>. Most bugs are a mismatch between the data you have and the data you assumed.</li>
 <li><strong>Isolate.</strong> Reduce the failing code to the smallest piece that still breaks.</li>
-<li><strong>Form a hypothesis and test it.</strong> State what you think is wrong in one sentence, then write code that confirms or rejects it.</li>
+<li><strong>Form a hypothesis and test it.</strong> State what you think is wrong in one sentence, then write code that confirms or rejects it. <strong>Read the documentation</strong> for any function or method involved, because the answer is very often written there already.</li>
 <li><strong>Fix, then verify.</strong> Re-run from the top and confirm the fix did not break something downstream.</li>
-<li><strong>Add a guard</strong>, so the bug announces itself if it ever returns.</li>
+<li><strong>Consider adding a guard</strong>, so the bug announces itself if it ever returns.</li>
 </ol>
+<p>Debugging is not a purely internal exercise. Searching the documentation for the method you are using, or pasting the exact error message into a search engine, is a legitimate move at any step and often the fastest one, which is why experienced programmers reach for it constantly rather than as a last resort.</p>
 <p>If a change does not fix the problem, <strong>undo it before trying the next thing.</strong> Novice programmers routinely introduce new bugs while hunting an old one, and a pile of half-reverted edits is how a one-bug problem becomes a three-bug problem.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>First, what an <code>assert</code> actually does
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Step 6 asks you to add a guard, and the tool for that is <code>assert</code>. It takes a condition and a message, does nothing at all when the condition is true, and raises an <code>AssertionError</code> carrying your message when it is false.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">2</span>, <span class="st">'Two is not two'</span>      <span class="co"># passes silently, nothing happens</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">3</span>, <span class="st">'Two is not three'</span>    <span class="co"># AssertionError: Two is not three</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That is the whole idea. An assertion turns an assumption you are carrying in your head into a line of code that fails loudly the moment the assumption stops being true. You will write real ones in exercise 5.</p>
 </div>
 </div>
 </section>
@@ -309,8 +326,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>Access the workbench-1 server.</p></li>
-<li><p>Navigate to the <code>eds220-discussion-sections</code> directory in the file navigation panel and the terminal.</p></li>
+<li><p>Open your <code>eds220-discussion-sections</code> directory, in whichever environment you normally work, whether that is the workbench server or your own computer.</p></li>
 <li><p>Create a new Python notebook inside your <code>eds220-discussion-sections</code> directory and rename it to <code>section-4-debugging.ipynb</code>.</p></li>
 <li><p>Use the terminal to push this file to your remote repository.</p></li>
 </ol>
@@ -329,7 +345,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Add comments as appropriate along your code following the course commenting standards.</li>
 <li>Include markdown cells in between your code cells to add titles and information to each exercise.</li>
-<li>Several exercises ask you to <strong>predict</strong> what will happen before you run the code. Do not skip the prediction, because comparing a prediction against an outcome is what builds the skill.</li>
+<li><strong><span style="color: #900C3F;">Several exercises ask you to predict what will happen before you run the code. Do not skip the prediction, because comparing a prediction against an outcome is what builds the skill.</span></strong></li>
+<li>The two things you hand in from this section are your <strong>debugging log</strong> and your completed <strong>error-type table</strong>, both of which you build as you go.</li>
 <li>Commit every time you finish a major step. <strong>Remember to write your commits in the imperative mood.</strong></li>
 </ul>
 </div>
@@ -379,7 +396,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Unlike the other discussion sections, this data is not from an archive. It is constructed, and it is deliberately small enough to read in full, so that you can always check whether your code produced the right answer by looking at the raw values.</p>
+<p>The example data is synthetic and was generated for the purpose of this lesson. Unlike the other discussion sections, this data is not from an archive. It is constructed, and it is deliberately small enough to read in full, so that you can always check whether your code produced the right answer by looking at the raw values.</p>
 <p>Every problem in it, however, is one you will meet in real environmental data:</p>
 <ul>
 <li><strong>Sentinel values for missing data.</strong> Many agencies encode “no measurement” as <code>-999</code> or <code>-9999</code> rather than leaving the field empty. NOAA and USGS products do this routinely.</li>
@@ -391,36 +408,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="load-the-data-and-commit-to-an-expectation" class="level2">
-<h2 class="anchored" data-anchor-id="load-the-data-and-commit-to-an-expectation">1. Load the data and commit to an expectation</h2>
+<section id="load-the-data-and-agree-on-an-expectation" class="level2">
+<h2 class="anchored" data-anchor-id="load-the-data-and-agree-on-an-expectation">1. Load the data and agree on an expectation</h2>
 <ol type="a">
 <li>Copy the following cell into your notebook and run it. It builds the data frame from text, exactly as if you had read it from a CSV file.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>CSV <span class="op">=</span> <span class="st">"""site_id,date,water_temp_c,discharge_cfs,nitrate_mg_l,qc_flag</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-01-15,12.4,"1,240",0.82,good</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-02-15,13.1,"1,180",0.79,good</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-03-15,15.8,"2,050",1.21,good</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-04-15,18.2,"1,620",0.94,good</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">sb-01,2024-05-15,21.5,"980",0.66,good</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01 ,2024-06-15,-999,"540",0.51,suspect</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-01-15,11.8,"3,410",1.88,good</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-02-15,12.3,"3,290",1.92,good</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-03-15,14.9,"4,870",2.41,good</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-04-15,17.6,"3,950",2.09,estimated</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-05-15,20.9,"2,240",1.44,good</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">sb-02,2024-06-15,-999,"1,130",1.02,suspect</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-01-15,10.2,"620",&lt;0.05,good</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-02-15,10.9,"590",&lt;0.05,good</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-03-15,13.4,"1,040",0.33,good</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-04-15,16.1,"870",0.28,good</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03 ,2024-05-15,19.3,"410",&lt;0.05,good</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-06-15,-999,"180",&lt;0.05,suspect</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>stream <span class="op">=</span> pd.read_csv(io.StringIO(CSV))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>CSV <span class="op">=</span> <span class="st">"""site_id,date,water_temp_c,discharge_cfs,nitrate_mg_l,qc_flag</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-01-15,12.4,"1,240",0.82,good</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-02-15,13.1,"1,180",0.79,good</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-03-15,15.8,"2,050",1.21,good</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01,2024-04-15,18.2,"1,620",0.94,good</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">sb-01,2024-05-15,21.5,"980",0.66,good</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">SB-01 ,2024-06-15,-999,"540",0.51,suspect</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-01-15,11.8,"3,410",1.88,good</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-02-15,12.3,"3,290",1.92,good</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-03-15,14.9,"4,870",2.41,good</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-04-15,17.6,"3,950",2.09,estimated</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">SB-02,2024-05-15,20.9,"2,240",1.44,good</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">sb-02,2024-06-15,-999,"1,130",1.02,suspect</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-01-15,10.2,"620",&lt;0.05,good</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-02-15,10.9,"590",&lt;0.05,good</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-03-15,13.4,"1,040",0.33,good</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-04-15,16.1,"870",0.28,good</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03 ,2024-05-15,19.3,"410",&lt;0.05,good</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="st">SB-03,2024-06-15,-999,"180",&lt;0.05,suspect</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>stream <span class="op">=</span> pd.read_csv(io.StringIO(CSV))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="a">
 <li><p>Print the data frame in full. It is only 18 rows, so you can and should read all of it.</p></li>
 <li><p>Before writing any more code, agree with your team on the answers to these three questions and write them in a markdown cell.</p>
@@ -450,30 +467,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="a-worked-example" class="level2">
 <h2 class="anchored" data-anchor-id="a-worked-example">2. A worked example</h2>
 <p>Your first task is to convert stream discharge from cubic feet per second to cubic metres per second, which means multiplying by 0.0283168. The following cell attempts it and fails.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>] <span class="op">*</span> <span class="fl">0.0283168</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Rather than asking you to fix this, <strong>this exercise walks through all six steps so you can see what the protocol looks like in practice.</strong> Read it, run each cell yourself, and confirm you get the same output. The next exercises hand the work back to you a piece at a time.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>] <span class="op">*</span> <span class="fl">0.0283168</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Rather than asking you to fix this, <strong>this exercise walks through all six steps so you can see what the protocol looks like in practice.</strong> Read it, run each cell yourself, and confirm you get the same output. The next exercise hands the work back to you entirely.</p>
 <p><strong>Step 1, read the error.</strong> Running the cell gives:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TypeError: can't multiply sequence by non-int of type 'float'</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>TypeError: can't multiply sequence by non-int of type 'float'</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The type is <code>TypeError</code>, so an operation met a kind of data it cannot work with. The word <code>sequence</code> is the clue, because Python calls strings and lists sequences, and multiplying a sequence by an integer repeats it. Python is not refusing to do arithmetic, it is trying to repeat something and finding 0.0283168 is not a whole number of repetitions.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reading a traceback
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A traceback reads <strong>bottom to top</strong>. The last line gives the error type and message, which is the single most informative thing on the screen. Above it, Python lists the chain of calls that led there, starting from your cell and descending into library code. The useful line is usually the <em>lowest</em> one that names a file you wrote, because everything below it is <code>pandas</code> internals and is rarely where your bug lives.</p>
+<p>When several errors appear at once, read the <strong>first</strong> one. Later errors are often consequences of the first.</p>
+</div>
+</div>
 <p><strong>Step 2, look at the data.</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stream.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stream.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>discharge_cfs</code> is <code>object</code>, which is how pandas labels a column of text. A column of measurements has arrived as text.</p>
 <p><strong>Step 3, isolate.</strong> Reduce to the smallest failing piece, which here is a single value.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].iloc[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">0.0283168</span>   <span class="co"># same TypeError, one value</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].iloc[<span class="dv">0</span>]              <span class="co"># '1,240'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Step 4, form a hypothesis and test it.</strong> The hypothesis is that the thousands separator makes every value text. Test it by looking at the distinct values.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Every value carries a comma, which confirms the hypothesis.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].iloc[<span class="dv">0</span>] <span class="op">*</span> <span class="fl">0.0283168</span>   <span class="co"># same TypeError, one value</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].iloc[<span class="dv">0</span>]              <span class="co"># '1,240'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Step 4, form a hypothesis and test it.</strong> The hypothesis is that thousands separators have forced the column to text. Test it by looking at the distinct values.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'discharge_cfs'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Eleven of the eighteen values carry a comma. Note that the remaining seven, the ones only reaching the hundreds, have no comma at all, and yet every value still appears wrapped in quotes as a string. That is the point worth seeing: a single non-numeric value is enough to force the entire column to text, so the handful of entries with separators has made even the clean ones unusable for arithmetic. The hypothesis holds.</p>
 <p><strong>Step 5, fix and verify.</strong> Remove the separator, convert, then check the result against something you know.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>discharge_cms <span class="op">=</span> (stream[<span class="st">'discharge_cfs'</span>]</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="bu">str</span>.replace(<span class="st">','</span>, <span class="st">''</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    .astype(<span class="bu">float</span>)) <span class="op">*</span> <span class="fl">0.0283168</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>discharge_cms.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>discharge_cms <span class="op">=</span> (stream[<span class="st">'discharge_cfs'</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                    .<span class="bu">str</span>.replace(<span class="st">','</span>, <span class="st">''</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                    .astype(<span class="bu">float</span>)) <span class="op">*</span> <span class="fl">0.0283168</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>discharge_cms.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This gives 35.11, 33.41 and 58.05 m³/s. Verify rather than assume, because 1,240 cfs is a little over a thousand and a cubic metre is about 35 cubic feet, so an answer near 35 m³/s is the right order of magnitude. Had the answer come back near 35,000 the conversion would have gone the wrong way.</p>
-<p><strong>Step 6, add a guard.</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pd.api.types.is_numeric_dtype(discharge_cms), <span class="st">'Discharge failed to convert to numeric'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>The log.</strong> Finally, record what happened, because in ten weeks you will meet this bug again and will not remember the fix. Copy this table into a markdown cell and keep adding rows to it as you work through the rest of the section.</p>
+<p><strong>Step 6, consider adding a guard.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> pd.api.types.is_numeric_dtype(discharge_cms), <span class="st">'Discharge failed to convert to numeric'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>And if none of this had worked?</strong> Suppose the protocol had run out of road and you still did not know why the multiplication failed. At that point you would ask someone, and you would ask by building a <strong>minimal reproducible example</strong>, which is a two-row version of the problem that another person can run in isolation.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'discharge_cfs'</span>: [<span class="st">'1,240'</span>, <span class="st">'980'</span>]})</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'discharge_cfs'</span>] <span class="op">*</span> <span class="fl">0.0283168</span>     <span class="co"># TypeError: can't multiply sequence by non-int</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You will build one of these properly in exercise 6. Notice already that shrinking the problem to two rows often reveals the cause before you have finished writing the question.</p>
+<p><strong>The log.</strong> Finally, record what happened, because in ten weeks you will meet this bug again and will not remember the fix. This log is an artifact of this discussion section, and it is one of the two things you hand in. Copy this table into a markdown cell and keep adding rows to it as you work through the rest of the section.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 20%">
@@ -505,37 +541,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <strong>commit, pull, and push changes</strong>
 </p>
 </section>
-<section id="guided-practice" class="level2">
-<h2 class="anchored" data-anchor-id="guided-practice">3. Guided practice</h2>
-<p>Now the same protocol, with less of it done for you.</p>
-<section id="a.-steps-1-and-2-are-given-you-do-steps-3-to-6" class="level3 unlisted">
-<h3 class="unlisted anchored" data-anchor-id="a.-steps-1-and-2-are-given-you-do-steps-3-to-6">a. Steps 1 and 2 are given, you do steps 3 to 6</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_id'</span>].strip()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Step 1, the error</strong> is <code>AttributeError: 'Series' object has no attribute 'strip'</code>.</p>
-<p><strong>Step 2, the data:</strong> <code>site_id</code> is an <code>object</code> column, and you can see from exercise 1 that some values carry trailing spaces.</p>
-<p>Complete steps 3 through 6 yourself. For step 6, the useful guard is not about dtype but about how many distinct sites you end up with.</p>
+<section id="on-your-own" class="level2">
+<h2 class="anchored" data-anchor-id="on-your-own">3. On your own</h2>
+<p>Four cells below are broken. No steps are given for any of them. For each one, <strong>predict what will happen before you run it</strong>, then work the full protocol, fix it, and add a row to your log.</p>
+<section id="a." class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="a.">a.</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_id'</span>].strip()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For the guard on this one, the useful check is not about dtype but about how many distinct sites you end up with. Be careful here, because removing the stray whitespace is not on its own enough to get that number down to what you decided in exercise 1c.</p>
 <!--
+Step 1, error: AttributeError: 'Series' object has no attribute 'strip'.
+Step 2, data: site_id is an object column, and some values carry trailing spaces.
 Step 3, isolate: stream['site_id'].iloc[0].strip() works on a single value, so the
   method exists on a string but not on a Series.
 Step 4, hypothesis: strip() is a Python string method. A Series is a container of
   strings, not a string, so string methods must be reached through the .str accessor.
+  This is also the exercise where reading the pandas Series documentation, or searching
+  "pandas series strip", lands you on .str directly. Say so to the room.
 Step 5, fix:
 ```python
 stream['site_id'] = stream['site_id'].str.strip().str.upper()
 ```
   Note that .str.strip() alone leaves 5 distinct values because of the lowercase
-  entries, so .str.upper() is needed too.
+  entries, so .str.upper() is needed too. Students who stop at 5 have removed the
+  error without removing the bug.
 Step 6, guard:
 ```python
 assert stream['site_id'].nunique() == 3, f"Expected 3 sites, found {stream['site_id'].nunique()}"
 ```
 -->
 </section>
-<section id="b.-only-step-1-is-given-you-do-steps-2-to-6" class="level3 unlisted">
-<h3 class="unlisted anchored" data-anchor-id="b.-only-step-1-is-given-you-do-steps-2-to-6">b. Only step 1 is given, you do steps 2 to 6</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'nitrate_mg_l'</span>].astype(<span class="bu">float</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Step 1, the error</strong> is <code>ValueError: could not convert string to float: '&lt;0.05'</code>.</p>
-<p>Notice that this error names the exact value it choked on, which is the fastest route to a fix that any error message gives you. Complete steps 2 through 6.</p>
+<section id="b." class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="b.">b.</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'nitrate_mg_l'</span>].astype(<span class="bu">float</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This error names the exact value it choked on, which is the fastest route to a fix that any error message gives you.</p>
 <p>Step 5 is not purely a coding decision here. The values reported as <code>&lt;0.05</code> are measurements that fell below the laboratory’s detection limit, so the true concentration lies somewhere between zero and 0.05 mg/L. Discuss with your team what those values should become. There is no single correct answer, and the common conventions include substituting the detection limit itself, substituting half of it, or treating the values as missing. Choose one, implement it, and <strong>write a comment stating what you did and why.</strong></p>
 <div class="callout callout-style-simple callout-important no-icon">
 <div class="callout-body d-flex">
@@ -543,11 +581,12 @@ assert stream['site_id'].nunique() == 3, f"Expected 3 sites, found {stream['site
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>This part is not really about debugging, and that is deliberate. Code that raises no error can still encode a scientific decision that a reader needs to know about. A pipeline earns trust when its judgment calls are visible, not merely when it runs cleanly.</p>
+<p>A pipeline earns trust when its judgment calls are visible, not merely when it runs cleanly.</p>
 </div>
 </div>
 </div>
 <!--
+Step 1, error: ValueError: could not convert string to float: '<0.05'
 Step 2: nitrate_mg_l is object. unique() shows four '<0.05' entries among numeric-looking strings.
 Step 4, hypothesis: the detection-limit strings are blocking conversion.
 Step 5, fix (half the detection limit, one defensible convention of several):
@@ -566,41 +605,30 @@ Step 6, guard:
 assert pd.api.types.is_numeric_dtype(stream['nitrate_mg_l']), 'Nitrate is not numeric'
 ```
 -->
-<p style="text-align: center;">
-<strong>commit, pull, and push changes</strong>
-</p>
 </section>
-</section>
-<section id="on-your-own" class="level2">
-<h2 class="anchored" data-anchor-id="on-your-own">4. On your own</h2>
-<p>No steps are given. For each cell below, <strong>predict what will happen before you run it</strong>, then work the full protocol and add a row to your log.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cell A</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'temperature'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cell B</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>warm <span class="op">=</span> stream[stream[<span class="st">'qc_flag'</span>] <span class="op">==</span> <span class="st">'good'</span>]</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>warm[<span class="st">'water_temp_c'</span>] <span class="op">=</span> warm[<span class="st">'water_temp_c'</span>] <span class="op">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Cell B is the subtle one. It does not raise an error, it raises a <em>warning</em>, and then it does not do what it appears to do. Check whether <code>warm</code> actually changed.</p>
+<section id="c." class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="c.">c.&nbsp;</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'temperature'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <!--
-Cell A -> KeyError: 'temperature'. The column is water_temp_c. A KeyError on a data
-frame almost always means the label does not exist, so check df.columns for spelling
-and stray whitespace. Fix: stream['water_temp_c'].mean()
-
-Cell B -> SettingWithCopyWarning, and the assignment is silently LOST. stream[...]
-returns a slice that may be a copy, so the write may land on a temporary object that
-is then discarded. Verified: the suspect rows are unchanged afterwards.
-Fix, operate on an explicit copy when you want an independent frame:
-```python
-warm = stream[stream['qc_flag'] == 'good'].copy()
-warm['water_temp_c'] = warm['water_temp_c'] + 1
-```
-Or write back into the original with a single .loc, when that is what you meant:
-```python
-stream.loc[stream['qc_flag'] == 'good', 'water_temp_c'] += 1
-```
+KeyError: 'temperature'. The column is water_temp_c. A KeyError on a data frame almost
+always means the label does not exist, so check df.columns for spelling and stray
+whitespace. Fix: stream['water_temp_c'].mean()
 -->
-<ol start="4" type="a">
-<li>Complete this table in a markdown cell, using what the four errors you have now met taught you.</li>
-</ol>
+</section>
+<section id="d." class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="d.">d.&nbsp;</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stream.iloc[<span class="dv">18</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!--
+IndexError: single positional indexer is out-of-bounds. The frame has 18 rows, so the
+valid positional range is 0 through 17. This is the classic off-by-one, and it is worth
+asking the room why 18 rows means there is no row 18.
+Fix: stream.iloc[17] for the last row, or stream.iloc[-1] to say "last" directly.
+Guard: assert len(stream) == 18, f"Expected 18 rows, found {len(stream)}"
+-->
+</section>
+<section id="e.-complete-the-error-type-table" class="level3 unlisted">
+<h3 class="unlisted anchored" data-anchor-id="e.-complete-the-error-type-table">e. Complete the error-type table</h3>
+<p>Using what the five errors you have now met taught you, complete this table in a markdown cell. This table is the second of the two things you hand in from this section.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -626,7 +654,7 @@ stream.loc[stream['qc_flag'] == 'good', 'water_temp_c'] += 1
 <td></td>
 </tr>
 <tr class="odd">
-<td><code>SettingWithCopyWarning</code></td>
+<td><code>IndexError</code></td>
 <td></td>
 </tr>
 </tbody>
@@ -636,33 +664,20 @@ stream.loc[stream['qc_flag'] == 'good', 'water_temp_c'] += 1
 | AttributeError | A method was called on the wrong kind of object, e.g. a string method directly on a Series instead of through .str |
 | TypeError | An operation met a dtype that does not support it, usually arithmetic on an object (text) column. |
 | ValueError | The type is right but a specific value is not acceptable, e.g. a non-numeric string inside astype(float). The message names the value. |
-| SettingWithCopyWarning | An assignment may have landed on a copy rather than the original, so it may have done nothing. Use .copy() or a single .loc. |
+| IndexError | A positional index is outside the range that exists. Valid positions run 0 to len(df) - 1. |
 -->
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Reading a traceback
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>A traceback reads <strong>bottom to top</strong>. The last line gives the error type and message, which is the single most informative thing on the screen. Above it, Python lists the chain of calls that led there, starting from your cell and descending into library code. The useful line is usually the <em>lowest</em> one that names a file you wrote, because everything below it is <code>pandas</code> internals and is rarely where your bug lives.</p>
-<p>When several errors appear at once, read the <strong>first</strong> one. Later errors are often consequences of the first.</p>
-</div>
-</div>
 <p style="text-align: center;">
 <strong>commit, pull, and push changes</strong>
 </p>
 </section>
+</section>
 <section id="bugs-that-do-not-raise-errors" class="level2">
-<h2 class="anchored" data-anchor-id="bugs-that-do-not-raise-errors">5. Bugs that do not raise errors</h2>
+<h2 class="anchored" data-anchor-id="bugs-that-do-not-raise-errors">4. Bugs that do not raise errors</h2>
 <p>Everything so far has been stage 1, where Python told you something was wrong. Stage 2 is harder, because the code runs, returns a plausible-looking number, and nothing warns you. Catching these depends entirely on the expectations you recorded in exercise 1c.</p>
 <ol type="a">
 <li>Run the following cell and compare the result against your expectation from 1c-iii.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'water_temp_c'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'water_temp_c'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol type="i">
 <li>The cell runs without error. Is the answer right, and how do you know?</li>
 <li>Explain in one sentence why the result is what it is.</li>
@@ -685,7 +700,7 @@ rows become NaN, and mean() skips NaN by default.
 <ol start="2" type="a">
 <li>Run the following cell and compare the result against your expectation from 1c-i.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_id'</span>].nunique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_id'</span>].nunique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you already fixed this in exercise 3a, re-load the raw data into a new variable and run it against that, so you can see what the bug looked like.</p>
 <ol type="i">
 <li>Which is wrong, the code or your expectation?</li>
@@ -703,9 +718,9 @@ real stations. The fix is the .str.strip().str.upper() from exercise 3a.
 <ol start="3" type="a">
 <li>Now a bug that produces no number at all, and still says nothing. You want to attach each site’s mean temperature back onto every row.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>site_means <span class="op">=</span> stream.groupby(<span class="st">'site_id'</span>)[<span class="st">'water_temp_c'</span>].mean()</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_mean'</span>] <span class="op">=</span> site_means</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>stream[[<span class="st">'site_id'</span>, <span class="st">'water_temp_c'</span>, <span class="st">'site_mean'</span>]].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>site_means <span class="op">=</span> stream.groupby(<span class="st">'site_id'</span>)[<span class="st">'water_temp_c'</span>].mean()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>stream[<span class="st">'site_mean'</span>] <span class="op">=</span> site_means</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>stream[[<span class="st">'site_id'</span>, <span class="st">'water_temp_c'</span>, <span class="st">'site_mean'</span>]].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol type="i">
 <li>Look at the <code>site_mean</code> column. What happened?</li>
 <li>Print <code>site_means</code> on its own and compare its index to <code>stream</code>’s index. Form a hypothesis about why the assignment produced what it did.</li>
@@ -741,7 +756,7 @@ Both give 16.2 for every SB-01 row.
 <ol start="4" type="a">
 <li><strong>The exercise that matters most.</strong> Run the per-site summary on your cleaned data.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>stream.groupby(<span class="st">'site_id'</span>)[<span class="st">'water_temp_c'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>stream.groupby(<span class="st">'site_id'</span>)[<span class="st">'water_temp_c'</span>].mean()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Discuss with your team and answer in a markdown cell. If you had <strong>not</strong> fixed the bugs in (a) and (b), what would this output have looked like, and would you have noticed?</p>
 <!--
 Unfixed, this returns seven groups instead of three, with SB-01 and SB-03 each
@@ -757,9 +772,9 @@ by someone who knows what a plausible stream temperature is.
 </p>
 </section>
 <section id="assertions-and-guards" class="level2">
-<h2 class="anchored" data-anchor-id="assertions-and-guards">6. Assertions and guards</h2>
-<p>Step 6 of the protocol is to add a guard. An <code>assert</code> statement checks a condition and raises an <code>AssertionError</code> with your message when the condition is false, which converts a silent bug into a loud one.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> condition, <span class="st">'message explaining what went wrong'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<h2 class="anchored" data-anchor-id="assertions-and-guards">5. Assertions and guards</h2>
+<p>Step 6 of the protocol is to consider adding a guard, and you met the mechanics of <code>assert</code> at the top of this section. An <code>assert</code> statement checks a condition and raises an <code>AssertionError</code> with your message when the condition is false, which converts a silent bug into a loud one.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> condition, <span class="st">'message explaining what went wrong'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol type="a">
 <li><p>Write an assertion for each of the following, and confirm each passes on your cleaned data.</p></li>
 <li><p><code>stream</code> has exactly 3 unique sites.</p></li>
@@ -808,9 +823,9 @@ assert pd.api.types.is_numeric_dtype(raw['discharge_cfs'])  # fails: object
 <strong>commit, pull, and push changes</strong>
 </p>
 </section>
-<section id="asking-for-help" class="level2">
-<h2 class="anchored" data-anchor-id="asking-for-help">7. Asking for help</h2>
-<p>When the protocol does not get you there, you ask someone, and how you ask determines whether they can help. A <strong>minimal reproducible example</strong> is the smallest piece of self-contained code that another person can run to see your problem, and it is built from the smallest data that still shows the problem, the shortest code that triggers it, the full error message, and a sentence saying what you expected instead.</p>
+<section id="constructing-minimal-reproducible-examples" class="level2">
+<h2 class="anchored" data-anchor-id="constructing-minimal-reproducible-examples">6. Constructing minimal reproducible examples</h2>
+<p>When the protocol does not get you there, you ask someone, and how you ask determines whether they can help. A <strong>minimal reproducible example</strong> is the smallest piece of self-contained code that another person can run to see your problem, and it is built from the smallest data that still shows the problem, the shortest code that triggers it, the full error message, and a sentence saying what you expected instead. You saw a two-row version of one at the end of exercise 2.</p>
 <ol type="a">
 <li><p>Choose one bug from this section. In a markdown cell, write a minimal reproducible example of it as though you were posting it for help.</p></li>
 <li><p>Discuss with your team why a three-row example gets a better answer than attaching the full dataset and a sixty-line notebook.</p></li>
@@ -839,7 +854,7 @@ environment.
 -->
 </section>
 <section id="collect-your-code" class="level2">
-<h2 class="anchored" data-anchor-id="collect-your-code">8. Collect your code</h2>
+<h2 class="anchored" data-anchor-id="collect-your-code">7. Collect your code</h2>
 <ol type="a">
 <li>In a new code cell, collect the relevant code into a single streamlined workflow that loads the raw data, cleans it, asserts that it is valid, and reports the mean water temperature and mean discharge by site. Your code cell should:</li>
 </ol>
@@ -915,6 +930,7 @@ nitrate measurements, all at SB-03, fell below the laboratory detection limit.
 <ul>
 <li>A traceback is information, not a punishment. Read the bottom line first, and the first error first.</li>
 <li>Most bugs are a mismatch between the data you have and the data you assumed, so inspect <code>.dtypes</code> and <code>.shape</code> before changing any code.</li>
+<li>Reading the documentation is debugging. The accessor, the argument or the default you are missing is usually written down somewhere, and looking it up is faster than guessing.</li>
 <li>An error that stops your code is a good day, because the bug that returns a plausible wrong number is the one that reaches a published figure.</li>
 <li>You can only catch a silent bug if you know roughly what answer to expect, which makes domain knowledge part of your debugging toolkit.</li>
 <li>Guard every assumption you rely on, and confirm the guard fails on data you know is bad.</li>

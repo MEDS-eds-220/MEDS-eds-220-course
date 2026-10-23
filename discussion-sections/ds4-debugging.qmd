@@ -2,13 +2,15 @@
 title: Debugging code
 subtitle: Week 4 - Discussion section
 week: 4
+image: images/ds4-debugging.jpg
 sidebar: false
 ---
 
-Every data scientist writes code that does not work, and professional developers spend between twenty and forty percent of their working time finding out why. Debugging is a skill distinct from programming, which means that strong programmers are not automatically strong debuggers and that the skill has to be practiced on its own terms. In this discussion section, you will:
+Every data scientist writes code that does not work, and a substantial share of any working programmer's time goes into finding out why. Debugging is a skill distinct from programming and from data science itself, which means that strong programmers are not automatically strong debuggers and that the skill has to be practiced on its own terms. In this discussion section, you will:
 
 - Read a Python traceback and locate the line that caused the error
 - Apply a systematic debugging protocol instead of changing code at random
+- Use documentation and error-message searches as part of that protocol
 - Recognize silent bugs, which produce wrong results without raising any error
 - Keep a debugging log, so that a hard-won fix is not lost by next week
 - Write assertions that make bugs announce themselves early
@@ -17,36 +19,49 @@ Every data scientist writes code that does not work, and professional developers
 ## The two-stage protocol
 
 :::{.callout-important appearance="minimal"}
-## Keep this open for the whole section
+## Keep this panel visible throughout the whole section
 
 Debugging has two stages, and they ask different questions. Work through them in order, because a program that does not run cannot be checked for correctness.
 
 **Stage 1. Does the code run?** If not, you have a **loud bug**, and the traceback is telling you where to look.
 
-**Stage 2. Is the answer right?** If the code runs but the result is wrong, you have a **silent bug**, and nothing will tell you except your own expectations.
+**Stage 2. Is the answer right?** If the code runs but the result is wrong, you have a **silent bug**. Nothing will notify you about this except checking the result against your own expectations and understanding.
 
 Inside either stage, the loop is the same six steps.
 
 1. **Read the error**, or state the mismatch. Note the error *type*, the *message*, and the last line of the traceback that points at **your** code.
 2. **Look at the data.** Check `.shape`, `.dtypes`, `.columns`, and `.head()`. Most bugs are a mismatch between the data you have and the data you assumed.
 3. **Isolate.** Reduce the failing code to the smallest piece that still breaks.
-4. **Form a hypothesis and test it.** State what you think is wrong in one sentence, then write code that confirms or rejects it.
+4. **Form a hypothesis and test it.** State what you think is wrong in one sentence, then write code that confirms or rejects it. **Read the documentation** for any function or method involved, because the answer is very often written there already.
 5. **Fix, then verify.** Re-run from the top and confirm the fix did not break something downstream.
-6. **Add a guard**, so the bug announces itself if it ever returns.
+6. **Consider adding a guard**, so the bug announces itself if it ever returns.
+
+Debugging is not a purely internal exercise. Searching the documentation for the method you are using, or pasting the exact error message into a search engine, is a legitimate move at any step and often the fastest one, which is why experienced programmers reach for it constantly rather than as a last resort.
 
 If a change does not fix the problem, **undo it before trying the next thing.** Novice programmers routinely introduce new bugs while hunting an old one, and a pile of half-reverted edits is how a one-bug problem becomes a three-bug problem.
+:::
+
+:::{.callout-note appearance="minimal"}
+## First, what an `assert` actually does
+
+Step 6 asks you to add a guard, and the tool for that is `assert`. It takes a condition and a message, does nothing at all when the condition is true, and raises an `AssertionError` carrying your message when it is false.
+
+```python
+assert 2 == 2, 'Two is not two'      # passes silently, nothing happens
+assert 2 == 3, 'Two is not three'    # AssertionError: Two is not three
+```
+
+That is the whole idea. An assertion turns an assumption you are carrying in your head into a line of code that fails loudly the moment the assumption stops being true. You will write real ones in exercise 5.
 :::
 
 ## Setup
 
 :::{.callout-tip appearance="minimal"}
-1. Access the workbench-1 server.
+1. Open your `eds220-discussion-sections` directory, in whichever environment you normally work, whether that is the workbench server or your own computer.
 
-2. Navigate to the `eds220-discussion-sections` directory in the file navigation panel and the terminal.
+2. Create a new Python notebook inside your `eds220-discussion-sections` directory and rename it to `section-4-debugging.ipynb`.
 
-3. Create a new Python notebook inside your `eds220-discussion-sections` directory and rename it to `section-4-debugging.ipynb`.
-
-4. Use the terminal to push this file to your remote repository.
+3. Use the terminal to push this file to your remote repository.
 :::
 
 ## General directions
@@ -54,7 +69,8 @@ If a change does not fix the problem, **undo it before trying the next thing.** 
 :::{.callout-tip appearance="minimal"}
 - Add comments as appropriate along your code following the course commenting standards.
 - Include markdown cells in between your code cells to add titles and information to each exercise.
-- Several exercises ask you to **predict** what will happen before you run the code. Do not skip the prediction, because comparing a prediction against an outcome is what builds the skill.
+- **[Several exercises ask you to predict what will happen before you run the code. Do not skip the prediction, because comparing a prediction against an outcome is what builds the skill.]{style="color: #900C3F;"}**
+- The two things you hand in from this section are your **debugging log** and your completed **error-type table**, both of which you build as you go.
 - Commit every time you finish a major step. **Remember to write your commits in the imperative mood.**
 :::
 
@@ -72,7 +88,7 @@ For this section you will use a small **constructed** dataset of stream monitori
 | `nitrate_mg_l` | Nitrate concentration, mg/L |
 | `qc_flag` | Quality control flag assigned by the monitoring program |
 
-Unlike the other discussion sections, this data is not from an archive. It is constructed, and it is deliberately small enough to read in full, so that you can always check whether your code produced the right answer by looking at the raw values.
+The example data is synthetic and was generated for the purpose of this lesson. Unlike the other discussion sections, this data is not from an archive. It is constructed, and it is deliberately small enough to read in full, so that you can always check whether your code produced the right answer by looking at the raw values.
 
 Every problem in it, however, is one you will meet in real environmental data:
 
@@ -82,7 +98,7 @@ Every problem in it, however, is one you will meet in real environmental data:
 - **Inconsistent identifiers.** Station codes entered by hand pick up trailing spaces and inconsistent capitalization.
 :::
 
-## 1. Load the data and commit to an expectation
+## 1. Load the data and agree on an expectation
 
 a. Copy the following cell into your notebook and run it. It builds the data frame from text, exactly as if you had read it from a CSV file.
 
@@ -141,7 +157,7 @@ Your first task is to convert stream discharge from cubic feet per second to cub
 stream['discharge_cfs'] * 0.0283168
 ```
 
-Rather than asking you to fix this, **this exercise walks through all six steps so you can see what the protocol looks like in practice.** Read it, run each cell yourself, and confirm you get the same output. The next exercises hand the work back to you a piece at a time.
+Rather than asking you to fix this, **this exercise walks through all six steps so you can see what the protocol looks like in practice.** Read it, run each cell yourself, and confirm you get the same output. The next exercise hands the work back to you entirely.
 
 **Step 1, read the error.** Running the cell gives:
 
@@ -150,6 +166,14 @@ TypeError: can't multiply sequence by non-int of type 'float'
 ```
 
 The type is `TypeError`, so an operation met a kind of data it cannot work with. The word `sequence` is the clue, because Python calls strings and lists sequences, and multiplying a sequence by an integer repeats it. Python is not refusing to do arithmetic, it is trying to repeat something and finding 0.0283168 is not a whole number of repetitions.
+
+:::{.callout-note appearance="minimal"}
+## Reading a traceback
+
+A traceback reads **bottom to top**. The last line gives the error type and message, which is the single most informative thing on the screen. Above it, Python lists the chain of calls that led there, starting from your cell and descending into library code. The useful line is usually the *lowest* one that names a file you wrote, because everything below it is `pandas` internals and is rarely where your bug lives.
+
+When several errors appear at once, read the **first** one. Later errors are often consequences of the first.
+:::
 
 **Step 2, look at the data.**
 
@@ -166,13 +190,13 @@ stream['discharge_cfs'].iloc[0] * 0.0283168   # same TypeError, one value
 stream['discharge_cfs'].iloc[0]              # '1,240'
 ```
 
-**Step 4, form a hypothesis and test it.** The hypothesis is that the thousands separator makes every value text. Test it by looking at the distinct values.
+**Step 4, form a hypothesis and test it.** The hypothesis is that thousands separators have forced the column to text. Test it by looking at the distinct values.
 
 ```python
 stream['discharge_cfs'].unique()
 ```
 
-Every value carries a comma, which confirms the hypothesis.
+Eleven of the eighteen values carry a comma. Note that the remaining seven, the ones only reaching the hundreds, have no comma at all, and yet every value still appears wrapped in quotes as a string. That is the point worth seeing: a single non-numeric value is enough to force the entire column to text, so the handful of entries with separators has made even the clean ones unusable for arithmetic. The hypothesis holds.
 
 **Step 5, fix and verify.** Remove the separator, convert, then check the result against something you know.
 
@@ -186,13 +210,23 @@ discharge_cms.head(3)
 
 This gives 35.11, 33.41 and 58.05 m³/s. Verify rather than assume, because 1,240 cfs is a little over a thousand and a cubic metre is about 35 cubic feet, so an answer near 35 m³/s is the right order of magnitude. Had the answer come back near 35,000 the conversion would have gone the wrong way.
 
-**Step 6, add a guard.**
+**Step 6, consider adding a guard.**
 
 ```python
 assert pd.api.types.is_numeric_dtype(discharge_cms), 'Discharge failed to convert to numeric'
 ```
 
-**The log.** Finally, record what happened, because in ten weeks you will meet this bug again and will not remember the fix. Copy this table into a markdown cell and keep adding rows to it as you work through the rest of the section.
+**And if none of this had worked?** Suppose the protocol had run out of road and you still did not know why the multiplication failed. At that point you would ask someone, and you would ask by building a **minimal reproducible example**, which is a two-row version of the problem that another person can run in isolation.
+
+```python
+import pandas as pd
+df = pd.DataFrame({'discharge_cfs': ['1,240', '980']})
+df['discharge_cfs'] * 0.0283168     # TypeError: can't multiply sequence by non-int
+```
+
+You will build one of these properly in exercise 6. Notice already that shrinking the problem to two rows often reveals the cause before you have finished writing the question.
+
+**The log.** Finally, record what happened, because in ten weeks you will meet this bug again and will not remember the fix. This log is an artifact of this discussion section, and it is one of the two things you hand in. Copy this table into a markdown cell and keep adding rows to it as you work through the rest of the section.
 
 | What I expected | What happened | My hypothesis | What I changed | Result |
 | --- | --- | --- | --- | --- |
@@ -202,56 +236,56 @@ assert pd.api.types.is_numeric_dtype(discharge_cms), 'Discharge failed to conver
 **commit, pull, and push changes**
 </p>
 
-## 3. Guided practice
+## 3. On your own
 
-Now the same protocol, with less of it done for you.
+Four cells below are broken. No steps are given for any of them. For each one, **predict what will happen before you run it**, then work the full protocol, fix it, and add a row to your log.
 
-### a. Steps 1 and 2 are given, you do steps 3 to 6 {.unlisted}
+### a. {.unlisted}
 
 ```python
 stream['site_id'].strip()
 ```
 
-**Step 1, the error** is `AttributeError: 'Series' object has no attribute 'strip'`.
-
-**Step 2, the data:** `site_id` is an `object` column, and you can see from exercise 1 that some values carry trailing spaces.
-
-Complete steps 3 through 6 yourself. For step 6, the useful guard is not about dtype but about how many distinct sites you end up with.
+For the guard on this one, the useful check is not about dtype but about how many distinct sites you end up with. Be careful here, because removing the stray whitespace is not on its own enough to get that number down to what you decided in exercise 1c.
 
 <!--
+Step 1, error: AttributeError: 'Series' object has no attribute 'strip'.
+Step 2, data: site_id is an object column, and some values carry trailing spaces.
 Step 3, isolate: stream['site_id'].iloc[0].strip() works on a single value, so the
   method exists on a string but not on a Series.
 Step 4, hypothesis: strip() is a Python string method. A Series is a container of
   strings, not a string, so string methods must be reached through the .str accessor.
+  This is also the exercise where reading the pandas Series documentation, or searching
+  "pandas series strip", lands you on .str directly. Say so to the room.
 Step 5, fix:
 ```python
 stream['site_id'] = stream['site_id'].str.strip().str.upper()
 ```
   Note that .str.strip() alone leaves 5 distinct values because of the lowercase
-  entries, so .str.upper() is needed too.
+  entries, so .str.upper() is needed too. Students who stop at 5 have removed the
+  error without removing the bug.
 Step 6, guard:
 ```python
 assert stream['site_id'].nunique() == 3, f"Expected 3 sites, found {stream['site_id'].nunique()}"
 ```
 -->
 
-### b. Only step 1 is given, you do steps 2 to 6 {.unlisted}
+### b. {.unlisted}
 
 ```python
 stream['nitrate_mg_l'].astype(float)
 ```
 
-**Step 1, the error** is `ValueError: could not convert string to float: '<0.05'`.
-
-Notice that this error names the exact value it choked on, which is the fastest route to a fix that any error message gives you. Complete steps 2 through 6.
+This error names the exact value it choked on, which is the fastest route to a fix that any error message gives you.
 
 Step 5 is not purely a coding decision here. The values reported as `<0.05` are measurements that fell below the laboratory's detection limit, so the true concentration lies somewhere between zero and 0.05 mg/L. Discuss with your team what those values should become. There is no single correct answer, and the common conventions include substituting the detection limit itself, substituting half of it, or treating the values as missing. Choose one, implement it, and **write a comment stating what you did and why.**
 
 :::{.callout-important appearance="minimal"}
-This part is not really about debugging, and that is deliberate. Code that raises no error can still encode a scientific decision that a reader needs to know about. A pipeline earns trust when its judgment calls are visible, not merely when it runs cleanly.
+A pipeline earns trust when its judgment calls are visible, not merely when it runs cleanly.
 :::
 
 <!--
+Step 1, error: ValueError: could not convert string to float: '<0.05'
 Step 2: nitrate_mg_l is object. unique() shows four '<0.05' entries among numeric-looking strings.
 Step 4, hypothesis: the detection-limit strings are blocking conversion.
 Step 5, fix (half the detection limit, one defensible convention of several):
@@ -271,47 +305,35 @@ assert pd.api.types.is_numeric_dtype(stream['nitrate_mg_l']), 'Nitrate is not nu
 ```
 -->
 
-<p style="text-align: center;">
-**commit, pull, and push changes**
-</p>
-
-## 4. On your own
-
-No steps are given. For each cell below, **predict what will happen before you run it**, then work the full protocol and add a row to your log.
+### c. {.unlisted}
 
 ```python
-# Cell A
 stream['temperature'].mean()
 ```
 
-```python
-# Cell B
-warm = stream[stream['qc_flag'] == 'good']
-warm['water_temp_c'] = warm['water_temp_c'] + 1
-```
-
-Cell B is the subtle one. It does not raise an error, it raises a *warning*, and then it does not do what it appears to do. Check whether `warm` actually changed.
-
 <!--
-Cell A -> KeyError: 'temperature'. The column is water_temp_c. A KeyError on a data
-frame almost always means the label does not exist, so check df.columns for spelling
-and stray whitespace. Fix: stream['water_temp_c'].mean()
-
-Cell B -> SettingWithCopyWarning, and the assignment is silently LOST. stream[...]
-returns a slice that may be a copy, so the write may land on a temporary object that
-is then discarded. Verified: the suspect rows are unchanged afterwards.
-Fix, operate on an explicit copy when you want an independent frame:
-```python
-warm = stream[stream['qc_flag'] == 'good'].copy()
-warm['water_temp_c'] = warm['water_temp_c'] + 1
-```
-Or write back into the original with a single .loc, when that is what you meant:
-```python
-stream.loc[stream['qc_flag'] == 'good', 'water_temp_c'] += 1
-```
+KeyError: 'temperature'. The column is water_temp_c. A KeyError on a data frame almost
+always means the label does not exist, so check df.columns for spelling and stray
+whitespace. Fix: stream['water_temp_c'].mean()
 -->
 
-d. Complete this table in a markdown cell, using what the four errors you have now met taught you.
+### d. {.unlisted}
+
+```python
+stream.iloc[18]
+```
+
+<!--
+IndexError: single positional indexer is out-of-bounds. The frame has 18 rows, so the
+valid positional range is 0 through 17. This is the classic off-by-one, and it is worth
+asking the room why 18 rows means there is no row 18.
+Fix: stream.iloc[17] for the last row, or stream.iloc[-1] to say "last" directly.
+Guard: assert len(stream) == 18, f"Expected 18 rows, found {len(stream)}"
+-->
+
+### e. Complete the error-type table {.unlisted}
+
+Using what the five errors you have now met taught you, complete this table in a markdown cell. This table is the second of the two things you hand in from this section.
 
 | Error type | What it usually means in `pandas` |
 | ---------- | --------------------------------- |
@@ -319,29 +341,21 @@ d. Complete this table in a markdown cell, using what the four errors you have n
 | `AttributeError` | |
 | `TypeError` | |
 | `ValueError` | |
-| `SettingWithCopyWarning` | |
+| `IndexError` | |
 
 <!--
 | KeyError | A column or index label does not exist. Check df.columns for spelling and whitespace. |
 | AttributeError | A method was called on the wrong kind of object, e.g. a string method directly on a Series instead of through .str |
 | TypeError | An operation met a dtype that does not support it, usually arithmetic on an object (text) column. |
 | ValueError | The type is right but a specific value is not acceptable, e.g. a non-numeric string inside astype(float). The message names the value. |
-| SettingWithCopyWarning | An assignment may have landed on a copy rather than the original, so it may have done nothing. Use .copy() or a single .loc. |
+| IndexError | A positional index is outside the range that exists. Valid positions run 0 to len(df) - 1. |
 -->
-
-:::{.callout-note appearance="minimal"}
-## Reading a traceback
-
-A traceback reads **bottom to top**. The last line gives the error type and message, which is the single most informative thing on the screen. Above it, Python lists the chain of calls that led there, starting from your cell and descending into library code. The useful line is usually the *lowest* one that names a file you wrote, because everything below it is `pandas` internals and is rarely where your bug lives.
-
-When several errors appear at once, read the **first** one. Later errors are often consequences of the first.
-:::
 
 <p style="text-align: center;">
 **commit, pull, and push changes**
 </p>
 
-## 5. Bugs that do not raise errors
+## 4. Bugs that do not raise errors
 
 Everything so far has been stage 1, where Python told you something was wrong. Stage 2 is harder, because the code runs, returns a plausible-looking number, and nothing warns you. Catching these depends entirely on the expectations you recorded in exercise 1c.
 
@@ -446,9 +460,9 @@ by someone who knows what a plausible stream temperature is.
 **commit, pull, and push changes**
 </p>
 
-## 6. Assertions and guards
+## 5. Assertions and guards
 
-Step 6 of the protocol is to add a guard. An `assert` statement checks a condition and raises an `AssertionError` with your message when the condition is false, which converts a silent bug into a loud one.
+Step 6 of the protocol is to consider adding a guard, and you met the mechanics of `assert` at the top of this section. An `assert` statement checks a condition and raises an `AssertionError` with your message when the condition is false, which converts a silent bug into a loud one.
 
 ```python
 assert condition, 'message explaining what went wrong'
@@ -494,9 +508,9 @@ c. An assertion can be switched off when Python runs with the `-O` flag, so asse
 **commit, pull, and push changes**
 </p>
 
-## 7. Asking for help
+## 6. Constructing minimal reproducible examples
 
-When the protocol does not get you there, you ask someone, and how you ask determines whether they can help. A **minimal reproducible example** is the smallest piece of self-contained code that another person can run to see your problem, and it is built from the smallest data that still shows the problem, the shortest code that triggers it, the full error message, and a sentence saying what you expected instead.
+When the protocol does not get you there, you ask someone, and how you ask determines whether they can help. A **minimal reproducible example** is the smallest piece of self-contained code that another person can run to see your problem, and it is built from the smallest data that still shows the problem, the shortest code that triggers it, the full error message, and a sentence saying what you expected instead. You saw a two-row version of one at the end of exercise 2.
 
 a. Choose one bug from this section. In a markdown cell, write a minimal reproducible example of it as though you were posting it for help.
 
@@ -525,7 +539,7 @@ guess what matters, and anyone can run it immediately without your data or your
 environment.
 -->
 
-## 8. Collect your code
+## 7. Collect your code
 
 a. In a new code cell, collect the relevant code into a single streamlined workflow that loads the raw data, cleans it, asserts that it is valid, and reports the mean water temperature and mean discharge by site. Your code cell should:
 
@@ -594,6 +608,7 @@ nitrate measurements, all at SB-03, fell below the laboratory detection limit.
 :::{.callout-tip appearance="minimal"}
 - A traceback is information, not a punishment. Read the bottom line first, and the first error first.
 - Most bugs are a mismatch between the data you have and the data you assumed, so inspect `.dtypes` and `.shape` before changing any code.
+- Reading the documentation is debugging. The accessor, the argument or the default you are missing is usually written down somewhere, and looking it up is faster than guessing.
 - An error that stops your code is a good day, because the bug that returns a plausible wrong number is the one that reaches a published figure.
 - You can only catch a silent bug if you know roughly what answer to expect, which makes domain knowledge part of your debugging toolkit.
 - Guard every assumption you rely on, and confirm the guard fails on data you know is bad.
