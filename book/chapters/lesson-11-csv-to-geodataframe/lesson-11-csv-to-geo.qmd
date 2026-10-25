@@ -1,10 +1,19 @@
+---
+toc-title: In this lesson
+---
+
 # 12 Streamline your code
 
 In this lesson we will learn how to extract geospatial data from a CSV to create a `geopandas.GeoDataFrame`, introduce more customizations for maps and matplotlib figures, and go over strategies to streamline our code.
 
-<!--
-TODO: learning objectives
--->
+By the end of this lesson, students will be able to:
+
+- create a `geopandas.GeoDataFrame` from a CSV with longitude and latitude columns
+- format printed output using f-strings
+- use `for` loops, alone and with `zip()`, to avoid repeating code
+- check that their code does what they expect using `assert`
+- create figures with multiple axes
+- write functions with docstrings to reuse code
 
 ## About the data
 
@@ -46,7 +55,7 @@ import matplotlib.pyplot as plt
 
 
 # Display all columns when looking at dataframes
-pd.set_option("display.max.columns", None)
+pd.set_option("display.max_columns", None)
 ```
 
 Next, we import the power plants dataset. In this lesson, we read it directly from its URL.
@@ -98,11 +107,11 @@ power_plants.plot()
 
 ## f-strings
 
-So far, we have printed variables using string concatenation inside the `print()` function. 
-This means that we write commas between every string and variable we want to print, and then the `print()` function concatenates these into a single string. For example:
+So far, we have printed variables by passing several arguments to the `print()` function. 
+This means that we write commas between every string and variable we want to print, and then the `print()` function joins these into a single string, with a space between each one. For example:
 
 ```{python}
-print('CRS: ', power_plants.crs)
+print('CRS:', power_plants.crs)
 ```
 
 Another popular way of mixing strings and variables in print statements is by creating an **f-string** which stands for "formatted string". 
@@ -303,7 +312,7 @@ power_plants.plot(ax=ax,
                       'fontsize': 'small',
                       'loc': 'upper left',
                       'bbox_to_anchor': (0, 0),
-                      'ncol': 6  
+                      'ncols': 6  
                   })
                   
 plt.show()
@@ -495,12 +504,22 @@ for state in ['New Jersey', 'New York', 'Pennsylvania']:
     print(state, ': ', top3_sources(state, power_plants))
 ```
 
-Let's do one more example and create a function that will produce a plot given a list of primary sources and a state name:
+Let's do one more example and create a function that will produce a plot given a state name, a list of primary sources, and the data:
 
 
 ```{python}
-def plot_3_energy_sources(state, sources, power_plants):
+def plot_3_energy_sources(state, sources, power_plants, states):
+    """
+    Plot the power plants of a given state for three primary energy sources.
     
+    Args:
+        state (str): The US state we want to plot.
+        sources (list): A list of three primary energy sources.
+        power_plants (gpd.GeoDataFrame): GeoDataFrame containing data 
+        on power plants, with at least 'state' and 'primsource' columns.
+        states (gpd.GeoDataFrame): GeoDataFrame with the US states boundaries, 
+        with at least a 'name' column.
+    """
     # Raise error if sources does not have exactly three elements
     assert len(sources) == 3, 'sources must have three elements to produce the plot'
 
@@ -530,7 +549,8 @@ We can now use our functions to produce plots for any state:
 ```{python}
 plot_3_energy_sources('New Jersey', 
                          top3_sources('New Jersey', power_plants),
-                         power_plants)
+                         power_plants,
+                         states)
 ```
 
 
