@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>2 Subsetting – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,10 +94,10 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -186,6 +189,10 @@ div.csl-indent {
         <li>
     <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-4-2026.html">
  <span class="dropdown-text">week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-5-2026.html">
+ <span class="dropdown-text">week 5</span></a>
   </li>  
     </ul>
   </li>
@@ -356,7 +363,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10 Streamline your code</span></a>
+ <span class="menu-text">12 Streamline your code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -533,7 +540,7 @@ div.csl-indent {
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -554,7 +561,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>2010</td>
 <td>39.0</td>
 <td>40.0</td>
@@ -570,7 +577,7 @@ div.csl-indent {
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2011</td>
 <td>48.0</td>
 <td>44.0</td>
@@ -586,7 +593,7 @@ div.csl-indent {
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -620,11 +627,11 @@ div.csl-indent {
 <p>A <strong>CSV (Comma-Separated Values) file</strong> is an open, simple text format for storing tabular data, with rows separated by line breaks and columns by commas. It’s widely used in environmental science for sharing datasets like species counts and environmental monitoring data because it’s easy to create, read, and process in different platforms, without the need for proprietary software.</p>
 <p>To read in a CSV file into our Python workspace we will first use the <code>os</code> package to create a reproducible file path:</p>
 <div id="04cd56e4" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'wetlands_seasonal_bird_diversity.csv'</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>fp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>fp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>'data/wetlands_seasonal_bird_diversity.csv'</code></pre>
 </div>
@@ -633,18 +640,18 @@ div.csl-indent {
 <p>Using the <code>os.path.join()</code> function allows us to create file paths that work on any operating system. Each operating system uses a different way to separate folders in a path (e.g., Windows uses backslashes <code>\</code>, while macOS and Linux use forward slashes <code>/</code>). By using <code>os.path.join()</code>, Python automatically handles the correct separator for the operating system you’re working on. This avoids errors and makes your code more portable.</p>
 <p>We can then use this file path to read in a CSV with <code>pandas</code> by using the <code>pandas.read_csv</code> function:</p>
 <div id="bd89d119" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in file, argument is the file path</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(fp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in file, argument is the file path</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(fp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we obtain some high-level information about this data frame:</p>
 <div id="35d5a6f1" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's first five rows </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's first five rows </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -665,7 +672,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>2010</td>
 <td>39.0</td>
 <td>40.0</td>
@@ -681,7 +688,7 @@ div.csl-indent {
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2011</td>
 <td>48.0</td>
 <td>44.0</td>
@@ -697,7 +704,7 @@ div.csl-indent {
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -713,7 +720,7 @@ div.csl-indent {
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>2013</td>
 <td>42.0</td>
 <td>46.0</td>
@@ -729,7 +736,7 @@ div.csl-indent {
 <td>64.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>2014</td>
 <td>38.0</td>
 <td>43.0</td>
@@ -751,13 +758,13 @@ div.csl-indent {
 </div>
 </div>
 <div id="ed1c6afa" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's last five rows </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's last five rows </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.tail()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -778,7 +785,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">9</td>
+<th data-quarto-table-cell-role="th">9</th>
 <td>2019</td>
 <td>39.0</td>
 <td>39.0</td>
@@ -794,7 +801,7 @@ div.csl-indent {
 <td>50.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">10</td>
+<th data-quarto-table-cell-role="th">10</th>
 <td>2020</td>
 <td>46.0</td>
 <td>NaN</td>
@@ -810,7 +817,7 @@ div.csl-indent {
 <td>54.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>2021</td>
 <td>47.0</td>
 <td>44.0</td>
@@ -826,7 +833,7 @@ div.csl-indent {
 <td>51.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>2022</td>
 <td>40.0</td>
 <td>46.0</td>
@@ -842,7 +849,7 @@ div.csl-indent {
 <td>60.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>2023</td>
 <td>56.0</td>
 <td>43.0</td>
@@ -864,8 +871,8 @@ div.csl-indent {
 </div>
 </div>
 <div id="99b3cfc3" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's column names</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's column names</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df.columns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>Index(['year', 'CSM_winter', 'CSM_spring', 'CSM_fall', 'MUL_winter',
        'MUL_spring', 'MUL_fall', 'SDW_winter', 'SDW_spring', 'SDW_fall',
@@ -874,8 +881,8 @@ div.csl-indent {
 </div>
 </div>
 <div id="428c18bd" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List the data types of each column</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List the data types of each column</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>year            int64
 CSM_winter    float64
@@ -894,8 +901,8 @@ dtype: object</code></pre>
 </div>
 </div>
 <div id="832730e9" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's shape: output is a tuple (# rows, # columns)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print data frame's shape: output is a tuple (# rows, # columns)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>(14, 13)</code></pre>
 </div>
@@ -904,17 +911,17 @@ dtype: object</code></pre>
 <section id="selecting-a-single-column" class="level2">
 <h2 class="anchored" data-anchor-id="selecting-a-single-column">Selecting a single column</h2>
 <p>Selecting a single column by column name is the simplest case for selecting data in a data frame. The general syntax to do this is:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'column_name'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'column_name'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Notice the column name is given as a string inside the square brackets. This is an example of <strong>label-based subsetting</strong>, which means we want to select data from our data frame using the <em>names</em> of the columns, <em>not their position</em>. When we select rows or columns using their position, we are doing <strong>position-based subsetting</strong>. We’ll see some methods to do this when we move into selecting rows.</p>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>Suppose we are interested in the number of bird species observed at the Mugu Lagoon in spring. We can access that single column in this way:</p>
 <div id="69ccaf9f" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a single column by using square brackets []</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a single column by using square brackets []</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mul_spring <span class="op">=</span> df[<span class="st">'MUL_spring'</span>]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print first five elements in this column</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>mul_spring.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>mul_spring.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>0     NaN
 1    52.0
@@ -926,8 +933,8 @@ Name: MUL_spring, dtype: float64</code></pre>
 </div>
 <p>Since we only selected a single column, <code>mul_spring</code> is a <code>pandas.Series</code>:</p>
 <div id="4530cc52" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of the output</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(mul_spring))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of the output</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(mul_spring))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.series.Series'&gt;</code></pre>
 </div>
@@ -938,7 +945,7 @@ Name: MUL_spring, dtype: float64</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<code>pd.DataFrame</code> = dictionary of columns
+<span class="screen-reader-only">Note</span><code>pd.DataFrame</code> = dictionary of columns
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -946,10 +953,10 @@ Name: MUL_spring, dtype: float64</code></pre>
 </div>
 </div>
 <p>We can also do label-based subsetting of a single column using attribute syntax:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df.column_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df.column_name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For example, to see the head of the <code>MUL_spring</code> column we would do:</p>
 <div id="efe2afc9" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.MUL_spring.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.MUL_spring.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>0     NaN
 1    52.0
@@ -965,7 +972,7 @@ Name: MUL_spring, dtype: float64</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Favor <code>df['column_name']</code> instead of <code>df.column_name</code>
+<span class="screen-reader-only">Caution</span>Favor <code>df['column_name']</code> instead of <code>df.column_name</code>
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -983,7 +990,7 @@ Favor <code>df['column_name']</code> instead of <code>df.column_name</code>
 <section id="using-a-list-of-column-names" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-list-of-column-names">… using a list of column names</h3>
 <p>We can select multiple columns in a single call by passing a list with the column names to the square brackets <code>[]</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'column_1'</span>, <span class="st">'column_10'</span>, <span class="st">'column_245'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'column_1'</span>, <span class="st">'column_10'</span>, <span class="st">'column_245'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Notice there are double square brackets. This is because we are passing the list of names <code>['column_1', 'column_10', 'column_245']</code> to the selection brackets <code>[]</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -991,7 +998,7 @@ Favor <code>df['column_name']</code> instead of <code>df.column_name</code>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1002,8 +1009,8 @@ Check-in
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>If we want to look at the species in the Tijuana Estuary during winter and fall, then we can select these columns like this:</p>
 <div id="b64c0643" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns with names "TJE_winter" and "TJE_fall"</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>tje_wf <span class="op">=</span> df[[<span class="st">'TJE_winter'</span>,<span class="st">'TJE_fall'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns with names "TJE_winter" and "TJE_fall"</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>tje_wf <span class="op">=</span> df[[<span class="st">'TJE_winter'</span>,<span class="st">'TJE_fall'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice there are double square brackets. This is because we are passing the list of names <code>['TJE_winter','TJE_fall']</code> to the selection brackets <code>[]</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1012,7 +1019,7 @@ Check-in
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1024,7 +1031,7 @@ Check-in
 <section id="using-a-slice" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-slice">… using a slice</h3>
 <p>To select a slice of the columns we will use a special case of <strong><code>loc</code> selection</strong> (we’ll cover the general one by the end of the lesson). The syntax will be</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.loc[ : , <span class="st">'column_start'</span>:<span class="st">'column_end'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.loc[ : , <span class="st">'column_start'</span>:<span class="st">'column_end'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>where <code>column_start</code> and <code>column_end</code> are, respectively, the starting point and endpoint of the column slice we want to subset from the data frame.</p>
 <p>Notice two things:</p>
 <ul>
@@ -1035,14 +1042,14 @@ Check-in
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
 <p>Let’s select the slice of columns that covers all data from Carpinteria Salt Marsh and Mugu Lagoon. This corresponds to all columns between <code>CSM_winter</code> and <code>MUL_fall</code>.</p>
 <div id="f018af77" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns between 'CSM_winter' and 'MUL_fall'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns between 'CSM_winter' and 'MUL_fall'</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>csm_mul <span class="op">=</span> df.loc[:,<span class="st">'CSM_winter'</span>:<span class="st">'MUL_fall'</span>]</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>csm_mul.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>csm_mul.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1056,7 +1063,7 @@ Check-in
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>39.0</td>
 <td>40.0</td>
 <td>50.0</td>
@@ -1065,7 +1072,7 @@ Check-in
 <td>61.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>48.0</td>
 <td>44.0</td>
 <td>NaN</td>
@@ -1074,7 +1081,7 @@ Check-in
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>51.0</td>
 <td>43.0</td>
 <td>49.0</td>
@@ -1083,7 +1090,7 @@ Check-in
 <td>53.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>42.0</td>
 <td>46.0</td>
 <td>38.0</td>
@@ -1092,7 +1099,7 @@ Check-in
 <td>62.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>38.0</td>
 <td>43.0</td>
 <td>45.0</td>
@@ -1119,20 +1126,20 @@ fall_columns = df.filter(like='fall')
 <section id="using-a-condition" class="level3">
 <h3 class="anchored" data-anchor-id="using-a-condition">… using a condition</h3>
 <p>Selecting rows that satisfy a particular condition is one of the most usual kinds of row subsetting. The general syntax for this type of selection is</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[condition_on_rows]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[condition_on_rows]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That <code>condition_on_rows</code> can be a myriad of things. Let’s see some usual scenarios.</p>
 <section id="example-3" class="level4">
 <h4 class="anchored" data-anchor-id="example-3">Example</h4>
 <p>Suppose we are interested in all data after 2020. We can select these rows in this way:</p>
 <div id="42d9902b" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select all rows with year &gt; 2020</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select all rows with year &gt; 2020</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>post_2020 <span class="op">=</span> df[df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span>]</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>post_2020</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>post_2020</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1153,7 +1160,7 @@ fall_columns = df.filter(like='fall')
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>2021</td>
 <td>47.0</td>
 <td>44.0</td>
@@ -1169,7 +1176,7 @@ fall_columns = df.filter(like='fall')
 <td>51.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>2022</td>
 <td>40.0</td>
 <td>46.0</td>
@@ -1185,7 +1192,7 @@ fall_columns = df.filter(like='fall')
 <td>60.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>2023</td>
 <td>56.0</td>
 <td>43.0</td>
@@ -1208,11 +1215,11 @@ fall_columns = df.filter(like='fall')
 </div>
 <p>Let’s break down what is happening here. The condition for our rows is <code>df['year']&gt;2020</code>, this is a <code>pandas.Series</code> with boolean values (<code>True</code> or <code>False</code>) indicating which rows satisfy the condition year&gt;2020:</p>
 <div id="3c13dfe4" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of df['year']&gt;2020</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the type of df['year']&gt;2020</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the boolean series</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.series.Series'&gt;</code></pre>
 </div>
@@ -1242,7 +1249,7 @@ Name: year, dtype: bool</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1254,13 +1261,13 @@ Check-in
 <h4 class="anchored" data-anchor-id="example-4">Example</h4>
 <p>Suppose we want to look at data from years 2012 to 2015 (including both years). One way of doing this is to use the <code>between</code> method in our condition:</p>
 <div id="d153b28e" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> df[df[<span class="st">'year'</span>].between(<span class="dv">2012</span>, <span class="dv">2015</span>)]</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>subset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> df[df[<span class="st">'year'</span>].between(<span class="dv">2012</span>, <span class="dv">2015</span>)]</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>subset</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1281,7 +1288,7 @@ Check-in
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -1297,7 +1304,7 @@ Check-in
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>2013</td>
 <td>42.0</td>
 <td>46.0</td>
@@ -1313,7 +1320,7 @@ Check-in
 <td>64.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>2014</td>
 <td>38.0</td>
 <td>43.0</td>
@@ -1329,7 +1336,7 @@ Check-in
 <td>62.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>2015</td>
 <td>44.0</td>
 <td>42.0</td>
@@ -1392,12 +1399,12 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 <h4 class="anchored" data-anchor-id="example-or">Example: or</h4>
 <p>Let’s select rows in which the Carpinteria Salt Marsh has more than 50 species registered in winter <em>or</em> fall:</p>
 <div id="69b610f8" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df[ (df[<span class="st">'CSM_winter'</span>]<span class="op">&gt;</span><span class="dv">50</span>) <span class="op">|</span> (df[<span class="st">'CSM_fall'</span>]<span class="op">&gt;</span><span class="dv">50</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df[ (df[<span class="st">'CSM_winter'</span>]<span class="op">&gt;</span><span class="dv">50</span>) <span class="op">|</span> (df[<span class="st">'CSM_fall'</span>]<span class="op">&gt;</span><span class="dv">50</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1418,7 +1425,7 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -1434,7 +1441,7 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>2021</td>
 <td>47.0</td>
 <td>44.0</td>
@@ -1450,7 +1457,7 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 <td>51.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>2023</td>
 <td>56.0</td>
 <td>43.0</td>
@@ -1476,12 +1483,12 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 <h4 class="anchored" data-anchor-id="example-and">Example: and</h4>
 <p>Let’s select rows in which both the Carpinteria Salt Marsh and the San Dieguito Wetland have more than 60 reported bird species during spring:</p>
 <div id="b347dfd3" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df[ (df[<span class="st">'CSM_spring'</span>]<span class="op">&gt;</span><span class="dv">60</span>) <span class="op">&amp;</span> (df[<span class="st">'SDW_spring'</span>]<span class="op">&gt;</span><span class="dv">60</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df[ (df[<span class="st">'CSM_spring'</span>]<span class="op">&gt;</span><span class="dv">60</span>) <span class="op">&amp;</span> (df[<span class="st">'SDW_spring'</span>]<span class="op">&gt;</span><span class="dv">60</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1513,14 +1520,14 @@ We prefer the first syntax when we are selecting rows and not columns since it i
 <section id="by-position" class="level3">
 <h3 class="anchored" data-anchor-id="by-position">… by position</h3>
 <p>All the selections we have done so far have been using labels. Sometimes we may want to select certain rows depending on their <em>actual position</em> in the data frame. In other words, using <strong>position-based subsetting</strong>. To do this, we use <strong><code>iloc</code> selection</strong> with the syntax</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a> df.iloc[row<span class="op">-</span>indices]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a> df.iloc[row<span class="op">-</span>indices]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>iloc</code> stands for integer-location based indexing.</p>
 <section id="example-5" class="level4">
 <h4 class="anchored" data-anchor-id="example-5">Example</h4>
 <p>Our <code>post_2020</code> subset kept the original row labels from <code>df</code>: 11, 12, and 13.</p>
 <div id="0636d850" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first row by position</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>post_2020.iloc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the first row by position</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>post_2020.iloc[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>year          2021.0
 CSM_winter      47.0
@@ -1539,8 +1546,8 @@ Name: 11, dtype: float64</code></pre>
 </div>
 </div>
 <div id="a3956910" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the same row by its label</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>post_2020.loc[<span class="dv">11</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the same row by its label</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>post_2020.loc[<span class="dv">11</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>year          2021.0
 CSM_winter      47.0
@@ -1560,8 +1567,8 @@ Name: 11, dtype: float64</code></pre>
 </div>
 <p>Both return the 2021 row. <code>iloc</code> counts positions starting from 0, while <code>loc</code> uses the labels in the index. That’s why <code>post_2020.loc[0]</code> raises a <code>KeyError</code>: there is no row labeled 0 in <code>post_2020</code>.</p>
 <div id="ccd66e56" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># There is no row with label 0</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>post_2020.loc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># There is no row with label 0</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>post_2020.loc[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">KeyError</span><span class="ansi-red-fg">:</span> 0
@@ -1578,18 +1585,18 @@ Name: 11, dtype: float64</code></pre>
 <section id="by-labels-or-conditions" class="level3">
 <h3 class="anchored" data-anchor-id="by-labels-or-conditions">…by labels or conditions</h3>
 <p>When we want to select rows and columns simultaneously by labels (including using conditions) we can use <code>loc</code> selection with the syntax</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df.loc[ row<span class="op">-</span>selection , column<span class="op">-</span>selection]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df.loc[ row<span class="op">-</span>selection , column<span class="op">-</span>selection]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>specifying both parameters: <code>row-selection</code> and <code>column-selection</code>. These parameters can be a condition or a subset of labels from the index or the column names.</p>
 <section id="example-6" class="level4">
 <h4 class="anchored" data-anchor-id="example-6">Example</h4>
 <p>Let’s select the winter surveys for Mugu Lagoon and the Tijuana Estuary after 2020:</p>
 <div id="094f73e3" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span>, [<span class="st">'MUL_winter'</span>,<span class="st">'TJE_winter'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">'year'</span>]<span class="op">&gt;</span><span class="dv">2020</span>, [<span class="st">'MUL_winter'</span>,<span class="st">'TJE_winter'</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1599,17 +1606,17 @@ Name: 11, dtype: float64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">11</td>
+<th data-quarto-table-cell-role="th">11</th>
 <td>54.0</td>
 <td>53.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">12</td>
+<th data-quarto-table-cell-role="th">12</th>
 <td>60.0</td>
 <td>60.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13</td>
+<th data-quarto-table-cell-role="th">13</th>
 <td>72.0</td>
 <td>60.0</td>
 </tr>
@@ -1630,17 +1637,17 @@ Name: 11, dtype: float64</code></pre>
 <section id="by-position-1" class="level3">
 <h3 class="anchored" data-anchor-id="by-position-1">… by position</h3>
 <p>When we want to select rows and columns simultaneously by position we use <code>iloc</code> selection with the syntax:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df.iloc[ row<span class="op">-</span>indices , column<span class="op">-</span>indices]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df.iloc[ row<span class="op">-</span>indices , column<span class="op">-</span>indices]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="example-7" class="level4">
 <h4 class="anchored" data-anchor-id="example-7">Example</h4>
 <p>Suppose we want to select rows 3-7 (including 7) and columns 3 and 4:</p>
 <div id="b620d482" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df.iloc[<span class="dv">3</span>:<span class="dv">8</span>, [<span class="dv">3</span>,<span class="dv">4</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df.iloc[<span class="dv">3</span>:<span class="dv">8</span>, [<span class="dv">3</span>,<span class="dv">4</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1650,27 +1657,27 @@ Name: 11, dtype: float64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>38.0</td>
 <td>60.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>45.0</td>
 <td>49.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">5</td>
+<th data-quarto-table-cell-role="th">5</th>
 <td>45.0</td>
 <td>58.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">6</td>
+<th data-quarto-table-cell-role="th">6</th>
 <td>47.0</td>
 <td>63.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">7</td>
+<th data-quarto-table-cell-role="th">7</th>
 <td>43.0</td>
 <td>57.0</td>
 </tr>
@@ -1697,7 +1704,7 @@ Name: 11, dtype: float64</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<code>iloc</code> vs.&nbsp;<code>loc</code>: which one does what?
+<span class="screen-reader-only">Caution</span><code>iloc</code> vs.&nbsp;<code>loc</code>: which one does what?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1712,18 +1719,18 @@ Name: 11, dtype: float64</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<code>iloc</code> for column selection? Think about it.
+<span class="screen-reader-only">Warning</span><code>iloc</code> for column selection? Think about it.
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>We can also access columns by position using <code>iloc</code> - but consider carefully if this is the best approach.</p>
 <p>Suppose we want to access the 9th column in the data frame - then we want to select a column <em>by position</em>. In this case, the 9th column is the data at San Dieguito Wetland during spring and the 9th position corresponds to the index 8. We can select this column by position using the <code>iloc</code> selection:</p>
 <div id="a5114b36" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select column by position using iloc</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select column by position using iloc</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The syntax is iloc[row-indices, column-indices]</span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># [:,8] means "select all rows from the column at index 8"</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>sdw_spring <span class="op">=</span> df.iloc[:,<span class="dv">8</span>]</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>sdw_spring.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>sdw_spring.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>0    75.0
 1    74.0
@@ -1810,7 +1817,7 @@ Figure&nbsp;1: Flow diagram for selecting core methods to subset a <code>pandas.
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-schroeter_ucsb_2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. C. Schroeter <em>et al.</em>, <span>“<span>UCSB</span> <span>SONGS</span> <span>Mitigation</span> <span>Monitoring</span>: <span>Wetland</span> <span>Survey</span> - <span>Bird</span> <span>Abundance</span>.”</span> Environmental Data Initiative, 2024. doi: <a href="https://doi.org/10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072">10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072</a>. Available: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6">https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6</a>. [Accessed: Sep. 13, 2024]</div>
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. C. Schroeter <em>et al.</em>, <span>“<span>UCSB</span> <span>SONGS</span> <span>Mitigation</span> <span>Monitoring</span>: <span>Wetland</span> <span>Survey</span> - <span>Bird</span> <span>Abundance</span>.”</span> Environmental Data Initiative, 2024. doi: <a href="https://doi.org/10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072">10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072</a>. Available: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6">https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6</a>. [Accessed: Sept. 13, 2024]</div>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1864,13 +1871,14 @@ Figure&nbsp;1: Flow diagram for selecting core methods to subset a <code>pandas.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

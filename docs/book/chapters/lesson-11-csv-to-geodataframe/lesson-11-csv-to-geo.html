@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>lesson-11-csv-to-geo – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -55,10 +58,30 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -71,10 +94,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -164,6 +187,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-4-2026.html">
  <span class="dropdown-text">week 4</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-5-2026.html">
+ <span class="dropdown-text">week 5</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -217,7 +244,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 Streamline your code</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">12 Streamline your code</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -333,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">10 Streamline your code</span></a>
+ <span class="menu-text">12 Streamline your code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -432,10 +459,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">In this lesson</h2>
    
   <ul>
-  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link active" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#streamline-your-code" id="toc-streamline-your-code" class="nav-link active" data-scroll-target="#streamline-your-code">12 Streamline your code</a>
+  <ul class="collapse">
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
   <li><a href="#csv-to-geopandas.geodataframe" id="toc-csv-to-geopandas.geodataframe" class="nav-link" data-scroll-target="#csv-to-geopandas.geodataframe">CSV to <code>geopandas.GeoDataFrame</code></a></li>
   <li><a href="#f-strings" id="toc-f-strings" class="nav-link" data-scroll-target="#f-strings">f-strings</a></li>
   <li><a href="#import-shapefile" id="toc-import-shapefile" class="nav-link" data-scroll-target="#import-shapefile">Import shapefile</a></li>
@@ -445,60 +474,164 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
   <li><a href="#for-with-zip" id="toc-for-with-zip" class="nav-link" data-scroll-target="#for-with-zip"><code>for</code> with <code>zip</code></a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">10 Streamline your code</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">10 Streamline your code</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-8-crs.html">Vector data</a></li><li class="breadcrumb-item"><a href="../../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html">12 Streamline your code</a></li></ol></nav></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
+<section id="streamline-your-code" class="level1">
+<h1>12 Streamline your code</h1>
 <p>In this lesson we will learn how to extract geospatial data from a CSV to create a <code>geopandas.GeoDataFrame</code>, introduce more customizations for maps and matplotlib figures, and go over strategies to streamline our code.</p>
-<!--
-TODO: learning objectives
--->
+<p>By the end of this lesson, students will be able to:</p>
+<ul>
+<li>create a <code>geopandas.GeoDataFrame</code> from a CSV with longitude and latitude columns</li>
+<li>format printed output using f-strings</li>
+<li>use <code>for</code> loops, alone and with <code>zip()</code>, to avoid repeating code</li>
+<li>check that their code does what they expect using <code>assert</code></li>
+<li>create figures with multiple axes</li>
+<li>write functions with docstrings to reuse code</li>
+</ul>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
 <p>The U.S. energy landscape relies on a mix of fossil fuels and renewables, each with unique environmental and economic impacts. As the nation works toward sustainability and energy security, understanding this energy mix is essential for informed policy and progress toward cleaner energy.</p>
-<p>In this lesson, we will use data from the U.S. <a href="https://www.eia.gov">Energy Information Administration (EIA)</a> about <a href="https://atlas.eia.gov/datasets/eia::power-plants/about">operable electric generating plants in the United States by energy source, as of May 2023</a>. The dataset includes information on plant types and energy sources, offering insights into the diversity of power sources—from fossil fuels to renewables—that supply electricity nationwide. The dataset’s metadata can be <a href="https://eia.maps.arcgis.com/sharing/rest/content/items/bf5c5110b1b944d299bb683cdbd02d2a/info/metadata/metadata.xml?format=default&amp;output=html">accessed here</a> <!-- TODO: add citation --> <!-- TODO: add image --> The EIA data on electric plants has been downloaded as a CSV and reprojected into the EPSG:4269 CRS for this lesson. It can be accessed <a href="https://github.com/carmengg/eds-220-book/blob/main/data/power_plants_epsg4269.csv">here</a>.</p>
-<!-- TODO: column descriptions: lat lon, -->
-<p>Additionally, we will use a <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2022.html#list-tab-790442341">TIGER shapefile of the US states from the United States Census Bureau</a>. <a href="https://en.wikipedia.org/wiki/Topologically_Integrated_Geographic_Encoding_and_Referencing">TIGER</a> stands for Topologically Integrated Geographic Encoding and Referencing. This used to be the data format the US Census distributed geospatial data, but since 2008 TIGER files are converted to shapefiles. You can view the metadata for all the TIGER shapefiles <a href="https://www.census.gov/programs-surveys/geography/technical-documentation/complete-technical-documentation/tiger-geo-line.html">here</a>.</p>
-<p>Follow these steps to download shapefile with the United States’ states:</p>
+<p>In this lesson, we will use data from the U.S. <a href="https://www.eia.gov">Energy Information Administration (EIA)</a> about <a href="https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about">operable electric generating plants in the United States by energy source, as of February 2025</a> <span class="citation" data-cites="eia_power_plants_2025"><a href="#ref-eia_power_plants_2025" role="doc-biblioref">[1]</a></span>. The dataset includes information on plant types and energy sources, offering insights into the diversity of power sources—from fossil fuels to renewables—that supply electricity nationwide. The dataset’s metadata can be <a href="https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about">accessed here</a>. <!-- TODO: add image --> The EIA data on electric plants has been downloaded as a CSV and reprojected into the EPSG:4269 CRS for this lesson. It can be accessed <a href="https://github.com/carmengg/eds-220-book/blob/main/data/power_plants_epsg4269.csv">here</a>.</p>
+<p>Each row in the data is one power plant. These are the columns we will use in this lesson:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 61%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>state</code></td>
+<td>State where the power plant is located</td>
+</tr>
+<tr class="even">
+<td><code>primsource</code></td>
+<td>Primary energy source of the power plant, for example solar, natural gas or wind</td>
+</tr>
+<tr class="odd">
+<td><code>longitude</code>, <code>latitude</code></td>
+<td>Location of the power plant, in the NAD83 CRS (EPSG:4269)</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, we will use a <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341">TIGER shapefile of the US states from the United States Census Bureau</a> <span class="citation" data-cites="us_census_bureau_tiger_2026"><a href="#ref-us_census_bureau_tiger_2026" role="doc-biblioref">[2]</a></span>. <a href="https://en.wikipedia.org/wiki/Topologically_Integrated_Geographic_Encoding_and_Referencing">TIGER</a> stands for Topologically Integrated Geographic Encoding and Referencing. This used to be the data format in which the US Census distributed geospatial data, but since 2008 TIGER files are converted to shapefiles. You can view the metadata for all the TIGER shapefiles <a href="https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2026/TGRSHP2026_TechDoc.pdf">here</a>.</p>
+<p>Follow these steps to download the shapefile with the United States’ states:</p>
 <ol type="1">
-<li>At the bottom of the <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2022.html#list-tab-790442341">2022 page</a>, under Download, click on “Web Interface”</li>
-<li>For year, select 2022, and for layer type select “States (and equivalent)”. Click submit.</li>
+<li>At the <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341">2026 TIGER page</a>, under Download, click on “Web Interface”</li>
+<li>For year, select 2026, and for layer type select “States (and equivalent)”. Click submit.</li>
 <li>Click on “Download national file”.</li>
 </ol>
-<p>The column descriptions for the US states shapefile are:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../../book/images/lesson-11/tiger_shp_columns.png" class="img-fluid figure-img"></p>
-<figcaption>Source: TIGER/Line Shapefiles Technical Documentation</figcaption>
-</figure>
-</div>
+<p>The column descriptions for the US states shapefile, from the <a href="https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2026/TGRSHP2026_TechDoc.pdf">TIGER/Line Shapefiles technical documentation</a>, are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 22%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>REGION</code></td>
+<td>String</td>
+<td>Region code</td>
+</tr>
+<tr class="even">
+<td><code>DIVISION</code></td>
+<td>String</td>
+<td>Division code</td>
+</tr>
+<tr class="odd">
+<td><code>STATEFP</code></td>
+<td>String</td>
+<td>State FIPS code</td>
+</tr>
+<tr class="even">
+<td><code>STATENS</code></td>
+<td>String</td>
+<td>State NS code</td>
+</tr>
+<tr class="odd">
+<td><code>GEOID</code></td>
+<td>String</td>
+<td>State identifier; state FIPS code</td>
+</tr>
+<tr class="even">
+<td><code>GEOIDFQ</code></td>
+<td>String</td>
+<td>Fully qualified GEOID; used to join data tables from data.census.gov</td>
+</tr>
+<tr class="odd">
+<td><code>STUSPS</code></td>
+<td>String</td>
+<td>Two-character United States Postal Service (USPS) state postal abbreviation</td>
+</tr>
+<tr class="even">
+<td><code>NAME</code></td>
+<td>String</td>
+<td>State name</td>
+</tr>
+<tr class="odd">
+<td><code>LSAD</code></td>
+<td>String</td>
+<td>LSAD code for the state</td>
+</tr>
+<tr class="even">
+<td><code>MTFCC</code></td>
+<td>String</td>
+<td>MAF/TIGER Feature Class Code (G4000)</td>
+</tr>
+<tr class="odd">
+<td><code>FUNCSTAT</code></td>
+<td>String</td>
+<td>Functional status</td>
+</tr>
+<tr class="even">
+<td><code>ALAND</code></td>
+<td>Number</td>
+<td>Land area</td>
+</tr>
+<tr class="odd">
+<td><code>AWATER</code></td>
+<td>Number</td>
+<td>Water area</td>
+</tr>
+<tr class="even">
+<td><code>INTPTLAT</code></td>
+<td>String</td>
+<td>Latitude of the internal point</td>
+</tr>
+<tr class="odd">
+<td><code>INTPTLON</code></td>
+<td>String</td>
+<td>Longitude of the internal point</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="csv-to-geopandas.geodataframe" class="level2">
 <h2 class="anchored" data-anchor-id="csv-to-geopandas.geodataframe">CSV to <code>geopandas.GeoDataFrame</code></h2>
 <p>Let’s start by importing packages and updating viewing options:</p>
-<div id="3bdb80c6" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div id="7b571646" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas.api.types <span class="im">import</span> is_string_dtype, is_numeric_dtype</span>
@@ -507,26 +640,20 @@ TODO: learning objectives
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Display all columns when looking at dataframes</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max.columns"</span>, <span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Next, we import the power plants dataset. In this lesson, we have downloaded the data into a <code>data/</code> folder in the same level as our notebook.</p>
-<div id="f0eaa7ba" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import power plants data</span></span>
+<p>Next, we import the power plants dataset. In this lesson, we read it directly from its URL.</p>
+<div id="9ef3dc0d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import power plants data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/carmengg/eds-220-book/refs/heads/main/data/power_plants_epsg4269.csv'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>power_plants <span class="op">=</span> pd.read_csv(URL)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Simpify column names</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>power_plants.columns <span class="op">=</span> power_plants.columns.<span class="bu">str</span>.lower()</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop first column</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>power_plants <span class="op">=</span> power_plants.drop(columns<span class="op">=</span><span class="st">'unnamed: 0'</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>power_plants.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>power_plants.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -566,109 +693,109 @@ TODO: learning objectives
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>11570</td>
-<td>1</td>
-<td>Sand Point</td>
-<td>63560</td>
-<td>TDX Sand Point Generating, LLC</td>
+<th data-quarto-table-cell-role="th">0</th>
+<td>62897</td>
+<td>1873</td>
+<td>Tower</td>
+<td>20910</td>
+<td>Wolverine Power Supply Coop</td>
 <td>Electric Utility</td>
-<td>100 Power Plant Way</td>
-<td>Sand Point</td>
-<td>Aleutians East</td>
-<td>Alaska</td>
-<td>99661.0</td>
+<td>9663 Cooperative Road</td>
+<td>Tower</td>
+<td>Cheboygan</td>
+<td>Michigan</td>
+<td>49792</td>
 <td>petroleum</td>
-<td>Petroleum = 1.3 MW, Wind = 0.4 MW</td>
-<td>Petroleum Liquids; Onshore Wind Turbine;</td>
-<td>3.7</td>
-<td>1.7</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1.3</td>
-<td>NaN</td>
-<td>0.4</td>
-<td>NaN</td>
+<td>Petroleum = 19.3 MW</td>
+<td>Petroleum Liquids</td>
+<td>21.3</td>
+<td>19.3</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>19.3</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>EIA-860, EIA-860M and EIA-923</td>
-<td>202305.0</td>
-<td>-160.497222</td>
-<td>55.339722</td>
+<td>202502</td>
+<td>-84.294970</td>
+<td>45.362818</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>11571</td>
-<td>2</td>
-<td>Bankhead Dam</td>
-<td>195</td>
-<td>Alabama Power Co</td>
+<th data-quarto-table-cell-role="th">1</th>
+<td>62898</td>
+<td>1874</td>
+<td>Caro</td>
+<td>18895</td>
+<td>Thumb Electric Coop of Mich</td>
 <td>Electric Utility</td>
-<td>19001 Lock 17 Road</td>
-<td>Northport</td>
-<td>Tuscaloosa</td>
-<td>Alabama</td>
-<td>35476.0</td>
-<td>hydroelectric</td>
-<td>Hydroelectric = 53 MW</td>
-<td>Conventional Hydroelectric</td>
-<td>53.9</td>
-<td>53.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>53.0</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>2437 East Dayton Road</td>
+<td>Caro</td>
+<td>Tuscola</td>
+<td>Michigan</td>
+<td>48723</td>
+<td>petroleum</td>
+<td>Petroleum = 8.5 MW</td>
+<td>Petroleum Liquids</td>
+<td>9.4</td>
+<td>8.5</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>8.5</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>EIA-860, EIA-860M and EIA-923</td>
-<td>202305.0</td>
-<td>-87.356823</td>
-<td>33.458665</td>
+<td>202502</td>
+<td>-83.327806</td>
+<td>43.465899</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>11572</td>
-<td>3</td>
-<td>Barry</td>
-<td>195</td>
-<td>Alabama Power Co</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>62899</td>
+<td>1875</td>
+<td>Ubly</td>
+<td>18895</td>
+<td>Thumb Electric Coop of Mich</td>
 <td>Electric Utility</td>
-<td>North Highway 43</td>
-<td>Bucks</td>
-<td>Mobile</td>
-<td>Alabama</td>
-<td>36512.0</td>
-<td>natural gas</td>
-<td>Coal = 1118.5 MW, Natural Gas = 1296.2 MW</td>
-<td>Conventional Steam Coal; Natural Gas Fired Com...</td>
-<td>2569.5</td>
-<td>2414.7</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1118.5</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>1296.2</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>4159 Ubly Road</td>
+<td>Ubly</td>
+<td>Huron</td>
+<td>Michigan</td>
+<td>48475</td>
+<td>petroleum</td>
+<td>Petroleum = 12.3 MW</td>
+<td>Petroleum Liquids</td>
+<td>12.4</td>
+<td>12.3</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>12.3</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
 <td>EIA-860, EIA-860M and EIA-923</td>
-<td>202305.0</td>
-<td>-88.010300</td>
-<td>31.006900</td>
+<td>202502</td>
+<td>-82.938806</td>
+<td>43.721699</td>
 </tr>
 </tbody>
 </table>
@@ -676,41 +803,40 @@ TODO: learning objectives
 </div>
 </div>
 </div>
-<!--TO DO: Need to drop the unnamed column from file-->
 <p>The power plants file is a CSV. Unlike shapefiles or other geospatial file formats, <code>geopandas</code> doesn’t have a way to extract a geometry column from a CSV file, so we will need to create this geometry manually.</p>
-<p>To do so we will use the longitude and latitude columns in the CSV, these indicate the location of the power plants in the NAD83 CRS (EPSG:4269). We can use this information to create a new <code>geopandas.GeoDataFrame</code> from the <code>pandas.DataFrame</code> using the <code>geopandas</code> function <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.points_from_xy.html"><code>points_from_xy()</code></a>:</p>
-<div id="d09f8e1d" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create points from latitude and longitude</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> gpd.points_from_xy(power_plants.longitude, </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                            power_plants.latitude)</span>
+<p>To do so we will use the longitude and latitude columns in the CSV. These indicate the location of the power plants in the NAD83 CRS (EPSG:4269). We can use this information to create a new <code>geopandas.GeoDataFrame</code> from the <code>pandas.DataFrame</code> using the <code>geopandas</code> function <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.points_from_xy.html"><code>points_from_xy()</code></a>:</p>
+<div id="6f752c06" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create points from latitude and longitude</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> gpd.points_from_xy(power_plants[<span class="st">'longitude'</span>], </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                            power_plants[<span class="st">'latitude'</span>])</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create geodataframe</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>power_plants <span class="op">=</span> gpd.GeoDataFrame(power_plants,    <span class="co"># Data</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                                geometry<span class="op">=</span>points, <span class="co"># Specify geometry column</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                                crs<span class="op">=</span><span class="st">'EPSG:4269'</span>  <span class="co"># Specify CRS</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                                )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                                )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s check that we now have a <code>geometry</code> column:</p>
-<div id="0cf8770b" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>power_plants[<span class="st">'geometry'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>0        POINT (-160.49722 55.33972)
-1         POINT (-87.35682 33.45867)
-2         POINT (-88.01030 31.00690)
-3         POINT (-86.28306 32.58389)
-4        POINT (-106.37500 31.75690)
+<div id="71c1772c" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>power_plants[<span class="st">'geometry'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>0         POINT (-84.29497 45.36282)
+1         POINT (-83.32781 43.46590)
+2         POINT (-82.93881 43.72170)
+3         POINT (-85.42600 43.83930)
+4         POINT (-85.85510 42.73100)
                     ...             
-12004     POINT (-82.37595 35.38014)
-12005     POINT (-79.36770 36.00932)
-12006     POINT (-79.73631 35.27343)
-12007     POINT (-73.91048 42.87657)
-12008     POINT (-77.27590 41.83800)
-Name: geometry, Length: 12009, dtype: geometry</code></pre>
+13440    POINT (-118.10900 34.60800)
+13441     POINT (-79.28172 42.50275)
+13442     POINT (-77.74272 43.18914)
+13443     POINT (-75.90345 42.33782)
+13444    POINT (-120.63443 37.08391)
+Name: geometry, Length: 13445, dtype: geometry</code></pre>
 </div>
 </div>
 <p>With the <code>geometry</code> column and CRS, we can plot our dataset:</p>
-<div id="295bfab5" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>power_plants.plot()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4f6eb67c" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>power_plants.plot()  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -722,20 +848,20 @@ Name: geometry, Length: 12009, dtype: geometry</code></pre>
 </section>
 <section id="f-strings" class="level2">
 <h2 class="anchored" data-anchor-id="f-strings">f-strings</h2>
-<p>So far, we have printed variables using string concatenation inside the <code>print()</code> function. This means that we write commas between every string and variable we want to print, and then the <code>print()</code> function concatenates these into a single string. For example:</p>
-<div id="a828426c" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'CRS: '</span>, power_plants.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So far, we have printed variables by passing several arguments to the <code>print()</code> function. This means that we write commas between every string and variable we want to print, and then the <code>print()</code> function joins these into a single string, with a space between each one. For example:</p>
+<div id="79985537" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'CRS:'</span>, power_plants.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CRS:  EPSG:4269</code></pre>
+<pre><code>CRS: EPSG:4269</code></pre>
 </div>
 </div>
 <p>Another popular way of mixing strings and variables in print statements is by creating an <strong>f-string</strong> which stands for “formatted string”. The simplest syntax for an f-string is:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f" some text </span><span class="sc">{</span>replace<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f" some text </span><span class="sc">{</span>replace<span class="sc">}</span><span class="ss">"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>where <code>replace</code> can be a variable, an expression, or a function or method call. For example:</p>
-<div id="8914c483" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore CRS</span></span>
+<div id="19ab96b1" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore CRS</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ellipsoid: </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>ellipsoid<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"datum: </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>datum<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"datum: </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>datum<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ellipsoid: GRS 1980
 datum: North American Datum 1983</code></pre>
@@ -743,10 +869,10 @@ datum: North American Datum 1983</code></pre>
 </div>
 <p>We just created a string replacing the value inside the curly brackets <code>{}</code>.</p>
 <p>One of the advantages of using f-strings is that they offer customization for formatting the output:</p>
-<div id="148c9097" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the label width to 25 characters, aligning the answers</span></span>
+<div id="9d5fb006" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the label width to 25 characters, aligning the answers</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Is the CRS geographic?:'</span><span class="sc">:&lt;25}</span><span class="ss"> </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>is_geographic<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Is the CRS projected?:'</span><span class="sc">:&lt;25}</span><span class="ss"> </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>is_projected<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'Is the CRS projected?:'</span><span class="sc">:&lt;25}</span><span class="ss"> </span><span class="sc">{</span>power_plants<span class="sc">.</span>crs<span class="sc">.</span>is_projected<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Is the CRS geographic?:   True
 Is the CRS projected?:    False</code></pre>
@@ -758,7 +884,7 @@ Is the CRS projected?:    False</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Use f-strings or not?
+<span class="screen-reader-only">Caution</span>Use f-strings or not?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -766,7 +892,7 @@ Use f-strings or not?
 <p>These are some good resources to learn more about f-string formatting:</p>
 <ul>
 <li><p><a href="https://realpython.com/python-f-strings/">Real Python - Python’s F-String for String Interpolation and Formatting</a></p></li>
-<li><p><a href="https://docs.python.org/3/library/string.html#formatspec">Python documentation- Format Specification Mini-Language</a></p></li>
+<li><p><a href="https://docs.python.org/3/library/string.html#formatspec">Python documentation - Format Specification Mini-Language</a></p></li>
 </ul>
 </div>
 </div>
@@ -774,20 +900,20 @@ Use f-strings or not?
 <section id="import-shapefile" class="level2">
 <h2 class="anchored" data-anchor-id="import-shapefile">Import shapefile</h2>
 <p>Let’s import the TIGER shapefile</p>
-<div id="0056a0a8" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import states data</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'tl_2022_us_state'</span>,<span class="st">'tl_2022_us_state.shp'</span>)</span>
+<div id="c8f8a5d3" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import states data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> os.path.join(<span class="st">'data'</span>,<span class="st">'tl_2026_us_state'</span>,<span class="st">'tl_2026_us_state.shp'</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> gpd.read_file(fp)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify column names </span></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>states.columns <span class="op">=</span> states.columns.<span class="bu">str</span>.lower()</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>states.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>states.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -796,6 +922,7 @@ Use f-strings or not?
 <th data-quarto-table-cell-role="th">statefp</th>
 <th data-quarto-table-cell-role="th">statens</th>
 <th data-quarto-table-cell-role="th">geoid</th>
+<th data-quarto-table-cell-role="th">geoidfq</th>
 <th data-quarto-table-cell-role="th">stusps</th>
 <th data-quarto-table-cell-role="th">name</th>
 <th data-quarto-table-cell-role="th">lsad</th>
@@ -810,58 +937,61 @@ Use f-strings or not?
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>3</td>
-<td>5</td>
-<td>54</td>
-<td>01779805</td>
-<td>54</td>
-<td>WV</td>
-<td>West Virginia</td>
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>2</td>
+<td>36</td>
+<td>01779796</td>
+<td>36</td>
+<td>0400000US36</td>
+<td>NY</td>
+<td>New York</td>
 <td>00</td>
 <td>G4000</td>
 <td>A</td>
-<td>62266456923</td>
-<td>489045863</td>
-<td>+38.6472854</td>
-<td>-080.6183274</td>
-<td>POLYGON ((-77.75438 39.33346, -77.75422 39.333...</td>
+<td>122049230845</td>
+<td>19256680224</td>
+<td>+42.9133974</td>
+<td>-075.5962723</td>
+<td>MULTIPOLYGON (((-74.04075 40.70017, -74.04073 ...</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>3</td>
-<td>5</td>
-<td>12</td>
-<td>00294478</td>
-<td>12</td>
-<td>FL</td>
-<td>Florida</td>
+<th data-quarto-table-cell-role="th">1</th>
+<td>4</td>
+<td>8</td>
+<td>32</td>
+<td>01779793</td>
+<td>32</td>
+<td>0400000US32</td>
+<td>NV</td>
+<td>Nevada</td>
 <td>00</td>
 <td>G4000</td>
 <td>A</td>
-<td>138962819934</td>
-<td>45971472526</td>
-<td>+28.3989775</td>
-<td>-082.5143005</td>
-<td>MULTIPOLYGON (((-83.10874 24.62949, -83.10711 ...</td>
+<td>284537080522</td>
+<td>1839846018</td>
+<td>+39.3310928</td>
+<td>-116.6151469</td>
+<td>POLYGON ((-119.32418 41.99392, -119.32362 41.9...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>2</td>
-<td>3</td>
-<td>17</td>
-<td>01779784</td>
-<td>17</td>
-<td>IL</td>
-<td>Illinois</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>4</td>
+<td>9</td>
+<td>02</td>
+<td>01785533</td>
+<td>02</td>
+<td>0400000US02</td>
+<td>AK</td>
+<td>Alaska</td>
 <td>00</td>
 <td>G4000</td>
 <td>A</td>
-<td>143778515726</td>
-<td>6216539665</td>
-<td>+40.1028754</td>
-<td>-089.1526108</td>
-<td>POLYGON ((-87.89243 38.28285, -87.89334 38.282...</td>
+<td>1479942808337</td>
+<td>244276695297</td>
+<td>+63.3469818</td>
+<td>-152.8385657</td>
+<td>MULTIPOLYGON (((-167.55823 60.22436, -167.5567...</td>
 </tr>
 </tbody>
 </table>
@@ -870,9 +1000,9 @@ Use f-strings or not?
 </div>
 </div>
 <p>and obtain some preliminary geospatial information about the states geodataframe:</p>
-<div id="4217e230" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(states.crs)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>states.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4cc91b68" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(states.crs)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>states.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:4269</code></pre>
 </div>
@@ -887,13 +1017,13 @@ Use f-strings or not?
 </section>
 <section id="for-loops" class="level2">
 <h2 class="anchored" data-anchor-id="for-loops"><code>for</code> loops</h2>
-<p>It can be easier to work with the codes as numbers instead of strings, so let’s update the corresponding columns in the states geo-dataframe. We start by checking the data type of the <code>region</code>, <code>division</code>, and <code>statefp</code> columns:</p>
-<div id="681f47ae" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>code_cols <span class="op">=</span> [<span class="st">'region'</span>, <span class="st">'division'</span>, <span class="st">'statefp'</span>]</span>
+<p>[<strong>CHECK</strong> “the codes” has not been introduced at this point.] It can be easier to work with the codes as numbers instead of strings, so let’s update the corresponding columns in the states geodataframe. We start by checking the data type of the <code>region</code>, <code>division</code>, and <code>statefp</code> columns:</p>
+<div id="067488d1" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>code_cols <span class="op">=</span> [<span class="st">'region'</span>, <span class="st">'division'</span>, <span class="st">'statefp'</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether codes columns are strings</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> code_cols: </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>column<span class="sc">}</span><span class="ss"> is string dtype? </span><span class="sc">{</span>is_string_dtype(states[column])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>column<span class="sc">}</span><span class="ss"> is string dtype? </span><span class="sc">{</span>is_string_dtype(states[column])<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>region is string dtype? True
 division is string dtype? True
@@ -907,19 +1037,19 @@ statefp is string dtype? True</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-DRY code
+<span class="screen-reader-only">Caution</span>DRY code
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>We could have checked whether all the <code>region</code>, <code>division</code>, and <code>statefp</code> columns were of string data type by using the following code:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"region is string dtype? </span><span class="sc">{</span>is_string_dtype(states[<span class="st">'region'</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"region is string dtype? </span><span class="sc">{</span>is_string_dtype(states[<span class="st">'region'</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"division is string dtype? </span><span class="sc">{</span>is_string_dtype(states[<span class="st">'division'</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"statefp is string dtype? </span><span class="sc">{</span>is_string_dtype(states[<span class="st">'statefp'</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>However, this is inconvenient as it repeats the same pieces of code, only changing the column name. Instead, using the <code>for</code> loop allows us to succintly print the same information:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>code_cols <span class="op">=</span> [<span class="st">'region'</span>, <span class="st">'division'</span>, <span class="st">'statefp'</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"statefp is string dtype? </span><span class="sc">{</span>is_string_dtype(states[<span class="st">'statefp'</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>However, this is inconvenient as it repeats the same pieces of code, only changing the column name. Instead, using the <code>for</code> loop allows us to succinctly print the same information:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>code_cols <span class="op">=</span> [<span class="st">'region'</span>, <span class="st">'division'</span>, <span class="st">'statefp'</span>]</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> code_cols: </span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>column<span class="sc">}</span><span class="ss"> is string dtype? </span><span class="sc">{</span>is_string_dtype(states[column])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>column<span class="sc">}</span><span class="ss"> is string dtype? </span><span class="sc">{</span>is_string_dtype(states[column])<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Don’t Repeat Yourself (DRY)</strong> is a core programming principle that encourages reducing redundancy and consolidating repeated logic. Try implementing it as much as possible! If you need to repeat the “same” code more than twice, you likely need a <code>for</code> loop.</p>
 </div>
 </div>
@@ -927,25 +1057,27 @@ DRY code
 <section id="assert" class="level2">
 <h2 class="anchored" data-anchor-id="assert"><code>assert</code></h2>
 <p>Next, we update the data type of the code columns to be integers. This time, we check the data type of the column using the <code>is_numeric_dtype()</code> function inside an <strong><code>assert</code></strong> statement:</p>
-<div id="9f7e437a" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update code columns into integers</span></span>
+<div id="1562d97c" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update code columns into integers</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> code_cols:</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    states[column] <span class="op">=</span> states[column].astype(<span class="st">'int'</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> is_numeric_dtype(states[column])  <span class="co"># Check conversion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> is_numeric_dtype(states[column])  <span class="co"># Check conversion</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The <code>assert</code> keyword does nothing if the expression next to it evaluates to <code>True</code> and raises an <code>AssertionError</code> exception and stops your code form running any further. For example,</p>
-<div id="9e5cc9a6" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does nothing if statement is True</span></span>
+<p>The <code>assert</code> keyword does nothing if the expression next to it evaluates to <code>True</code>. If it evaluates to <code>False</code>, it raises an <code>AssertionError</code> exception and stops your code from running any further. For example,</p>
+<div id="b96076db" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does nothing if statement is True</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span><span class="op">+</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">4</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Raises an error if statement is False</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span><span class="op">+</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="dv">2</span><span class="op">+</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AssertionError</span>                            Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[13]</span><span class="ansi-green-fg">, line 5</span>
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[37]</span><span class="ansi-green-fg">, line 5</span>
+<span class="ansi-green-fg">      1</span> <span style="font-style:italic;color:rgb(95,135,135)"># Does nothing if statement is True</span>
 <span class="ansi-green-fg">      2</span> <span style="font-weight:bold;color:rgb(0,135,0)">assert</span> <span class="ansi-green-fg">2</span>+<span class="ansi-green-fg">2</span> == <span class="ansi-green-fg">4</span>
+<span class="ansi-green-fg">      3</span> 
 <span class="ansi-green-fg">      4</span> <span style="font-style:italic;color:rgb(95,135,135)"># Raises an error if statement is False</span>
 <span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">5</span> <span style="font-weight:bold;color:rgb(0,135,0)">assert</span> <span class="ansi-green-fg">2</span>+<span class="ansi-green-fg">2</span> == <span class="ansi-green-fg">3</span>
 
@@ -957,42 +1089,42 @@ DRY code
 </section>
 <section id="data-selection" class="level2">
 <h2 class="anchored" data-anchor-id="data-selection">Data selection</h2>
-<p>For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger extension.</p>
+<p>For this lesson, we want to use only the contiguous states. As seen in the plot, the data covers a bigger area.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>From the TIGER shapefiles metadata we know that:</p>
 <blockquote class="blockquote">
-<p>In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation.</p>
+<p>In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island Areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation.</p>
 </blockquote>
 <p>In <a href="https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf">this US Census Bureau file</a> we can see what each code for the region, division, and state corresponds to.</p>
 <ul>
 <li>What are the unique values for region, division, or state codes in the data?</li>
-<li>Which codes should should we select to keep only states in the contiguous US?</li>
+<li>Which codes should we select to keep only states in the contiguous US?</li>
 </ul>
 <!--
  States correspond to regions 1 through 4. 
  However, there's also a region code 9.
  Hawaii = state code 15
- Alaska = satate code 02
- Need to exclude: region code 9 ans state codes 15 and 02
+ Alaska = state code 02
+ Need to exclude: region code 9 and state codes 15 and 02
  -->
 </div>
 </div>
 <p>Let’s go ahead and select the data:</p>
-<div id="b8e1fad8" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select contiguous US states</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>contiguous <span class="op">=</span> states[(states.region<span class="op">!=</span><span class="dv">9</span>) <span class="op">&amp;</span> (<span class="op">~</span>states.statefp.isin([<span class="dv">2</span>,<span class="dv">15</span>]))]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4d4d1366" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select contiguous US states</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>contiguous <span class="op">=</span> states[(states[<span class="st">'region'</span>]<span class="op">!=</span><span class="dv">9</span>) <span class="op">&amp;</span> (<span class="op">~</span>states[<span class="st">'statefp'</span>].isin([<span class="dv">2</span>,<span class="dv">15</span>]))]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this code we used the syntax</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">~</span>df.column.isin([val1, val2, val3])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">~</span>df[<span class="st">'column'</span>].isin([val1, val2, val3])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>~</code> tilde symbol is used in Python to negate a statement. So the previous line could be read as “the values in <code>df</code>’s column which are <em>not</em> in the list <code>[val1, val2, val3]</code>.”</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1000,15 +1132,15 @@ Check-in
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Select the data in the <code>power_plants</code> data frame for the contiguous US states. <!--
 
-::: {#2bae2fca .cell execution_count=15}
+::: {#982df6e5 .cell execution_count=15}
 ``` {.python .cell-code}
-power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Alaska'])]
+power_plants = power_plants[~power_plants['state'].isin(['Puerto Rico','Hawaii','Alaska'])]
 ```
 :::
 
@@ -1020,16 +1152,16 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 <section id="plotting" class="level2">
 <h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
 <p>Before we plot our data, let’s make sure they are in the same CRS:</p>
-<div id="7c20350a" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>contiguous.crs <span class="op">==</span> power_plants.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="a27b95f4" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>contiguous.crs <span class="op">==</span> power_plants.crs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div id="2e57095d" class="cell" data-execution_count="17">
+<div id="6a6c5a9d" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>)) <span class="co"># Update figure size</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>)) <span class="co"># Update figure size</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the axis for a cleaner map</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
@@ -1056,10 +1188,10 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 <span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'fontsize'</span>: <span class="st">'small'</span>,</span>
 <span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'loc'</span>: <span class="st">'upper left'</span>,</span>
 <span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'bbox_to_anchor'</span>: (<span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'ncol'</span>: <span class="dv">6</span>  </span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'ncols'</span>: <span class="dv">6</span>  </span>
 <span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>                  })</span>
 <span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>                  </span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1076,7 +1208,7 @@ power_plants = power_plants[~power_plants.state.isin(['Puerto Rico','Hawaii','Al
 <li><code>bbox_to_anchor</code> is a tuple with coordinates indicating where to place the corner specified in <code>loc</code> relative to the axes. Values between 0 and 1 are within the axes.</li>
 </ul>
 <!--TODO: add diagram of bbox-->
-<p><code>matplotlib</code> uses a variety of ways to locate elements within the graph and it is best to check the documentation to not spend too much time fidling with locations.</p>
+<p><code>matplotlib</code> uses a variety of ways to locate elements within the graph and it is best to check the documentation to not spend too much time fiddling with locations.</p>
 <!--
 
 https://www.flexprojector.com
@@ -1089,8 +1221,8 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 <section id="for-with-zip" class="level2">
 <h2 class="anchored" data-anchor-id="for-with-zip"><code>for</code> with <code>zip</code></h2>
 <p>Often, we need to iterate simultaneously over two lists (or other iterables). The <code>zip()</code> function in Python allows you to combine two or more lists (or other iterables) so that you can iterate over their elements in pairs. When used with a <code>for</code> loop, it lets you process elements from each list together, like this example:</p>
-<div id="4573a418" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over a single list</span></span>
+<div id="8e4ca3d1" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over a single list</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num <span class="kw">in</span> numbers:</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(num)</span>
@@ -1100,7 +1232,7 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over two lists in pairs using zip()</span></span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>letters <span class="op">=</span> [<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>]</span>
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> num, letter <span class="kw">in</span> <span class="bu">zip</span>(numbers, letters):</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(num, letter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(num, letter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1
 2
@@ -1113,14 +1245,14 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 </div>
 </div>
 <p>Let’s see a practical application of <code>for</code> loops and <code>zip()</code> with <code>matplotlib</code> subplots. A common situation when code gets repeated is when creating subplots. For example:</p>
-<div id="30144216" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">3</span>))</span>
+<div id="32eaf72d" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">3</span>))</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'This is axis 0'</span>)</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'This is axis 1'</span>)</span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'This is axis 2'</span>)</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1129,7 +1261,7 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 </div>
 </div>
 </div>
-<p>In this example, notice that the <code>axes</code> variable returned by the <code>plt.subplots()</code> function is actually an array of axes we can iterate over. Remember that the figure and the axes are separete elements in a <code>matplotlib</code> plot.</p>
+<p>In this example, notice that the <code>axes</code> variable returned by the <code>plt.subplots()</code> function is actually an array of axes we can iterate over. Remember that the figure and the axes are separate elements in a <code>matplotlib</code> plot.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../../book/images/lesson-10/matplotlib_figure_axes_axis.png" class="img-fluid figure-img"></p>
@@ -1142,7 +1274,7 @@ https://stackoverflow.com/questions/74143732/customize-legend-labels-in-geopanda
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1162,7 +1294,7 @@ plt.show()
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exercise
+<span class="screen-reader-only">Tip</span>Exercise
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1172,7 +1304,7 @@ Exercise
 <li><p>Isolate the California state boundary in a variable named <code>ca_boundary</code>.</p></li>
 <li><p>Recreate the following plot:</p></li>
 </ol>
-<div id="d4763f56" class="cell" data-execution_count="20">
+<div id="23a247af" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1187,23 +1319,23 @@ Exercise
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <p>Next, we want to keep exploring these maps of the top 3 electric primary sources for different states. This is a scenario where creating functions can be useful. In Python, <strong>functions</strong> are blocks of reusable code designed to perform specific tasks, helping to make your code more modular and organized. The general syntax for defining a function is the following:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> function_name(parameter_1, ..., parameter_n):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> function_name(parameter_1, ..., parameter_n):</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Docstring"""</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>body of the function<span class="op">&gt;</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value  <span class="co"># Depending on the function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value  <span class="co"># Depending on the function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>We define a function using:</p>
 <ol type="1">
 <li>the <code>def</code> keyword, followed by the function name, parentheses (which can contain parameters), and a colon.</li>
-<li>The first line(s) of the function should be a <code>docstring</code>, this is a special kind of comment used to describe what the function will do. It must be indented and in between triple quotes <code>"""</code>.</li>
-<li>After the docstring, you write the body of the function, this is the code that will be executed when the function is called. The wholek body of the function should be indentated to indicate the function’s scope.</li>
+<li>The first line(s) of the function should be a <code>docstring</code>. This is a special kind of comment used to describe what the function will do. It must be indented and in between triple quotes <code>"""</code>.</li>
+<li>After the docstring, you write the body of the function. This is the code that will be executed when the function is called. The whole body of the function should be indented to indicate the function’s scope.</li>
 <li>The <code>return</code> keyword is used to allow the function to return values. Functions that do not return any values don’t need to have a <code>return</code> keyword.</li>
 </ol>
 <p>Let’s see two simple examples just to get familiar with the syntax. In the first one we have a simple function with a one-line docstring, no parameters, and no return values.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet():</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet():</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">"""Print a greeting message."""</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>   <span class="bu">print</span>(<span class="st">"Hello, welcome to the class!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>   <span class="bu">print</span>(<span class="st">"Hello, welcome to the class!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The second one has a single parameter and a more detailed docstring with information about the arguments and return values.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_area(radius):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_area(radius):</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">"""</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">   Calculate the area of a circle given its radius.</span></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">   </span></span>
@@ -1214,14 +1346,14 @@ Exercise
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co">       float: The area of the circle, calculated as π * radius^2.</span></span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">   """</span></span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>   area <span class="op">=</span> <span class="fl">3.14159</span> <span class="op">*</span> radius <span class="op">**</span> <span class="dv">2</span></span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> area</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>Going back to our power plants data frame, let’s create a function that will give us the top 3 primary energy sources for a given state:</p>
-<div id="027fed10" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> top3_sources(state, power_plants):</span>
+<div id="17fb52ed" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> top3_sources(state, power_plants):</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Find the top 3 electric primary sources of given state.</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Find the top 3 electric primary sources of a given state.</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">        state (str): The US state we want information about.</span></span>
@@ -1236,52 +1368,63 @@ Exercise
 <span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>                                .index[:<span class="dv">3</span>]</span>
 <span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>                                .tolist()</span>
 <span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>                                )</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> top_sources</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> top_sources</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We may now reuse this function as much as we want!</p>
-<div id="f0972820" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Top 3 primary energy sources in Division 2 states:'</span>)</span>
+<div id="22d45d8a" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Top 3 primary energy sources in Division 2 states:'</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> state <span class="kw">in</span> [<span class="st">'New Jersey'</span>, <span class="st">'New York'</span>, <span class="st">'Pennsylvania'</span>]:</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(state, <span class="st">': '</span>, top3_sources(state, power_plants))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(state, <span class="st">': '</span>, top3_sources(state, power_plants))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Top 3 primary energy sources in Division 2 states:
 New Jersey :  ['solar', 'natural gas', 'biomass']
 New York :  ['solar', 'hydroelectric', 'natural gas']
-Pennsylvania :  ['natural gas', 'solar', 'biomass']</code></pre>
+Pennsylvania :  ['natural gas', 'solar', 'petroleum']</code></pre>
 </div>
 </div>
-<p>Let’s do one more example and create a function that will produce a plot given a list of primary sources and a state name:</p>
-<div id="21714a0a" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_3_energy_sources(state, sources, power_plants):</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Raise error if there are more than three sources</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sources) <span class="op">==</span> <span class="dv">3</span>, <span class="st">'sources must have three elements to produce the plot'</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Isolate the state boundary and power plants</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    boundary <span class="op">=</span> states[states.name<span class="op">==</span>state]</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    state_power_plants <span class="op">=</span> power_plants[power_plants[<span class="st">'state'</span>]<span class="op">==</span>state]</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create plot</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">3</span>))</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax, source <span class="kw">in</span> <span class="bu">zip</span>(axes, sources):</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>        boundary.plot(ax<span class="op">=</span>ax,                </span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                      color<span class="op">=</span><span class="st">'none'</span>,</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>                      edgecolor<span class="op">=</span><span class="st">'#362312'</span>)</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> state_power_plants[state_power_plants[<span class="st">'primsource'</span>] <span class="op">==</span> source]</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>        subset.plot(ax<span class="op">=</span>ax, markersize<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>        ax.set_title(source)</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">'off'</span>)  <span class="co"># Remove axes for a cleaner look</span></span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(<span class="ss">f"Top 3 energy sources for electric power plants in </span><span class="sc">{</span>state<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s do one more example and create a function that will produce a plot given a state name, a list of primary sources, and the data:</p>
+<div id="a1b8f3c1" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_3_energy_sources(state, sources, power_plants, states):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Plot the power plants of a given state for three primary energy sources.</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">        state (str): The US state we want to plot.</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">        sources (list): A list of three primary energy sources.</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co">        power_plants (gpd.GeoDataFrame): GeoDataFrame containing data </span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co">        on power plants, with at least 'state' and 'primsource' columns.</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="co">        states (gpd.GeoDataFrame): GeoDataFrame with the US states boundaries, </span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co">        with at least a 'name' column.</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Raise error if sources does not have exactly three elements</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sources) <span class="op">==</span> <span class="dv">3</span>, <span class="st">'sources must have three elements to produce the plot'</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Isolate the state boundary and power plants</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>    boundary <span class="op">=</span> states[states[<span class="st">'name'</span>]<span class="op">==</span>state]</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    state_power_plants <span class="op">=</span> power_plants[power_plants[<span class="st">'state'</span>]<span class="op">==</span>state]</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create plot</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">3</span>))</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ax, source <span class="kw">in</span> <span class="bu">zip</span>(axes, sources):</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>        boundary.plot(ax<span class="op">=</span>ax,                </span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>                      color<span class="op">=</span><span class="st">'none'</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>                      edgecolor<span class="op">=</span><span class="st">'#362312'</span>)</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> state_power_plants[state_power_plants[<span class="st">'primsource'</span>] <span class="op">==</span> source]</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>        subset.plot(ax<span class="op">=</span>ax, markersize<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>        ax.set_title(source)</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>        ax.axis(<span class="st">'off'</span>)  <span class="co"># Remove axes for a cleaner look</span></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>    plt.suptitle(<span class="ss">f"Top 3 energy sources for electric power plants in </span><span class="sc">{</span>state<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now use our functions to produce plots for any state:</p>
-<div id="9a63e46c" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plot_3_energy_sources(<span class="st">'New Jersey'</span>, </span>
+<div id="b0641f3b" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>plot_3_energy_sources(<span class="st">'New Jersey'</span>, </span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                         top3_sources(<span class="st">'New Jersey'</span>, power_plants),</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                         power_plants)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                         power_plants,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                         states)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1294,7 +1437,7 @@ Pennsylvania :  ['natural gas', 'solar', 'biomass']</code></pre>
 <!--
 As you go forward, some tips that can help you write them are:
 
-- crate the code for a single 
+- create the code for a single 
 -->
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1302,11 +1445,11 @@ As you go forward, some tips that can help you write them are:
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exercise
+<span class="screen-reader-only">Tip</span>Exercise
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Write a function <code>states_with_source</code> that takes a primary energy source (e.g., ‘solar’) and returns a <em>list</em> of states that use that source.</p>
+<p>Write a function <code>states_with_source</code> that takes a primary energy source (e.g., ‘solar’) and returns a <em>list</em> of states that use that source. [<strong>CHECK</strong> the answer’s function also takes <code>power_plants</code> as a parameter.]</p>
 <!--
 ```python
 def states_with_source(source_type, power_plants):
@@ -1334,10 +1477,19 @@ def states_with_source(source_type, power_plants):
 </div>
 
 
+
+</section>
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-eia_power_plants_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">U.S. Energy Information Administration, <span>“Power <span>Plants</span> in the <span>U.S.</span>”</span> Esri U.S. Federal Datasets, 2025. Available: <a href="https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about">https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about</a>. [Accessed: Oct. 24, 2026]</div>
+</div>
+<div id="ref-us_census_bureau_tiger_2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">U.S. Census Bureau, <span>“<span>TIGER</span>/<span>Line</span> <span>Shapefiles</span>: <span>States</span> (2026).”</span> U.S. Census Bureau, 2026. Available: <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html">https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html</a>. [Accessed: Oct. 24, 2026]</div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1389,13 +1541,14 @@ def states_with_source(source_type, power_plants):
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

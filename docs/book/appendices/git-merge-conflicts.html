@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>git-merge-conflicts – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -71,10 +74,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -160,6 +163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-4-2026.html">
  <span class="dropdown-text">week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-5-2026.html">
+ <span class="dropdown-text">week 5</span></a>
   </li>  
     </ul>
   </li>
@@ -330,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10 Streamline your code</span></a>
+ <span class="menu-text">12 Streamline your code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -512,7 +519,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Using VSCode, clone your repository.</p></li>
 <li><p>Verify your merge configuration by running this command in the terminal:</p></li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> <span class="at">--list</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This command shows you all the settings git is using at the moment. Your output should look something like this:</p>
 <pre class="text"><code>user.name=carmengg
 user.email=c_galazgarcia@ucsb.edu
@@ -520,14 +527,14 @@ credential.helper=cache --timeout=10000000
 [...]
 pull.rebase=false</code></pre>
 <p>If you see <code>pull.rebase=false</code> it means you have the right configuration. Otherwise, update the default method for pulling into repositories on your personal computer by running this line of code in the terminal:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase false</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="step-3-personal-computer-check-quarto-and-vscode-extensions" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-personal-computer-check-quarto-and-vscode-extensions">Step 3 (@ personal computer): Check Quarto and VSCode extensions</h3>
 <ol type="1">
 <li>Verify that Quarto is installed by running this command in the terminal:</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The output should be a version number. If you get an error like <code>command not found</code>, <a href="https://quarto.org/docs/get-started/">install Quarto</a> before continuing.</p>
 <ol start="2" type="1">
 <li>In VSCode, go to the extensions panel and verify you have the Python, Jupyter, and Quarto extensions installed. If any of them is missing, install it (see <a href="../../setup/setup-vscode.html">Set up VSCode</a>) and restart VSCode.</li>
@@ -544,7 +551,7 @@ pull.rebase=false</code></pre>
 <li><p>Create a new Quarto document called <code>merge_test_YOURLASTNAME.qmd</code>.</p></li>
 <li><p>Copy the following code into a Python code chunk in your Quarto file:</p></li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a random number generator with a seed</span></span>
@@ -562,16 +569,16 @@ pull.rebase=false</code></pre>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Select rows subset</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> df[df[<span class="st">'C'</span>] <span class="op">==</span> <span class="st">'w'</span>]</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subset has"</span>, <span class="bu">len</span>(subset), <span class="st">"rows."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subset has"</span>, <span class="bu">len</span>(subset), <span class="st">"rows."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li><p>Examine the code, make sure you understand what it is doing!</p></li>
 <li><p>In a <em>bash terminal</em>, activate the course environment:</p></li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate eds220-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate eds220-env</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="5" type="1">
 <li>Preview the output of the Quarto file by running</li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview merge_test_YOURLASTNAME.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview merge_test_YOURLASTNAME.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="6" type="1">
 <li><p>Save your Quarto file, pull, commit, and push your updates to GitHub.</p></li>
 <li><p>Go over to GitHub and look at your repository. Your Quarto file is now upstream!</p></li>
@@ -583,9 +590,9 @@ pull.rebase=false</code></pre>
 <li><p>Clone the <code>merge_test_YOURLASTNAME</code> repository to your workbench-1 workspace.</p></li>
 <li><p>Check that <code>pull.rebase</code> is configured on the workbench by running this in the terminal:</p></li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the output is <code>false</code>, you are all set. If there is no output, run</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> pull.rebase false</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
 <li><p>Open the Quarto file and update the <code>Select rows subset</code> to <em>select a different letter</em>. Remember which letter you chose!</p></li>
 <li><p>Save and try to pull. What does it tell you and why?</p></li>
@@ -639,7 +646,7 @@ pull.rebase=false</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Stuck in the middle of a merge?
+<span class="screen-reader-only">Note</span>Stuck in the middle of a merge?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -652,7 +659,7 @@ Stuck in the middle of a merge?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Always do <code>git pull</code> before starting to update your code!
+<span class="screen-reader-only">Tip</span>Always do <code>git pull</code> before starting to update your code!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -730,7 +737,7 @@ Always do <code>git pull</code> before starting to update your code!
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-A merge without conflicts does not mean your code works
+<span class="screen-reader-only">Warning</span>A merge without conflicts does not mean your code works
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -743,7 +750,7 @@ A merge without conflicts does not mean your code works
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Remember: Always do <code>git pull</code> before starting to update your code!
+<span class="screen-reader-only">Tip</span>Remember: Always do <code>git pull</code> before starting to update your code!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -784,7 +791,7 @@ Remember: Always do <code>git pull</code> before starting to update your code!
 <section id="what-a-notebook-looks-like-under-the-hood" class="level3">
 <h3 class="anchored" data-anchor-id="what-a-notebook-looks-like-under-the-hood">What a notebook looks like under the hood</h3>
 <p>A <code>.ipynb</code> file is not a plain list of code lines like a <code>.qmd</code> or <code>.py</code> file. It is a text file in JSON format that stores every cell together with information about it. For example, this is how one code cell is saved:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">"cell_type"</span><span class="fu">:</span> <span class="st">"code"</span><span class="fu">,</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">"execution_count"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"a1b2c3d4"</span><span class="fu">,</span></span>
@@ -802,7 +809,7 @@ Remember: Always do <code>git pull</code> before starting to update your code!
 <span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"subset = df[df['C'] == 'w']</span><span class="ch">\n</span><span class="st">"</span><span class="ot">,</span></span>
 <span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"print(</span><span class="ch">\"</span><span class="st">Subset has</span><span class="ch">\"</span><span class="st">, len(subset), </span><span class="ch">\"</span><span class="st">rows.</span><span class="ch">\"</span><span class="st">)"</span></span>
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a> <span class="ot">]</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Your code is only the <code>source</code> part. Everything else can change even if you don’t touch a single line of code:</p>
 <ul>
 <li><strong>Execution counts</strong>: the <code>execution_count</code> number changes every time you run a cell, and it depends on the order in which you run them.</li>
@@ -893,13 +900,14 @@ Remember: Always do <code>git pull</code> before starting to update your code!
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

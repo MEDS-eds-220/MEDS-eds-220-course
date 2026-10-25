@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>3 Basic plotting – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,10 +94,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -183,6 +186,10 @@ div.csl-indent {
         <li>
     <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-4-2026.html">
  <span class="dropdown-text">week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../week-by-week/weekly-descriptions/week-5-2026.html">
+ <span class="dropdown-text">week 5</span></a>
   </li>  
     </ul>
   </li>
@@ -353,7 +360,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-11-csv-to-geodataframe/lesson-11-csv-to-geo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10 Streamline your code</span></a>
+ <span class="menu-text">12 Streamline your code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -513,7 +520,7 @@ div.csl-indent {
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -534,7 +541,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>2010</td>
 <td>39.0</td>
 <td>40.0</td>
@@ -550,7 +557,7 @@ div.csl-indent {
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2011</td>
 <td>48.0</td>
 <td>44.0</td>
@@ -566,7 +573,7 @@ div.csl-indent {
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -592,19 +599,19 @@ div.csl-indent {
 <section id="plot-method" class="level2">
 <h2 class="anchored" data-anchor-id="plot-method"><code>plot()</code> method</h2>
 <p>Let us start by loading the data:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in file</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data/wetlands_seasonal_bird_diversity.csv'</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the first 5 rows</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="fcd2dbab" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -625,7 +632,7 @@ div.csl-indent {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>2010</td>
 <td>39.0</td>
 <td>40.0</td>
@@ -641,7 +648,7 @@ div.csl-indent {
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2011</td>
 <td>48.0</td>
 <td>44.0</td>
@@ -657,7 +664,7 @@ div.csl-indent {
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -673,7 +680,7 @@ div.csl-indent {
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>2013</td>
 <td>42.0</td>
 <td>46.0</td>
@@ -689,7 +696,7 @@ div.csl-indent {
 <td>64.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>2014</td>
 <td>38.0</td>
 <td>43.0</td>
@@ -712,8 +719,8 @@ div.csl-indent {
 </div>
 <p>A <code>pandas.DataFrame</code> has a <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html">built-in method <code>plot()</code></a> for plotting. When we call it without specifying any other parameters <code>plot()</code> creates one line plot for each of the columns with numeric data.</p>
 <div id="660c44ed" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default plot(): one line plot per column with numeric data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default plot(): one line plot per column with numeric data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -727,13 +734,13 @@ div.csl-indent {
 <section id="line-plots" class="level2">
 <h2 class="anchored" data-anchor-id="line-plots">Line plots</h2>
 <p>We can make a line plot of one column against another by using the following general syntax:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'x_values_column'</span>, y<span class="op">=</span><span class="st">'y_values_column'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'x_values_column'</span>, y<span class="op">=</span><span class="st">'y_values_column'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <p>If we want to plot the bird surveys at Carpinteria Salt Marsh across years we can do:</p>
 <div id="b2f4a239" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bird species registered during winter at CSM yearly</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'CSM_winter'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bird species registered during winter at CSM yearly</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'CSM_winter'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -752,14 +759,14 @@ div.csl-indent {
 </ul>
 <p>In action:</p>
 <div id="1da63044" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">'CSM_winter'</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">'Bird species registered during winter at Carpinteria Salt Marsh'</span>,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        xlabel<span class="op">=</span><span class="st">'Year'</span>,</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        ylabel<span class="op">=</span><span class="st">'Number of bird species'</span>,</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">'green'</span>,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="va">False</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -775,7 +782,7 @@ div.csl-indent {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -798,7 +805,7 @@ Check-in
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>Let’s say we want to compare the bird surveys at the Tijuana Estuary during spring and fall across years.</p>
 <div id="48787032" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>[<span class="st">'TJE_spring'</span>, <span class="st">'TJE_fall'</span>],</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="st">'Seasonal bird surveys at Tijuana Estuary'</span>,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        xlabel<span class="op">=</span><span class="st">'Year'</span>,</span>
@@ -806,7 +813,7 @@ Check-in
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        color <span class="op">=</span> {<span class="st">'TJE_spring'</span>:<span class="st">'#F48FB1'</span>,</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">'TJE_fall'</span>: <span class="st">'#AB47BC'</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                 }</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -819,7 +826,7 @@ Check-in
 <p>Notice that for specifying the colors we used a <strong>HEX code</strong>, this gives us more control over how our graph looks.</p>
 <p>We can also create separate plots for each column by setting the <code>subplots</code> parameter to <code>True</code>.</p>
 <div id="53963f2d" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df.plot(x<span class="op">=</span><span class="st">'year'</span>, </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>[<span class="st">'TJE_spring'</span>, <span class="st">'TJE_fall'</span>],</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="st">'Seasonal bird surveys at Tijuana Estuary'</span>,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        xlabel<span class="op">=</span><span class="st">'Year'</span>,</span>
@@ -828,7 +835,7 @@ Check-in
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">'TJE_fall'</span>: <span class="st">'#AB47BC'</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                 },</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        subplots<span class="op">=</span><span class="va">True</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        )<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -843,7 +850,7 @@ Check-in
 <section id="updating-the-index" class="level2">
 <h2 class="anchored" data-anchor-id="updating-the-index">Updating the index</h2>
 <p><strong>Updating the index</strong> of our data frame to be something other than the default integers numbering the rows can be a useful operation for plotting. To update the index we use the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.set_index.html"><code>set_index()</code></a> method for a <code>pandas.DataFrame</code>. Its general syntax is:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(new_index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(new_index)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>where <code>new_index</code> is:</p>
 <ul>
 <li>the name of the column in the data frame <code>df</code> we want to use as new index</li>
@@ -855,18 +862,18 @@ Check-in
 <li>If the function <strong>does not act in-place</strong>, a new object (in this case a <code>pandas.DataFrame</code>) is created and the original is not modified.</li>
 </ul>
 <p>If we wanted to update our <code>df</code> data frame we could do an <strong>explicit assignment</strong> to reassign the output of <code>set_index()</code> to <code>df</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set `column_name` column in df as the new index (reassignment)</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">'column_name'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set `column_name` column in df as the new index (reassignment)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">'column_name'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>or use the optional <code>inplace</code> parameter:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set `column_name` column in df as the new index (modify df in-place)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'column_name'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set `column_name` column in df as the new index (modify df in-place)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'column_name'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-In general, avoid using the <code>inplace=True</code> argument and favor explicit variable assignments
+<span class="screen-reader-only">Caution</span>In general, avoid using the <code>inplace=True</code> argument and favor explicit variable assignments
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -877,14 +884,14 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
 <p>In all our previous examples we used the year column as the x-axis. Since all our bird survey variables are dependent on the year, it makes sense to use the year column as the index of the data frame:</p>
 <div id="647ce68c" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update index to be the year column</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update index to be the year column</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">'year'</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -919,7 +926,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2010</td>
+<th data-quarto-table-cell-role="th">2010</th>
 <td>39.0</td>
 <td>40.0</td>
 <td>50.0</td>
@@ -934,7 +941,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2011</td>
+<th data-quarto-table-cell-role="th">2011</th>
 <td>48.0</td>
 <td>44.0</td>
 <td>NaN</td>
@@ -949,7 +956,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2012</td>
+<th data-quarto-table-cell-role="th">2012</th>
 <td>51.0</td>
 <td>43.0</td>
 <td>49.0</td>
@@ -964,7 +971,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">2013</td>
+<th data-quarto-table-cell-role="th">2013</th>
 <td>42.0</td>
 <td>46.0</td>
 <td>38.0</td>
@@ -979,7 +986,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>64.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2014</td>
+<th data-quarto-table-cell-role="th">2014</th>
 <td>38.0</td>
 <td>43.0</td>
 <td>45.0</td>
@@ -1000,8 +1007,8 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 </div>
 </div>
 <div id="15151061" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple plot of Carpinteria Salt Marsh winter surveys</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df.plot(y<span class="op">=</span><span class="st">'CSM_winter'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple plot of Carpinteria Salt Marsh winter surveys</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df.plot(y<span class="op">=</span><span class="st">'CSM_winter'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1012,13 +1019,13 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 </div>
 <p>If needed, we can reset the index to be the numbering of the rows:</p>
 <div id="b0b32d75" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.reset_index()</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.reset_index()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1039,7 +1046,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>2010</td>
 <td>39.0</td>
 <td>40.0</td>
@@ -1055,7 +1062,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>81.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>2011</td>
 <td>48.0</td>
 <td>44.0</td>
@@ -1071,7 +1078,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>2012</td>
 <td>51.0</td>
 <td>43.0</td>
@@ -1087,7 +1094,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>69.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>2013</td>
 <td>42.0</td>
 <td>46.0</td>
@@ -1103,7 +1110,7 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <td>64.0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>2014</td>
 <td>38.0</td>
 <td>43.0</td>
@@ -1130,14 +1137,14 @@ In general, avoid using the <code>inplace=True</code> argument and favor explici
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>Without running the code, give a step-by-step breakdown of what this code is doing:</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'year'</span>).loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>].plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'year'</span>).loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>].plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="2" type="1">
 <li><p>Is this code modifying the data frame <code>df</code>? Why or why not?</p></li>
 <li><p>Run the code and examine the graph. Review the data description. Do we have all the necessary information to make sure it makes sense to directly compare the surveys at these different sites? <!--The different sites have very different sizes and the surveys show the total number of birds identified, not the number of birds relative to the extent. --></p></li>
@@ -1149,20 +1156,20 @@ Check-in
 <section id="method-chaining" class="level2">
 <h2 class="anchored" data-anchor-id="method-chaining">Method chaining</h2>
 <p>The code used in the check-in</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'year'</span>).loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>].plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">'year'</span>).loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>].plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>is an example of <strong>method chaining</strong>. Each method in the chain returns a new object (usually a <code>pandas.DataFrame</code> or <code>pandas.Series</code>), allowing the next method to be called directly on the result. This is a powerful technique that makes code concise and readable.</p>
 <p>Chaining methods can result in lines of code that are too long and hard to read. We can break up chains of methods by using parentheses:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(df.set_index(<span class="st">'year'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(df.set_index(<span class="st">'year'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  .loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>]</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  .plot()</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Method chaining and the R pipe operator
+<span class="screen-reader-only">Note</span>Method chaining and the R pipe operator
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1171,9 +1178,9 @@ Method chaining and the R pipe operator
 </div>
 </div>
 <p>An alternative to the previous code chaining could have been:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>year_index_df <span class="op">=</span> df.set_index(<span class="st">'year'</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>year_index_df <span class="op">=</span> df.set_index(<span class="st">'year'</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>subset_df <span class="op">=</span> year_index_df.loc[:,<span class="st">'SDW_winter'</span>:<span class="st">'TJE_fall'</span>]</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>subset_df.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>subset_df.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>While this accomplishes the same output, several variables are created along the way and it can be difficult to keep track of what is what.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1181,7 +1188,7 @@ Method chaining and the R pipe operator
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Use method chaining wisely
+<span class="screen-reader-only">Caution</span>Use method chaining wisely
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1209,7 +1216,7 @@ Use method chaining wisely
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1225,7 +1232,7 @@ Use method chaining wisely
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>39.1</td>
@@ -1236,7 +1243,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>39.5</td>
@@ -1247,7 +1254,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>40.3</td>
@@ -1269,16 +1276,16 @@ Use method chaining wisely
 <p>The data is usually accessed through the <code>palmerpenguins</code> R data package <span class="citation" data-cites="palmerpenguins"><a href="#ref-palmerpenguins" role="doc-biblioref">[2]</a></span>. In this lesson we will access the CSV directly into our workspace using the URL: <a href="https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv">https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv</a></p>
 <p>Let’s start by reading in the data:</p>
 <div id="e2d9b304" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv'</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(URL)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1294,7 +1301,7 @@ Use method chaining wisely
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>39.1</td>
@@ -1305,7 +1312,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>39.5</td>
@@ -1316,7 +1323,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>40.3</td>
@@ -1327,7 +1334,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
+<th data-quarto-table-cell-role="th">3</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>NaN</td>
@@ -1338,7 +1345,7 @@ Use method chaining wisely
 <td>2007</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
+<th data-quarto-table-cell-role="th">4</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>36.7</td>
@@ -1356,8 +1363,8 @@ Use method chaining wisely
 </div>
 <p>And getting some preliminary information:</p>
 <div id="a6b7d85a" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check column data types and NA values</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>penguins.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check column data types and NA values</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>penguins.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
 RangeIndex: 344 entries, 0 to 343
@@ -1377,13 +1384,13 @@ memory usage: 21.6+ KB</code></pre>
 </div>
 </div>
 <div id="2c5b9704" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple statistics about numeric columns</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>penguins.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple statistics about numeric columns</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>penguins.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1396,7 +1403,7 @@ memory usage: 21.6+ KB</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">count</td>
+<th data-quarto-table-cell-role="th">count</th>
 <td>342.000000</td>
 <td>342.000000</td>
 <td>342.000000</td>
@@ -1404,7 +1411,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>344.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">mean</td>
+<th data-quarto-table-cell-role="th">mean</th>
 <td>43.921930</td>
 <td>17.151170</td>
 <td>200.915205</td>
@@ -1412,7 +1419,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>2008.029070</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">std</td>
+<th data-quarto-table-cell-role="th">std</th>
 <td>5.459584</td>
 <td>1.974793</td>
 <td>14.061714</td>
@@ -1420,7 +1427,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>0.818356</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">min</td>
+<th data-quarto-table-cell-role="th">min</th>
 <td>32.100000</td>
 <td>13.100000</td>
 <td>172.000000</td>
@@ -1428,7 +1435,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>2007.000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">25%</td>
+<th data-quarto-table-cell-role="th">25%</th>
 <td>39.225000</td>
 <td>15.600000</td>
 <td>190.000000</td>
@@ -1436,7 +1443,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>2007.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">50%</td>
+<th data-quarto-table-cell-role="th">50%</th>
 <td>44.450000</td>
 <td>17.300000</td>
 <td>197.000000</td>
@@ -1444,7 +1451,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>2008.000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">75%</td>
+<th data-quarto-table-cell-role="th">75%</th>
 <td>48.500000</td>
 <td>18.700000</td>
 <td>213.000000</td>
@@ -1452,7 +1459,7 @@ memory usage: 21.6+ KB</code></pre>
 <td>2009.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">max</td>
+<th data-quarto-table-cell-role="th">max</th>
 <td>59.600000</td>
 <td>21.500000</td>
 <td>231.000000</td>
@@ -1467,8 +1474,8 @@ memory usage: 21.6+ KB</code></pre>
 </div>
 <p>We can also subset the data frame to get information about a particular column or groups of columns:</p>
 <div id="bce3acb3" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count unique values in categorical columns and year</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>penguins[[<span class="st">'species'</span>, <span class="st">'island'</span>, <span class="st">'sex'</span>, <span class="st">'year'</span>]].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count unique values in categorical columns and year</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>penguins[[<span class="st">'species'</span>, <span class="st">'island'</span>, <span class="st">'sex'</span>, <span class="st">'year'</span>]].nunique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>species    3
 island     3
@@ -1478,15 +1485,15 @@ dtype: int64</code></pre>
 </div>
 </div>
 <div id="765c6c86" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique values in species column</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'species'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique values in species column</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'species'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>array(['Adelie', 'Gentoo', 'Chinstrap'], dtype=object)</code></pre>
 </div>
 </div>
 <div id="6c1fb830" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of values per unique value in species column</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'species'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of values per unique value in species column</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'species'</span>].value_counts()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>species
 Adelie       152
@@ -1512,9 +1519,9 @@ Name: count, dtype: int64</code></pre>
 <h2 class="anchored" data-anchor-id="scatter-plots">Scatter plots</h2>
 <p>Suppose we want to visually compare the flipper length against the body mass. We can do this with a scatter plot:</p>
 <div id="e42705de" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'scatter'</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'scatter'</span>,</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>              x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>              y<span class="op">=</span><span class="st">'body_mass_g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>              y<span class="op">=</span><span class="st">'body_mass_g'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1525,7 +1532,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 <p>We can update some other arguments to customize the graph:</p>
 <div id="11c84a19" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'scatter'</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'scatter'</span>,</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>              x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, </span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>              y<span class="op">=</span><span class="st">'body_mass_g'</span>,</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>              title<span class="op">=</span><span class="st">'Flipper length and body mass for Palmer penguins'</span>,</span>
@@ -1533,7 +1540,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>              ylabel<span class="op">=</span><span class="st">'Body mass (g)'</span>,</span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>              color<span class="op">=</span><span class="st">'#ff3b01'</span>,</span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>              alpha<span class="op">=</span><span class="fl">0.4</span>  <span class="co"># Controls transparency</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>              )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1548,8 +1555,8 @@ Name: count, dtype: int64</code></pre>
 <p>We can create bar plots of our data by setting <code>kind='bar'</code> in the <code>plot()</code> method.</p>
 <p>For example, let’s say we want to get data about the 10 penguins with the lowest body mass. We can first select this data using the <code>nsmallest()</code> method for series:</p>
 <div id="6908866a" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>smallest <span class="op">=</span> penguins[<span class="st">'body_mass_g'</span>].nsmallest(<span class="dv">10</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>smallest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>smallest <span class="op">=</span> penguins[<span class="st">'body_mass_g'</span>].nsmallest(<span class="dv">10</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>smallest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>314    2700.0
 58     2850.0
@@ -1566,7 +1573,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 </div>
 <p>We can then plot this data as a bar plot:</p>
 <div id="77fd9cdb" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>smallest.plot(kind<span class="op">=</span><span class="st">'bar'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>smallest.plot(kind<span class="op">=</span><span class="st">'bar'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1577,12 +1584,12 @@ Name: body_mass_g, dtype: float64</code></pre>
 </div>
 <p>If we wanted to look at other data for these smallest penguins we can use a different call to the <code>nsmallest</code> method:</p>
 <div id="e261bd92" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>penguins.nsmallest(<span class="dv">10</span>, <span class="st">'body_mass_g'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>penguins.nsmallest(<span class="dv">10</span>, <span class="st">'body_mass_g'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1598,7 +1605,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">314</td>
+<th data-quarto-table-cell-role="th">314</th>
 <td>Chinstrap</td>
 <td>Dream</td>
 <td>46.9</td>
@@ -1609,7 +1616,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2008</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">58</td>
+<th data-quarto-table-cell-role="th">58</th>
 <td>Adelie</td>
 <td>Biscoe</td>
 <td>36.5</td>
@@ -1620,7 +1627,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2008</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">64</td>
+<th data-quarto-table-cell-role="th">64</th>
 <td>Adelie</td>
 <td>Biscoe</td>
 <td>36.4</td>
@@ -1631,7 +1638,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2008</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">54</td>
+<th data-quarto-table-cell-role="th">54</th>
 <td>Adelie</td>
 <td>Biscoe</td>
 <td>34.5</td>
@@ -1642,7 +1649,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2008</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">98</td>
+<th data-quarto-table-cell-role="th">98</th>
 <td>Adelie</td>
 <td>Dream</td>
 <td>33.1</td>
@@ -1653,7 +1660,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2008</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">116</td>
+<th data-quarto-table-cell-role="th">116</th>
 <td>Adelie</td>
 <td>Torgersen</td>
 <td>38.6</td>
@@ -1664,7 +1671,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2009</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">298</td>
+<th data-quarto-table-cell-role="th">298</th>
 <td>Chinstrap</td>
 <td>Dream</td>
 <td>43.2</td>
@@ -1675,7 +1682,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2007</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">104</td>
+<th data-quarto-table-cell-role="th">104</th>
 <td>Adelie</td>
 <td>Biscoe</td>
 <td>37.9</td>
@@ -1686,7 +1693,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2009</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">47</td>
+<th data-quarto-table-cell-role="th">47</th>
 <td>Adelie</td>
 <td>Dream</td>
 <td>37.5</td>
@@ -1697,7 +1704,7 @@ Name: body_mass_g, dtype: float64</code></pre>
 <td>2007</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">44</td>
+<th data-quarto-table-cell-role="th">44</th>
 <td>Adelie</td>
 <td>Dream</td>
 <td>37.0</td>
@@ -1718,8 +1725,8 @@ Name: body_mass_g, dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
 <p>We can create a histogram of our data by setting <code>kind='hist'</code> in <code>plot()</code>.</p>
 <div id="e63dd9dd" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using plot without subsetting data - a mess again</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using plot without subsetting data - a mess again</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>penguins.plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1730,12 +1737,12 @@ Name: body_mass_g, dtype: float64</code></pre>
 </div>
 <p>To gain actual information, let’s subset the data before plotting it. For example, suppose we want to do a preliminary graph for the distribution of flipper length. We could do it in this way:</p>
 <div id="e79d0c8b" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distribution of flipper length measurements</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distribution of flipper length measurements</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># First select data, then plot</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">'flipper_length_mm'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>,</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                                title<span class="op">=</span><span class="st">'Penguin flipper lengths'</span>,</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                                xlabel<span class="op">=</span><span class="st">'Flipper length (mm)'</span>,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                                grid<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                                grid<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1750,41 +1757,39 @@ Name: body_mass_g, dtype: float64</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p>Select the <code>bill_length_mm</code> and <code>bill_depth_mm</code> columns in the <code>penguins</code> data frame and then update the <code>kind</code> parameter to <code>box</code> to make boxplots of the bill length and bill depth. <!--
-
-::: {#34b3f904 .cell execution_count=25}
-``` {.python .cell-code}
-penguins[['bill_length_mm','bill_depth_mm']].plot(kind='box')
-```
-
-::: {.cell-output .cell-output-display}
-![](lesson-4-plotting-pandas_files/figure-html/cell-26-output-1.png){width=566 height=411}
-:::
-:::
-
-
---></p></li>
-<li><p>Which measurement shows a greater spread?</p></li>
-<li><p>Create a simple histogram of the flipper length of female gentoo penguins. <!--
-
-::: {#50c720b5 .cell execution_count=26}
-``` {.python .cell-code}
-penguins.loc[(penguins['species'] == 'Gentoo') & (penguins['sex'] == 'female'), 'flipper_length_mm'].plot(kind='hist')
-```
-
-::: {.cell-output .cell-output-display}
-![](lesson-4-plotting-pandas_files/figure-html/cell-27-output-1.png){width=593 height=411}
-:::
-:::
-
-
---></p></li>
+<li>Select the <code>bill_length_mm</code> and <code>bill_depth_mm</code> columns in the <code>penguins</code> data frame and then update the <code>kind</code> parameter to <code>box</code> to make boxplots of the bill length and bill depth. &lt;!–</li>
 </ol>
+<div id="34b3f904" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>penguins[[<span class="st">'bill_length_mm'</span>,<span class="st">'bill_depth_mm'</span>]].plot(kind<span class="op">=</span><span class="st">'box'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lesson-4-plotting-pandas_files/figure-html/cell-26-output-1.png" width="566" height="411" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>–&gt;</p>
+<ol start="2" type="1">
+<li><p>Which measurement shows a greater spread?</p></li>
+<li><p>Create a simple histogram of the flipper length of female gentoo penguins. &lt;!–</p></li>
+</ol>
+<div id="50c720b5" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>penguins.loc[(penguins[<span class="st">'species'</span>] <span class="op">==</span> <span class="st">'Gentoo'</span>) <span class="op">&amp;</span> (penguins[<span class="st">'sex'</span>] <span class="op">==</span> <span class="st">'female'</span>), <span class="st">'flipper_length_mm'</span>].plot(kind<span class="op">=</span><span class="st">'hist'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lesson-4-plotting-pandas_files/figure-html/cell-27-output-1.png" width="593" height="411" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>–&gt;</p>
 </div>
 </div>
 <ol start="4" type="1">
@@ -1797,7 +1802,7 @@ penguins.loc[(penguins['species'] == 'Gentoo') & (penguins['sex'] == 'female'), 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-schroeter_ucsb_2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. C. Schroeter <em>et al.</em>, <span>“<span>UCSB</span> <span>SONGS</span> <span>Mitigation</span> <span>Monitoring</span>: <span>Wetland</span> <span>Survey</span> - <span>Bird</span> <span>Abundance</span>.”</span> Environmental Data Initiative, 2024. doi: <a href="https://doi.org/10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072">10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072</a>. Available: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6">https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6</a>. [Accessed: Sep. 13, 2024]</div>
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. C. Schroeter <em>et al.</em>, <span>“<span>UCSB</span> <span>SONGS</span> <span>Mitigation</span> <span>Monitoring</span>: <span>Wetland</span> <span>Survey</span> - <span>Bird</span> <span>Abundance</span>.”</span> Environmental Data Initiative, 2024. doi: <a href="https://doi.org/10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072">10.6073/PASTA/5E5E4D0C6BBF455B9F2474ED05C31072</a>. Available: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6">https://portal.edirepository.org/nis/mapbrowse?packageid=edi.649.6</a>. [Accessed: Sept. 13, 2024]</div>
 </div>
 <div id="ref-palmerpenguins" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[2] </div><div class="csl-right-inline">A. M. Horst, A. P. Hill, and K. B. Gorman, <em>Palmerpenguins: Palmer archipelago (antarctica) penguin data</em>. 2020. Available: <a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a></div>
@@ -1854,13 +1859,14 @@ penguins.loc[(penguins['species'] == 'Gentoo') & (penguins['sex'] == 'female'), 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
