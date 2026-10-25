@@ -19,26 +19,47 @@ By the end of this lesson, students will be able to:
 
 The U.S. energy landscape relies on a mix of fossil fuels and renewables, each with unique environmental and economic impacts. As the nation works toward sustainability and energy security, understanding this energy mix is essential for informed policy and progress toward cleaner energy.
 
-In this lesson, we will use data from the U.S. [Energy Information Administration (EIA)](https://www.eia.gov) about [operable electric generating plants in the United States by energy source, as of May 2023](https://atlas.eia.gov/datasets/eia::power-plants/about). The dataset includes information on plant types and energy sources, offering insights into the diversity of power sources—from fossil fuels to renewables—that supply electricity nationwide. The dataset's metadata can be [accessed here](https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about).
-<!-- TODO: add citation -->
+In this lesson, we will use data from the U.S. [Energy Information Administration (EIA)](https://www.eia.gov) about [operable electric generating plants in the United States by energy source, as of February 2025](https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about) @eia_power_plants_2025. The dataset includes information on plant types and energy sources, offering insights into the diversity of power sources—from fossil fuels to renewables—that supply electricity nationwide. The dataset's metadata can be [accessed here](https://hub.arcgis.com/datasets/fedmaps::power-plants-in-the-u-s--2/about).
 <!-- TODO: add image -->
 The EIA data on electric plants has been downloaded as a CSV and reprojected into the EPSG:4269 CRS for this lesson. It can be accessed [here](https://github.com/carmengg/eds-220-book/blob/main/data/power_plants_epsg4269.csv).
 
-<!-- TODO: column descriptions: lat lon, -->
+Each row in the data is one power plant. These are the columns we will use in this lesson:
 
-Additionally, we will use a [TIGER shapefile of the US states from the United States Census Bureau](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2022.html#list-tab-790442341). 
-[TIGER](https://en.wikipedia.org/wiki/Topologically_Integrated_Geographic_Encoding_and_Referencing) stands for Topologically Integrated Geographic Encoding and Referencing. This used to be the data format in which the US Census distributed geospatial data, but since 2008 TIGER files are converted to shapefiles. You can view the metadata for all the TIGER shapefiles [here](https://www.census.gov/programs-surveys/geography/technical-documentation/complete-technical-documentation/tiger-geo-line.html). 
+| Column | Description |
+|--------|-------------|
+| `state` | State where the power plant is located |
+| `primsource` | Primary energy source of the power plant, for example solar, natural gas or wind |
+| `longitude`, `latitude` | Location of the power plant, in the NAD83 CRS (EPSG:4269) |
+
+Additionally, we will use a [TIGER shapefile of the US states from the United States Census Bureau](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341) @us_census_bureau_tiger_2026. 
+[TIGER](https://en.wikipedia.org/wiki/Topologically_Integrated_Geographic_Encoding_and_Referencing) stands for Topologically Integrated Geographic Encoding and Referencing. This used to be the data format in which the US Census distributed geospatial data, but since 2008 TIGER files are converted to shapefiles. You can view the metadata for all the TIGER shapefiles [here](https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2026/TGRSHP2026_TechDoc.pdf). 
 
 Follow these steps to download the shapefile with the United States' states:
 
-1. At the bottom of the [2022 page](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2022.html#list-tab-790442341), under Download, click on "Web Interface"
-2. For year, select 2022, and for layer type select "States (and equivalent)". Click submit. 
+1. At the [2026 TIGER page](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341), under Download, click on "Web Interface"
+2. For year, select 2026, and for layer type select "States (and equivalent)". Click submit. 
 3. Click on "Download national file".
 
 
-The column descriptions for the US states shapefile are:
+The column descriptions for the US states shapefile, from the [TIGER/Line Shapefiles technical documentation](https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2026/TGRSHP2026_TechDoc.pdf), are:
 
-![Source: TIGER/Line Shapefiles Technical Documentation](/book/images/lesson-11/tiger_shp_columns.png)
+| Column | Type | Description |
+|--------|------|-------------|
+| `REGION` | String | Region code |
+| `DIVISION` | String | Division code |
+| `STATEFP` | String | State FIPS code |
+| `STATENS` | String | State NS code |
+| `GEOID` | String | State identifier; state FIPS code |
+| `GEOIDFQ` | String | Fully qualified GEOID; used to join data tables from data.census.gov |
+| `STUSPS` | String | Two-character United States Postal Service (USPS) state postal abbreviation |
+| `NAME` | String | State name |
+| `LSAD` | String | LSAD code for the state |
+| `MTFCC` | String | MAF/TIGER Feature Class Code (G4000) |
+| `FUNCSTAT` | String | Functional status |
+| `ALAND` | Number | Land area |
+| `AWATER` | Number | Water area |
+| `INTPTLAT` | String | Latitude of the internal point |
+| `INTPTLON` | String | Longitude of the internal point |
 
 
 ## CSV to `geopandas.GeoDataFrame`
@@ -65,16 +86,8 @@ Next, we import the power plants dataset. In this lesson, we read it directly fr
 URL = 'https://raw.githubusercontent.com/carmengg/eds-220-book/refs/heads/main/data/power_plants_epsg4269.csv'
 power_plants = pd.read_csv(URL)
 
-# Simplify column names
-power_plants.columns = power_plants.columns.str.lower()
-
-# Drop first column
-power_plants = power_plants.drop(columns='unnamed: 0')
-
 power_plants.head(3)
 ```
-
-<!--TO DO: Need to drop the unnamed column from file--> 
 
 The power plants file is a CSV. Unlike shapefiles or other geospatial file formats, `geopandas` doesn't have a way to extract a geometry column from a CSV file, so we will need to create this geometry manually. 
 
@@ -154,7 +167,7 @@ These are some good resources to learn more about f-string formatting:
 Let's import the TIGER shapefile
 ```{python}
 # Import states data
-fp = os.path.join('data','tl_2022_us_state','tl_2022_us_state.shp')
+fp = os.path.join('data','tl_2026_us_state','tl_2026_us_state.shp')
 states = gpd.read_file(fp)
 
 # Simplify column names 
@@ -234,7 +247,7 @@ For this lesson, we want to use only the contiguous states. As seen in the plot,
 ## Check-in
 From the TIGER shapefiles metadata we know that:
  
-> In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
+> In addition to the fifty states, the Census Bureau treats the District of Columbia, Puerto Rico, and the Island Areas (American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the U.S. Virgin Islands) as statistical equivalents of states for the purpose of data presentation. 
 
 In [this US Census Bureau file](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) we can see what each code for the region, division, and state corresponds to. 
 
