@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>lesson-7-time-series – EDS 220 - Working with Environmental Datasets</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -94,10 +91,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -130,7 +127,7 @@ div.csl-indent {
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -143,7 +140,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -570,7 +567,7 @@ TODO
 <h2 class="anchored" data-anchor-id="timestamps">Timestamps</h2>
 <p>The <code>pandas</code> library represents an instant in time using the <code>pandas.Timestamp</code> class. For example:</p>
 <div id="2cc8d79e" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a timestamp</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pd.Timestamp(year<span class="op">=</span><span class="dv">2020</span>,</span>
@@ -578,17 +575,17 @@ TODO
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>             day<span class="op">=</span><span class="dv">18</span>,</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>             hour<span class="op">=</span><span class="dv">12</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>             minute<span class="op">=</span><span class="dv">30</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>             second<span class="op">=</span><span class="dv">15</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>             second<span class="op">=</span><span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="231">
 <pre><code>Timestamp('2020-10-18 12:30:15')</code></pre>
 </div>
 </div>
 <p>When we store multiple <code>pandas.Timestamps</code> in a <code>pandas.Series</code> the data type of the series is set to <code>datetime64[ns]</code>:</p>
 <div id="00b4235c" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Notice the data type of the series is datetime64</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Notice the data type of the series is datetime64</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pd.Series([pd.Timestamp(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">18</span>),</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           pd.Timestamp(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">17</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           pd.Timestamp(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">16</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           pd.Timestamp(<span class="dv">2020</span>, <span class="dv">10</span>, <span class="dv">16</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="232">
 <pre><code>0   2020-10-18
 1   2020-10-17
@@ -604,16 +601,16 @@ dtype: datetime64[ns]</code></pre>
 <h2 class="anchored" data-anchor-id="data-exploration">Data exploration</h2>
 <p>Let’s start by reading in the data and taking a look at it:</p>
 <div id="a2b2f4d0" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/carmengg/eds-220-book/main/data/boulder_colorado_2013_hourly_precipitation.csv'</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> pd.read_csv(URL)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>precip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>precip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="233">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -627,7 +624,7 @@ dtype: datetime64[ns]</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
+<td data-quarto-table-cell-role="th">0</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000101 00:00</td>
@@ -636,7 +633,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
+<td data-quarto-table-cell-role="th">1</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000101 01:00</td>
@@ -645,7 +642,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
+<td data-quarto-table-cell-role="th">2</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000102 20:00</td>
@@ -654,7 +651,7 @@ dtype: datetime64[ns]</code></pre>
 <td>q</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
+<td data-quarto-table-cell-role="th">3</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000103 01:00</td>
@@ -663,7 +660,7 @@ dtype: datetime64[ns]</code></pre>
 <td>q</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<td data-quarto-table-cell-role="th">4</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000103 05:00</td>
@@ -672,7 +669,7 @@ dtype: datetime64[ns]</code></pre>
 <td>q</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">...</th>
+<td data-quarto-table-cell-role="th">...</td>
 <td>...</td>
 <td>...</td>
 <td>...</td>
@@ -681,7 +678,7 @@ dtype: datetime64[ns]</code></pre>
 <td>...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">9001</th>
+<td data-quarto-table-cell-role="th">9001</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>20131222 01:00</td>
@@ -690,7 +687,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">9002</th>
+<td data-quarto-table-cell-role="th">9002</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>20131223 00:00</td>
@@ -699,7 +696,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">9003</th>
+<td data-quarto-table-cell-role="th">9003</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>20131223 02:00</td>
@@ -708,7 +705,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">9004</th>
+<td data-quarto-table-cell-role="th">9004</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>20131229 01:00</td>
@@ -717,7 +714,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">9005</th>
+<td data-quarto-table-cell-role="th">9005</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>20131231 00:00</td>
@@ -734,8 +731,8 @@ dtype: datetime64[ns]</code></pre>
 </div>
 <p>Notice the data has records from more than one station. We can check which ones using the <code>unique()</code> method:</p>
 <div id="85ec6725" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which stations are in the data</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>precip[<span class="st">'STATION_NAME'</span>].unique()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which stations are in the data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>precip[<span class="st">'STATION_NAME'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="234">
 <pre><code>array(['NEDERLAND 5 NNW CO US', 'ALLENSPARK 2 SE CO US',
        'LONGMONT 6 NW CO US', 'BOULDER 2 CO US'], dtype=object)</code></pre>
@@ -744,8 +741,8 @@ dtype: datetime64[ns]</code></pre>
 <p>So the data has hourly precipitation records from four stations in Boulder County. The rows are ordered by station first and then by date: all the records from the first station (2000 to 2013), followed by all the records from the second station, and so on. We will come back to this when we use the dates as the index. In this lesson, we will look at the total precipitation over all four stations.</p>
 <p>Let’s take an initial look at hour data:</p>
 <div id="59851dc5" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot hourly precipitation from all stations</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot hourly precipitation from all stations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -766,15 +763,15 @@ dtype: datetime64[ns]</code></pre>
 <h2 class="anchored" data-anchor-id="reading-in-missing-data-values">Reading in missing data values</h2>
 <p>The metadata states the missing values are indicated by the number 999.99. We can use this information to reload the data frame indicating 999.99 is the missing value. To do this, we add the <code>na_values</code> parameter to the <code>pandas.read_csv()</code> function to indicate additional values that should be recognized as <code>NA</code>. Since 999.99 only means “missing” in the <code>HPCP</code> column, we pass a dictionary that applies it to that column only:</p>
 <div id="ab2a1a86" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in CSV indicating NA values in HPCP column based on metadata</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in CSV indicating NA values in HPCP column based on metadata</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> pd.read_csv(URL, na_values<span class="op">=</span>{<span class="st">'HPCP'</span>: [<span class="fl">999.99</span>]})</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>precip.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>precip.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="236">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -788,7 +785,7 @@ dtype: datetime64[ns]</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
+<td data-quarto-table-cell-role="th">0</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000101 00:00</td>
@@ -797,7 +794,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
+<td data-quarto-table-cell-role="th">1</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000101 01:00</td>
@@ -806,7 +803,7 @@ dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
+<td data-quarto-table-cell-role="th">2</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000102 20:00</td>
@@ -815,7 +812,7 @@ dtype: datetime64[ns]</code></pre>
 <td>q</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
+<td data-quarto-table-cell-role="th">3</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000103 01:00</td>
@@ -824,7 +821,7 @@ dtype: datetime64[ns]</code></pre>
 <td>q</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<td data-quarto-table-cell-role="th">4</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>20000103 05:00</td>
@@ -841,7 +838,7 @@ dtype: datetime64[ns]</code></pre>
 <p>Notice that the first hourly precipitation value used to be 999.99 and it is now set to a <code>NaN</code>. Check the <code>na_values</code> parameter in the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html"><code>pd.read_csv()</code> documentation</a> to learn more about which values are identified as <code>NA</code> by default.</p>
 <p>We can try making our plot again:</p>
 <div id="9821bf6d" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -859,8 +856,8 @@ Remember the rows are ordered by station, so this plot goes through the years 20
 <h2 class="anchored" data-anchor-id="casting-strings-into-dates">Casting strings into dates</h2>
 <p>Notice that the <code>DATE</code> column in our data frame is not of type <code>datetime</code>. We can check this using the <code>dtypes</code> attribute for data frames:</p>
 <div id="d32f5514" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether DATE column is of type datetime</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>precip.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether DATE column is of type datetime</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>precip.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="238">
 <pre><code>STATION              object
 STATION_NAME         object
@@ -882,8 +879,8 @@ precip['DATE'].apply(type).unique()
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
 <div id="fe612aa2" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview DATE converted to timestamps</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pd.to_datetime(precip[<span class="st">'DATE'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview DATE converted to timestamps</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pd.to_datetime(precip[<span class="st">'DATE'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="239">
 <pre><code>0      2000-01-01 00:00:00
 1      2000-01-01 01:00:00
@@ -901,14 +898,14 @@ Name: DATE, Length: 9006, dtype: datetime64[ns]</code></pre>
 </div>
 <p>We can overwrite the <code>DATE</code> column with this output:</p>
 <div id="4d593883" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert DATE column to timestamps</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert DATE column to timestamps</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>precip[<span class="st">'DATE'</span>] <span class="op">=</span> pd.to_datetime(precip[<span class="st">'DATE'</span>])</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check DATE column data type is updated</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(precip.dtypes)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check new values</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>precip[<span class="st">'DATE'</span>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>precip[<span class="st">'DATE'</span>].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>STATION                     object
 STATION_NAME                object
@@ -929,7 +926,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 <p>We can make another attempt at plotting our precipitation data:</p>
 <div id="0d13d38f" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>precip.plot(x<span class="op">=</span><span class="st">'DATE'</span>, y<span class="op">=</span><span class="st">'HPCP'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>precip.plot(x<span class="op">=</span><span class="st">'DATE'</span>, y<span class="op">=</span><span class="st">'HPCP'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -942,16 +939,16 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <!-- However, the lines jump back and forth: `plot()` connects the points in the order of the rows, so the line goes from 2000 to 2013 for the first station, jumps back to 2000 for the next station, and so on. -->
 <p>Next, using our <code>DATE</code> column as the index will allow us to perform operations with respect to time, including subsetting and resampling. We will also sort the index using <code>sort_index()</code>, so that the rows are in chronological order instead of grouped by station. This will remove some artifacts from our plot. In general, it is good practice to sort a time index, since many time series operations assume the dates are in order.</p>
 <div id="7c290858" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set DATE column as index and sort rows chronologically</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set DATE column as index and sort rows chronologically</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>precip <span class="op">=</span> precip.set_index(<span class="st">'DATE'</span>).sort_index()</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect new index</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>precip.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>precip.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="242">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -972,7 +969,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2000-01-01 00:00:00</th>
+<td data-quarto-table-cell-role="th">2000-01-01 00:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>NaN</td>
@@ -980,7 +977,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2000-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2000-01-01 01:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>0.0</td>
@@ -988,7 +985,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2000-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2000-01-01 01:00:00</td>
 <td>COOP:055121</td>
 <td>LONGMONT 6 NW CO US</td>
 <td>0.0</td>
@@ -996,7 +993,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2000-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2000-01-01 01:00:00</td>
 <td>COOP:050183</td>
 <td>ALLENSPARK 2 SE CO US</td>
 <td>0.0</td>
@@ -1004,7 +1001,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2000-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2000-01-01 01:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>0.0</td>
@@ -1019,7 +1016,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 <p>Since we know the default behavior of <code>plot()</code> is to use the index as the <span class="math inline">\(x\)</span>-axis and make a line plot for each numeric column, we can simplify our plot making like this:</p>
 <div id="a9e7ba83" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>precip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1034,14 +1031,14 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Leverage <code>pandas.read_csv()</code> to set a known index
+Leverage <code>pandas.read_csv()</code> to set a known index
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>If we already have information about our data frame and know which column we will use as the index, we can directly set the index when we load the data by using:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(<span class="bu">file</span>, index_col<span class="op">=</span><span class="st">'index_column'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(<span class="bu">file</span>, index_col<span class="op">=</span><span class="st">'index_column'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If we also need our index to be of type <code>datetime</code> and we have a known dates column, then we can also create a <code>datetime</code> index directly when loading the data:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(<span class="bu">file</span>, index_col<span class="op">=</span><span class="st">'date_column'</span>, parse_dates<span class="op">=</span>[<span class="st">'date_column'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pandas.read_csv(<span class="bu">file</span>, index_col<span class="op">=</span><span class="st">'date_column'</span>, parse_dates<span class="op">=</span>[<span class="st">'date_column'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If the rows in the file are not in chronological order, remember to add <code>sort_index()</code> after loading the data.</p>
 </div>
 </div>
@@ -1054,13 +1051,13 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <h4 class="anchored" data-anchor-id="example-1">Example</h4>
 <p>We can use <code>.loc[year-month]</code> to select data from a specific year and month:</p>
 <div id="3f4f69ad" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select precipitation data from September 2013</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013-09'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select precipitation data from September 2013</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013-09'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="244">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1081,7 +1078,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-01 00:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-01 00:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>NaN</td>
@@ -1089,7 +1086,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-09-01 00:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-01 00:00:00</td>
 <td>COOP:055121</td>
 <td>LONGMONT 6 NW CO US</td>
 <td>NaN</td>
@@ -1097,7 +1094,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-01 00:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-01 00:00:00</td>
 <td>COOP:050183</td>
 <td>ALLENSPARK 2 SE CO US</td>
 <td>NaN</td>
@@ -1105,7 +1102,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-09-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-01 01:00:00</td>
 <td>COOP:050183</td>
 <td>ALLENSPARK 2 SE CO US</td>
 <td>NaN</td>
@@ -1113,7 +1110,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-01 01:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>NaN</td>
@@ -1121,7 +1118,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">...</th>
+<td data-quarto-table-cell-role="th">...</td>
 <td>...</td>
 <td>...</td>
 <td>...</td>
@@ -1129,7 +1126,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td>...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-27 14:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-27 14:00:00</td>
 <td>COOP:055121</td>
 <td>LONGMONT 6 NW CO US</td>
 <td>0.1</td>
@@ -1137,7 +1134,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-09-27 15:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-27 15:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>0.1</td>
@@ -1145,7 +1142,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-27 17:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-27 17:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>0.1</td>
@@ -1153,7 +1150,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-09-27 18:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-27 18:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>0.1</td>
@@ -1161,7 +1158,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-09-27 20:00:00</th>
+<td data-quarto-table-cell-role="th">2013-09-27 20:00:00</td>
 <td>COOP:055121</td>
 <td>LONGMONT 6 NW CO US</td>
 <td>0.1</td>
@@ -1177,13 +1174,13 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 <p>Or simply select data from a given year using <code>.loc[year]</code>:</p>
 <div id="62dfec20" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select 2013 precipitation data</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select 2013 precipitation data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="245">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1204,7 +1201,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-01-01 00:00:00</th>
+<td data-quarto-table-cell-role="th">2013-01-01 00:00:00</td>
 <td>COOP:050183</td>
 <td>ALLENSPARK 2 SE CO US</td>
 <td>NaN</td>
@@ -1212,7 +1209,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-01-01 01:00:00</td>
 <td>COOP:055121</td>
 <td>LONGMONT 6 NW CO US</td>
 <td>0.0</td>
@@ -1220,7 +1217,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-01-01 01:00:00</td>
 <td>COOP:050183</td>
 <td>ALLENSPARK 2 SE CO US</td>
 <td>NaN</td>
@@ -1228,7 +1225,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-01-01 01:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>0.0</td>
@@ -1236,7 +1233,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-01-01 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-01-01 01:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>0.0</td>
@@ -1244,7 +1241,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">...</th>
+<td data-quarto-table-cell-role="th">...</td>
 <td>...</td>
 <td>...</td>
 <td>...</td>
@@ -1252,7 +1249,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td>...</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-12-24 18:00:00</th>
+<td data-quarto-table-cell-role="th">2013-12-24 18:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>0.1</td>
@@ -1260,7 +1257,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-12-28 22:00:00</th>
+<td data-quarto-table-cell-role="th">2013-12-28 22:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>0.1</td>
@@ -1268,7 +1265,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-12-29 01:00:00</th>
+<td data-quarto-table-cell-role="th">2013-12-29 01:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>NaN</td>
@@ -1276,7 +1273,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2013-12-30 04:00:00</th>
+<td data-quarto-table-cell-role="th">2013-12-30 04:00:00</td>
 <td>COOP:055881</td>
 <td>NEDERLAND 5 NNW CO US</td>
 <td>0.1</td>
@@ -1284,7 +1281,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <td></td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2013-12-31 00:00:00</th>
+<td data-quarto-table-cell-role="th">2013-12-31 00:00:00</td>
 <td>COOP:050843</td>
 <td>BOULDER 2 CO US</td>
 <td>NaN</td>
@@ -1300,7 +1297,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 </div>
 <p>We can use this selection to plot data as usual. Notice we have a lot of gaps due to missing data:</p>
 <div id="227b9522" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>].plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>].plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1314,7 +1311,7 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <section id="resample" class="level2">
 <h2 class="anchored" data-anchor-id="resample">Resample</h2>
 <p>Resampling a time series means converting a time series from one frequency to another. For example, monthly to yearly (downsampling) or weekly to daily (upsampling). We can resample with the <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html"><code>resample()</code></a> method. The simplest use is to call</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df.resample(new_frequency).aggregator_function()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df.resample(new_frequency).aggregator_function()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>where:</p>
 <ul>
 <li><code>new_frequency</code> is a string representing the new frequency to resample the data, for example <code>'D'</code> for day, <code>'W'</code> for week, <code>'MS'</code> or <code>'ME'</code> for month start and month end, <code>'YS'</code> or <code>'YE'</code> for year start and year end.</li>
@@ -1327,14 +1324,14 @@ Name: DATE, dtype: datetime64[ns]</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Month end or month start?
+Month end or month start?
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p><code>'ME'</code> stands for “month end” and <code>'MS'</code> for “month start”. Both group the data by calendar month. The only difference is how each month is labeled: <code>'ME'</code> uses the last day of the month and <code>'MS'</code> uses the first day. For example, this is the total monthly precipitation for the first three months of 2013 with each option:</p>
 <div id="5f8ac43f" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monthly totals labeled by the last day of each month</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'ME'</span>).<span class="bu">sum</span>().head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monthly totals labeled by the last day of each month</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'ME'</span>).<span class="bu">sum</span>().head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="247">
 <pre><code>DATE
 2013-01-31    1.0
@@ -1344,8 +1341,8 @@ Freq: ME, Name: HPCP, dtype: float64</code></pre>
 </div>
 </div>
 <div id="aef12848" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monthly totals labeled by the first day of each month</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'MS'</span>).<span class="bu">sum</span>().head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monthly totals labeled by the first day of each month</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'MS'</span>).<span class="bu">sum</span>().head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="248">
 <pre><code>DATE
 2013-01-01    1.0
@@ -1361,18 +1358,18 @@ Freq: MS, Name: HPCP, dtype: float64</code></pre>
 <h4 class="anchored" data-anchor-id="example-2">Example</h4>
 <p>Our 2013 precipitation data has hourly frequency and we want to resample it to daily frequency.</p>
 <div id="74bb329b" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample 2013 hourly data to daily frequency: no output</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'D'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample 2013 hourly data to daily frequency: no output</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'D'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="249">
 <pre><code>&lt;pandas.core.resample.DatetimeIndexResampler object at 0x1617a2990&gt;</code></pre>
 </div>
 </div>
 <p>To get an output we need to add an aggregator function that indicates how we want to summarize the data that falls on each day. In this case we want the total precipitation on a day, so we aggregate it using <code>sum()</code>:</p>
 <div id="86c51bac" class="cell" data-execution_count="20">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Total daily precipitation in 2013 (sum over all stations)</span></span>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Total daily precipitation in 2013 (sum over all stations)</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>daily_precip_2013 <span class="op">=</span> precip.loc[<span class="st">'2013'</span>, <span class="st">'HPCP'</span>].resample(<span class="st">'D'</span>).<span class="bu">sum</span>()</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.head(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="250">
 <pre><code>DATE
 2013-01-01    0.0
@@ -1390,18 +1387,18 @@ Freq: D, Name: HPCP, dtype: float64</code></pre>
 </ul>
 <p>The index has now changed to be days in 2013 and, since we selected a single column, the result is a <code>pandas.Series</code>. We should also rename the series since it is no longer hourly precipitation:</p>
 <div id="f774eac3" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename series to match resample</span></span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename series to match resample</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>daily_precip_2013 <span class="op">=</span> daily_precip_2013.rename(<span class="st">'daily_precipitation'</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="251">
 <pre><code>'daily_precipitation'</code></pre>
 </div>
 </div>
 <p>Finally, we can plot our data:</p>
 <div id="c61e0168" class="cell" data-execution_count="22">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.plot(ylabel<span class="op">=</span><span class="st">'daily precipitation (in)'</span>,</span>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.plot(ylabel<span class="op">=</span><span class="st">'daily precipitation (in)'</span>,</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                       xlabel<span class="op">=</span><span class="st">''</span>,</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                       title<span class="op">=</span><span class="st">'Total precipitation over four stations in Boulder County, CO (2013)'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                       title<span class="op">=</span><span class="st">'Total precipitation over four stations in Boulder County, CO (2013)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1416,7 +1413,7 @@ Freq: D, Name: HPCP, dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="complete-workflow">Complete workflow</h2>
 <p>The previous code includes a lot of exploratory functions and trials. While it is important to keep our data exploration documented, once we are certain of our data wrangling, we can streamline our analyses to only include the code that directly contributes to the output. Moving on, we will start to collect all our relevant code to create such complete workflows. For this lesson, the code below will produce the final graph:</p>
 <div id="89c86099" class="cell" data-execution_count="23">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in hourly precipitation data from four stations in Boulder County, CO</span></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># HPCP = hourly precipitation (unique numerical column in data frame)</span></span>
@@ -1439,7 +1436,7 @@ Freq: D, Name: HPCP, dtype: float64</code></pre>
 <span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot time series</span></span>
 <span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>daily_precip_2013.plot(ylabel<span class="op">=</span><span class="st">'daily precipitation (in)'</span>,</span>
 <span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>                       xlabel<span class="op">=</span><span class="st">''</span>,</span>
-<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>                       title<span class="op">=</span><span class="st">'Total precipitation over four stations in Boulder County, CO (2013)'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>                       title<span class="op">=</span><span class="st">'Total precipitation over four stations in Boulder County, CO (2013)'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1518,14 +1515,13 @@ Freq: D, Name: HPCP, dtype: float64</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
