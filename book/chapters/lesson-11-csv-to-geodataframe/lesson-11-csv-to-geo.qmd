@@ -109,7 +109,7 @@ power_plants = gpd.GeoDataFrame(power_plants,    # Data
 Let's check that we now have a `geometry` column:
 
 ```{python}
-power_plants['geometry']
+power_plants.geometry
 ```
 
 With the `geometry` column and CRS, we can plot our dataset:
@@ -292,7 +292,7 @@ power_plants = power_plants[~power_plants['state'].isin(['Puerto Rico','Hawaii',
 Before we plot our data, let's make sure they are in the same CRS:
 
 ```{python}
-contiguous.crs == power_plants.crs
+assert contiguous.crs == power_plants.crs
 ```
 
 ```{python}
@@ -569,14 +569,12 @@ plot_3_energy_sources('New Jersey',
 
 Writing functions can feel challenging at first, but with practice, they’ll start to come naturally whenever you find yourself reusing blocks of code. Keep experimenting and practicing—it gets easier with each function you write!
 
-<!--
-As you go forward, some tips that can help you write them are:
 
-- create the code for a single 
--->
 
-:::{.callout-tip}
-## Exercise
+## Exercises
+
+::: {.callout-tip icon=false }
+## Exercise 1
 
 Write a function `states_with_source` that takes a primary energy source (e.g., 'solar') and returns a _list_ of states that use that source. [**CHECK** the answer's function also takes `power_plants` as a parameter.]
 
@@ -603,4 +601,43 @@ def states_with_source(source_type, power_plants):
     return states
 ```
 -->
+:::
+
+::: {.callout-tip}
+## Exercise 2
+
+Create a function called `power_source_counts` that, given a power source, returns a Series with the counts of power plants by state that use that source.
+
+Follow the steps:
+
+1. solve the problem for a specific example (e.g., 'wind')
+2. identify which parts of the code need to be generalized and update these parts
+3. wrap this into a function
+4. add additional parameters or assert statements if needed
+
+:::
+
+::: {.callout-tip}
+## Exercise 3
+
+1. Recreate the following plot.
+2. Make a function that produces this plot for any power source. 
+3. Brainstorm ways in which your function might break or not produced the desired output.
+
+![](images/week6-exercise1.png)
+
+:::
+
+::: {.callout-tip}
+## Bonus
+Create a function that, for a given power source, produces a plot like this one. Many ways of doing it, a hint could be to zip three things together: the axes, the top 3 states, and the counts of power plants in those states. 
+
+```python
+# Example of more than two zipped items
+
+for a, b, c in zip([1,2,3], ['x','y','z'], [10,20,30]):
+    print(a, b, c)
+```
+
+![](images/week6-exercise2.png)
 :::
