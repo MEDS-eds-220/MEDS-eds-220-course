@@ -6,6 +6,15 @@ toc-title: In this lesson
 
 In this lesson we will learn how to join data frames and will apply this to creating a [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) with `geopandas`.
 
+By the end of this lesson, students will be able to:
+
+- write `if`-`else` statements to run different code depending on a condition
+- merge data frames  using `merge()`
+- merge a `pandas.DataFrame` into a `geopandas.GeoDataFrame` without losing its geometry
+- create a choropleth map with `geopandas`
+- reproject a `geopandas.GeoDataFrame` using `to_crs()`
+- use a dataset's metadata to anticipate and question the results of an analysis
+
 ## About the data
 
 The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). 
@@ -276,9 +285,28 @@ arctic_countries = countries.merge(n_comms,
 print(f"Countries in arctic_countries: {len(arctic_countries)}")
 ```
 
+#### Checking with `indicator=True`
+
+Another way to find rows without a match is to add `indicator=True` to the merge. This creates a `_merge` column that says whether each row was found in both data frames or only in one of them:
+
+```{python}
+left = pd.DataFrame({'key': ['a', 'b', 'c'], 'x': [1, 2, 3]})
+right = pd.DataFrame({'key': ['a', 'b', 'd'], 'y': [4, 5, 6]})
+
+pd.merge(left, right, how='outer', on='key', indicator=True)
+```
+
 ## Choropleth map
 
-A [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) is an efficient way to visualize aggregate data per region. 
+A [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) is an efficient way to visualize aggregate data per region.
+
+:::{.callout-tip}
+## Check-in
+Re-read the [dataset's abstract](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80). Which countries do you expect to have the most communities? 
+<!--
+Communities are at or above 55°N with at least 10,000 people, except in Alaska, where the minimum is 500. Expect Russia to have the most, the US to look high because of the lower threshold, and countries with few large northern towns (Canada, Iceland, Greenland) to look low.
+-->
+:::
 
 Making a choropleth map from our polygons `GeoDataFrame` is easy; we just need to specify the `column` parameter in `plot()` and make it equal to the column with the values we want to plot in each country:
 
@@ -286,6 +314,14 @@ Making a choropleth map from our polygons `GeoDataFrame` is easy; we just need t
 arctic_countries.plot(column='n_communities',
                       legend=True)
 ```
+
+:::{.callout-tip}
+## Check-in
+Compare the map with your predictions. Does this map show where people live in the Arctic, or how the communities were selected for this dataset? What title would describe the map more accurately?
+<!--
+The map mostly shows the selection rules. 108 of the 115 US communities have fewer than 10,000 people, so they are only included because of the Alaska exception. Canada has only 7 communities despite its large Arctic area, because few towns above 55°N reach 10,000 people. The UK, Denmark, Lithuania, Latvia and Belarus count as "Arctic" only because of the 55°N cutoff, and only 41 of the 1,424 communities are north of the Arctic Circle (66.56°N). A more accurate title: "Number of communities at or above 55°N with at least 10,000 people (500 in Alaska), 2022".
+-->
+:::
 
 ## Reprojecting
 
