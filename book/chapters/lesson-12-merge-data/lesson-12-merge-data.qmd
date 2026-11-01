@@ -182,7 +182,16 @@ where
 - `how` specifies the type of join between the left and right data frames, ([check the options here](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge)), the default is to do an inner join,
 - `on` specifies the column to join on; this column must be present in both our data frames. 
 
-When merging a `geopandas.GeoDataFrame` with a `pandas.DataFrame`, the `geopandas.GeoDataFrame` must be "on the left" to retain the geospatial information. Otherwise, the output will be a `pandas.DataFrame`.
+The `pandas.merge()` function is also available as a method of data frames: 
+```python
+left_df.merge(right_df, how=..., on=...)
+``` 
+does the same as 
+```python
+pd.merge(left_df, right_df, how=..., on=...)
+``` 
+
+When one of the data frames is a `geopandas.GeoDataFrame`, GeoPandas recommends calling `merge()` from the geodataframe, so the output keeps its geometry. With `pd.merge()`, the geodataframe must be the left argument, otherwise you lose the geometry and the output is a plain `pandas.DataFrame`.
 
 So, we merge the `n_comms` and `country_names` data frames using a left join:
 
@@ -210,10 +219,9 @@ Create a new variable named `arctic_countries` which is the result of an inner j
 <!--
 ```{python}
 # Merge data frames 
-arctic_countries = pd.merge(countries,
-                            n_comms,
-                            how='inner',
-                            on='admin')
+arctic_countries = countries.merge(n_comms,
+                                   how='inner',
+                                   on='admin')
 ```
 -->
 :::
