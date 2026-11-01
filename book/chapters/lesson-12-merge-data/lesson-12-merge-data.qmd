@@ -36,7 +36,7 @@ The geoname-id description is the US Census Bureau's definition of a GEOID, but 
 -->
 :::
 
-The second dataset is [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
+The second dataset is [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/) @natural_earth_admin0_50m.
 We can obtain this dataset by downloading the shapefile. 
 [Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with free, ready-to-use data for creating maps. 
 
@@ -370,16 +370,30 @@ arctic_countries.plot(
     linewidth=0.5,
     legend_kwds={
         "shrink": 0.7,
-        "label": "Number of Arctic Communities",
+        "label": "Number of Communities",
         "orientation": "horizontal",
         "pad": 0.05
     }
 )
 
 # Add title for better context
-ax.set_title('Distribution of Arctic Communities', fontsize=18, weight='bold', pad=15)
+ax.set_title('Communities at or above 55°N, 2022\n(at least 10,000 people; 500 in Alaska)',
+             fontsize=14, weight='bold', pad=15)
 
 plt.show()
 ```
+
+:::{.callout-tip}
+## Check-in
+Critique this map. What does it do well, what could mislead a reader, and what would you change to improve it? Consider both the data and the design choices.
+<!--
+Possible answers:
+- The whole United States is colored, but only Alaska has communities in the data (we'll fix this in the next lesson by clipping).
+- Russia's 774 communities stretch the color scale, so most other countries look the same. A classified scale (for example `scheme='quantiles'`) or a log scale would show more differences.
+- Counts depend on the dataset's selection rules (different population minimum for Alaska), so the map compares how communities were selected as much as where people live. Mapping total population, or adding the community points on top, would tell a different story.
+- Small units like Aland and the Faroe Islands are almost invisible.
+- There is no source or caption, and no context for areas without data (oceans, countries with no communities).
+-->
+:::
 
 Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the entire United States territory is in it, when we should only have Alaska. **In our next lesson we will review strategies to clip and subset vector data and return to this plot in our discussion section.**
