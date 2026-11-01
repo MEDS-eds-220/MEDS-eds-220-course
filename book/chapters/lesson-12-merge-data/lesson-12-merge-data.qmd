@@ -228,30 +228,40 @@ arctic_countries = countries.merge(n_comms,
 
 ## Reviewing results
 
-Start by setting `'admin'` as our index:
+It is always a good idea to check the number of rows after a merge. Our `n_comms` data frame has one row per country, but the merged data frame has one row less:
 
 ```{python}
-arctic_countries = arctic_countries.set_index('admin')
+print(f"Countries in n_comms: {len(n_comms)}")
+print(f"Countries in arctic_countries: {len(arctic_countries)}")
 ```
 
-Notice that the row for Aland Islands is not present in the merged data frame:
+An inner join only keeps the rows that have a match in both data frames, so one country in `n_comms` had no match in `countries`. We can find it using `isin()`:
 
 ```{python}
-arctic_countries
+# Countries in n_comms without a match in countries
+n_comms[~n_comms['admin'].isin(countries['admin'])]
 ```
 
-The `values` attribute of a data frame returns *all* the values in the data frame as an array. We can verify the value 'Aland Islands' was *nowhere* in our original countries data frame like this:
+The Aland Islands are an autonomous region of Finland and there is one Arctic community registered in this region.
+Like the Faroe Islands and Greenland, the Aland Islands have their own country code in the Arctic communities data and their own polygon in Natural Earth's data.
+So why didn't they match? Let's look for them in the `countries` data frame:
 
 ```{python}
-# Check Aland Islands is nowhere in data frame
-'Aland Islands' not in countries.values
+countries[countries['admin'].str.contains('Aland')]
 ```
 
-The Aland Islands are an autonomous region of Finland and there is one Arctic community registered in this region. 
-We will directly add one to Finland to not lose this piece of data:
+Natural Earth's data calls this region 'Aland', while our `country_names` data uses 'Aland Islands'. The values in the column we join on must match *exactly* for the merge to find them.
+We update the name in `n_comms` to match the `countries` data and merge again:
 
 ```{python}
-arctic_countries.at['Finland', 'n_communities'] += 1
+# Match the name used in the countries data
+n_comms['admin'] = n_comms['admin'].replace('Aland Islands', 'Aland')
+
+# Merge again
+arctic_countries = countries.merge(n_comms,
+                                   how='inner',
+                                   on='admin')
+print(f"Countries in arctic_countries: {len(arctic_countries)}")
 ```
 
 ## Choropleth map
