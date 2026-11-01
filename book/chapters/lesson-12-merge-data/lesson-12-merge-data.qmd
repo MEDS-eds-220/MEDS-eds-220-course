@@ -13,20 +13,20 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 ```
 -->
 
-# 11 Reprojecting
+# 13 Reprojecting and merging
 
-In this section we will learn how to join dataframes and will apply this to creating a [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) with `geopandas`.
+In this section we will learn how to join data frames and will apply this to creating a [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) with `geopandas`.
 
 ## About the data
 
 The first dataset we will use is a [list of Arctic communities and their location](https://search.dataone.org/view/doi%3A10.18739%2FA28S4JQ80) @brook_approximate_2023 created by the [Alaska Native Tribal Health Consortium](https://www.anthc.org). This data comes in a GeoJSON file with the following attributes:
 
-- **name**: name of Arctic community, 
+- **name**: name of Arctic community
 - **population**: population of Arctic community, as of 2022
 - **country**: country that the Arctic community falls within (see dataset metadata for the codes)
 - **geoname-id**: numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data
 
-The second dataset is [Natural Earth's medium-scale  cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
+The second dataset is [Natural Earth's medium-scale cultural boundaries data for countries (1:50m)](https://www.naturalearthdata.com/downloads/50m-cultural-vectors/). 
 We can obtain this dataset by downloading the shapefile. 
 [Natural Earth](https://www.naturalearthdata.com) is a public domain dataset with free, ready-to-use data for creating maps. 
 
@@ -71,13 +71,13 @@ communities = gpd.read_file(URL)
 communities.head()
 ```
 
-The CRS of the `communities` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees.
+The CRS of the `countries` is EPSG:4326. Remember all GeoJSON files are given in this CRS and all points are expressed in longitude and latitude units of decimal degrees.
 
 ```{python}
 print(countries.crs)
 ```
 
-Since the CRSs of our geospatila data match, it is easy to take a quick look at our communities data by plotting it on top of the countries dataframe:
+Since the CRSs of our geospatial data match, it is easy to take a quick look at our communities data by plotting it on top of the countries data frame:
 
 ```{python}
 # Verify CRSs match
@@ -109,10 +109,10 @@ n_comms = (communities.groupby('country')
 
 Let's break this down:
 
-- We start with our `communities` dataframe and use `groupby('country')` to group by country code.
+- We start with our `communities` data frame and use `groupby('country')` to group by country code.
 - Then we use [`size()`](https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.size.html) as an aggregator function to calculate the size of each group.
 - The result of this operation is a `pandas.Series` indexed by the `country` values.
-- By resetting the index we transform the `pandas.Series` into a `pandas.DataFrame`, the index is now a column named `country` and the values of the series are named `n_communities`.
+- By resetting the index we transform the `pandas.Series` into a `pandas.DataFrame`; the index is now a column named `country` and the values of the series are named `n_communities`.
 
 ```{python}
 # Number of Arctic communities per country
@@ -128,7 +128,7 @@ Currently our datasets do not have any columns in common:
 set(countries.columns).intersection(n_comms.columns)
 ```
 
-The output `set()` represents the empty set. This might not be as informative, so let's write a different information statement:
+The output `set()` represents the empty set. This might not be as informative, so let's write a different notification:
 
 ```{python}
 common_columns = set(countries.columns).intersection(n_comms.columns)
@@ -144,15 +144,15 @@ Remember that an `if-else` statement is a control structure that allows code to 
 
 :::{.callout-tip}
 ## Check-in
-Wrap up the previous code into a function called `check_common_columns` that prints a message depending of whether two data frames have common columns or not. Don't forget to include a docstring!
+Wrap up the previous code into a function called `check_common_columns` that prints a message depending on whether two data frames have common columns or not. Don't forget to include a docstring!
 <!--
 
 ```{python}
 def check_common_columns(df1, df2):
     """
-    Prints a message depending whether df1 and df2 have columns in common
+    Prints a message depending on whether df1 and df2 have columns in common
 
-     Parameters:
+    Parameters:
     - df1: The first DataFrame.
     - df2: The second DataFrame.
     
@@ -174,7 +174,7 @@ def check_common_columns(df1, df2):
 
 ## Merging data frames
 
-We can use the `country_names` data frame to add the names countries into the `n_comms` data which, in turn, will allow us to merge that data frame with the `country_names` data. To merge dataframes we can use the [`pandas.merge()` function](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge). 
+We can use the `country_names` data frame to add the country names into the `n_comms` data which, in turn, will allow us to merge that data frame with the `countries` data. To merge data frames we can use the [`pandas.merge()` function](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge). 
 The basic syntax for it is:
 
 ```python
@@ -185,11 +185,11 @@ output_df = pd.merge(left_df,
 ```
 where
 
-- `output_df` is the dataframe resulting from the merge,
-- `left_df` is the dataframe we have "on the left side",
-- `right_df` is the dataframe we have "on the right side",
-- `how` specifies the type of join between the left and right dataframes, ([check the options here](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge)), the default is to do an inner join,
-- `on` specifies the column to join on, this column must be present in both our dataframes. 
+- `output_df` is the data frame resulting from the merge,
+- `left_df` is the data frame we have "on the left side",
+- `right_df` is the data frame we have "on the right side",
+- `how` specifies the type of join between the left and right data frames, ([check the options here](https://pandas.pydata.org/docs/reference/api/pandas.merge.html#pandas.merge)), the default is to do an inner join,
+- `on` specifies the column to join on; this column must be present in both our data frames. 
 
 When merging a `geopandas.GeoDataFrame` with a `pandas.DataFrame`, the `geopandas.GeoDataFrame` must be "on the left" to retain the geospatial information. Otherwise, the output will be a `pandas.DataFrame`.
 
@@ -213,7 +213,7 @@ check_common_columns(n_comms, countries)
 
 :::{.callout-tip}
 ## Check-in
-Create a new variable named `arctic_countries` which is the result of an inner join between our `countries` and `n_comms` dataframes. The inner joun will merge the subset of rows that have matches in both the left table and the right table.
+Create a new variable named `arctic_countries` which is the result of an inner join between our `countries` and `n_comms` data frames. The inner join will merge the subset of rows that have matches in both the left table and the right table.
 
 ![Image source: Data Modeling Essentials, NCEAS Learning Hub @do-linh_open_2023](/book/images/merging_data/join-diagrams-inner.png)
 <!--
@@ -235,20 +235,20 @@ Start by setting `'admin'` as our index:
 arctic_countries = arctic_countries.set_index('admin')
 ```
 
-Notice that the row for Aland Islands is not present in the merged dataframe:
+Notice that the row for Aland Islands is not present in the merged data frame:
 
 ```{python}
 arctic_countries
 ```
 
-The `values` attribute of a data frame returns *all* the values in the data frame as an array. We can verify the value 'Aland Islands' was *nowhere* in our original countries dataframe like this:
+The `values` attribute of a data frame returns *all* the values in the data frame as an array. We can verify the value 'Aland Islands' was *nowhere* in our original countries data frame like this:
 
 ```{python}
 # Check Aland Islands is nowhere in data frame
 'Aland Islands' not in countries.values
 ```
 
-The Aland Islands is an autonomous region of Finland and there is one Arctic community registered in this region. 
+The Aland Islands are an autonomous region of Finland and there is one Arctic community registered in this region. 
 We will directly add one to Finland to not lose this piece of data:
 
 ```{python}
@@ -270,7 +270,7 @@ arctic_countries.plot(column='n_communities',
 
 Remember that CRSs reflect cultural views and even biases. Any map projection involves choices about which areas to emphasize, minimize, or distort, and those choices can influence how viewers perceive different regions. In our map, using the EPSG:4326 CRS is, among other things, mapping the Arctic regions as far apart, while they are actually near each other.
 
-**Reprojecting** means changing the coordinate reference system of your geospatial data. In our case, we will reproject the Alaska geo-dataframe to the CRS EPSG:3413. 
+**Reprojecting** means changing the coordinate reference system of your geospatial data. In our case, we will reproject the `arctic_countries` geo-dataframe to the CRS EPSG:3413. 
 This CRS is a *projected* CRS, better suited for working with data from the Arctic region:
 
 ![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/3413/)](/book/images/lesson-12/epsg_3413.png)
@@ -284,7 +284,7 @@ where:
 
 - `updated_geodf` is the output of the method, a new geodataframe (`to_crs()` does not work in place), 
 - `geodf` is the `geopandas.GeoDataFrame` we want to transform, 
-- `new_crs` the CRS we want to convert to, this is an object of type CRS or string representing the CRS (ex: `'epsg:3413'`). 
+- `new_crs` is the CRS we want to convert to; this is an object of type CRS or a string representing the CRS (ex: `'epsg:3413'`). 
 
 In our case:
 
@@ -320,10 +320,10 @@ arctic_countries.plot(
     }
 )
 
-# Add title and subtitle for better context
+# Add title for better context
 ax.set_title('Distribution of Arctic Communities', fontsize=18, weight='bold', pad=15)
 
 plt.show()
 ```
 
-Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the entire United States territory is in it, when we should only have Alaska. **In our next lesson we will review startegies to clip and subset vector data and return to this plot in our discussion section.**
+Although the new projection clearly improves the presentation of the data, there are still issues with this plot! Mainly, the entire United States territory is in it, when we should only have Alaska. **In our next lesson we will review strategies to clip and subset vector data and return to this plot in our discussion section.**
