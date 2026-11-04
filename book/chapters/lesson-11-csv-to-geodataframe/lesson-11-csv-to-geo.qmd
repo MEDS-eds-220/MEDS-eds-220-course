@@ -411,7 +411,7 @@ plt.show()
 ## Exercise
 1. Select the power plants in California in a variable named `ca_power_plants`.
 
-2. Create a _list_ named `top_sources` with California's top 3 electric primary sources.
+2. Create a _list_ named `top_sources` with California's top 3 primary sources by number of power plants. That is, the 3 values of `primsource` that appear in the most California power plants.
 
 3. Isolate the California state boundary in a variable named `ca_boundary`.
 
@@ -419,7 +419,7 @@ plt.show()
 
 ```{python}
 #| echo: false
-# Create a list with California top 3 electric primary sources
+# Create a list with California's top 3 primary sources by number of power plants
 ca_power_plants = power_plants[power_plants['state']=='California']
 top_sources = (ca_power_plants['primsource']
                             .value_counts()
@@ -442,7 +442,7 @@ for ax, source in zip(axes, top_sources):
     ax.set_title(source)
     ax.axis('off')  # Remove axes for a cleaner look
 
-plt.suptitle("Top 3 energy sources for electric power plants in CA")
+plt.suptitle("Top 3 primary sources by number of power plants in CA")
 plt.tight_layout()
 plt.show()
 ```

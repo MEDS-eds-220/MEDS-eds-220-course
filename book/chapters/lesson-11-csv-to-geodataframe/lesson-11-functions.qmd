@@ -179,7 +179,7 @@ power_plants = gpd.GeoDataFrame(power_plants,      # Data
 
 ## Previous work: CA top power plant sources map
 
-In the previous lesson we solved the following exercise using a `for` loop with `zip()` to create subplots of the top 3 most frequent power plant sources in California.
+In the previous lesson we solved the following exercise using a `for` loop with `zip()` to create subplots of California's top 3 primary sources by number of power plants.
 
 ```{python}
 # --- Find top sources by number of plants
@@ -210,15 +210,15 @@ for axis, source in zip(ax, ca_top_sources):   # Iterate over subplots and energ
                     markersize=5,
                     alpha=0.5)
 
-fig.suptitle("Top 3 most frequent energy sources for electric power plants in California")
+fig.suptitle("Top 3 primary sources by number of power plants in California")
 plt.show()
 ```
 
 ## Steps to create a function
 
-Our previous code "hard-codes" California, so it only works for that state. Next, we want to keep exploring the top 3 electric primary sources for different states. This is a scenario where creating functions can be useful.
+Our previous code "hard-codes" California, so it only works for that state. Next, we want to keep exploring the top 3 primary sources by number of power plants for different states. This is a scenario where creating functions can be useful.
 
-Let's make a function that finds the top 3 power sources for any state! My general advice to break down this problem is:
+Let's make a function that finds the top 3 primary sources by number of power plants for any state! My general advice to break down this problem is:
 
 - Step 1: solve the problem for a concrete example
 - Step 2: identify which parts of the code need to be generalized and update them
@@ -289,7 +289,7 @@ def top3_sources(state):
 We may now reuse this function as much as we want!
 
 ```{python}
-print('Top 3 primary energy sources in Division 2 states:')
+print('Top 3 primary sources by number of power plants in Division 2 states:')
 for state in ['New Jersey', 'New York', 'Pennsylvania']:
     print(f"{state}: {', '.join(top3_sources(state))}")
 ```
@@ -322,7 +322,7 @@ Finally, we can add a docstring to explain what the function does, its parameter
 ```{python}
 def top3_sources(state, plants):
     """
-    Find the top 3 electric primary sources of a given state.
+    Find the top 3 primary sources by number of power plants in a given state.
 
     Args:
         state (str): The US state we want information about.
@@ -330,7 +330,7 @@ def top3_sources(state, plants):
         on power plants, with at least 'state' and 'primsource' columns.
 
     Returns:
-        list: A list of the top 3 primary sources of the state within the plants data frame.
+        list: The 3 primary sources with the most power plants in the state, from most to fewest plants.
     """
 
     # Check that state is in the plants data
@@ -348,7 +348,7 @@ def top3_sources(state, plants):
 ```
 
 ```{python}
-print('Top 3 primary energy sources in Division 2 states:')
+print('Top 3 primary sources by number of power plants in Division 2 states:')
 for state in ['New Jersey', 'New York', 'Pennsylvania']:
     print(f"{state}: {', '.join(top3_sources(state, power_plants))}")
 ```
@@ -402,14 +402,14 @@ power_source_counts('wind', power_plants)
 
 ## Plotting the top 3 sources for any state
 
-Let's do one more example and create a function that will produce a plot of the top 3 primary sources for a given state.
+Let's do one more example and create a function that will produce a plot of the top 3 primary sources by number of power plants for a given state.
 
 ### Step 1: solve the problem for a concrete example
 
-We can start with the code we had for California. We will use our function for the top 3 power sources instead of the code that found the `ca_top_sources` list.
+We can start with the code we had for California. We will use our `top3_sources` function instead of the code that found the `ca_top_sources` list.
 
 ```{python}
-# CA top 3 power sources
+# CA top 3 primary sources by number of power plants
 ca_top_sources = top3_sources('California', power_plants)
 
 # Select CA power plants and boundary
@@ -432,7 +432,7 @@ for axis, source in zip(ax, ca_top_sources):   # Iterate over subplots and energ
                     markersize=5,
                     alpha=0.5)
 
-fig.suptitle("Top 3 energy sources for electric power plants in California")
+fig.suptitle("Top 3 primary sources by number of power plants in California")
 plt.tight_layout()
 plt.show()
 ```
@@ -448,7 +448,7 @@ Basically anything where we are using California specifically.
 ```{python}
 state = 'California'
 
-# Find top 3 power sources
+# Find top 3 primary sources by number of power plants
 state_top_sources = top3_sources(state, power_plants)
 
 # Select power plants and boundary
@@ -471,7 +471,7 @@ for axis, source in zip(ax, state_top_sources):   # Iterate over subplots and en
                     markersize=5,
                     alpha=0.5)
 
-fig.suptitle(f"Top 3 most frequent energy sources for electric power plants in {state}")
+fig.suptitle(f"Top 3 primary sources by number of power plants in {state}")
 plt.tight_layout()
 plt.show()
 ```
@@ -481,7 +481,7 @@ plt.show()
 ```{python}
 def plot_top3_power_sources(state):
 
-    # Find top 3 power sources
+    # Find top 3 primary sources by number of power plants
     state_top_sources = top3_sources(state, power_plants)
 
     # Select power plants and boundary
@@ -504,7 +504,7 @@ def plot_top3_power_sources(state):
                         markersize=5,
                         alpha=0.5)
 
-    fig.suptitle(f"Top 3 energy sources for electric power plants in {state}")
+    fig.suptitle(f"Top 3 primary sources by number of power plants in {state}")
     plt.tight_layout()
     plt.show()
 ```
@@ -522,7 +522,7 @@ Here, `power_plants` and `states` are global variables, so we turn them into the
 ```{python}
 def plot_top3_power_sources(state, plants, boundaries):
 
-    # Find top 3 power sources
+    # Find top 3 primary sources by number of power plants
     state_top_sources = top3_sources(state, plants)
 
     # Select power plants and boundary
@@ -545,7 +545,7 @@ def plot_top3_power_sources(state, plants, boundaries):
                         markersize=5,
                         alpha=0.5)
 
-    fig.suptitle(f"Top 3 energy sources for electric power plants in {state}")
+    fig.suptitle(f"Top 3 primary sources by number of power plants in {state}")
     plt.tight_layout()
     plt.show()
 ```
@@ -561,7 +561,8 @@ We add a docstring and use `assert` to check that the state is in `boundaries`. 
 ```{python}
 def plot_top3_power_sources(state, plants, boundaries):
     """
-    Plot the power plants of a given state for its top 3 primary energy sources.
+    Plot the power plants of a given state for its top 3 primary sources
+    by number of power plants.
 
     Args:
         state (str): The US state we want to plot.
@@ -574,7 +575,7 @@ def plot_top3_power_sources(state, plants, boundaries):
     # (top3_sources already checks that state is in plants)
     assert state in boundaries['name'].values, f"{state} is not in the 'name' column of boundaries"
 
-    # Find top 3 power sources
+    # Find top 3 primary sources by number of power plants
     state_top_sources = top3_sources(state, plants)
 
     # Select power plants and boundary
@@ -597,7 +598,7 @@ def plot_top3_power_sources(state, plants, boundaries):
                         markersize=5,
                         alpha=0.5)
 
-    fig.suptitle(f"Top 3 energy sources for electric power plants in {state}")
+    fig.suptitle(f"Top 3 primary sources by number of power plants in {state}")
     plt.tight_layout()
     plt.show()
 ```
