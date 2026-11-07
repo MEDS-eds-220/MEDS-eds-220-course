@@ -11,7 +11,7 @@ By the end of this lesson, students will be able to:
 - reproject geo-dataframes so they share the same CRS before combining them
 - clip a `geopandas.GeoDataFrame` to the polygons of another one using `geopandas.clip()`
 - subset tabular data before applying geospatial operations
-- create a bounding box with `shapely`'s `box()` function and the `*` unpacking operator
+- clip a `geopandas.GeoDataFrame` to a bounding box using `total_bounds`
 - decide when to clip to a bounding box instead of the exact polygons
 
 ## About the data
@@ -69,8 +69,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
-from shapely import box  # To create polygon bounding box
-
 pd.set_option("display.max_columns", None)
 
 # -------------------------------------
@@ -106,7 +104,7 @@ for df in [states, places, roads]:
 
 ## Prepare Alaska multipolygon
 
-Let's start by taking a look at our `states` geo-dataframe. 
+Let's take a look at our `states` geo-dataframe. 
 Since this is a geospatial dataset, exploration should include *at least* checking the head of the dataset, plotting the data, and looking at its CRS.
 
 ```{python}
@@ -210,10 +208,12 @@ places.plot(ax=ax, color='red', markersize=2)
 plt.show()
 ```
 
-This is better: we can see the Alaska polygons and some of the `places` points on top of it. 
-Our next step is to select these points. 
+This is better: we can see the Alaska polygons and some of the `places` points on top of it.
+But why does the rest of the world look so strange?
+Every CRS is designed for an area of use (look for "Area of Use" in the output of `alaska.crs` above).
+EPSG:3338 is accurate around Alaska, so points far from Alaska get heavily distorted.
+We don't need them anyway: next, we'll keep only the points inside Alaska.
 
-<!--TODO: add if-else here with reprojecting -->
 
 ## Clipping
 
@@ -227,7 +227,7 @@ where:
 
 - `updated_geodf` is the output of the function: the intersection of the geometries in `geodf` with `mask`,
 - `geodf` is the `geopandas.GeoDataFrame` we want to clip, 
-- `mask` is a `geopandas.GeoDataFrame` with the polygon(s) we want to use for clipping. This `mask` must be in the same CRS as `geodf`!
+- `mask` is a `geopandas.GeoDataFrame` with the polygon(s) we want to use for clipping (we will see later that it can also be a bounding box). This `mask` must be in the same CRS as `geodf`!
 
 In our case:
 
@@ -270,9 +270,6 @@ The more detailed our geometries are, the longer it takes to do geospatial compu
 It's a good practice to reduce your data as much as possible before applying any geospatial transformation. 
 :::
 
-<!--
-YOU CAN JUMP FROM HERE TO CLIPPING WITH BOUNDING BOX
--->
 
 We will now compose functions to clip `usa_roads` using the `alaska` multipolygon. Notice we are using the output of `usa_roads.to_crs(alaska.crs)` directly and thus not changing the `usa_roads` geo-dataframe or creating new variables:
 
@@ -288,56 +285,32 @@ plt.show()
 
 ```
 
-Notice how the lines break on the small islands? 
-However, in the `usa_roads` there are no broken lines. 
-This should make us suspect we are leaving data out and clipping *exactly* to the polygons in `alaska` is not quite what we want. 
+Notice the short, disconnected segments in the southwest?
+Many of these "roads" are ferry routes that run over water.
+Clipping to the `alaska` polygons keeps only the pieces that cross land, so clipping *exactly* to the polygons isn't what we want here.
 
 ### Clipping with a bounding box
-We will clip the `usa_roads` geo-dataframe with the **bounding box** of `alaska` instead of its polygons. 
-To create a bounding box, we first use the [`box()` function](https://shapely.readthedocs.io/en/stable/reference/shapely.box.html) we imported from `shapely`. 
-The syntax for `box()` is:
-```python
-box(minx, miny, maxx, maxy)
-```
-the output is a polygon representing a box constructed like this:
+We will clip the `usa_roads` geo-dataframe with the **bounding box** of `alaska` instead of its polygons.
+A bounding box is the smallest rectangle that contains all the geometries.
+It is defined by four coordinates, `minx, miny, maxx, maxy`:
 
 ![Image adapted from: National Ecological Observatory Network (NEON)](/book/images/lesson-13/bounding-box.png){width="80%"}
 
-If we want to create a `shapely` polygon from the bounds of a geo-dataframe `gdf`, a more straightforward syntax is:
-```python 
-box(*gdf.total_bounds)
-```
-In our case:
+Remember that the `total_bounds` attribute of a geo-dataframe gives us these four values:
 
 ```{python}
-bbox = box(*alaska.total_bounds)
-print(type(bbox))
-bbox
+alaska.total_bounds
 ```
 
-::: {.callout-tip}
-## `*` = unpacking operator
-In the last syntax we used the asterisk `*` as an **unpacking operator** on the array `alaska.total_bounds`. 
-Think about it as unpacking the elements of `alaska.total_bounds` and assigning them one-by-one to the parameters `minx, miny, maxx, maxy` of the `box()` function.
-
-This is a good article explaining more about unpacking with `*` in Python:
-https://geekflare.com/dev/python-unpacking-operators/
-:::
-
-Notice that the bounding box is not a geo-dataframe, it is a standalone, abstract polygon without any geospatial information. To interpret this polygon as something on the Earth's surface we need to wrap it into a geo-dataframe and assign it a CRS:
+`gpd.clip()` accepts these four values directly as the `mask`, so we can clip the roads to Alaska's bounding box in one step:
 
 ```{python}
-# Create geo-dataframe from bounding box
-ak_bbox = gpd.GeoDataFrame(geometry = [bbox],  # Assign geometry column
-                           crs = alaska.crs)  # Assign CRS
-print(type(ak_bbox))
-ak_bbox
+ak_complete_roads = gpd.clip(usa_roads.to_crs(alaska.crs), alaska.total_bounds)
 ```
 
-We can now clip the roads using Alaska's bounding box:
-```{python}
-ak_complete_roads = gpd.clip(usa_roads.to_crs(ak_bbox.crs), ak_bbox)
-```
+The bounds are just four numbers in the units of `alaska`'s CRS (meters, for EPSG:3338).
+They don't carry any CRS information, so it is up to us to make sure the data we clip is in the same CRS.
+Here, we do this by reprojecting `usa_roads` to `alaska.crs` before clipping.
 
 Notice the difference between the two clipping methods:
 
@@ -386,6 +359,11 @@ for x, y, name in zip(ak_places.geometry.x, ak_places.geometry.y, ak_places['nam
 
 ax.set_title("Road Networks and Major Cities in Alaska", fontsize=14, fontweight='bold')
 
+# Add data sources below the map
+ax.annotate("Data: Natural Earth (roads and populated places) and US Census Bureau TIGER/Line (state boundaries)",
+            xy=(1, 0), xycoords='axes fraction',  # Bottom-right corner of the axes
+            ha='right', va='top', fontsize=8, color='gray')
+
 plt.show()
 ```
 
@@ -396,6 +374,7 @@ Notice the overlapping labels for Anchorage and Valdez:
 ![](/book/images/lesson-13/overlapping_points.png){width="40%" fig-align="center"}
 
 Update the map so these labels do not overlap. One way to do it is using an `if` when iterating over the Alaska populated places.
+Remember that the map is in the EPSG:3338 CRS, whose units are meters, so the label offsets (like `x-30000`) are in meters too.
 
 <!--
 Update text labels to this:
