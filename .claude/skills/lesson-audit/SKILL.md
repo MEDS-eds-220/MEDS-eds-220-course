@@ -45,10 +45,12 @@ EDS 217 did **not** cover `.iloc`, method chaining (it explicitly avoided it), `
 1. **Correctness.** Look for:
    - statements that are false, including domain terms (for example, species richness vs abundance, CRS and projection claims, units);
    - code that errors or silently gives wrong results;
-   - explanations of output that the code doesn't actually produce;
+   - explanations of output that the code doesn't actually produce. Look at the frozen figures in `_freeze/<page path>/figure-html/` (and the text output in `execute-results/html.json`) and check that the prose describes what each plot actually shows;
    - broken links or data URLs;
    - inconsistencies with other lessons;
-   - solutions or answers hidden inside `<!-- -->` comments. Quarto copies HTML comments into the published page, so students can read them with "view source". Suggest moving them to a solutions notebook in `_planning/` (for example `_planning/dsN-test.ipynb`).
+   - solutions or answers hidden inside `<!-- -->` comments. Quarto copies HTML comments into the published page, so students can read them with "view source". The instructor's preferred fixes:
+     - if later cells depend on the answer (for example, a check-in that reprojects a dataset), replace the comment with a normal `{python}` cell that has `#| include: false`, so the code runs but nothing reaches the HTML;
+     - exercise answers that nothing depends on stay in the page as plain ```` ```python ```` fences inside `<!-- -->`. Mention that they are visible in the page source, but don't suggest moving them to `_planning/` unless the instructor asks.
 2. **Currency of methods.** Look for deprecated or removed APIs and changed defaults. Known changes to look for (verify them, don't assume):
    - **pandas 3:** Copy-on-Write is the default, so chained assignment never updates and `SettingWithCopyWarning` is gone; text columns get the `str` dtype, not `object`; datetimes default to microseconds; frequency aliases changed (`'ME'`, `'YE'`, `'h'`); `stack()` keeps NaN.
    - **numpy 2:** scalars print as `np.int64(...)`; removed aliases such as `np.NaN`; stricter dtype promotion (`np.select` with string choices and `default=np.nan` raises).
@@ -97,6 +99,8 @@ Reply in chat (no HTML file unless asked), in this order:
 5. **Minor.** Typos, inconsistent wording, redundant sentences. Keep it short.
 
 **Re-audits.** When this file was already audited earlier in the conversation, add one line after the verdict listing what has been fixed since the last audit. Don't re-flag suggestions the instructor has decided against. If such an item is still worth a mention, list it once under a "still open, skip if decided" note.
+
+**After making fixes.** When listing the items that are still open, keep each item's original number, give a clickable link to its current line (line numbers shift after edits, so look them up again), and order the items by where they first appear in the file, so the instructor can review them while reading the page.
 
 Number the items in sections 2–5 with one continuous sequence (for example, if Corrections ends at 3, Outdated methods starts at 4), so the instructor can ask for fixes by number. Don't number the section headings, and don't restart the count in each section.
 
