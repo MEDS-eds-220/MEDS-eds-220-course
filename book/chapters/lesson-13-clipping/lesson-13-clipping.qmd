@@ -13,6 +13,7 @@ By the end of this lesson, students will be able to:
 - subset tabular data before applying geospatial operations
 - clip a `geopandas.GeoDataFrame` to a bounding box using `total_bounds`
 - decide when to clip to a bounding box instead of the exact polygons
+- select whole features by location with `geopandas.sjoin()`, and explain how this differs from clipping
 
 ## About the data
 
@@ -217,7 +218,7 @@ We don't need them anyway: next, we'll keep only the points inside Alaska.
 
 ## Clipping
 
-**Clipping** means using a polygon (or polygons) to only select geospatial data within them. 
+**Clipping** means using a polygon (or polygons) to keep only the parts of the geometries that fall inside them.
 Clipping a `geopandas.GeoDataFrame` is simple using the geopandas [`clip()` function](https://geopandas.org/en/stable/docs/reference/api/geopandas.clip.html). 
 The general syntax is:
 ```python
@@ -326,6 +327,45 @@ ax2.set_title('Roads clipped with AK bounding box')
 plt.show()
 ```
 
+How does this difference show up in the geo-dataframes themselves?
+Let's compare their number of rows and the total length of their roads.
+Since EPSG:3338 uses meters, the `length` attribute gives the length of each line in meters:
+
+```{python}
+print('Number of roads (polygon clip):', len(ak_roads))
+print('Number of roads (bbox clip):   ', len(ak_complete_roads))
+
+# Divide by 1000 to convert meters to kilometers
+print('Total length in km (polygon clip):', round(ak_roads.length.sum() / 1000))
+print('Total length in km (bbox clip):   ', round(ak_complete_roads.length.sum() / 1000))
+```
+
+Both geo-dataframes have the same number of rows: clipping to the polygons did not drop any road.
+Instead, `gpd.clip()` *cut* the roads that cross the coastline, so the polygon clip has about 1,000 fewer kilometers of roads.
+The difference is in the geometries, not in the number of rows.
+(EPSG:3338 preserves areas, not distances, so these lengths are approximate, but they are good enough to compare the two results.)
+
+Remember that we selected only the US roads before clipping.
+This mattered: a bounding box is a rectangle, so it includes everything that falls inside it, not only Alaska.
+Let's see what happens if we clip all the North American roads to Alaska's bounding box instead:
+
+```{python}
+# Select North American roads and reproject them to Alaska's CRS
+na_roads = roads[roads['continent'] == 'North America'].to_crs(alaska.crs)
+
+# Clip them to Alaska's bounding box
+na_bbox_roads = gpd.clip(na_roads, alaska.total_bounds)
+
+fig, ax = plt.subplots(figsize=(10,5))
+alaska.plot(ax=ax, color='whitesmoke', edgecolor='0.7')
+na_bbox_roads.plot(ax=ax, column='sov_a3', legend=True, cmap='Set1')
+ax.set_title('North American roads clipped with AK bounding box')
+plt.show()
+```
+
+Alaska's bounding box covers a large part of Yukon and northern British Columbia, so the clip brought in many Canadian roads (`'CAN'` in the `sov_a3` column), some of them cut at the edge of the box.
+Clipping to the bounding box only gave us Alaska's roads because we had already filtered the data to US roads.
+
 ## Plot
 
 Finally, we can put all our data together in the same map:
@@ -392,3 +432,79 @@ ax.text(valdez.geometry.x.iloc[0]+30000, valdez.geometry.y.iloc[0]+20000, 'Valde
 -->
 :::
 
+## Clipping vs spatial joins
+
+`gpd.clip()` changes the geometries: it cuts them at the edge of the mask.
+Sometimes we want to keep or drop **whole** features instead, without changing their geometries.
+A common tool for this is a **spatial join** with `gpd.sjoin()`.
+
+A spatial join is like a `merge()`, but instead of matching rows by the values in a column, it matches them by their location.
+The general syntax is:
+
+```python
+gpd.sjoin(left_gdf, right_gdf, predicate='intersects')
+```
+
+where:
+
+- `left_gdf` is the geo-dataframe whose rows we want to select,
+- `right_gdf` is the geo-dataframe we match them against,
+- `predicate` sets what counts as a match. Common options are `'intersects'` (the default), `'within'` and `'contains'`.
+
+Each row in `left_gdf` gets the columns of the row(s) in `right_gdf` it matches.
+Like `merge()`, `sjoin()` does an inner join by default, so rows without a match are dropped.
+And, as always, both geo-dataframes must be in the same CRS.
+
+Let's use a spatial join to select the US roads that intersect Alaska and compare the result with clipping to the Alaska polygons.
+We only keep the columns we need from `alaska`, since both geo-dataframes have a `name` column:
+
+```{python}
+# Select the roads that intersect Alaska, without cutting them
+ak_roads_join = gpd.sjoin(usa_roads.to_crs(alaska.crs),
+                          alaska[['stusps', 'geometry']],
+                          predicate='intersects')
+
+print('Number of roads (polygon clip):', len(ak_roads))
+print('Number of roads (spatial join):', len(ak_roads_join))
+
+print('Total length in km (polygon clip):', round(ak_roads.length.sum() / 1000))
+print('Total length in km (spatial join):', round(ak_roads_join.length.sum() / 1000))
+```
+
+Both geo-dataframes have the same roads, but the spatial join keeps their full, uncut geometries, ferry routes included.
+
+```{python}
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10,10))
+
+alaska.plot(ax=ax1, color='whitesmoke', edgecolor='0.7')
+ak_roads.plot(ax=ax1, color='red')
+ax1.set_title('Roads clipped with AK multipolygon')
+
+alaska.plot(ax=ax2, color='whitesmoke', edgecolor='0.7')
+ak_roads_join.plot(ax=ax2, color='red')
+ax2.set_title('Roads selected with a spatial join')
+
+plt.show()
+```
+
+The spatial join also added two columns: `stusps`, from `alaska`, and `index_right`, the index of the matching row in `alaska`:
+
+```{python}
+ak_roads_join[['type', 'stusps', 'index_right']].head(3)
+```
+
+Adding the other geo-dataframe's columns is most useful when it has many rows.
+
+### Summary
+
+| | `gpd.clip()` | `gpd.sjoin()` |
+|---|---|---|
+| What it does | Keeps only the parts of the geometries inside the mask | Keeps the whole features that match by location and adds the other geo-dataframe's columns |
+| Changes the geometries? | Yes, cuts them at the mask's edge | No |
+| Rows in the output | One for each feature that overlaps the mask | One for each match, so a feature that matches two polygons appears twice |
+| Second input | Geo-dataframe, geometry or bounding box | Geo-dataframe |
+| Use it when | You only want what falls inside an area, like a map extent | You want whole features, or you need attributes from the other dataset |
+
+
+
+TEST
