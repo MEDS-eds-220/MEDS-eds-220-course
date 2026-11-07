@@ -192,6 +192,10 @@ div.csl-indent {
     <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-6-2026.html">
  <span class="dropdown-text">week 6</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../../week-by-week/weekly-descriptions/week-7-2026.html">
+ <span class="dropdown-text">week 7</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -617,7 +621,7 @@ div.csl-indent {
 <section id="import-data" class="level2">
 <h2 class="anchored" data-anchor-id="import-data">Import data</h2>
 <p>Let’s start by loading our libraries and then importing the datasets we will use.</p>
-<div id="71d99620" class="cell" data-execution_count="1">
+<div id="1711505c" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -661,14 +665,14 @@ Check-in
 <section id="prepare-alaska-multipolygon" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-alaska-multipolygon">Prepare Alaska multipolygon</h2>
 <p>Let’s take a look at our <code>states</code> geo-dataframe. Since this is a geospatial dataset, exploration should include <em>at least</em> checking the head of the dataset, plotting the data, and looking at its CRS.</p>
-<div id="eefcae52" class="cell" data-execution_count="3">
+<div id="6a2a8724" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"CRS: </span><span class="sc">{</span>states<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>states.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CRS: EPSG:4269</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="190">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -758,7 +762,7 @@ Check-in
 </div>
 </div>
 </div>
-<div id="f9dcfe3d" class="cell" data-execution_count="4">
+<div id="6a7270f6" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>states.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -769,7 +773,7 @@ Check-in
 </div>
 </div>
 <p>For this lesson, we are interested in plotting data only for Alaska, so let’s select this data:</p>
-<div id="657f9582" class="cell" data-execution_count="5">
+<div id="452fd5a2" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>alaska <span class="op">=</span> states[states[<span class="st">'name'</span>] <span class="op">==</span> <span class="st">'Alaska'</span>]</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>alaska.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -787,7 +791,7 @@ Check-in
 <figcaption>Source: <a href="https://spatialreference.org/ref/epsg/3338/">spatialreference.org</a></figcaption>
 </figure>
 </div>
-<div id="5a385e2a" class="cell" data-execution_count="6">
+<div id="dbb25b75" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject to CRS optimized for Alaska</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>alaska <span class="op">=</span> alaska.to_crs(<span class="st">'epsg:3338'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -797,7 +801,7 @@ Check-in
 <div class="cell-output cell-output-stdout">
 <pre><code>Is this CRS projected?  True</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="193">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>&lt;Projected CRS: EPSG:3338&gt;
 Name: NAD83 / Alaska Albers
 Axis Info [cartesian]:
@@ -814,7 +818,7 @@ Datum: North American Datum 1983
 - Prime Meridian: Greenwich</code></pre>
 </div>
 </div>
-<div id="f70f3dbd" class="cell" data-execution_count="7">
+<div id="79454cce" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alaska.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -828,14 +832,14 @@ Datum: North American Datum 1983
 <section id="prepare-populated-places-points" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-populated-places-points">Prepare populated places points</h2>
 <p>Let’s now explore the populated places data.</p>
-<div id="817f453b" class="cell" data-execution_count="8">
+<div id="3e66792b" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"CRS: </span><span class="sc">{</span>places<span class="sc">.</span>crs<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>places.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CRS: EPSG:4326</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="195">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -989,7 +993,7 @@ Datum: North American Datum 1983
 </div>
 </div>
 </div>
-<div id="cf68d2f5" class="cell" data-execution_count="9">
+<div id="96436d44" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>places.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1001,7 +1005,7 @@ Datum: North American Datum 1983
 </div>
 <p>This dataset has the EPSG:4326 CRS. Remember this is the EPSG code for the WGS 84 CRS. This is not a surprise since the places data is global and EPSG:4326/WGS 84 is the most widely used CRS for such data.</p>
 <p>Let’s see what happens when we try to plot this data on top of Alaska:</p>
-<div id="71cf103b" class="cell" data-execution_count="10">
+<div id="37817fe8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trouble</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1029,9 +1033,9 @@ Data in weird places? Check your CRSs
 <div class="callout-body-container callout-body">
 <p>This is a classic slip in geospatial analysis. To plot, analyze, or integrate different geospatial datasets they <strong>must have the same CRS</strong>.</p>
 <p>Here, <code>alaska</code> and <code>places</code> have different CRSs, leading to unexpected results when plotting them together:</p>
-<div id="b253af34" class="cell" data-execution_count="11">
+<div id="8032ebad" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>alaska.crs <span class="op">==</span> places.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="198">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>False</code></pre>
 </div>
 </div>
@@ -1051,7 +1055,7 @@ Check-in
 </div>
 </div>
 <p>Let’s check that map again:</p>
-<div id="2e87e551" class="cell" data-execution_count="13">
+<div id="6ab1dd92" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>alaska.plot(ax<span class="op">=</span>ax)</span>
@@ -1079,7 +1083,7 @@ Check-in
 <li><code>mask</code> is a <code>geopandas.GeoDataFrame</code> with the polygon(s) we want to use for clipping (we will see later that it can also be a bounding box). This <code>mask</code> must be in the same CRS as <code>geodf</code>!</li>
 </ul>
 <p>In our case:</p>
-<div id="26112344" class="cell" data-execution_count="14">
+<div id="b7bb9ef2" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip populated places to Alaska multipolygon</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ak_places <span class="op">=</span> gpd.clip(places, alaska)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1099,14 +1103,14 @@ Check-in
 <section id="prepare-roads" class="level2">
 <h2 class="anchored" data-anchor-id="prepare-roads">Prepare roads</h2>
 <p>Now we move on to our roads dataset.</p>
-<div id="cffad5a3" class="cell" data-execution_count="15">
+<div id="a541e173" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roads.crs)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>roads.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:4326</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="202">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
@@ -1260,7 +1264,7 @@ Check-in
 </div>
 </div>
 </div>
-<div id="4b4d709d" class="cell" data-execution_count="16">
+<div id="abdf84f9" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>roads.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1271,7 +1275,7 @@ Check-in
 </div>
 </div>
 <p>You may have already noticed that the <code>roads</code> data is not in the same CRS as the <code>alaska</code> polygons, so these geo-datasets shouldn’t interact until they’re in the same CRS. Before jumping right into reprojecting and clipping, we will subset the data to select only US roads:</p>
-<div id="74be2762" class="cell" data-execution_count="17">
+<div id="3047abb9" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>usa_roads <span class="op">=</span> roads[roads[<span class="st">'sov_a3'</span>] <span class="op">==</span> <span class="st">'USA'</span>]</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>usa_roads.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1296,7 +1300,7 @@ Reduce your tabular data before reducing via geometries
 </div>
 </div>
 <p>We will now compose functions to clip <code>usa_roads</code> using the <code>alaska</code> multipolygon. Notice we are using the output of <code>usa_roads.to_crs(alaska.crs)</code> directly and thus not changing the <code>usa_roads</code> geo-dataframe or creating new variables:</p>
-<div id="1809111d" class="cell" data-execution_count="18">
+<div id="d4269133" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip usa_roads to alaska geometry</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>ak_roads <span class="op">=</span> gpd.clip(usa_roads.to_crs(alaska.crs), alaska)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1324,20 +1328,20 @@ Reduce your tabular data before reducing via geometries
 </figure>
 </div>
 <p>Remember that the <code>total_bounds</code> attribute of a geo-dataframe gives us these four values:</p>
-<div id="83a841df" class="cell" data-execution_count="19">
+<div id="37ee2548" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>alaska.total_bounds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="206">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>array([-2175729.73162241,   404545.10791528,  1493082.30904445,
         2383808.43520816])</code></pre>
 </div>
 </div>
 <p><code>gpd.clip()</code> accepts these four values directly as the <code>mask</code>, so we can clip the roads to Alaska’s bounding box in one step:</p>
-<div id="8641bd05" class="cell" data-execution_count="20">
+<div id="aa0c6505" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ak_complete_roads <span class="op">=</span> gpd.clip(usa_roads.to_crs(alaska.crs), alaska.total_bounds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The bounds are just four numbers in the units of <code>alaska</code>’s CRS (meters, for EPSG:3338). They don’t carry any CRS information, so it is up to us to make sure the data we clip is in the same CRS. Here, we do this by reprojecting <code>usa_roads</code> to <code>alaska.crs</code> before clipping.</p>
 <p>Notice the difference between the two clipping methods:</p>
-<div id="03dda229" class="cell" data-execution_count="21">
+<div id="ba277c64" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>))</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>ak_roads.plot(ax<span class="op">=</span>ax1)</span>
@@ -1356,7 +1360,7 @@ Reduce your tabular data before reducing via geometries
 </div>
 </div>
 <p>How does this difference show up in the geo-dataframes themselves? Let’s compare their number of rows and the total length of their roads. Since EPSG:3338 uses meters, the <code>length</code> attribute gives the length of each line in meters:</p>
-<div id="175f26bb" class="cell" data-execution_count="22">
+<div id="2ae51320" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of roads (polygon clip):'</span>, <span class="bu">len</span>(ak_roads))</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of roads (bbox clip):   '</span>, <span class="bu">len</span>(ak_complete_roads))</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1371,79 +1375,73 @@ Total length in km (bbox clip):    7111</code></pre>
 </div>
 </div>
 <p>Both geo-dataframes have the same number of rows: clipping to the polygons did not drop any road. Instead, <code>gpd.clip()</code> <em>cut</em> the roads that cross the coastline, so the polygon clip has about 1,000 fewer kilometers of roads. The difference is in the geometries, not in the number of rows. (EPSG:3338 preserves areas, not distances, so these lengths are approximate, but they are good enough to compare the two results.)</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Check-in
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>gpd.clip()</code> changed the geometries of the roads. What about their other columns? Compare the attributes of a few roads before clipping (in <code>usa_roads</code>) and after clipping (in <code>ak_roads</code>). What do you notice?</p>
-<!--
-```python
-# Attributes of a few roads after clipping
-ak_roads.head(3)
-
-# Attributes of the same roads before clipping
-usa_roads.loc[ak_roads.index].head(3)
-```
-
-Expected answer: all the columns except the geometry are the same before and after clipping.
-gpd.clip() cuts the geometries, but it copies the other columns unchanged,
-so columns like length_km still describe the original, uncut roads.
-For example, the first road in ak_roads (index 1138) is a ferry route that is 132 km long after clipping, but its length_km is still 435.
--->
+<p>Remember that we selected only the US roads before clipping. This mattered: a bounding box is a rectangle, so it includes everything that falls inside it, not only Alaska. Let’s see what happens if we clip all the North American roads to Alaska’s bounding box instead:</p>
+<div id="2f11bb2d" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select North American roads and reproject them to Alaska's CRS</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>na_roads <span class="op">=</span> roads[roads[<span class="st">'continent'</span>] <span class="op">==</span> <span class="st">'North America'</span>].to_crs(alaska.crs)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clip them to Alaska's bounding box</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>na_bbox_roads <span class="op">=</span> gpd.clip(na_roads, alaska.total_bounds)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>alaska.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'whitesmoke'</span>, edgecolor<span class="op">=</span><span class="st">'0.7'</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>na_bbox_roads.plot(ax<span class="op">=</span>ax, column<span class="op">=</span><span class="st">'sov_a3'</span>, legend<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Set1'</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'North American roads clipped with AK bounding box'</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lesson-13-clipping_files/figure-html/cell-24-output-1.png" width="743" height="448" class="figure-img"></p>
+</figure>
 </div>
 </div>
-<p><code>gpd.clip()</code> only changes the geometries: all the other columns are copied unchanged from the original geo-dataframe. This means attributes that depend on the geometry, like the <code>length_km</code> column in our roads data, still describe the original, uncut features. If we need them for the clipped data, we have to recalculate them from the new geometries.</p>
+</div>
+<p>Alaska’s bounding box covers a large part of Yukon and northern British Columbia, so the clip brought in many Canadian roads (<code>'CAN'</code> in the <code>sov_a3</code> column), some of them cut at the edge of the box. Clipping to the bounding box only gave us Alaska’s roads because we had already filtered the data to US roads.</p>
 </section>
 </section>
 <section id="plot" class="level2">
 <h2 class="anchored" data-anchor-id="plot">Plot</h2>
 <p>Finally, we can put all our data together in the same map:</p>
-<div id="ce5e334d" class="cell" data-execution_count="23">
+<div id="1cc8ebe9" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">5</span>))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>alaska.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'whitesmoke'</span>, edgecolor<span class="op">=</span><span class="st">'0.7'</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>ak_complete_roads.plot(ax<span class="op">=</span>ax, </span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                       zorder<span class="op">=</span><span class="dv">1</span>,  <span class="co"># Specify layer plotting order</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>                       column<span class="op">=</span><span class="st">'type'</span>, </span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>                       legend<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>                       legend_kwds<span class="op">=</span>{<span class="st">'title'</span>: <span class="st">"Road Types"</span>, </span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'loc'</span>: <span class="st">'upper left'</span>,</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'bbox_to_anchor'</span>:(<span class="dv">0</span>,<span class="fl">0.9</span>),</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'fontsize'</span>:<span class="st">'small'</span>}</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>                                    )</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>ak_places.plot(ax<span class="op">=</span>ax, </span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>               zorder<span class="op">=</span><span class="dv">2</span>,  <span class="co"># Specify layer plotting order</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>               color<span class="op">=</span><span class="st">'red'</span>, </span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>               marker<span class="op">=</span><span class="st">'s'</span>  <span class="co"># Square marker</span></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>               )</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add city names as text annotations</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y, name <span class="kw">in</span> <span class="bu">zip</span>(ak_places.geometry.x, ak_places.geometry.y, ak_places[<span class="st">'name'</span>]):</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>    ax.text(x<span class="op">-</span><span class="dv">30000</span>, y<span class="op">+</span><span class="dv">20000</span>, name, fontsize<span class="op">=</span><span class="dv">8</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Roads, Ferry Routes and Selected Places in Alaska"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data sources below the map</span></span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>ax.annotate(<span class="st">"Data: Natural Earth (roads and populated places) and US Census Bureau TIGER/Line (state boundaries)"</span>,</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>            xy<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">0</span>), xycoords<span class="op">=</span><span class="st">'axes fraction'</span>,  <span class="co"># Bottom-right corner of the axes</span></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'top'</span>, fontsize<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">5</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>alaska.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'whitesmoke'</span>, edgecolor<span class="op">=</span><span class="st">'0.7'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>ak_complete_roads.plot(ax<span class="op">=</span>ax, </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                       zorder<span class="op">=</span><span class="dv">1</span>,  <span class="co"># Specify layer plotting order</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>                       column<span class="op">=</span><span class="st">'type'</span>, </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                       legend<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                       legend_kwds<span class="op">=</span>{<span class="st">'title'</span>: <span class="st">"Road Types"</span>, </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'loc'</span>: <span class="st">'upper left'</span>,</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'bbox_to_anchor'</span>:(<span class="dv">0</span>,<span class="fl">0.9</span>),</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'fontsize'</span>:<span class="st">'small'</span>}</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>                                    )</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>ak_places.plot(ax<span class="op">=</span>ax, </span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>               zorder<span class="op">=</span><span class="dv">2</span>,  <span class="co"># Specify layer plotting order</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>               color<span class="op">=</span><span class="st">'red'</span>, </span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>               marker<span class="op">=</span><span class="st">'s'</span>  <span class="co"># Square marker</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>               )</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add city names as text annotations</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y, name <span class="kw">in</span> <span class="bu">zip</span>(ak_places.geometry.x, ak_places.geometry.y, ak_places[<span class="st">'name'</span>]):</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    ax.text(x<span class="op">-</span><span class="dv">30000</span>, y<span class="op">+</span><span class="dv">20000</span>, name, fontsize<span class="op">=</span><span class="dv">8</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Road Networks and Major Cities in Alaska"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data sources below the map</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>ax.annotate(<span class="st">"Data: Natural Earth (roads and populated places) and US Census Bureau TIGER/Line (state boundaries)"</span>,</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>            xy<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">0</span>), xycoords<span class="op">=</span><span class="st">'axes fraction'</span>,  <span class="co"># Bottom-right corner of the axes</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'top'</span>, fontsize<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lesson-13-clipping_files/figure-html/cell-24-output-1.png" width="704" height="421" class="figure-img"></p>
+<p><img src="lesson-13-clipping_files/figure-html/cell-25-output-1.png" width="704" height="421" class="figure-img"></p>
 </figure>
 </div>
 </div>
