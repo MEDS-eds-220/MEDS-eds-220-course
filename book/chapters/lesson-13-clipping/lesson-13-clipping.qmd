@@ -344,26 +344,33 @@ Instead, `gpd.clip()` *cut* the roads that cross the coastline, so the polygon c
 The difference is in the geometries, not in the number of rows.
 (EPSG:3338 preserves areas, not distances, so these lengths are approximate, but they are good enough to compare the two results.)
 
-Remember that we selected only the US roads before clipping.
-This mattered: a bounding box is a rectangle, so it includes everything that falls inside it, not only Alaska.
-Let's see what happens if we clip all the North American roads to Alaska's bounding box instead:
+:::{.callout-tip}
+## Check-in
+`gpd.clip()` changed the geometries of the roads. What about their other columns?
+Compare the attributes of a few roads before clipping (in `usa_roads`) and after clipping (in `ak_roads`).
+What do you notice?
 
-```{python}
-# Select North American roads and reproject them to Alaska's CRS
-na_roads = roads[roads['continent'] == 'North America'].to_crs(alaska.crs)
+<!--
+```python
+# Attributes of a few roads after clipping
+ak_roads.head(3)
 
-# Clip them to Alaska's bounding box
-na_bbox_roads = gpd.clip(na_roads, alaska.total_bounds)
-
-fig, ax = plt.subplots(figsize=(10,5))
-alaska.plot(ax=ax, color='whitesmoke', edgecolor='0.7')
-na_bbox_roads.plot(ax=ax, column='sov_a3', legend=True, cmap='Set1')
-ax.set_title('North American roads clipped with AK bounding box')
-plt.show()
+# Attributes of the same roads before clipping
+usa_roads.loc[ak_roads.index].head(3)
 ```
 
-Alaska's bounding box covers a large part of Yukon and northern British Columbia, so the clip brought in many Canadian roads (`'CAN'` in the `sov_a3` column), some of them cut at the edge of the box.
-Clipping to the bounding box only gave us Alaska's roads because we had already filtered the data to US roads.
+Expected answer: all the columns except the geometry are the same before and after clipping.
+gpd.clip() cuts the geometries, but it copies the other columns unchanged,
+so columns like length_km still describe the original, uncut roads.
+For example, the first road in ak_roads (index 1138) is a ferry route that is 132 km long after clipping, but its length_km is still 435.
+-->
+:::
+
+`gpd.clip()` only changes the geometries: all the other columns are copied unchanged from the original geo-dataframe.
+This means attributes that depend on the geometry, like the `length_km` column in our roads data, still describe the original, uncut features.
+If we need them for the clipped data, we have to recalculate them from the new geometries.
+
+
 
 ## Plot
 
@@ -396,7 +403,7 @@ ak_places.plot(ax=ax,
 for x, y, name in zip(ak_places.geometry.x, ak_places.geometry.y, ak_places['name']):
     ax.text(x-30000, y+20000, name, fontsize=8, ha='right')
 
-ax.set_title("Road Networks and Major Cities in Alaska", fontsize=14, fontweight='bold')
+ax.set_title("Roads, Ferry Routes and Selected Places in Alaska", fontsize=14, fontweight='bold')
 
 # Add data sources below the map
 ax.annotate("Data: Natural Earth (roads and populated places) and US Census Bureau TIGER/Line (state boundaries)",
