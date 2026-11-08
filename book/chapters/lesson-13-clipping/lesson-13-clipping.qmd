@@ -12,6 +12,8 @@ By the end of this lesson, students will be able to:
 - clip a `geopandas.GeoDataFrame` to the polygons of another one using `geopandas.clip()`
 - subset tabular data before applying geospatial operations
 - clip a `geopandas.GeoDataFrame` to a bounding box using `total_bounds`
+- measure the length of lines in a projected CRS
+- explain how clipping changes geometries but not attributes
 - decide when to clip to a bounding box instead of the exact polygons
 
 ## About the data
@@ -267,9 +269,8 @@ usa_roads.plot()
 ## Reduce your tabular data before reducing via geometries
 Geospatial operations are usually costly in terms of computing power. 
 The more detailed our geometries are, the longer it takes to do geospatial computations. 
-It's a good practice to reduce your data as much as possible before applying any geospatial transformation. 
+It's a good practice to reduce your data as much as possible before applying any geospatial transformation.
 :::
-
 
 We will now compose functions to clip `usa_roads` using the `alaska` multipolygon. Notice we are using the output of `usa_roads.to_crs(alaska.crs)` directly and thus not changing the `usa_roads` geo-dataframe or creating new variables:
 
@@ -289,7 +290,7 @@ Notice the short, disconnected segments in the southwest?
 Many of these "roads" are ferry routes that run over water.
 Clipping to the `alaska` polygons keeps only the pieces that cross land, so clipping *exactly* to the polygons isn't what we want here.
 
-### Clipping with a bounding box
+## Clipping with a bounding box
 We will clip the `usa_roads` geo-dataframe with the **bounding box** of `alaska` instead of its polygons.
 A bounding box is the smallest rectangle that contains all the geometries.
 It is defined by four coordinates, `minx, miny, maxx, maxy`:
@@ -326,9 +327,40 @@ ax2.set_title('Roads clipped with AK bounding box')
 plt.show()
 ```
 
-How does this difference show up in the geo-dataframes themselves?
+## Measuring lengths
+
+To understand the difference between the two clips, we will compare the lengths of their roads.
+Geo-dataframes have a `length` attribute that calculates the length of each line from its geometry, **in the units of the CRS**.
+Let's try it on one road in Alaska, the road with index 1138:
+
+```{python}
+usa_roads.loc[[1138]].length
+```
+
+geopandas gives us a warning, and the result is not a length we can use.
+`usa_roads` is in EPSG:4326, a *geographic* CRS whose units are degrees.
+A degree is not a fixed distance: one degree of longitude is about 111 km at the equator but only about 55 km in southern Alaska.
+
+![ Figure highlighting that a degree is larger at the equator than at the poles. Image source: [intro-r-gis](https://annakrystalli.me/intro-r-gis/gis.html) and [ecologi.st](https://www.ecologi.st/spatial-r/some-important-concepts-and-pitfalls.html)](geographiccoords.png)
+
+To measure lengths, we first need to reproject to a *projected* CRS whose units are meters.
+Let's use the EPSG:3338 CRS for Alaska:
+
+```{python}
+# Reproject to the Alaska CRS and convert meters to kilometers
+usa_roads.loc[[1138]].to_crs('epsg:3338').length / 1000
+```
+
+The road is about 287 km long.
+Every projection distorts some lengths, but a projected CRS designed for our region, like EPSG:3338 for Alaska, can keep that distortion small.
+
+
+## How does clipping affect the data?
+
+Let's go back to the two clipped geo-dataframes, `ak_roads` and `ak_complete_roads`.
+How does the difference we saw in the plots show up in the geo-dataframes themselves?
 Let's compare their number of rows and the total length of their roads.
-Since EPSG:3338 uses meters, the `length` attribute gives the length of each line in meters:
+As we saw, both are in EPSG:3338, so the `length` attribute gives the length of each line in meters:
 
 ```{python}
 print('Number of roads (polygon clip):', len(ak_roads))
@@ -342,37 +374,54 @@ print('Total length in km (bbox clip):   ', round(ak_complete_roads.length.sum()
 Both geo-dataframes have the same number of rows: clipping to the polygons did not drop any road.
 Instead, `gpd.clip()` *cut* the roads that cross the coastline, so the polygon clip has about 1,000 fewer kilometers of roads.
 The difference is in the geometries, not in the number of rows.
-(EPSG:3338 preserves areas, not distances, so these lengths are approximate, but they are good enough to compare the two results.)
 
-:::{.callout-tip}
-## Check-in
-`gpd.clip()` changed the geometries of the roads. What about their other columns?
-Compare the attributes of a few roads before clipping (in `usa_roads`) and after clipping (in `ak_roads`).
-What do you notice?
+Let's zoom in on road 1138, the route we measured earlier, to see what happened.
+It's a ferry route in the eastern Aleutian Islands.
+Let's plot it from each clipped geo-dataframe:
 
-<!--
-```python
-# Attributes of a few roads after clipping
-ak_roads.head(3)
+```{python}
+fig, (ax1, ax2) = plt.subplots(2, 1)
 
-# Attributes of the same roads before clipping
-usa_roads.loc[ak_roads.index].head(3)
+ak_roads.loc[[1138]].plot(ax=ax1)
+ax1.set_title('Road 1138 clipped with AK multipolygon')
+
+ak_complete_roads.loc[[1138]].plot(ax=ax2)
+ax2.set_title('Road 1138 clipped with AK bounding box')
+
+plt.show()
 ```
 
-Expected answer: all the columns except the geometry are the same before and after clipping.
-gpd.clip() cuts the geometries, but it copies the other columns unchanged,
-so columns like length_km still describe the original, uncut roads.
-For example, the first road in ak_roads (index 1138) is a ferry route that is 132 km long after clipping, but its length_km is still 435.
--->
-:::
+The polygon clip kept only the pieces of the ferry route that cross the islands and removed the parts over water.
+The bounding box clip kept the whole route, because all of it is inside Alaska's bounding box.
+Let's compare the length and geometry type of road 1138 in each geo-dataframe:
 
-`gpd.clip()` only changes the geometries: all the other columns are copied unchanged from the original geo-dataframe.
+```{python}
+print('Length in km (polygon clip):', round(ak_roads.length[1138] / 1000, 1))
+print('Length in km (bbox clip):   ', round(ak_complete_roads.length[1138] / 1000, 1))
+
+print('Geometry type (polygon clip):', ak_roads.geom_type[1138])
+print('Geometry type (bbox clip):   ', ak_complete_roads.geom_type[1138])
+```
+
+The polygon clip kept only about 132 of the route's 287 km.
+It also changed the geometry type: the route crosses the coastline several times, so the polygon clip cut it into several pieces and turned the `LineString` into a `MultiLineString`.
+
+What about the other columns? `gpd.clip()` only changes the geometries: all the other columns are copied unchanged from the original geo-dataframe.
+
+```{python}
+ak_roads.loc[[1138]]
+```
+
+```{python}
+ak_complete_roads.loc[[1138]]
+```
+
 This means attributes that depend on the geometry, like the `length_km` column in our roads data, still describe the original, uncut features.
 If we need them for the clipped data, we have to recalculate them from the new geometries.
+Heads up: `length_km` was stored by Natural Earth and doesn't always match the geometries even before clipping (for road 1138 it says 435 km, but we measured about 287 km), so it's good practice to check stored attributes against the data.
 
 
-
-## Plot
+## Plot and exercises
 
 Finally, we can put all our data together in the same map:
 
@@ -414,7 +463,7 @@ plt.show()
 ```
 
 :::{.callout-tip}
-## Exercise
+## Exercise 1
 Notice the overlapping labels for Anchorage and Valdez:
 
 ![](/book/images/lesson-13/overlapping_points.png){width="40%" fig-align="center"}
@@ -435,5 +484,37 @@ for x, y, name in zip(ak_places.geometry.x, ak_places.geometry.y, ak_places['nam
 valdez = ak_places[ak_places['name']=='Valdez']
 ax.text(valdez.geometry.x.iloc[0]+30000, valdez.geometry.y.iloc[0]+20000, 'Valdez', fontsize=8, ha='left')
 ```
+-->
+:::
+
+:::{.callout-tip}
+## Exercise 2
+Look closely at southeast Alaska.
+A short road goes past the Alaska border into Canada.
+Why is this road on our map of Alaska?
+How could you update the map so it only shows roads inside Alaska but still includes the ferry routes?
+
+<!--
+Expected answer: this is road 1082. The map uses ak_complete_roads, which was clipped
+with Alaska's bounding box, so the part of road 1082 in Canada was kept.
+Clipping everything to the polygons isn't a good fix because it cuts the ferry routes over water.
+
+One option is to treat roads and ferry routes differently:
+use the polygon clip for roads and the bounding box clip for ferry routes.
+
+```python
+# Ferry routes have type 'Ferry Route' or 'Ferry, seasonal'
+is_ferry = usa_roads['type'].str.startswith('Ferry')
+
+ak_land_roads = ak_roads[~is_ferry.loc[ak_roads.index]]
+ak_ferries = ak_complete_roads[is_ferry.loc[ak_complete_roads.index]]
+
+ak_final_roads = pd.concat([ak_land_roads, ak_ferries])
+```
+
+Then use ak_final_roads instead of ak_complete_roads in the map.
+Another option is to clip to a buffered polygon, for example alaska.buffer(50000).
+It's simpler, but it also keeps a 50 km strip of Canada along the border, so part of road 1082 would come back.
+Ferry routes still extend over water outside the Alaska polygons, which is what we want.
 -->
 :::
