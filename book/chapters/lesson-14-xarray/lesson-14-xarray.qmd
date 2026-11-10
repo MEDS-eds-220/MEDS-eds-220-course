@@ -87,12 +87,12 @@ are small notes or supplementary metadata to annotate a variable or the file as 
 
 ### Metadata standards
 
-The most commonly used metadata standard for geospatial data is the **Climate and Forecast metadata standard**, also called the [**CF conventions**](https://cfconventions.org). 
+The most widely used metadata standard for climate and forecast data, especially in netCDF files, is the **Climate and Forecast metadata standard**, also called the [**CF conventions**](https://cfconventions.org). 
 
->The CF conventions are specifically designed to promote the processing and sharing of files created with the netCDF API.
->Principles of CF include self-describing data (no external tables needed for understanding), metadata equally readable by humans and software, minimum redundancy, and maximum simplicity. [(CF conventions FAQ)](http://cfconventions.org/faq.html)
+>The conventions for CF (Climate and Forecast) metadata are designed to promote the processing and sharing of files created with the NetCDF API.
+>Principles of CF include self-describing data (no external tables needed for understanding); metadata equally readable by humans and software; minimum redundancy and maximum simplicity; and a development process focusing on existing needs. [(CF conventions FAQ)](http://cfconventions.org/faq.html)
 
-The CF conventions provide a unique standardized name and precise description of over 1,000 physical variables. 
+The CF conventions provide a unique standardized name and precise description of several thousand physical variables. 
 To maximize the reusability of our data, it is best to include a variable's standardized name as an attribute called `standard_name`. 
 Variables should also include a `units` attribute. 
 This attribute should be a string that can be recognized by UNIDATA’s [UDUNITS package](https://www.unidata.ucar.edu/software/udunits/).
@@ -151,12 +151,12 @@ Latitude has values 30, 40, 50, 60, and 70, measured in degrees North. Longitude
         + description: date of measurement
 
     * Latitude attributes:
-        + standard_name: grid_latitude
-        + units: degree_N
+        + standard_name: latitude
+        + units: degree_north
 
     * Longitude attributes:
-        + standard_name: grid_longitude
-        + units: degree_E
+        + standard_name: longitude
+        + units: degree_east
 
 * Dataset attributes:
     + title: Temperature Measurements at Weather Stations
@@ -202,7 +202,7 @@ It is an n-dimensional array with **labeled dimensions**.
 <ins>We can think of an `xarray.DataArray` as representing a single variable in the netCDF data format: it holds the variable's values, dimensions, and attributes.</ins>
 
 Apart from variables, dimensions, and attributes, `xarray` introduces one more piece of information to keep track of a dataset's content: 
-in `xarray` each dimension has at least one set of **coordinates**.
+in `xarray` each dimension usually has at least one set of **coordinates**.
 A dimension's coordinates indicate the dimension's values. 
 We can think of the coordinate's values as the tick labels along a dimension. 
 
@@ -313,11 +313,11 @@ temp.attrs['description'] = 'Simple example of an xarray.DataArray'
 # Add attributes to coordinates 
 temp.time.attrs = {'description':'date of measurement'}
 
-temp.lat.attrs['standard_name']= 'grid_latitude'
-temp.lat.attrs['units'] = 'degree_N'
+temp.lat.attrs['standard_name']= 'latitude'
+temp.lat.attrs['units'] = 'degree_north'
 
-temp.lon.attrs['standard_name']= 'grid_longitude'
-temp.lon.attrs['units'] = 'degree_E'
+temp.lon.attrs['standard_name']= 'longitude'
+temp.lon.attrs['units'] = 'degree_east'
 temp
 ```
 
@@ -384,7 +384,7 @@ temp.sel(time='2022-09-01', lat=40, lon=80)
 ```
 
 Notice that the result of this indexing is a 0-dimensional `xarray.DataArray` holding a single value. 
-This is because operations on an `xarray.DataArray` always return another `xarray.DataArray`. 
+This is because most operations on an `xarray.DataArray` return another `xarray.DataArray`. 
 In particular, operations returning scalar values will also produce `xarray` objects, so we need to cast them as numbers manually using the `xarray.DataArray` [`.item()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.item.html):
 
 ```{python}
@@ -452,16 +452,11 @@ To do this, specify the file path and use the *.nc* extension for the file name.
 Then save the dataset using the `to_netcdf()` method with your file path.
 Opening a netCDF file is similarly straightforward using `xarray.open_dataset()`.
 
-```python
+```{python}
 # Save xarray.Dataset as netCDF file
 temp_dataset.to_netcdf('temp_dataset.nc')
 
 # Import netCDF file
-check = xr.open_dataset('temp_dataset.nc')
-check
-```
-```{python}
-#| echo: false
 check = xr.open_dataset('temp_dataset.nc')
 check
 ```
