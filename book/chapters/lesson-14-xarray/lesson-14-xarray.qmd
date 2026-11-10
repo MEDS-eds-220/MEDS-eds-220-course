@@ -1,3 +1,7 @@
+---
+toc-title: In this lesson
+---
+
 <!--
 Some references:
 https://github.com/carmengg/rasters_intro_SB_NAIP/blob/main/full_raster_notebook.ipynb
@@ -9,15 +13,18 @@ https://data.giss.nasa.gov/gistemp/
 https://earth-env-data-science.github.io/lectures/xarray/xarray.html#loading-data-from-netcdf-files
 -->
 
-# 13 netCDF and `xarray`
+# 16 netCDF and `xarray`
 
 In this lesson, we will get acquainted with a popular format for working with multidimensional datasets called netCDF and the Python package `xarray` @hoyer2017xarray which is based on netCDF. 
 
-<!--
-Learning objectives:
-In this lesson we will learn about the two core objects in `xarray`: the `xarray.DataArray` and the `xarray.Dataset`. 
-We will also learn how to subset data from them.
--->
+By the end of this lesson, students will be able to:
+
+- describe the netCDF data model in terms of variables, dimensions, and attributes
+- create an `xarray.DataArray` from a NumPy array, adding dimensions, coordinates, and attributes
+- subset an `xarray.DataArray` by dimension position or name, using integers or labels
+- reduce an `xarray.DataArray` along a dimension
+- combine several `xarray.DataArray`s into an `xarray.Dataset`
+- save an `xarray.Dataset` as a netCDF file and open it again
 
 This lesson is adapted from the netCDF and `xarray` lesson Galaz García created for the Arctic Data Center's course on scalable computing @clark_scalable_2023.
 
@@ -91,7 +98,7 @@ Variables should also include a `units` attribute.
 This attribute should be a string that can be recognized by UNIDATA’s [UDUNITS package](https://www.unidata.ucar.edu/software/udunits/).
 In these links you can find:
 
-* [a table with all of the CF convention's standard names](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html), and
+* [a table with all of the CF conventions' standard names](http://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html), and
 
 * [a list of the units found in the UDUNITS database](https://ncics.org/portfolio/other-resources/udunits2/#degree_N) maintained by the North Carolina Institute for Climate Studies. 
 
@@ -109,7 +116,7 @@ In these links you can find:
 **Variables, dimensions, and attributes** refer to the same components of [netCDF files we reviewed in the previous section](#netcdf).
 The following is a concrete example of variables, dimensions, and attributes that will guide the rest of the section. 
 
-#### Example
+#### Example: temperature at weather stations {.unlisted}
 
 Imagine the following scenario. We have a network of 25 weather stations. 
 They are located in a square grid: starting at 30°0′N 60°0′E, there is a station every 10° North and every 10° East. 
@@ -199,7 +206,7 @@ in `xarray` each dimension has at least one set of **coordinates**.
 A dimension's coordinates indicate the dimension's values. 
 We can think of the coordinate's values as the tick labels along a dimension. 
 
-#### Example
+#### Example: coordinates of the weather station data {.unlisted}
 
 In our previous exercise about temperature measured in weather stations, latitude is a dimension, and the latitude's coordinates are 30, 40, 50, 60, and 70 because those are the latitude values at which we are collecting temperature data. 
 In that same exercise, time is a dimension, and its coordinates are 2022-09-01, 2022-09-02, and 2022-09-03.
@@ -331,7 +338,7 @@ We can specify the data we need from each dimension either by looking up the dim
 : Indexing methods summary
 
 
-#### Example
+#### Example: temperature at one station on one day {.unlisted}
 
 We want to know what temperature was recorded by the weather station located at 40°0′N 80°0′E on September 1st, 2022. 
 
@@ -376,9 +383,9 @@ temp.isel(time=0, lon=2, lat=3)
 temp.sel(time='2022-09-01', lat=40, lon=80)
 ```
 
-Notice that the result of this indexing is a 1x1 `xarray.DataArray`. 
+Notice that the result of this indexing is a 0-dimensional `xarray.DataArray` holding a single value. 
 This is because operations on an `xarray.DataArray` always return another `xarray.DataArray`. 
-In particular, operations returning scalar values will also produce `xarray` objects, so we need to cast them as numbers manually using the `xarray.DataArray` [item() method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.item.html):
+In particular, operations returning scalar values will also produce `xarray` objects, so we need to cast them as numbers manually using the `xarray.DataArray` [`.item()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.item.html):
 
 ```{python}
 temp.sel(time='2022-09-01', lat=40, lon=80).item()
@@ -442,7 +449,7 @@ temp_dataset
 ### Save and reopen
 Finally, we want to save our dataset as a netCDF file. 
 To do this, specify the file path and use the *.nc* extension for the file name. 
-Then save the dataset using the `to_netcdf` method with your file path.
+Then save the dataset using the `to_netcdf()` method with your file path.
 Opening a netCDF file is similarly straightforward using `xarray.open_dataset()`.
 
 ```python
