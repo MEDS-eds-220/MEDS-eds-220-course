@@ -1,19 +1,7 @@
 ---
+title: 16 netCDF and `xarray`
 toc-title: In this lesson
 ---
-
-<!--
-Some references:
-https://github.com/carmengg/rasters_intro_SB_NAIP/blob/main/full_raster_notebook.ipynb
-
-https://github.com/NCEAS/scalable-computing-course/blob/2022-09-arctic/sections/08-data-structures-netcdf.qmd
-
-https://data.giss.nasa.gov/gistemp/
-
-https://earth-env-data-science.github.io/lectures/xarray/xarray.html#loading-data-from-netcdf-files
--->
-
-# 16 netCDF and `xarray`
 
 In this lesson, we will get acquainted with a popular format for working with multidimensional datasets called netCDF and the Python package `xarray` @hoyer2017xarray which is based on netCDF. 
 
@@ -29,6 +17,8 @@ By the end of this lesson, students will be able to:
 This lesson is adapted from the netCDF and `xarray` lesson Galaz García created for the Arctic Data Center's course on scalable computing @clark_scalable_2023.
 
 ## netCDF
+
+[Slides here.](https://docs.google.com/presentation/d/11uJ_HQd0gA2Bm04f8thUxdjzUU2TqKeouXnetw1YuU0/edit?slide=id.g297c2556425_1_83#slide=id.g297c2556425_1_83)
 
 Efficient and reproducible data analysis begins with choosing a proper format to store our data, particularly when working with large, complex, multi-dimensional datasets. 
 Consider, for example, the following Earth System Data Cube from Mahecha et al. @mahecha_earth_2020, which measures nine environmental variables at high resolution across space and time. 
@@ -129,7 +119,7 @@ What are the *variables*, *dimensions* and *attributes* for this data?
 :::{.callout-tip collapse="true"}
 ## Answer
 **Variables**: There is a single variable being measured: temperature. 
-The variable values can be represented as a 5x5x3 array, with constant values for each day. 
+The variable values can be represented as a 3x5x5 array, with constant values for each day. 
 
 **Dimensions**: 
 This dataset has three dimensions: time, latitude, and longitude. 
@@ -190,7 +180,8 @@ Notice that the dataset's title is general enough that we don't need to update i
 The only update we need to do is add the attributes for our new average temperature variable:
 
 * Average temperature attributes: 
-    + standard_name: average_air_temperature
+    + standard_name: mean_air_temperature
+    + units: degree_C
     + description: average temperature over three days
 
 :::
@@ -199,7 +190,7 @@ The only update we need to do is add the attributes for our new average temperat
 
 The `xarray.DataArray` is the primary data structure of the `xarray` package. 
 It is an n-dimensional array with **labeled dimensions**. 
-<ins>We can think of an `xarray.DataArray` as representing a single variable in the netCDF data format: it holds the variable's values, dimensions, and attributes.</ins>
+We can think of an `xarray.DataArray` as representing a single variable in the netCDF data format: it holds the variable's values, dimensions, and attributes.
 
 Apart from variables, dimensions, and attributes, `xarray` introduces one more piece of information to keep track of a dataset's content: 
 in `xarray` each dimension usually has at least one set of **coordinates**.
@@ -284,7 +275,7 @@ Next, we add the attributes (metadata) for our temperature data as a dictionary:
 
 ```{python}
 # Attributes (metadata) of the data array 
-attrs = { 'title':'temperature across weather stations',
+attrs = { 'long_name':'temperature across weather stations',
           'standard_name':'air_temperature',
           'units':'degree_C'}
 ```
@@ -321,7 +312,7 @@ temp.lon.attrs['units'] = 'degree_east'
 temp
 ```
 
-At this point, since we have a single variable, the dataset attributes and the variable attributes are the same. 
+So far, all these attributes describe the temperature variable. When we create an `xarray.Dataset` later, we will add attributes that describe the whole dataset, like its `title`. 
 
 ### Subsetting
 
@@ -402,7 +393,10 @@ For example, we can calculate the average temperature at each weather station ov
 ```{python}
 avg_temp = temp.mean(dim = 'time') 
 
-avg_temp.attrs = {'title':'Average temperature over three days'}
+avg_temp.attrs = {'long_name':'average temperature over three days',
+                  'standard_name':'air_temperature',
+                  'units':'degree_C',
+                  'cell_methods':'time: mean'}
 avg_temp
 ```
 
@@ -446,6 +440,24 @@ Notice the following:
 temp_dataset
 ```
 
+### Select variables
+
+To select a single variable from an `xarray.Dataset`, we use its name in square brackets, just like selecting a column from a `pandas.DataFrame`.
+The result is an `xarray.DataArray`:
+
+```{python}
+# Select one variable: returns an xarray.DataArray
+temp_dataset['avg_temp']
+```
+
+To select one or more variables and keep them in an `xarray.Dataset`, we pass a list of variable names.
+The variables in the new `xarray.Dataset` follow the order of the list:
+
+```{python}
+# Select a list of variables: returns an xarray.Dataset
+temp_dataset[['temp', 'avg_temp']]
+```
+
 ### Save and reopen
 Finally, we want to save our dataset as a netCDF file. 
 To do this, specify the file path and use the *.nc* extension for the file name. 
@@ -460,3 +472,14 @@ temp_dataset.to_netcdf('temp_dataset.nc')
 check = xr.open_dataset('temp_dataset.nc')
 check
 ```
+
+<!--
+Some references:
+https://github.com/carmengg/rasters_intro_SB_NAIP/blob/main/full_raster_notebook.ipynb
+
+https://github.com/NCEAS/scalable-computing-course/blob/2022-09-arctic/sections/08-data-structures-netcdf.qmd
+
+https://data.giss.nasa.gov/gistemp/
+
+https://earth-env-data-science.github.io/lectures/xarray/xarray.html#loading-data-from-netcdf-files
+-->
