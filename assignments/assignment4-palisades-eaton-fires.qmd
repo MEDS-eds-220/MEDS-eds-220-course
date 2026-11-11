@@ -15,7 +15,7 @@ This assignment is due by **11:59 pm on {{< var hwk4-due >}}**. All tasks for th
   - [ ] Answer for task 1 must be submitted as a PDF file.
   - [ ] Answers for task 2 must be submitted as a PDF file to Gradescope, *not* an HTML or any other format.
   - [ ] Double-check that each PDF is uploaded to the correct task on Gradescope. 
-  - [ ] Before you upload your finished notebook to Gradescope, please rename your notebook so it is called `hwk4-task2-false-color-YOURLASTNAME.pdf`.
+  - [ ] Before you upload your finished notebook to Gradescope, please name its PDF `hwk4-task2-false-color-YOURLASTNAME.pdf`.
 
 - Notebook PDF content checklists:
   - [ ] Ensure your notebooks include a link to your assignment's GitHub repository in the designated section.
@@ -61,7 +61,7 @@ To convert your notebook to PDF, we will first convert your notebook to HTML, an
 
 ## Task 1: The politics of pixels reading
 
-When working with satellite data, it’s easy to assume that it is inherently objective and equally accessible to everyone. However, Bennett et al., in their paper *The Politics of Pixels: A Review and Agenda for Critical Remote Sensing* (2022 @bennett_politics_2022), challenge this assumption, arguing that remote sensing needs a critical lens. They emphasize that various sociopolitical factors influence who collects remotely sensed data, how it’s collected, and ultimately, who benefits from its insights. This reading will encourage you to explore the biases and inequalities that can be embedded in remote sensing technologies and practices.
+When working with satellite data, it’s easy to assume that it is inherently objective and equally accessible to everyone. However, Bennett et al., in their paper *The Politics of Pixels: A Review and Agenda for Critical Remote Sensing* @bennett_politics_2022, challenge this assumption, arguing that remote sensing needs a critical lens. They emphasize that various sociopolitical factors influence who collects remotely sensed data, how it’s collected, and ultimately, who benefits from its insights. This reading will encourage you to explore the biases and inequalities that can be embedded in remote sensing technologies and practices.
 
 ![](/assignments/images/spacex-VBNb52J8Trk-unsplash.jpg)
 
@@ -122,7 +122,7 @@ eds220-hwk4
 #### 1. Reading
 Read the following resources about false color images and Landsat imagery: 
 
-- [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue? How to Interpret a False-Color Satellite Image](https://earthobservatory.nasa.gov/features/FalseColor)
+- [NASA Earth Observatory - Why is that Forest Red and that Cloud Blue? How to Interpret a False-Color Satellite Image](https://science.nasa.gov/earth/earth-observatory/how-to-interpret-a-false-color-satellite-image)
 
 - [What are the band designations for the Landsat satellites?](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites)
 
@@ -143,27 +143,9 @@ Explore the fire perimeter data and write a brief summary of the information you
 
 #### 3. NetCDF data import and exploration
 
-:::{.callout-caution appearance="minimal"}
-If you are **working on your personal computer**: then follow steps a, b, and c to update the `eds220-env` conda environment (recommended). 
+a. Import the Landsat data using `xr.open_dataset()`.
 
-If you are **working on workbench-1**: the EDS-220 environment is already updated with the `netcdf4` package and you can skip steps a, b, and c.
-:::
-On the terminal:
-
-a. Activate the `eds220-env` conda environment and verify it is active.
-
-b. Install the netCDF4 package in the `eds220-env` environment by running
-```default
-conda install -c conda-forge netcdf4
-```
-
-c. Verify that the `netcdf4` package was installed.
-
-In your notebook:
-
-d. Import the Landsat data using `xr.open_dataset()`.
-
-e. Explore the data and write a brief summary of the information you obtained from the preliminary exploration. Your summary should include a description of the data's variables, dimensions, and coordinates.
+b. Explore the data and write a brief summary of the information you obtained from the preliminary exploration. Your summary should include a description of the data's variables, dimensions, and coordinates.
 
 #### 4. Restoring geospatial information
 
@@ -171,7 +153,7 @@ a. Use `rio.crs` to print the CRS of this dataset. Is this a geospatial object?
 
 b. You may have noticed in section 3 that the geospatial information for this dataset is stored in the variable `spatial_ref`. Print the CRS by accessing the `spatial_ref.crs_wkt` attribute of the dataset.
 
-c. Recover the geospatial information by using [`rio.write_crs()`](https://corteva.github.io/rioxarray/stable/getting_started/crs_management.html#Setting-the-CRS) and the spatial reference information from part b. 
+c. Recover the geospatial information by using [`rio.write_crs()`](https://vylor.github.io/rioxarray/stable/getting_started/crs_management.html#Setting-the-CRS) and the spatial reference information from part b. 
 
 d. Print the CRS of the updated dataset. 
 
@@ -179,7 +161,7 @@ d. Print the CRS of the updated dataset.
 
 a. Without creating any new variables: 
   - select the red, green, and blue variables (in that order) of the `xarray.Dataset` holding the Landsat data, 
-  - convert it to an `xarray.DataArray` using the `to_array()` method, and then 
+  - convert it to an `xarray.DataArray` using the [`to_dataarray()`](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.to_dataarray.html) method, and then 
   - use `.plot.imshow()` to create an RGB image with the data. 
 There will be two warnings; that's ok.
 
@@ -228,7 +210,7 @@ The rest of your notebook should be organized into logical subsections (indicate
 
 #### 9. Update your repository {#sec-repo-instructions}
 
-Update your repository's README with (at least) the following (based on [EDS 296](https://ucsb-meds.github.io/README-guidelines/)):
+Update your repository's README with (at least) the following (based on the [MEDS README guidelines](https://ucsb-meds.github.io/README-guidelines/)):
 
 - [ ] **Title.** Short, but descriptive title.
 - [ ] **"About" section.** A brief explanation of the repository’s purpose.
