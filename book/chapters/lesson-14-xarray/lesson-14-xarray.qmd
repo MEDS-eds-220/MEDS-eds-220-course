@@ -473,6 +473,145 @@ check = xr.open_dataset('temp_dataset.nc')
 check
 ```
 
+## A real netCDF file
+
+So far, we have worked with a small dataset we built ourselves, where temperature is measured on a regular grid of latitudes and longitudes. 
+From this example, it would be easy to conclude that netCDF files always hold rasters, but that's not the case! 
+netCDF files can also store measurements taken at a single location over time, vertical profiles in the ocean or the atmosphere, or the path followed by a ship or an animal. 
+
+Let's explore a real netCDF file that is not a raster: the measurements from a buoy in the Santa Barbara Channel.
+
+### About the data
+
+The [National Data Buoy Center (NDBC)](https://www.ndbc.noaa.gov) of the National Oceanic and Atmospheric Administration (NOAA) operates a network of buoys and coastal stations that measure weather and ocean conditions. 
+[Station 46053, East Santa Barbara](https://www.ndbc.noaa.gov/station_page.php?station=46053), is a buoy about 19 km south of the UCSB campus. 
+It records variables such as wind speed, wave height, air pressure, and air and sea surface temperatures. 
+We will use its standard meteorological data for 2025 [@noaa_ndbc_46053_2025].
+
+```python
+#| code-fold: true
+#| code-summary: "Code for the map"
+import geopandas as gpd
+#import contextily as ctx
+import matplotlib.pyplot as plt
+
+# Locations of the buoy and the UCSB campus
+locations = gpd.GeoDataFrame({'name': ['Buoy 46053', 'UCSB']},
+                             geometry=gpd.points_from_xy([-119.839, -119.8489],
+                                                         [34.241, 34.4140]),
+                             crs='EPSG:4326')
+# Reproject to match the basemap tiles
+locations = locations.to_crs('EPSG:3857')
+
+fig, ax = plt.subplots(figsize=(6, 5))
+locations.plot(ax=ax, color=['tab:blue', 'tab:orange'], markersize=60)
+
+# Label each point
+for x, y, name in zip(locations.geometry.x, locations.geometry.y, locations['name']):
+    ax.annotate(name, (x, y), xytext=(6, 6), textcoords='offset points')
+
+# Leave some space around the points
+xmin, ymin, xmax, ymax = locations.total_bounds
+ax.set_xlim(xmin - 15000, xmax + 15000)
+ax.set_ylim(ymin - 10000, ymax + 10000)
+
+#ctx.add_basemap(ax, crs=locations.crs)
+ax.set_axis_off()
+plt.show()
+```
+
+### Open the file
+
+NDBC shares its data through a server that uses [OPeNDAP](https://www.opendap.org), a protocol to access data remotely. 
+This means we can open the file with `xarray.open_dataset()` directly from its URL, without downloading it first. 
+Remember that one of the design goals of netCDF is to be *scalable*: "small subsets of large datasets may be accessed efficiently through netCDF interfaces, even from remote servers." 
+This is an example of that!
+
+```{python}
+# Open the 2025 data for buoy 46053 from the NDBC server
+url = 'https://dods.ndbc.noaa.gov/thredds/dodsC/data/stdmet/46053/46053h2025.nc'
+buoy = xr.open_dataset(url)
+buoy
+```
+
+:::{.callout-tip}
+## Check-in
+Click through the data viewer and answer the following questions:
+
+1. What are the dimensions of this dataset, and what are their sizes?
+2. Why does the data from a single buoy have latitude and longitude dimensions?
+3. What are the units of the sea surface temperature?
+4. Who produced this dataset, and which metadata conventions does it follow?
+5. What is something about the data that might not be described in the netCDF file?
+:::
+
+:::{.callout-tip collapse="true"}
+## Answer
+1. The dimensions are time (52,550), latitude (1), and longitude (1). The time values go from January 1 to December 31, 2025. Notice that the file doesn't say how far apart the time values are: the `time` coordinate stores every single timestamp, and they don't need to be evenly spaced.
+2. The file uses the same layout as a gridded dataset, but the "grid" has a single cell: the buoy's location. The data is really a time series at one point.
+3. The `units` attribute of `sea_surface_temperature` is `degree_Celsius`.
+4. The `institution` attribute says the NOAA National Data Buoy Center. The `conventions` attribute says COARDS, an older set of conventions that the CF conventions build on.
+5. There are many possible answers: how often each variable is measured, the height or depth of each sensor, or how the instruments were calibrated. In particular, all 13 variables share the same `time` dimension, which makes it look like every variable is measured at every time step. We can't assume that! For example, this buoy records waves every 30 minutes and most other variables every 10 minutes, so the wave variables are `NaN` at two out of every three time steps.
+:::
+<!-- 
+### Missing values
+
+NDBC stores missing values as 99, 999, or 9999, depending on the variable. 
+The value used for each variable is recorded in its `_FillValue` attribute. 
+When `xarray` opens the file, it replaces these values with `NaN` and moves `_FillValue` from `.attrs` to `.encoding`:
+
+```{python}
+# Value used to mark missing air temperature data in the file
+buoy['air_temperature'].encoding['_FillValue']
+```
+
+If we read the same data from a text file with `pandas`, a value of 999 would look like a real measurement unless we told `pandas` it marks missing data.
+
+Let's calculate the percentage of missing values in each variable. 
+Notice that when we apply an operation to an `xarray.Dataset`, it is applied to every variable:
+
+```{python}
+# Percentage of missing values in each variable
+buoy.isnull().mean() * 100
+```
+
+Two variables, `visibility` and `water_level`, are completely empty: they are part of the file, but this buoy does not measure them. 
+The wave variables (`wave_height`, `dominant_wpd`, `average_wpd`, and `mean_wave_dir`) are missing 71% of their values.
+
+:::{.callout-tip}
+## Check-in
+Why do you think the wave variables are missing so many values? 
+Look at the wave height measurements during the first hour of June 1, 2025:
+
+```{python}
+# Wave height measurements during the first hour of June 1, 2025
+buoy['wave_height'].sel(time='2025-06-01T00').isel(latitude=0, longitude=0)
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Answer
+The buoy records waves every 30 minutes, while most other variables are recorded every 10 minutes. 
+So, by design, four out of every six time steps have no wave measurement, which accounts for about 67% of missing values. 
+The rest comes from actual gaps in the data, like most of March 2025.
+
+A `NaN` can mean very different things: a variable the station doesn't measure, a measurement taken on a different schedule, or an instrument that stopped working. 
+Always check which one it is before analyzing your data!
+::: -->
+
+### Plot a variable
+
+Finally, let's plot the sea surface temperature over the year. 
+We select the only latitude and longitude values with `isel()` so that `xarray` plots a time series:
+
+```{python}
+# Plot sea surface temperature time series
+buoy['sea_surface_temperature'].isel(latitude=0, longitude=0).plot()
+```
+
+Notice that `xarray` used the variable's `long_name` and `units` attributes to label the y-axis. 
+This is one of the benefits of a self-describing data format!
+
 <!--
 Some references:
 https://github.com/carmengg/rasters_intro_SB_NAIP/blob/main/full_raster_notebook.ipynb
