@@ -31,7 +31,14 @@ EDS 217 did **not** cover `.iloc`, method chaining (it explicitly avoided it), `
 
 **Other summer courses.** Students also take EDS 214 (reproducibility) and EDS 221 (programming in R). Their 2026 sites are `eds-214-reproducibility-m26/eds-214-reproducibility-m26.github.io`, `eds-221-programming-m26/eds-221-programming-m26.github.io` and `EDS-217-Essential-Python/EDS-217-Essential-Python.github.io` on GitHub, and may already be cloned in `_planning/summer-course-repos/`. When a page teaches git, the workbench, Quarto or reproducibility, search them for overlap so you can say what is review. For example, EDS 214 already had students create and resolve a merge conflict between Workbench and their laptop, and draw commit histories.
 
-**The environment.** Read `eds220-env.yml` each time. As of October 2026 it pins pandas 2.3.3, numpy 1.26.4 (which keeps pandas on 2.x), geopandas 1.1.4, xarray 2026.9.0, matplotlib 3.11.2 and Python 3.12. For every finding, say whether it affects students **now** or only **after the environment is updated**.
+**The environment.** Check every finding against the environment students actually have, not the repo's `eds220-env.yml`. In Fall 2026 students built their env from the 2026-10-05 version of the yml (commit `d3ce49f`). The repo file was bumped on 2026-10-13 (commit `6209dc6`) and no longer matches what students run. The student env pins:
+
+- Python 3.11.4, numpy 1.24.3, matplotlib 3.7.1, geopandas 0.14.4, rioxarray 0.14.1
+- netcdf4 1.7.2, libgdal-netcdf 3.10.3, scikit-learn 1.7.2, statsmodels 0.15.0, contextily 1.7.1, geogif 0.3
+- earthaccess 0.15.1, odc-stac 0.4.0, planetary-computer 1.0.0, pystac-client 0.7.5, otter-grader 5.7.1, ipykernel 6.30.1, pip 23.3.1
+- unpinned, as resolved: xarray 2024.10.0, pandas 2.3.2, scipy 1.15.2
+
+The instructor's local `eds220-env` has the same core versions (Python, numpy, pandas, xarray, geopandas, rioxarray, matplotlib), but as of 2026-11-10 it is missing `contextily`, `statsmodels` and `geogif`; code that needs them can't be tested or rendered locally until they are installed. Run tests in it (`conda activate eds220-env`) and treat those results as what students see. Confirm with `conda list` at the start of an audit; if it no longer matches this list, say so and ask which env students have. The repo yml (pandas 2.3.3, numpy 1.26.4, geopandas 1.1.4, xarray 2026.9.0, matplotlib 3.11.2, Python 3.12) is the planned update. For every finding, say whether it affects students **now** (student env) or only **after the environment is updated** (repo yml or later).
 
 **Earlier findings.** If `_planning/code-currency-audit.html` exists, read it first. It is a full-course audit from September 2026. Reuse its findings for this file, but check that each one is still present (line numbers shift, and some items are fixed). Don't report items that are already fixed.
 
