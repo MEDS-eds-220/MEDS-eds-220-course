@@ -3,14 +3,14 @@
 In this lesson we will introduce [`rioxarray`](https://corteva.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. 
 The name `rioxarray` stands for *raster input/output + xarray*. 
 
-We will use the `rioxarray`'s `rio` accessor to obtain raster information from an `xarray.DataArray` and do some raster manipulations (calculate NDVI). 
+We will use `rioxarray`'s `rio` accessor to obtain raster information from an `xarray.DataArray` and do some raster manipulations (calculate NDVI). 
 
 ## About the data
 The raster files we will use today come from the [US National Agriculture Imagery Program (NAIP)](https://naip-usdaonline.hub.arcgis.com). 
-NAIP images are are high-resolution aerial images with four spectral bands: red (R), green (G), blue (B) and near-infrared (NIR). 
-The raster's we'll use today are from 2020.
+NAIP images are high-resolution aerial images with four spectral bands: red (R), green (G), blue (B) and near-infrared (NIR). 
+The rasters we'll use today are from 2020.
 
-The data used in this lesson was pre-processing from a complete NAIP scene to separate the RGB bands from the NIR band and reduce the spatial extent. 
+The data used in this lesson was pre-processed from a complete NAIP scene to separate the RGB bands from the NIR band and reduce the spatial extent. 
 The data was accessed through [Microsoft's Planetary Computer NAIP data repository](https://planetarycomputer.microsoft.com/dataset/naip#overview).
 
 ## Import a TIF file
@@ -38,7 +38,7 @@ nir = rioxr.open_rasterio(fp)
 nir
 ```
 
-Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordiantes for each dimension, and some attributes. We can also directly access some of these attribues:
+Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordinates for each dimension, and some attributes. We can also directly access some of these attributes:
 
 ```{python}
 print('Shape: ', nir.shape)
@@ -61,7 +61,7 @@ nir.plot()
 Notice the coordinates on the x and y axes.
 
 This map shows the light captured in the near-infrared spectrum by a sensor on a plane. 
-**Can you guess where this?** 
+**Can you guess where this is?** 
 If you guessed Santa Barbara downtown, you guessed right! 
 
 ## Drop a dimension
@@ -90,14 +90,14 @@ print(nir.dims, nir.coords,'\n')
 nir = nir.squeeze()
 print(nir.dims, nir.coords,'\n')
 
-# Remove coordinates associated to band
+# Remove coordinates associated with band
 nir = nir.drop('band')
 print(nir.dims, nir.coords)
 ```
 
 ## `rio` accessor
 
-Remember an **accessor** in Python let's us access a different set of properties of an object. We have previously used accesors like `.str` and `.dt` in `pandas` to work with strings and dates. In this lesson, we will use the `.rio` accessor for an `xarray.DataArray` to access its raster properties. 
+Remember an **accessor** in Python lets us access a different set of properties of an object. We have previously used accessors like `.str` and `.dt` in `pandas` to work with strings and dates. In this lesson, we will use the `.rio` accessor for an `xarray.DataArray` to access its raster properties. 
 For example, we can access the number of bands, height, width, spatial bounding box, and CRS:
 
 ```{python}
@@ -169,7 +169,7 @@ aoi.plot()
 Remember: **if two geospatial sets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
 
 ```{python}
-# Examine CRss
+# Examine CRSs
 print('aoi CRS: ', aoi.crs)
 print('nir CRS: ', nir.rio.crs)
 print('rgb CRS: ', rgb.rio.crs)
@@ -192,7 +192,7 @@ aoi.plot(ax=ax, alpha=0.6)
 plt.show()
 ```
 
-To clip the raster using the AOI polygon we use the `.rio.clip_box()` method:
+To clip the raster to the AOI's bounding box we use the `.rio.clip_box()` method:
 
 ```{python}
 # Clip rasters to AOI
@@ -203,7 +203,7 @@ nir_small = nir.rio.clip_box(*aoi.total_bounds)
 Notice a few things:
 
 - we had to use the `.rio` accessor to access the `clip_box()` method 
-- similarly to the `shapely.box()` function [we've used previously](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd), [`.rio.clip_box()` usual parameters](https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box) are `minx`, `miny`, `maxx`, `maxy`. We are using the `*` asterisk as an unpacking operator to get these from the list `aoi.total_bounds`.
+- [`.rio.clip_box()` usual parameters](https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box) are `minx`, `miny`, `maxx`, `maxy`, the same four values the `total_bounds` attribute gave us when we [clipped with a bounding box using `gpd.clip()`](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd#clipping-with-a-bounding-box). We are using the `*` asterisk as an unpacking operator to get these from the array `aoi.total_bounds`.
 
 Let's check our clipped data:
 
@@ -236,13 +236,13 @@ rgb_small.plot.imshow(size=4,
 
 ## Raster math
 
-We often want perform calculations on rasters to create a new output raster, commonly known as "raster math". 
+We often want to perform calculations on rasters to create a new output raster, commonly known as "raster math". 
 <!--TODO: add diagrams-->
 
 In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our AOI. 
 The NDVI is an index commonly used to check if an area has live green vegetation or not.
 
-According to the [Earth Observing System](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/)
+According to the [Earth Observing System](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/):
 
 > The results of the NDVI calculation range from -1 to 1. Negative values correspond to areas with water surfaces, manmade structures, rocks, clouds, snow; bare soil usually falls within 0.1-0.2 range; and plants will always have positive values between 0.2 and 1. Healthy, dense vegetation canopy should be above 0.5, and sparse vegetation will most likely fall within 0.2 to 0.5. 
 
@@ -271,7 +271,7 @@ Do these results look as expected?
 
 ### Data type issues
 The `uint8` (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. 
-In particular, calculations don't return what what we are used to when working with intgers ([they're done module 256](https://en.wikipedia.org/wiki/Modular_arithmetic)):
+In particular, calculations don't return what we are used to when working with integers ([they're done modulo 256](https://en.wikipedia.org/wiki/Modular_arithmetic)):
 
 ```{python}
 np.uint8(150) + np.uint8(150)
@@ -283,13 +283,13 @@ If both NIR and Red are very close to 255, when we add them, the calculation ove
 :::{.callout-warning}
 ## Avoid silent failures: ALWAYS verify your results!
 Notice that when we performed the NDVI calculation we did not get any warning, although we were overflowing the computation at every cell of our array. 
-This is can be an example of what is referred as *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. 
+This is an example of what is referred to as a *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. 
 **That's why it's so important to double-check our results!**
 :::
 
 ### Updating data types
 
-To be able to perform the calculation successfully, we will need to udpate the data type of our rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations:
+To be able to perform the calculation successfully, we will need to update the data type of our rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations:
 
 ```{python}
 # Update data type to int16 to perform NDVI calculation
