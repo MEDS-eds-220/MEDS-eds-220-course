@@ -1,4 +1,7 @@
-# 14 `rioxarray`
+---
+title: "17 `rioxarray`"
+toc-title: In this lesson
+---
 
 In this lesson we will introduce [`rioxarray`](https://corteva.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. 
 The name `rioxarray` stands for *raster input/output + xarray*. 
@@ -242,7 +245,7 @@ We often want to perform calculations on rasters to create a new output raster, 
 In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our AOI. 
 The NDVI is an index commonly used to check if an area has live green vegetation or not.
 
-According to the [Earth Observing System](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/):
+According to [EOS Data Analytics](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/):
 
 > The results of the NDVI calculation range from -1 to 1. Negative values correspond to areas with water surfaces, manmade structures, rocks, clouds, snow; bare soil usually falls within 0.1-0.2 range; and plants will always have positive values between 0.2 and 1. Healthy, dense vegetation canopy should be above 0.5, and sparse vegetation will most likely fall within 0.2 to 0.5. 
 
@@ -282,14 +285,14 @@ If both NIR and Red are very close to 255, when we add them, the calculation ove
 
 :::{.callout-warning}
 ## Avoid silent failures: ALWAYS verify your results!
-Notice that when we performed the NDVI calculation we did not get any warning, although we were overflowing the computation at every cell of our array. 
+Notice that when we performed the NDVI calculation we did not get any warning, although the computation overflowed at every cell where NIR + Red was greater than 255.
 This is an example of what is referred to as a *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. 
 **That's why it's so important to double-check our results!**
 :::
 
 ### Updating data types
 
-To be able to perform the calculation successfully, we will need to update the data type of our rasters into `int16`, which will be big enough to hold all the numbers that appear in the calculations:
+To be able to perform the calculation successfully, we will need to update the data type of our rasters to `int16`, which will be big enough to hold all the numbers that appear in the calculations:
 
 ```{python}
 # Update data type to int16 to perform NDVI calculation
@@ -303,7 +306,7 @@ print('NIR: original dtype:', nir.dtype, '.... converted dtype:', nir16.dtype)
 ndvi = (nir16 - red16)/(nir16+red16)
 
 # Plot
-fig, ax = plt.subplots()  # Adjust figure size
+fig, ax = plt.subplots()  # Create figure and axes
 ndvi.plot(
     ax=ax,
     cmap="RdYlGn",  # Colormap for NDVI
