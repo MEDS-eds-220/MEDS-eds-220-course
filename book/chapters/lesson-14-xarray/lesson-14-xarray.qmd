@@ -488,11 +488,11 @@ The [National Data Buoy Center (NDBC)](https://www.ndbc.noaa.gov) of the Nationa
 It records variables such as wind speed, wave height, air pressure, and air and sea surface temperatures. 
 We will use its standard meteorological data for 2025 [@noaa_ndbc_46053_2025].
 
-```python
+```{python}
 #| code-fold: true
 #| code-summary: "Code for the map"
 import geopandas as gpd
-#import contextily as ctx
+import contextily as ctx
 import matplotlib.pyplot as plt
 
 # Locations of the buoy and the UCSB campus
@@ -512,10 +512,10 @@ for x, y, name in zip(locations.geometry.x, locations.geometry.y, locations['nam
 
 # Leave some space around the points
 xmin, ymin, xmax, ymax = locations.total_bounds
-ax.set_xlim(xmin - 15000, xmax + 15000)
+ax.set_xlim(xmin - 15000, xmax + 30000)
 ax.set_ylim(ymin - 10000, ymax + 10000)
 
-#ctx.add_basemap(ax, crs=locations.crs)
+ctx.add_basemap(ax, crs=locations.crs, attribution_size=6)
 ax.set_axis_off()
 plt.show()
 ```
