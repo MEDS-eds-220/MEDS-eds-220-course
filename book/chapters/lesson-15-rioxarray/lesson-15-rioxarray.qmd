@@ -149,9 +149,7 @@ Since it has three bands, we can plot it as an image using the `.plot.imshow()` 
 ```{python}
 # Plot three bands as RGB image
 rgb_aspect_ratio = rgb.rio.width / rgb.rio.height  # Raster's aspect ratio
-rgb.plot.imshow(size=8,  # Plot's height in inches
-                aspect=rgb_aspect_ratio  # Ratio of width/height
-                )
+rgb.plot.imshow(figsize=(8*rgb_aspect_ratio,8))  # (width, height) in inches
 ```
 
 ## Clip a raster
@@ -186,7 +184,7 @@ And plot them together:
 
 ```{python}
 # Plot of RGB raster with AOI overlay
-fig, ax = plt.subplots(figsize=(8, 8 * rgb_aspect_ratio))  # Directly set size and aspect
+fig, ax = plt.subplots(figsize=(8 * rgb_aspect_ratio, 8))
 rgb.plot.imshow(ax=ax)
 aoi.plot(ax=ax, alpha=0.6)
 plt.show()
@@ -227,9 +225,7 @@ print('Clipped shape: ', rgb_small.shape)
 
 # plot with correct sizes
 ratio = rgb_small.rio.width / rgb_small.rio.height  # Raster's aspect ratio
-rgb_small.plot.imshow(size=4, 
-                      aspect=ratio
-                      )
+rgb_small.plot.imshow(figsize=(4*ratio,4))
 ```
 -->
 :::
@@ -246,6 +242,8 @@ According to [NASA's Earth Observatory](https://science.nasa.gov/earth/earth-obs
 Typical values for different surfaces are:
 
 > Very low values of NDVI (0.1 and below) correspond to barren areas of rock, sand, or snow. Moderate values represent shrub and grassland (0.2 to 0.3), while high values indicate temperate and tropical rainforests (0.6 to 0.8).
+
+Water and many artificial surfaces, like roofs and pavement, often have NDVI values close to zero or negative.
 
 The NDVI is calculated using the NIR and red bands. 
 The formula is
