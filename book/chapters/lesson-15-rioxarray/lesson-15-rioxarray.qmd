@@ -20,10 +20,11 @@ By the end of this lesson, students will be able to:
 ## About the data
 The raster files we will use today come from the [US National Agriculture Imagery Program (NAIP)](https://naip-usdaonline.hub.arcgis.com). 
 NAIP images are high-resolution aerial images with four spectral bands: red (R), green (G), blue (B) and near-infrared (NIR). 
-The rasters we'll use today are from 2020.
+The rasters we'll use today were flown on July 24, 2018.
 
 The data used in this lesson was pre-processed from a complete NAIP scene to separate the RGB bands from the NIR band and reduce the spatial extent. 
-The data was accessed through [Microsoft's Planetary Computer NAIP data repository](https://planetarycomputer.microsoft.com/dataset/naip#overview).
+The data was accessed through [Microsoft's Planetary Computer NAIP data repository](https://planetarycomputer.microsoft.com/dataset/naip#overview) @usda_naip_2018. 
+The original scene is [`ca_m_3411935_sw_11_060_20180724_20190209`](https://planetarycomputer.microsoft.com/api/stac/v1/collections/naip/items/ca_m_3411935_sw_11_060_20180724_20190209).
 
 ## Import a TIF file
 
@@ -202,6 +203,7 @@ Notice a few things:
 
 - we had to use the `.rio` accessor to access the `clip_box()` method 
 - [`.rio.clip_box()` usual parameters](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) are `minx`, `miny`, `maxx`, `maxy`, the same four values the `total_bounds` attribute gave us when we [clipped with a bounding box using `gpd.clip()`](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd#clipping-with-a-bounding-box). We are using the `*` asterisk as an unpacking operator to get these from the array `aoi.total_bounds`.
+- `.rio.clip_box()` keeps everything inside the AOI's bounding box, not only the AOI itself. To clip a raster to the exact outline of the AOI we can use [`.rio.clip()`](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip) with the AOI's geometry: `nir.rio.clip(aoi.geometry)`.
 
 Let's check our clipped data:
 
@@ -259,6 +261,20 @@ red_small
 ```
 
 We can perform raster calculations using the same arithmetic we use for `numpy.ndarray`s (because, underneath it all, that's what they are). 
+
+:::{.callout-tip}
+## Check-in
+Before we calculate the NDVI, make a prediction. 
+Our area of interest is downtown Santa Barbara. 
+About what share of the area do you expect to have positive NDVI values? 
+What values do you expect for roofs and streets?
+<!--
+Expected: mostly buildings and pavement, so most cells should be close to zero or negative 
+(with int16: 71% of cells are negative, median -0.05; about 16% are above 0.2).
+Roofs and streets: near zero or negative.
+-->
+:::
+
 So our NDVI calculation is as follows:
 
 ```{python}
@@ -335,3 +351,20 @@ plt.show()
 
 In this image, vegetation shows up as the highest NDVI values, roughly between 0.25 and 0.6. Can you spot the Santa Barbara Courthouse?
 
+:::{.callout-tip}
+## Check-in
+A city planner wants to use this NDVI map to find blocks that need more street trees. 
+Write two or three sentences on what this map can and can't tell them.
+<!--
+Reasonable points:
+- it's a single date (July 24, 2018, dry season), so it may be outdated and season matters;
+- the values are 8-bit digital numbers, not reflectance, so NDVI values can't be compared directly with other flights or sensors;
+- NDVI doesn't distinguish trees from lawns or shrubs;
+- building shadows and the 0.6 m pixels affect what is detected;
+- the area is the AOI's bounding box, not the AOI itself.
+-->
+:::
+
+
+Converting the rasters to `int16` fixed the calculation, but the final map still has limits:…it shows a single summer day in 2018, and its values are 8-bit brightness values from a camera, not physical measurements of reflected light.
+A result that looks right is not the same as a result that is right, so always check your outputs against what you know about the data!
