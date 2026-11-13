@@ -3,10 +3,19 @@ title: "17 `rioxarray`"
 toc-title: In this lesson
 ---
 
-In this lesson we will introduce [`rioxarray`](https://corteva.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. 
+In this lesson we will introduce [`rioxarray`](https://vylor.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. 
 The name `rioxarray` stands for *raster input/output + xarray*. 
 
-We will use `rioxarray`'s `rio` accessor to obtain raster information from an `xarray.DataArray` and do some raster manipulations (calculate NDVI). 
+We will use `rioxarray`'s `rio` accessor to obtain raster information from an `xarray.DataArray` and do some raster manipulations (calculate NDVI).
+
+By the end of this lesson, students will be able to:
+
+- open a GeoTIFF file as an `xarray.DataArray` using `rioxarray`
+- remove a dimension of length 1 and its coordinate from an `xarray.DataArray`
+- use the `.rio` accessor to examine a raster's number of bands, height, width, bounding box and CRS
+- plot a three-band raster as an RGB image
+- clip a raster to the bounding box of an area of interest after matching their CRSs
+- calculate NDVI using raster math and explain how the data type of a raster can silently give wrong results
 
 ## About the data
 The raster files we will use today come from the [US National Agriculture Imagery Program (NAIP)](https://naip-usdaonline.hub.arcgis.com). 
@@ -31,7 +40,7 @@ import geopandas as gpd
 import rioxarray as rioxr
 ```
 
-There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://corteva.github.io/rioxarray/html/getting_started/getting_started.html). 
+There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://vylor.github.io/rioxarray/html/getting_started/getting_started.html). 
 Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to import the raster file as an `xarray.DataArray` and make sure all our geospatial data gets loaded correctly:
 
 ```{python}
@@ -48,7 +57,7 @@ print('Shape: ', nir.shape)
 print('Data type: ', nir.dtype, '\n')
 ```
 
-Using the `.values` attribute we can retrieve the underlying `numpy.array` holding the values of the variable:
+Using the `.values` attribute we can retrieve the underlying `numpy.ndarray` holding the values of the variable:
 
 ```{python}
 print(type(nir.values))
@@ -76,25 +85,16 @@ print("Sizes of dimensions:", dict(nir.sizes))
 ```
 
 This is making this `xarray.DataArray` three-dimensional when it is not needed. 
-We can "squeeze this dimension" of length 1 by:
-
-1. using the [`squeeze()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html).
-If we don't pass any parameters, then `squeeze()` gets rid of all dimensions with length one, and then
-
-2. getting rid of the associated coordinates for this dimension. 
-We can do this using the `xarray.DataArray` `drop()` method and specifying the name of the coordinates we want to remove, in this case 'band'.
+We can "squeeze this dimension" of length 1 using the [`squeeze()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html).
+We pass it the name of the dimension we want to remove, in this case 'band', and `drop=True` to also get rid of the coordinate associated with this dimension.
 
 Let's do this:
 ```{python}
 # Original dimensions and coordinates
 print(nir.dims, nir.coords,'\n')
 
-# Remove length 1 dimension (band)
-nir = nir.squeeze()
-print(nir.dims, nir.coords,'\n')
-
-# Remove coordinates associated with band
-nir = nir.drop('band')
+# Remove length 1 dimension (band) and its coordinate
+nir = nir.squeeze('band', drop=True)
 print(nir.dims, nir.coords)
 ```
 
@@ -115,9 +115,6 @@ print(nir.rio.bounds(), '\n')
 print('CRS: ', nir.rio.crs)
 ```
 
-<!--
-![Source: [spatialreference.org](https://spatialreference.org/ref/epsg/26911/)]()
--->
 
 ## Multi-band raster
 
@@ -152,7 +149,7 @@ Since it has three bands, we can plot it as an image using the `.plot.imshow()` 
 ```{python}
 # Plot three bands as RGB image
 rgb_aspect_ratio = rgb.rio.width / rgb.rio.height  # Raster's aspect ratio
-rgb.plot.imshow(size=6,  # Plot's height in inches
+rgb.plot.imshow(size=8,  # Plot's height in inches
                 aspect=rgb_aspect_ratio  # Ratio of width/height
                 )
 ```
@@ -169,7 +166,7 @@ aoi.plot()
 ```
 
 
-Remember: **if two geospatial sets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
+Remember: **if two geospatial datasets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:
 
 ```{python}
 # Examine CRSs
@@ -182,14 +179,14 @@ So let's reproject:
 ```{python}
 # Reproject AOI to RGB CRS
 aoi = aoi.to_crs(rgb.rio.crs)
-print('Matched CRS?',  aoi.crs == rgb.rio.crs)
+assert aoi.crs == rgb.rio.crs
 ```
 
 And plot them together:
 
 ```{python}
 # Plot of RGB raster with AOI overlay
-fig, ax = plt.subplots(figsize=(6, 6 * rgb_aspect_ratio))  # Directly set size and aspect
+fig, ax = plt.subplots(figsize=(8, 8 * rgb_aspect_ratio))  # Directly set size and aspect
 rgb.plot.imshow(ax=ax)
 aoi.plot(ax=ax, alpha=0.6)
 plt.show()
@@ -206,7 +203,7 @@ nir_small = nir.rio.clip_box(*aoi.total_bounds)
 Notice a few things:
 
 - we had to use the `.rio` accessor to access the `clip_box()` method 
-- [`.rio.clip_box()` usual parameters](https://corteva.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_dataset.RasterDataset.clip_box) are `minx`, `miny`, `maxx`, `maxy`, the same four values the `total_bounds` attribute gave us when we [clipped with a bounding box using `gpd.clip()`](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd#clipping-with-a-bounding-box). We are using the `*` asterisk as an unpacking operator to get these from the array `aoi.total_bounds`.
+- [`.rio.clip_box()` usual parameters](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) are `minx`, `miny`, `maxx`, `maxy`, the same four values the `total_bounds` attribute gave us when we [clipped with a bounding box using `gpd.clip()`](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd#clipping-with-a-bounding-box). We are using the `*` asterisk as an unpacking operator to get these from the array `aoi.total_bounds`.
 
 Let's check our clipped data:
 
@@ -245,9 +242,10 @@ We often want to perform calculations on rasters to create a new output raster, 
 In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our AOI. 
 The NDVI is an index commonly used to check if an area has live green vegetation or not.
 
-According to [EOS Data Analytics](https://eos.com/blog/ndvi-faq-all-you-need-to-know-about-ndvi/):
+According to [NASA's Earth Observatory](https://science.nasa.gov/earth/earth-observatory/measuring-vegetation-ndvi-evi/) @weier_measuring_2000, NDVI values always range from -1 to 1, and areas with no green leaves give values close to zero.
+Typical values for different surfaces are:
 
-> The results of the NDVI calculation range from -1 to 1. Negative values correspond to areas with water surfaces, manmade structures, rocks, clouds, snow; bare soil usually falls within 0.1-0.2 range; and plants will always have positive values between 0.2 and 1. Healthy, dense vegetation canopy should be above 0.5, and sparse vegetation will most likely fall within 0.2 to 0.5. 
+> Very low values of NDVI (0.1 and below) correspond to barren areas of rock, sand, or snow. Moderate values represent shrub and grassland (0.2 to 0.3), while high values indicate temperate and tropical rainforests (0.6 to 0.8).
 
 The NDVI is calculated using the NIR and red bands. 
 The formula is
@@ -258,19 +256,27 @@ First, let's select the red band:
 
 ```{python}
 # Select dimension by name and coordinate by label
-red = rgb_small.sel(band=1)
-red
+red_small = rgb_small.sel(band=1)
+red_small
 ```
 
-We can perform raster calculations using the same arithmetic we use for `numpy.array`s (because, underneath it all, that's what they are). 
+We can perform raster calculations using the same arithmetic we use for `numpy.ndarray`s (because, underneath it all, that's what they are). 
 So our NDVI calculation is as follows:
 
 ```{python}
-ndvi = (nir - red)/(nir + red)
+ndvi = (nir_small - red_small)/(nir_small + red_small)
 ndvi.plot()
 ```
 
 Do these results look as expected?
+Remember that NDVI values must be between -1 and 1. Let's check the range of our results:
+
+```{python}
+print('Minimum NDVI:', ndvi.min().values)
+print('Maximum NDVI:', ndvi.max().values)
+```
+
+None of the values are negative and some are infinite, so something went wrong.
 
 ### Data type issues
 The `uint8` (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. 
@@ -280,12 +286,14 @@ In particular, calculations don't return what we are used to when working with i
 np.uint8(150) + np.uint8(150)
 ```
 
-In the NDVI formula we have to add NIR + Red. 
-If both NIR and Red are very close to 255, when we add them, the calculation overflows the `uint8` data type and we don't get the expected results.
+In the NDVI formula we have to subtract and add the NIR and red values, and both operations can go outside the `uint8` range:
+
+- when NIR + Red is greater than 255, the sum wraps around to a small number;
+- when Red is greater than NIR, NIR - Red should be negative, but `uint8` cannot hold negative numbers, so the result wraps around to a large positive number.
 
 :::{.callout-warning}
 ## Avoid silent failures: ALWAYS verify your results!
-Notice that when we performed the NDVI calculation we did not get any warning, although the computation overflowed at every cell where NIR + Red was greater than 255.
+Notice that when we performed the NDVI calculation we did not get any warning, although the computation wrapped around on many cells.
 This is an example of what is referred to as a *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. 
 **That's why it's so important to double-check our results!**
 :::
@@ -296,7 +304,7 @@ To be able to perform the calculation successfully, we will need to update the d
 
 ```{python}
 # Update data type to int16 to perform NDVI calculation
-red16 = red.astype('int16')
+red16 = red_small.astype('int16')
 nir16 = nir_small.astype('int16')
 
 print('RED: original dtype:', rgb_small.dtype, '.... converted dtype:', red16.dtype)
@@ -327,5 +335,5 @@ ax.set_ylabel("")
 plt.show()
 ```
 
-Remember that plants will always have positive NDVI values between 0.2 and 1. Can you spot the Santa Barbara Courthouse?
+In this image, vegetation shows up as the highest NDVI values, roughly between 0.25 and 0.6. Can you spot the Santa Barbara Courthouse?
 
