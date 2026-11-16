@@ -6,10 +6,15 @@ image: images/palisades-fire.jpg
 sidebar: false
 ---
 
-<!-- In this discussion section you will ...
+---
 
-FILL OUT
- -->
+In January 2025, the Eaton and Palisades fires burned thousands of homes in Los Angeles County. A wildfire's impact depends not only on where it burns but also on who lives there: communities differ in their resources to evacuate, recover and rebuild. Here we will combine fire perimeters with the Environmental Justice Index to look at the social dimensions of these two fires. In this discussion section, you will:
+
+- explore the EJI metadata and choose variables that could influence a community's response to a wildfire
+- spatially join census tracts with the fire perimeters
+- clip census tracts to the fire perimeters and compare clipping with a spatial join
+- make maps of the fire perimeters over a basemap
+- compare an EJI variable across the two fire areas and discuss what the differences could mean for wildfire relief
 
 :::{.callout-caution appearance="minimal"}
 The work in this section will be part of your final project blog post that will go on your website!
@@ -18,24 +23,28 @@ The work in this section will be part of your final project blog post that will 
 ## Setup
 
 :::{.callout-tip appearance="minimal"}
-1. Find fire perimeters for the Eaton and Palisades fires that occurred in Los Angeles County on 2025. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file). *These are the same files you will use for assignment 4.* 
+1. Find fire perimeters for the Eaton and Palisades fires that occurred in Los Angeles County in 2025. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file). *These are the same files you will use for assignment 4.* 
 
 2. Add the fire perimeter datasets to the `data` directory in your `eds220-discussion-sections` directory.
 
 3. Download the **2024** [Environmental Justice Index data](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html) for **California** in the **geodatabase** data format. Add it to the `data` directory in your `eds220-discussion-sections` directory.
 :::
 
+## About the data
 
-<!-- ## About the data
+:::{.callout-note appearance="minimal"}
+The [Environmental Justice Index (EJI)](https://www.atsdr.cdc.gov/place-health/php/eji/index.html) is a national, place-based tool that measures the cumulative impacts of environmental burden on human health and health equity. It is produced by the Centers for Disease Control and Prevention (CDC) and the Agency for Toxic Substances and Disease Registry (ATSDR) [@CDC_ATSDR_EJI].
 
-The [Environmental Justice Index] is [INSERT], it can be viewed and downloaded at 
-[EJI website](https://www.atsdr.cdc.gov/place-health/php/eji/index.html). EJI is a [WHO DOES THIS] [@CDC_ATSDR_EJI]
+The EJI ranks every census tract in the United States on 36 environmental, social and health factors, grouped into three modules:
 
-[MINI DESCRIPTION OF WHAT IS IN IT]
+- **Social vulnerability**: racial/ethnic minority status, socioeconomic status, household characteristics and housing type.
+- **Environmental burden**: air pollution, potentially hazardous and toxic sites, built environment, transportation infrastructure and water pollution.
+- **Health vulnerability**: pre-existing chronic disease burden.
 
-You can interactively explore this dataset through the [EJI explorer](https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html). 
+The 2024 release also includes a separate climate burden module with indicators for extreme heat, wildfire and other extreme events. You can interactively explore this dataset through the [EJI explorer](https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html).
 
-[WRITE SOMETHING ABOUT FIRE PERIMETERS] -->
+The **fire perimeters** are polygons outlining the area burned by each fire. Different agencies publish perimeters for the Eaton and Palisades fires, and they may differ in how and when they were mapped. Read the metadata of the dataset you select so you know where its perimeters come from and how current they are.
+:::
 
 ## 1. Metadata exploration
 
@@ -45,20 +54,20 @@ b. Look at the variables and with your team **select a few variables** that, in 
 ## 2. Polygon intersection
 
 a. Open the fire perimeters and the EJI data and do initial data exploration. 
-b. Spatially join the EJI data with the Palisades fire perimeter using [`geopandas.sjoin()`](https://geopandas.org/en/stable/docs/reference/api/geopandas.sjoin.html) to get a `geopandas.GeoDataFrame` that will have only have the census tracts intersecting the Palisades fire perimeter. 
+b. Spatially join the EJI data with the Palisades fire perimeter using [`geopandas.sjoin()`](https://geopandas.org/en/stable/docs/reference/api/geopandas.sjoin.html) to get a `geopandas.GeoDataFrame` that will only have the census tracts intersecting the Palisades fire perimeter. 
 c. Create an exploratory map showing 
 
     (1) the census tracts that intersect the Palisades fire perimeter and 
     (2) the Palisades fire perimeter. 
 
 :::{.callout-tip appearance="minimal"}
-Discuss how big is the Palisades fire perimeter in relation to the census tracts.
+Discuss how big the Palisades fire perimeter is in relation to the census tracts.
 :::
 
 d. Create the corresponding `geopandas.GeoDataFrame` and exploratory map for the Eaton fire. 
 
 :::{.callout-tip appearance="minimal"}
-Discuss how big is the Eaton fire perimeter in relation to the census tracts intersectig the Eaton fire perimeter.
+Discuss how big the Eaton fire perimeter is in relation to the census tracts intersecting the Eaton fire perimeter.
 :::
 
 ## 3. Polygon clipping
@@ -68,7 +77,7 @@ b. Do the same for the Eaton fire perimeter.
 c. Quickly visualize your data. 
 
 :::{.callout-tip appearance="minimal"}
-Discuss with your group  the difference between a spatial join (step 2) and clipping (step 3). 
+Discuss with your group the difference between a spatial join (step 2) and clipping (step 3). 
 Make sure you understand the difference and what your goal is when transforming geospatial data!
 :::
 
@@ -107,7 +116,7 @@ a. Use and update the code below to plot one of the variables you and your team 
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
 
-# UPDATE WITH YOU EJI VARIABLE FROM STEP 1
+# UPDATE WITH YOUR EJI VARIABLE FROM STEP 1
 eji_variable = ''
 
 # Find common min/max for legend range
@@ -116,7 +125,7 @@ vmax = max(census_within_palisades[eji_variable].max(), census_within_eaton[eji_
 
 # Plot census tracts within Palisades perimeter
 census_within_palisades.plot(
-    column= eji_variable,
+    column=eji_variable,
     vmin=vmin, vmax=vmax,
     legend=False,
     ax=ax1,
@@ -138,7 +147,7 @@ ax2.axis('off')
 fig.suptitle('YOUR VARIABLE HERE - Fire Areas Comparison')
 
 # Add shared colorbar at the bottom
-sm = plt.cm.ScalarMappable( norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm = plt.cm.ScalarMappable(norm=plt.Normalize(vmin=vmin, vmax=vmax))
 cbar_ax = fig.add_axes([0.25, 0.08, 0.5, 0.02])  # [left, bottom, width, height]
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='horizontal')
 cbar.set_label('YOUR VARIABLE HERE (WITH UNITS)')
@@ -147,7 +156,7 @@ plt.show()
 ```
 
 :::{.callout-tip appearance="minimal"}
-With your team, write a short paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildifre relief?
+With your team, write a paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildfire relief?
 :::
 
 ## References
