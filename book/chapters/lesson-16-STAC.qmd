@@ -1,18 +1,18 @@
-# 15 STAC specification
+# 18 STAC specification
 
 So far in our course we have obtained data in two ways: by downloading it directly from the data provider or by obtaining a URL from a data repository. 
-This can be a convenient way to access targeted datasets, often usign graphical user interfaces (GUIs) for data discovery and filtering.
+These can be a convenient ways to access targeted datasets, often using graphical user interfaces (GUIs) for data discovery and filtering.
 However, relying on clicking and copy-pasting addresses and file names can make our workflows more error-prone and less reproducible. 
-In particular, satellites around the world produce terabytes of new data daily and manually browsing through data repositories can it make difficult to access this data. 
+In particular, satellites around the world produce terabytes of new data daily and manually browsing through data repositories can make it difficult to access this data. 
 Moreover, it can be inconvenient to learn a new way to access data from every single big data provider.
 This is where STAC comes in.
 
 ![](/book/images/lesson-16/STAC-01.png){width="60%" fig-align="center"}
 
-The **SpatioTemporal Asset Catalog (STAC)** is an emerging open standard for geospatial data that aims to increase the interoperability of geospatial data, particularly satellite imagery. 
+The **SpatioTemporal Asset Catalog (STAC)** is an open standard for geospatial data that aims to increase the interoperability of geospatial data, particularly satellite imagery. 
 [Many major data archives](https://stacspec.org/en/about/datasets/) now follow the STAC specification.
 
-In the next classes we'll be working with the [Microsoft's Planetary Computer (MPC)](https://planetarycomputer.microsoft.com) STAC API. 
+In the next classes we'll be working with the [Microsoft Planetary Computer (MPC)](https://planetarycomputer.microsoft.com) STAC API. 
 In this lesson we will learn about the main components of a STAC catalog and how to search for data using the MPC's STAC API. 
 
 ## Item, collection, and catalog
@@ -23,15 +23,15 @@ An item holds two types of information:
 
 1. **Metadata:** The metadata for a STAC item includes core identifying information (such as ID, geometry, bounding box, and date), and additional properties (for example, place of collection). 
 
-2. **Assets:** Assets are links to the actual data of the item (for example, links to the spectral bands of a satellite image.)
+2. **Assets:** Assets are links to the actual data of the item (for example, links to the spectral bands of a satellite image).
 
 STAC items can be grouped into **STAC collections**. 
-For example, while a single satellite scene (at a single time and location) would constitue an item, scenes across time and location from the same satellite can be orgnanized in a collection. 
+For example, while a single satellite scene (at a single time and location) would constitute an item, scenes across time and location from the same satellite can be organized in a collection. 
 Finally, multiple collections can be organized into a single **STAC catalog**. 
 
-For example, we'll be accessing the MPC STAC catalog. Two of its collections are the National Agriculture Imagery Program (NAIP) colelction and the Copernicus Digital Elevation Model (DEM) colleciton. Each of these collections has multiple items, with item cotaining properties (metadata) and assets (links to the data). 
+For example, we'll be accessing the MPC STAC catalog. Two of its collections are the National Agriculture Imagery Program (NAIP) collection and the Copernicus Digital Elevation Model (DEM) collection. Each of these collections has multiple items, with each item containing metadata and assets (links to the data). 
 
-![](/book//images/lesson-16/mpc-stac-catalog.png)
+![](/book/images/lesson-16/mpc-stac-catalog.png)
 
 ## Application Programming Interface (API)
 To request data from a catalog following the STAC standard we use an **Application Programming Interface (API)**. 
@@ -43,7 +43,7 @@ The following diagram nicely explains what an API does using a real-life analogy
 The Python package to access APIs for STAC catalogs is [`pystac_client`](https://pystac-client.readthedocs.io/en/stable/). 
 Our goal in this lesson is to retrieve [NAIP data](https://naip-usdaonline.hub.arcgis.com) from the [MPC's data catalog](https://planetarycomputer.microsoft.com/catalog) via its STAC API. 
 
-## MPC Catalog 
+## MPC catalog
 <!--https://github.com/NCEAS/msai4earth-esa/blob/main/examples/naip_example/access_naip.ipynb-->
 First, load the necessary packages:
 
@@ -72,7 +72,7 @@ catalog = Client.open(
 
 The `modifier` parameter is needed to access the data in the MPC catalog.
 
-### Catalog Exploration
+### Catalog exploration
 Let's check out some of the catalog's metadata:
 ```{python}
 # Explore catalog metadata
@@ -87,8 +87,8 @@ catalog.get_collections()
 ```
 
 Notice the output of `get_collections()` is a **generator**. 
-This is a special kind of **lazy object** in Python over which you can loop over like a list. 
-Unlike a list, the items in a generator do not exist in memory until you explicitely iterate over them or convert them to a list. This can allow for more efficient memory allcoation. Once the generator is exhausted (i.e. iterated over completely), it cannot be reused unless it is recreated.
+This is a special kind of **lazy object** in Python that you can loop over like a list. 
+Unlike a list, the items in a generator do not exist in memory until you explicitly iterate over them or convert them to a list. This can allow for more efficient memory allocation. Once the generator is exhausted (i.e. iterated over completely), it cannot be reused unless it is recreated.
 
 Let's try getting the collections from the catalog again:
 
@@ -98,13 +98,13 @@ collections = list(catalog.get_collections())  # Turn generator into list
 
 print('Number of collections:', len(collections))
 
-print("Collections IDs (first 10):")
+print("Collection IDs (first 10):")
 for i in range(10):
     print('-', collections[i].id)
 ```
 
 ## Collection
-The NAIP catalog's ID is `'naip'`. 
+The NAIP collection's ID is `'naip'`. 
 We can select a single collection for exploration using the `get_child()` method for the catalog and the collection ID as the parameter:
 ```{python}
 naip_collection = catalog.get_child('naip')
@@ -122,7 +122,7 @@ We can narrow down the search within the `catalog` by specifying a time range, a
 The simplest ways to define the area of interest to look for data in the catalog are:
 
 - a GeoJSON-type dictionary with the coordinates of the bounding box,
-- as a list `[xmin, ymin, xmax, ymax]` with the coordinate values defining the four corners of the bounding box.
+- a list `[xmin, ymin, xmax, ymax]` with the coordinate values defining the four corners of the bounding box.
 
 In this lesson we will look for the NAIP scenes over Santa Barbara from 2018 to 2023. 
 We'll use the GeoJSON method to define the area of interest:
@@ -178,7 +178,7 @@ type(item)
 ```
 
 Remember the [STAC item](https://pystac.readthedocs.io/en/stable/api/pystac.html#pystac.Item) is the core object in a STAC catalog. 
-The item does not contain the data itself, but rather metadata and assets that contain links to access the actual data.
+The item does not contain the data itself, but rather metadata and assets. The assets contain links to access the actual data.
 Some of the metadata:
 
 ```{python}
@@ -187,7 +187,7 @@ print('ID:' , item.id)
 item.properties
 ```
 
-Just as the item properties, the item assets are given in a dictionary, with each value being a [`pystac.asset`](https://pystac.readthedocs.io/en/stable/api/asset.html)
+Just as the item properties, the item assets are given in a dictionary, with each value being a [`pystac.Asset`](https://pystac.readthedocs.io/en/stable/api/asset.html).
 Let's check the assets in the `item`:
 
 ```{python}
@@ -216,8 +216,8 @@ sb = rioxr.open_rasterio(item.assets['image'].href)
 sb
 ```
 
-Notice this raster has four bands (red, green, blue, nir), so we cannot use the `.plot.imshow()` method directly (as this function only works when we have three bands). 
-Thus we need select the bands we want to plot (RGB) before plotting:
+Notice this raster has four bands (red, green, blue, nir), so we cannot use the `.plot.imshow()` method directly (as this method only works when we have three bands). 
+Thus we need to select the bands we want to plot (RGB) before plotting:
 
 ```{python}
 #| eval: false
@@ -236,10 +236,10 @@ The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microso
 
 1) Reuse the `bbox` for Santa Barbara to look for items in this collection. 
 2) Get the first item in the search and examine its properties and assets.
-3) Check the item's rendered preview asset by clicking on it's URL.
+3) Check the item's rendered preview asset by clicking on its URL.
 4) Open and plot the item's data using `rioxarray`, save it into a variable named `dem`.
 5) Obtain the maximum and minimum elevation on the scene as *numbers*. 
-6) Print the maximum and minimum elevation [rounded to two decimal points using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). For vertical units, consult the [data's handbook](https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf).
+6) Print the maximum and minimum elevation [rounded to two decimal places using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). For vertical units, consult the [data's handbook](https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf).
 :::
 
 <!--
@@ -277,14 +277,14 @@ xdataarray.coarsen(x=x_window, y=y_window).aggr()
 where:
 
 - `xdataarray` is a 2-dimensional `xarray.DataArray` with dimensions `x` and `y`. 
-- `x` and `y` are the names dimensions of the `xarray.DataArray` (these could have other names like `lon`/`lat`)
-- `x_window` and `y_window` are the dimensions of the window used to make the aggregation (must be an integer). 
-- `aggr()` is an aggregator function, this is the function which will be applied to each window. Examples are `min()`, `max()`, `sum()` and `mean()`.
+- `x` and `y` are the names of the dimensions of the `xarray.DataArray` (these could have other names like `lon`/`lat`)
+- `x_window` and `y_window` are the dimensions of the window used to make the aggregation (each must be an integer). 
+- `aggr()` is an aggregator function: the function that will be applied to each window. Examples are `min()`, `max()`, `sum()` and `mean()`.
 
 
-**Example**
+### Example: coarsening the DEM to 60x60 pixels {.unlisted}
 
-Suppose we want to coarsen our DEM elevation raster from 1200x1200 pixels to a raster of 60x60 pixels by calculating the maximun at each window. Remember the windows are non-overlapping, so we will obtain one pixel per window. A quick division tells us that to got from 1200x1200 to 60x60 we will need to use a 20x20 window.  The aggregator function on each of this window will be `max()`.
+Suppose we want to coarsen our DEM elevation raster from 1200x1200 pixels to a raster of 60x60 pixels by calculating the maximum at each window. Remember the windows are non-overlapping, so we will obtain one pixel per window. A quick division tells us that to go from 1200x1200 to 60x60 we will need to use a 20x20 window. The aggregator function on each of these windows will be `max()`.
 
 Our call looks like this:
 
@@ -306,7 +306,7 @@ dem_coarse.plot()
 ## Exercise
 1. Downsample the elevation raster into a 240x240 raster by taking the average over windows of the appropriate size. Plot the resulting raster.
 2. Use an f-string to check whether the spatial bounds of the rasters have changed.
-3. If you are curious about the different colormaps, check out the [`xarray documentation`](https://docs.xarray.dev/en/latest/user-guide/plotting.html#colormaps).
+3. If you are curious about the different colormaps, check out the [`xarray` documentation](https://docs.xarray.dev/en/latest/user-guide/plotting.html#colormaps).
 :::
 
 <!--
@@ -339,8 +339,8 @@ aoi.crs
 #| 
 fig, ax = plt.subplots()
 
-size = 6 # height in in of plot height
-aspect = sb.rio.width / sb.rio.height # ratio of widht/height
+size = 6 # plot height in inches
+aspect = sb.rio.width / sb.rio.height # ratio of width/height
 fig.set_size_inches((size, size*aspect)) # reuse size and aspect
 
 sb.sel(band=[1,2,3]).plot.imshow(ax=ax)
@@ -373,14 +373,12 @@ from shapely import Polygon
 ```
 An easy way to obtain coordinates for such a region:
 
-![Screenshot from geojson.io](/images/geojsonio-sb.png)
-
 1. go to  [https://geojson.io/](https://geojson.io/) website,
 2. zoom in until you find the NCEAS building in Santa Barbara, it might help to change to 'Satellite Streets' view on the bottom left corner, 
-3. click on the rectangle icon on the right-side toolbar and draw a small region around the NCEAS buildng,
+3. click on the rectangle icon on the right-side toolbar and draw a small region around the NCEAS building,
 4. the geoJSON code representing this area will appear in the code box,
-5. one option is two copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
-6. instead, we will create our region of index by just *copy-pasting the list of points* and storing it as a variable:
+5. one option is to copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
+6. instead, we will create our region of interest by just *copy-pasting the list of points* and storing it as a variable:
 
 ```{python}
 # vertices of our aoi box
@@ -404,5 +402,5 @@ Let's break this down a bit:
 
 - first, we use the `shapely`'s `Polygon()` function to create a polygon from our `points` list. 
 - in `[Polygon(points)]` we put this polygon inside a list so we can form the geometry column of our new `gpd.GeoDataFrame`
-- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the the CRS of our new `gpd.GeoDataFrame` to this.
+- we know all the geoJSON files have CRS equal to EPSG:4326/WGS 84, so we set the CRS of our new `gpd.GeoDataFrame` to this.
 -->
