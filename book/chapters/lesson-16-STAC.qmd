@@ -41,7 +41,7 @@ The following diagram nicely explains what an API does using a real-life analogy
 ![Image Source: [Geeks for geeks - What is an API?](https://www.geeksforgeeks.org/what-is-an-api/)](/book/images/lesson-16/what-is-an-api.png)
 
 The Python package to access APIs for STAC catalogs is [`pystac_client`](https://pystac-client.readthedocs.io/en/stable/). 
-Our goal in this lesson is to retrieve [NAIP data](https://naip-usdaonline.hub.arcgis.com) from the [MPC's data catalog](https://planetarycomputer.microsoft.com/catalog) via its STAC API. 
+Our goal in this lesson is to retrieve [NAIP data](https://naip-usdaonline.hub.arcgis.com) from the [MPC's data catalog](https://planetarycomputer.microsoft.com/catalog) via its STAC API @usda_naip_mpc.
 
 ## MPC catalog
 <!--https://github.com/NCEAS/msai4earth-esa/blob/main/examples/naip_example/access_naip.ipynb-->
@@ -167,10 +167,35 @@ items
 
 ## Item
 <!--https://pystac.readthedocs.io/en/stable/api/pystac.html#pystac.Item-->
-Let's get the first item in the search:
+:::{.callout-tip}
+## Check-in
+Our search returned several items. Run the code below to see what distinguishes them.
+
+```python
+for scene in items:
+    print(scene.id, scene.properties['datetime'], scene.properties['gsd'])
+```
+
+Here `gsd` stands for [ground sample distance at the sensor](https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument), in meters (m). This is the pixel size of the raster. 
+
+1. What differs between the items besides the year?
+2. Suppose you want to compare the vegetation around NCEAS with the 2018 image from the [`rioxarray` lesson](lesson-15-rioxarray/lesson-15-rioxarray.qmd). Which item would you pick, and why? 
+:::
+
+
+<!--
+Answer: gsd (pixel size, in meters) is 1.0 m in 2012 and 2014 and 0.6 m from 2016 on.
+The flight month also varies between May and July.
+Defensible picks: 2020 or 2022 (same 0.6 m pixels, similar season to the July 2018 flight)
+or 2024 (most recent, same pixel size). Weak pick: 2012 or 2014 (coarser pixels).
+Key point: items[0] is just the order the API returns, not a choice anyone made.
+-->
+
+In our search the items are listed from newest to oldest, so `items[0]` is the most recent scene.
+We'll work with this one for the rest of the lesson:
 
 ```{python}
-# Get first item in the catalog search
+# Get first (most recent) item in the catalog search
 item = items[0]
 type(item)
 ```
@@ -185,6 +210,17 @@ print('ID:' , item.id)
 item.properties
 ```
 
+:::{.callout-tip}
+## Check-in
+From the item's properties, when was this image taken, at what resolution, and in what CRS?
+Is the time of day in `datetime` believable?
+:::
+
+<!--
+Answer (2024 item): datetime 2024-06-25, gsd 0.6 m, CRS EPSG:26911 (NAD83 / UTM zone 11N).
+The time is a placeholder: all NAIP items show T00:00 or T16:00, so only the date is meaningful.
+-->
+
 Just as the item properties, the item assets are given in a dictionary, with each value being a [`pystac.Asset`](https://pystac.readthedocs.io/en/stable/api/asset.html).
 Let's check the assets in the `item`:
 
@@ -195,6 +231,22 @@ item.assets
 for key in item.assets.keys():
     print(key, '--', item.assets[key].title)
 ```
+
+
+<!--
+
+** TO DO: plot about how the item intersects our bounding box **
+:::{.callout-tip}
+## Check-in
+Our `bbox` is a box of about 0.85 km × 0.65 km around NCEAS.
+Before we look at the image, predict: will it cover just that box?
+Then check `item.bbox` and explain what you see.
+:::
+
+
+Answer: item.bbox is about [-119.754, 34.372, -119.683, 34.441], roughly 6.5 km × 7.7 km.
+A search with intersects returns every whole item that touches the area of interest; it doesn't clip the data to it.
+-->
 
 Notice each asset has an `href`, which is a link to the data. 
 For example, we can use the URL for the `'thumbnail'` asset to plot a small preview of the scene:
@@ -214,6 +266,12 @@ sb = rioxr.open_rasterio(item.assets['image'].href)
 sb
 ```
 
+Notice the output doesn't show any data values, only `[526656000 values with dtype=uint8]`.
+That's because `open_rasterio()` only read the file's metadata: its dimensions, coordinates and CRS.
+The data itself (about 500 MB) stays in the cloud until we use it, for example to plot it or to compute a statistic.
+This is the same lazy behavior we saw with generators.
+The NAIP files are stored as **Cloud-Optimized GeoTIFFs (COGs)**, a format designed so we can read just the part of a file we need instead of downloading all of it.
+
 Notice this raster has four bands (red, green, blue, nir), so we cannot plot it directly: `.plot.imshow()` would read the fourth band (NIR) as transparency. 
 Thus we need to select the bands we want to plot (RGB) before plotting:
 
@@ -229,8 +287,11 @@ sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)
 ![](/book/images/lesson-16/sb-from-stac-item.png){width="70%"}
 
 :::{.callout-tip}
+
+**TO DO: fix DEM exercise**
+
 ## Exercise
-The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem) collection contains elevation data at 90 m spatial resolution. The collection ID in the MPC catalog is `'cop-dem-glo-90'`.
+The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem) collection contains elevation data at 90 m spatial resolution @esa_copernicus_dem_glo90. The collection ID in the MPC catalog is `'cop-dem-glo-90'`.
 
 1) Reuse the `bbox` for Santa Barbara to look for items in this collection. 
 2) Get the first item in the search and examine its properties and assets.
@@ -253,59 +314,6 @@ items = search.item_collection()
 dem = rioxr.open_rasterio(items[0].assets['data'].href)
 ```
 -->
-
-
-## Aggregation
-
-Let's take a look at our elevation raster over Santa Barbara:
-
-```{python}
-dem.plot()
-```
-
-Rasters with high spatial resolution can offer great insight into fine-scale patterns, but can also be challenging to process due to their size.
-
-We can use **aggregation methods** to **spatially downsample** a raster into a coarser resolution. 
-
-A simple way to spatially downsample an `xarray.DataArray` is:
-
-```python
-xdataarray.coarsen(x=x_window, y=y_window).aggr()
-```
-where:
-
-- `xdataarray` is an `xarray.DataArray` with dimensions `x` and `y` (it can have other dimensions too, like `band`). 
-- `x` and `y` are the names of the dimensions of the `xarray.DataArray` (these could have other names like `lon`/`lat`)
-- `x_window` and `y_window` are the dimensions of the window used to make the aggregation (each must be an integer). 
-- `aggr()` is an aggregator function: the function that will be applied to each window. Examples are `min()`, `max()`, `sum()` and `mean()`.
-
-
-### Example: coarsening the DEM to 60x60 pixels {.unlisted}
-
-Suppose we want to coarsen our DEM elevation raster from 1200x1200 pixels to a raster of 60x60 pixels by calculating the maximum at each window. Remember the windows are non-overlapping, so we will obtain one pixel per window. A quick division tells us that to go from 1200x1200 to 60x60 we will need to use a 20x20 window. The aggregator function on each of these windows will be `max()`.
-
-Our call looks like this:
-
-```{python}
-# Coarsen to a 60x60 raster calculating the maximum value in each window
-dem_coarse = dem.coarsen(x=20,y=20).max()
-dem_coarse
-```
-
-```{python}
-# Inspect old and coarsened resolution
-print(f"old resolution: {dem.rio.width}x{dem.rio.height}")
-print(f"coarse resolution: {dem_coarse.rio.width}x{dem_coarse.rio.height}")
-dem_coarse.plot()
-```
-
-
-:::{.callout-tip}
-## Exercise
-1. Downsample the elevation raster into a 240x240 raster by taking the average over windows of the appropriate size. Plot the resulting raster.
-2. Use an f-string to check whether the spatial bounds of the rasters have changed.
-3. If you are curious about the different colormaps, check out the [`xarray` documentation](https://docs.xarray.dev/en/latest/user-guide/plotting.html#colormaps).
-:::
 
 <!--
 ## Exercise
@@ -347,7 +355,7 @@ aoi.plot(ax=ax, color='red', alpha=0.6)
 -->
 
 
-## References
+## Further reading
 STAC Documentation:
 
 - [The STAC Specification](https://stacspec.org/en/tutorials/intro-to-stac/)
