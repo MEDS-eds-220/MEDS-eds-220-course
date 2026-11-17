@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -247,6 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
   <li><a href="#metadata-exploration" id="toc-metadata-exploration" class="nav-link" data-scroll-target="#metadata-exploration">1. Metadata exploration</a></li>
   <li><a href="#polygon-intersection" id="toc-polygon-intersection" class="nav-link" data-scroll-target="#polygon-intersection">2. Polygon intersection</a></li>
   <li><a href="#polygon-clipping" id="toc-polygon-clipping" class="nav-link" data-scroll-target="#polygon-clipping">3. Polygon clipping</a></li>
@@ -279,10 +300,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<!-- In this discussion section you will ...
-
-FILL OUT
- -->
+<hr>
+<p>In January 2025, the Eaton and Palisades fires burned thousands of homes in Los Angeles County. A wildfire’s impact depends not only on where it burns but also on who lives there: communities differ in their resources to evacuate, recover and rebuild. Here we will combine fire perimeters with the Environmental Justice Index to look at the social dimensions of these two fires. In this discussion section, you will:</p>
+<ul>
+<li>explore the EJI metadata and choose variables that could influence a community’s response to a wildfire</li>
+<li>spatially join census tracts with the fire perimeters</li>
+<li>clip census tracts to the fire perimeters and compare clipping with a spatial join</li>
+<li>make maps of the fire perimeters over a basemap</li>
+<li>compare an EJI variable across the two fire areas and discuss what the differences could mean for wildfire relief</li>
+</ul>
 <div class="callout callout-style-simple callout-caution no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -302,23 +328,34 @@ FILL OUT
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>Find fire perimeters for the Eaton and Palisades fires that occurred in Los Angeles County on 2025. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file). <em>These are the same files you will use for assignment 4.</em></p></li>
+<li><p>Find fire perimeters for the Eaton and Palisades fires that occurred in Los Angeles County in 2025. There are several datasets with this information online. You will need to independently select one from a reputable source (it may be more than one file). <em>These are the same files you will use for assignment 4.</em></p></li>
 <li><p>Add the fire perimeter datasets to the <code>data</code> directory in your <code>eds220-discussion-sections</code> directory.</p></li>
 <li><p>Download the <strong>2024</strong> <a href="https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html">Environmental Justice Index data</a> for <strong>California</strong> in the <strong>geodatabase</strong> data format. Add it to the <code>data</code> directory in your <code>eds220-discussion-sections</code> directory.</p></li>
 </ol>
 </div>
 </div>
 </div>
-<!-- ## About the data
-
-The [Environmental Justice Index] is [INSERT], it can be viewed and downloaded at 
-[EJI website](https://www.atsdr.cdc.gov/place-health/php/eji/index.html). EJI is a [WHO DOES THIS] [@CDC_ATSDR_EJI]
-
-[MINI DESCRIPTION OF WHAT IS IN IT]
-
-You can interactively explore this dataset through the [EJI explorer](https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html). 
-
-[WRITE SOMETHING ABOUT FIRE PERIMETERS] -->
+</section>
+<section id="about-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The <a href="https://www.atsdr.cdc.gov/place-health/php/eji/index.html">Environmental Justice Index (EJI)</a> is a national, place-based tool that measures the cumulative impacts of environmental burden on human health and health equity. It is produced by the Centers for Disease Control and Prevention (CDC) and the Agency for Toxic Substances and Disease Registry (ATSDR) <span class="citation" data-cites="CDC_ATSDR_EJI"><a href="#ref-CDC_ATSDR_EJI" role="doc-biblioref">[1]</a></span>.</p>
+<p>The EJI ranks every census tract in the United States on 36 environmental, social and health factors, grouped into three modules:</p>
+<ul>
+<li><strong>Social vulnerability</strong>: racial/ethnic minority status, socioeconomic status, household characteristics and housing type.</li>
+<li><strong>Environmental burden</strong>: air pollution, potentially hazardous and toxic sites, built environment, transportation infrastructure and water pollution.</li>
+<li><strong>Health vulnerability</strong>: pre-existing chronic disease burden.</li>
+</ul>
+<p>The 2024 release also includes a separate climate burden module with indicators for extreme heat, wildfire and other extreme events. You can interactively explore this dataset through the <a href="https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html">EJI explorer</a>.</p>
+<p>The <strong>fire perimeters</strong> are polygons outlining the area burned by each fire. Different agencies publish perimeters for the Eaton and Palisades fires, and they may differ in how and when they were mapped. Read the metadata of the dataset you select so you know where its perimeters come from and how current they are.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="metadata-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="metadata-exploration">1. Metadata exploration</h2>
@@ -331,7 +368,7 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <h2 class="anchored" data-anchor-id="polygon-intersection">2. Polygon intersection</h2>
 <ol type="a">
 <li><p>Open the fire perimeters and the EJI data and do initial data exploration.</p></li>
-<li><p>Spatially join the EJI data with the Palisades fire perimeter using <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.sjoin.html"><code>geopandas.sjoin()</code></a> to get a <code>geopandas.GeoDataFrame</code> that will have only have the census tracts intersecting the Palisades fire perimeter.</p></li>
+<li><p>Spatially join the EJI data with the Palisades fire perimeter using <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.sjoin.html"><code>geopandas.sjoin()</code></a> to get a <code>geopandas.GeoDataFrame</code> that will only have the census tracts intersecting the Palisades fire perimeter.</p></li>
 <li><p>Create an exploratory map showing</p>
 <ol type="1">
 <li>the census tracts that intersect the Palisades fire perimeter and</li>
@@ -344,7 +381,7 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Discuss how big is the Palisades fire perimeter in relation to the census tracts.</p>
+<p>Discuss how big the Palisades fire perimeter is in relation to the census tracts.</p>
 </div>
 </div>
 </div>
@@ -357,7 +394,7 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Discuss how big is the Eaton fire perimeter in relation to the census tracts intersectig the Eaton fire perimeter.</p>
+<p>Discuss how big the Eaton fire perimeter is in relation to the census tracts intersecting the Eaton fire perimeter.</p>
 </div>
 </div>
 </div>
@@ -408,12 +445,12 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <ol type="a">
 <li>Use and update the code below to plot one of the variables you and your team explored in step 1 as being relevant to a community’s response to a wildfire.</li>
 </ol>
-<div id="8cf6c954" class="cell" data-execution_count="1">
+<div id="d032855f" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">10</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># UPDATE WITH YOU EJI VARIABLE FROM STEP 1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># UPDATE WITH YOUR EJI VARIABLE FROM STEP 1</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">''</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
@@ -422,7 +459,7 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>census_within_palisades.plot(</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span> eji_variable,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span>eji_variable,</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax1,</span>
@@ -444,7 +481,7 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'YOUR VARIABLE HERE - Fire Areas Comparison'</span>)</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable( norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax))</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable(norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax))</span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.25</span>, <span class="fl">0.08</span>, <span class="fl">0.5</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'YOUR VARIABLE HERE (WITH UNITS)'</span>)</span>
@@ -458,18 +495,23 @@ You can interactively explore this dataset through the [EJI explorer](https://ww
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>With your team, write a short paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildifre relief?</p>
+<p>With your team, write a paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildfire relief?</p>
 </div>
 </div>
 </div>
 </section>
 <section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-CDC_ATSDR_EJI" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">C. for Disease Control, Prevention, A. for Toxic Substances, and D. Registry, <span>“Environmental justice index.”</span> Accessed: November 19, 2025, 2025. Available: <a href="https://atsdr.cdc.gov/place-health/php/eji/eji-data-download.html">https://atsdr.cdc.gov/place-health/php/eji/eji-data-download.html</a></div>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
