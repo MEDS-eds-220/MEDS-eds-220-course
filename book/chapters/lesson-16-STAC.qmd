@@ -315,72 +315,133 @@ sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)
 
 ![](/book/images/lesson-16/sb-from-stac-item.png){width="70%"}
 
-:::{.callout-tip}
 
-**TO DO: fix DEM exercise**
+## Exercises
 
-## Exercise
 The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem) collection contains elevation data at 90 m spatial resolution @esa_copernicus_dem_glo90. The collection ID in the MPC catalog is `'cop-dem-glo-90'`.
 
-1) Reuse the `aoi` for Santa Barbara to look for items in this collection. 
-2) Get the first item in the search and examine its properties and assets.
-3) Check the item's rendered preview asset by clicking on its URL.
-4) Open and plot the item's data using `rioxarray`, save it into a variable named `dem`.
-5) Obtain the maximum and minimum elevation on the scene as *numbers*. 
-6) Print the maximum and minimum elevation [rounded to two decimal places using f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). For vertical units, consult the [data's handbook](https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf).
+Suppose you want to know how high above sea level the area around NCEAS is, for example to start thinking about its flood or sea-level-rise risk.
+
+
+:::{.callout-tip}
+## Part A: Access the data
+
+1. Explore the dataset's [landing page in the MPC catalog](https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-90). Who produced this data, how was it made and what is its spatial resolution?
+2. Search the catalog for items in this collection that intersect our `aoi`. How many items did you get?
+3. Get the first item in the search and look at its properties. What is its `gsd`? What is its `datetime`?
+4. Before plotting, predict: will this item's footprint be larger or smaller than the NAIP item's? Then create a geodataframe with the DEM item's footprint and plot it together with the NAIP `footprint` and `aoi_gdf`.
+5. Open the item's `'data'` asset using `rioxarray` and save it into a variable named `dem`. Check its CRS, resolution and nodata value, and plot it.
 :::
 
 <!--
+Solution
 
-```{python}
-# Open DEM item over SB
-search = catalog.search(
-    collections=["cop-dem-glo-90"],
-    intersects = aoi,
-)
-items = search.item_collection()
+1. Produced from TanDEM-X radar data (DLR and Airbus, distributed through the European Space Agency's Copernicus programme).
+   It is a digital surface model (includes buildings and vegetation), at about 90 m resolution.
 
-dem = rioxr.open_rasterio(items[0].assets['data'].href)
+```python
+# 2. Search
+dem_search = catalog.search(
+    collections=['cop-dem-glo-90'],
+    intersects=aoi)
+dem_items = dem_search.item_collection()
+len(dem_items)  # 1 item
+
+# 3. Item properties
+dem_item = dem_items[0]
+dem_item.properties  # gsd: 90, datetime: 2021-04-22 (a release date, not when the radar data was acquired)
+
+# 4. Footprints: the DEM item is a 1° x 1° tile, about 92 km x 111 km
+dem_footprint = gpd.GeoDataFrame(geometry=[shape(dem_item.geometry)], crs='EPSG:4326')
+
+fig, ax = plt.subplots()
+dem_footprint.plot(ax=ax, color='none', edgecolor='blue')
+footprint.plot(ax=ax, color='none', edgecolor='black')
+aoi_gdf.plot(ax=ax, color='red')
+ax.set_title('DEM item (blue), NAIP item (black) and AOI (red)')
+plt.show()
+
+# 5. Open and inspect
+dem = rioxr.open_rasterio(dem_item.assets['data'].href)
+print('CRS:', dem.rio.crs)                 # EPSG:4326
+print('Resolution:', dem.rio.resolution())  # 0.000833 degrees (about 76 m E-W x 92 m N-S here)
+print('Nodata:', dem.rio.nodata)           # None: the ocean is stored as 0, not as missing
+dem.plot()
 ```
 -->
 
+:::{.callout-tip}
+## Part B: Is this the data we want?
+
+6. Obtain the maximum and minimum elevation in `dem` as *numbers*, and print them rounded to two decimal places using [f-strings](https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string). For vertical units, consult the [data's handbook](https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf).
+7. Read the collection's description (`catalog.get_collection('cop-dem-glo-90').description`). What kind of elevation model is this? Over the NCEAS building, what would it measure?
+8. Look at your plots from steps 4 and 5. Are the maximum and minimum from step 6 the highest and lowest points in Santa Barbara? Where do you think they are?
+9. Count how many pixels in `dem` are exactly 0 using `(dem == 0).sum()`. What fraction of the raster is that, and what do you think these pixels are? Compare `dem.mean()` with `dem.where(dem != 0).mean()`. Which one would you report as the average elevation of this area, and why?
+10. Clip `dem` to the NAIP `footprint` using `dem.rio.clip_box(*footprint.total_bounds)`. Plot it and recompute the maximum, minimum and the number of 0 pixels.
+11. **Your call:** would you use this dataset to estimate the ground elevation at NCEAS for a sea-level-rise question? Write two or three sentences justifying your answer. Consider what the data measures, its pixel size and when it was made.
+:::
+
 <!--
-## Exercise
-Recreate the following image, where the red rectangle shows the bounding box used to do the catalog search. 
-HINT: `aoi` as it is now is a dictionary. How can you get the vertices list out of it to first create a `shapely` `Polygon`?
+Solution
 
-![](/book/images/lesson-16/sb-and-aoi-mpc.png)
+```python
+# 6. Maximum and minimum (meters, relative to the EGM2008 geoid: check the handbook)
+max_elev = dem.max().item()
+min_elev = dem.min().item()
+print(f"Maximum elevation: {max_elev:.2f} m")  # 2689.83 m
+print(f"Minimum elevation: {min_elev:.2f} m")  # -1.50 m
 
-
-```{python}
-#| eval: false
-#| 
-aoi = gpd.GeoDataFrame(geometry=[Polygon(aoi['coordinates'][0])],
-                crs='epsg:4326')
-aoi.plot()
+# 7. Description
+print(catalog.get_collection('cop-dem-glo-90').description)
 ```
 
-```{python}
-#| eval: false
-#| 
-# reproject aoi to rgb crs
-aoi = aoi.to_crs(sb.rio.crs)
-print('matched crs?',  aoi.crs == sb.rio.crs)
-aoi.crs
+7. It is a digital surface model (DSM): it includes buildings, infrastructure and vegetation.
+   Over NCEAS it measures the top of whatever covers each ~90 m pixel (roofs, trees), not the ground.
+
+8. No, the tile reaches far beyond Santa Barbara.
+   The maximum (~2,690 m) is around Mt Pinos (34.81°N, 119.15°W), about 60 km from NCEAS.
+   The minimum (-1.5 m) is a coastal pixel near Oxnard (34.13°N, 119.17°W).
+   Optional code to locate them:
+
+```python
+dem_max = dem.where(dem == dem.max(), drop=True)
+dem_min = dem.where(dem == dem.min(), drop=True)
+print('Max at:', dem_max.x.values, dem_max.y.values)
+print('Min at:', dem_min.x.values, dem_min.y.values)
+
+# 9. Pixels equal to 0
+n_zero = (dem == 0).sum().item()
+print('Pixels equal to 0:', n_zero)                     # 429651
+print(f'Fraction of the raster: {n_zero / dem.size:.1%}')  # 29.8%
+print(f"Mean with 0s: {dem.mean().item():.2f} m")                  # 629.56 m
+print(f"Mean without 0s: {dem.where(dem != 0).mean().item():.2f} m")  # 897.28 m
 ```
 
-```{python}
-#| eval: false
-#| 
-fig, ax = plt.subplots()
+9. The 0s are the ocean: the DEM stores water as 0, and since nodata is None nothing tells xarray to skip them.
+   For a question about land, report the mean without the 0s.
+   Good answers notice that dropping every 0 could also drop real land at sea level,
+   and that the handbook's water mask would be a cleaner way to separate water from land.
 
-size = 6 # plot height in inches
-aspect = sb.rio.width / sb.rio.height # ratio of width/height
-fig.set_size_inches((size, size*aspect)) # reuse size and aspect
-
-sb.sel(band=[1,2,3]).plot.imshow(ax=ax)
-aoi.plot(ax=ax, color='red', alpha=0.6)
+```python
+# 10. Clip to the NAIP footprint
+dem_clip = dem.rio.clip_box(*footprint.total_bounds)
+dem_clip.plot()
+print(f"Maximum elevation: {dem_clip.max().item():.2f} m")  # 240.10 m
+print(f"Minimum elevation: {dem_clip.min().item():.2f} m")  # 0.00 m
+n_zero_clip = (dem_clip == 0).sum().item()
+print(f"Pixels equal to 0: {n_zero_clip} ({n_zero_clip / dem_clip.size:.1%})")  # 3079 (42.6%)
 ```
+
+10. The clipped raster is only ~84 x 86 pixels. Clipping makes the numbers describe Santa Barbara,
+    but it does not remove the ocean.
+
+11. No single right answer. Strong answers mention:
+    - it is a surface model: values around NCEAS include buildings and trees, while sea-level rise needs the ground (a terrain model);
+    - one ~90 m pixel is larger than the NCEAS building; the whole AOI is only about 9 x 7 pixels;
+    - the elevation reflects the radar acquisition years, not 2021;
+    - a few meters of vertical error matter a lot for sea-level rise (check the handbook's accuracy).
+    A defensible "yes": fine for a coarse first look at which parts of the coast are low,
+    but not for decisions about a specific building. A better source: a lidar-based terrain model such as USGS 3DEP.
 -->
 
 
