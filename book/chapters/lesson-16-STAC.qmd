@@ -49,9 +49,12 @@ First, load the necessary packages:
 
 ```{python}
 import rioxarray as rioxr
+import geopandas as gpd
+import matplotlib.pyplot as plt
+
+from shapely.geometry import shape  # To turn GeoJSON dictionaries into geometries
 
 from pystac_client import Client  # To access STAC catalogs
-
 import planetary_computer  # To sign items from the MPC STAC catalog 
 
 from IPython.display import Image  # To nicely display images
@@ -129,8 +132,8 @@ We'll use the GeoJSON method to define the area of interest:
 # Temporal range of interest
 time_range = "../2026-11-16"
 
-# NCEAS bounding box (as a GeoJSON)
-bbox = {
+# NCEAS bounding box (as a GeoJSON, CRS=EPSG:4326)
+aoi = {
     "type": "Polygon",
     "coordinates":[
         [
@@ -146,7 +149,7 @@ bbox = {
 # Catalog search
 search = catalog.search(
     collections = ['naip'],
-    intersects = bbox,
+    intersects = aoi,
     datetime = time_range)
 search
 ```
@@ -221,6 +224,47 @@ Answer (2024 item): datetime 2024-06-25, gsd 0.6 m, CRS EPSG:26911 (NAD83 / UTM 
 The time is a placeholder: all NAIP items show T00:00 or T16:00, so only the date is meaningful.
 -->
 
+### Footprint
+
+The **footprint** of the item is the area on the ground its data covers. We can access it with the `geometry` attribute:
+
+```{python}
+item.geometry
+```
+
+Before loading the data we want to see how the item intersects with our `aoi` around NCEAS. To do this, we create a `gpd.GeoDataFrame` for each of the geometries. The new piece is the `shape()` function from the `shapely` package, which turns a GeoJSON-type dictionary into a geometry. Both our `aoi` and the item's geometry are GeoJSON-type dictionaries, and STAC geometries always use longitude and latitude coordinates (EPSG:4326).
+
+```{python}
+# Turn the AOI and the item's footprint into geodataframes
+aoi_gdf = gpd.GeoDataFrame(geometry=[shape(aoi)], crs='EPSG:4326')
+footprint = gpd.GeoDataFrame(geometry=[shape(item.geometry)], crs='EPSG:4326')
+```
+
+The code below plots the item's footprint together with our area of interest.
+<!-- Read it before running it: most of it uses tools you already know from `geopandas`. -->
+
+
+```{python}
+# Plot the footprint outline and the AOI on the same axis
+fig, ax = plt.subplots()
+footprint.plot(ax=ax, color='none', edgecolor='black')
+aoi_gdf.plot(ax=ax, color='red')
+ax.set_title('NAIP item footprint (black) and our area of interest (red)')
+plt.show()
+```
+
+Our area of interest is a small part of the item.
+When we search with `intersects`, the catalog returns every *whole* item that touches our area of interest.
+It doesn't clip the data to it.
+
+<!--
+Answer: the footprint is about 6.5 km × 7.7 km, around 85 times the area of the AOI.
+Extra: the footprint looks slightly tilted because the image is a rectangle in its own CRS
+(UTM zone 11N), not in longitude and latitude.
+-->
+
+### Assets
+
 Just as the item properties, the item assets are given in a dictionary, with each value being a [`pystac.Asset`](https://pystac.readthedocs.io/en/stable/api/asset.html).
 Let's check the assets in the `item`:
 
@@ -232,21 +276,6 @@ for key in item.assets.keys():
     print(key, '--', item.assets[key].title)
 ```
 
-
-<!--
-
-** TO DO: plot about how the item intersects our bounding box **
-:::{.callout-tip}
-## Check-in
-Our `bbox` is a box of about 0.85 km × 0.65 km around NCEAS.
-Before we look at the image, predict: will it cover just that box?
-Then check `item.bbox` and explain what you see.
-:::
-
-
-Answer: item.bbox is about [-119.754, 34.372, -119.683, 34.441], roughly 6.5 km × 7.7 km.
-A search with intersects returns every whole item that touches the area of interest; it doesn't clip the data to it.
--->
 
 Notice each asset has an `href`, which is a link to the data. 
 For example, we can use the URL for the `'thumbnail'` asset to plot a small preview of the scene:
@@ -293,7 +322,7 @@ sb.sel(band=[1,2,3]).plot.imshow(size=size, aspect=aspect)
 ## Exercise
 The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem) collection contains elevation data at 90 m spatial resolution @esa_copernicus_dem_glo90. The collection ID in the MPC catalog is `'cop-dem-glo-90'`.
 
-1) Reuse the `bbox` for Santa Barbara to look for items in this collection. 
+1) Reuse the `aoi` for Santa Barbara to look for items in this collection. 
 2) Get the first item in the search and examine its properties and assets.
 3) Check the item's rendered preview asset by clicking on its URL.
 4) Open and plot the item's data using `rioxarray`, save it into a variable named `dem`.
@@ -307,7 +336,7 @@ The [Copernicus Digital Elevation Model (DEM)](https://planetarycomputer.microso
 # Open DEM item over SB
 search = catalog.search(
     collections=["cop-dem-glo-90"],
-    intersects = bbox,
+    intersects = aoi,
 )
 items = search.item_collection()
 
@@ -318,7 +347,7 @@ dem = rioxr.open_rasterio(items[0].assets['data'].href)
 <!--
 ## Exercise
 Recreate the following image, where the red rectangle shows the bounding box used to do the catalog search. 
-HINT: `bbox` as it is now is a dictionary. How can you get the vertices list out of it to first create a `shapely` `Polygon`?
+HINT: `aoi` as it is now is a dictionary. How can you get the vertices list out of it to first create a `shapely` `Polygon`?
 
 ![](/book/images/lesson-16/sb-and-aoi-mpc.png)
 
@@ -326,7 +355,7 @@ HINT: `bbox` as it is now is a dictionary. How can you get the vertices list out
 ```{python}
 #| eval: false
 #| 
-aoi = gpd.GeoDataFrame(geometry=[Polygon(bbox['coordinates'][0])],
+aoi = gpd.GeoDataFrame(geometry=[Polygon(aoi['coordinates'][0])],
                 crs='epsg:4326')
 aoi.plot()
 ```
