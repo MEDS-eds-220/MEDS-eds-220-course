@@ -494,8 +494,13 @@ div.csl-indent {
   </ul></li>
   <li><a href="#collection" id="toc-collection" class="nav-link" data-scroll-target="#collection">Collection</a></li>
   <li><a href="#catalog-search" id="toc-catalog-search" class="nav-link" data-scroll-target="#catalog-search">Catalog search</a></li>
-  <li><a href="#item" id="toc-item" class="nav-link" data-scroll-target="#item">Item</a></li>
+  <li><a href="#item" id="toc-item" class="nav-link" data-scroll-target="#item">Item</a>
+  <ul class="collapse">
+  <li><a href="#footprint" id="toc-footprint" class="nav-link" data-scroll-target="#footprint">Footprint</a></li>
+  <li><a href="#assets" id="toc-assets" class="nav-link" data-scroll-target="#assets">Assets</a></li>
+  </ul></li>
   <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
   </ul>
 </nav>
@@ -557,19 +562,22 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="mpc-catalog">MPC catalog</h2>
 <!--https://github.com/NCEAS/msai4earth-esa/blob/main/examples/naip_example/access_naip.ipynb-->
 <p>First, load the necessary packages:</p>
-<div id="a784a114" class="cell" data-execution_count="1">
+<div id="c0f7af9d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pystac_client <span class="im">import</span> Client  <span class="co"># To access STAC catalogs</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> planetary_computer  <span class="co"># To sign items from the MPC STAC catalog </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> shape  <span class="co"># To turn GeoJSON dictionaries into geometries</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image  <span class="co"># To nicely display images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pystac_client <span class="im">import</span> Client  <span class="co"># To access STAC catalogs</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> planetary_computer  <span class="co"># To sign items from the MPC STAC catalog </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image  <span class="co"># To nicely display images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="access" class="level3">
 <h3 class="anchored" data-anchor-id="access">Access</h3>
 <p>We use the <code>open()</code> method of the <code>Client</code> class from the <code>pystac_client</code> package to access the catalog:</p>
-<div id="37aca480" class="cell" data-execution_count="2">
+<div id="09620b8e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access MPC catalog</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> Client.<span class="bu">open</span>(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://planetarycomputer.microsoft.com/api/stac/v1"</span>,</span>
@@ -581,7 +589,7 @@ div.csl-indent {
 <section id="catalog-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="catalog-exploration">Catalog exploration</h3>
 <p>Let’s check out some of the catalog’s metadata:</p>
-<div id="704e5db6" class="cell" data-execution_count="3">
+<div id="2650d7f6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore catalog metadata</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Title:'</span>, catalog.title)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Description:'</span>, catalog.description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -591,15 +599,15 @@ Description: Searchable spatiotemporal metadata describing Earth science dataset
 </div>
 </div>
 <p>We can access its collections by using the <code>get_collections()</code> method:</p>
-<div id="b251c993" class="cell" data-execution_count="4">
+<div id="bd254b03" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>catalog.get_collections()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;generator object Client.get_collections at 0x13ba81360&gt;</code></pre>
+<pre><code>&lt;generator object Client.get_collections at 0x70055cf340&gt;</code></pre>
 </div>
 </div>
 <p>Notice the output of <code>get_collections()</code> is a <strong>generator</strong>. This is a special kind of <strong>lazy object</strong> in Python that you can loop over like a list. Unlike a list, the items in a generator do not exist in memory until you explicitly iterate over them or convert them to a list. This can allow for more efficient memory allocation. Once the generator is exhausted (i.e.&nbsp;iterated over completely), it cannot be reused unless it is recreated.</p>
 <p>Let’s try getting the collections from the catalog again:</p>
-<div id="438b814b" class="cell" data-execution_count="5">
+<div id="d7e5e65b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get collections and print their names</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>collections <span class="op">=</span> <span class="bu">list</span>(catalog.get_collections())  <span class="co"># Turn generator into list</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -628,7 +636,7 @@ Collection IDs (first 10):
 <section id="collection" class="level2">
 <h2 class="anchored" data-anchor-id="collection">Collection</h2>
 <p>The NAIP collection’s ID is <code>'naip'</code>. We can select a single collection for exploration using the <code>get_collection()</code> method for the catalog and the collection ID as the parameter:</p>
-<div id="a3a72528" class="cell" data-execution_count="6">
+<div id="65d49d1c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>naip_collection <span class="op">=</span> catalog.get_collection(<span class="st">'naip'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>naip_collection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -2434,7 +2442,7 @@ You can visualize the coverage of current and past collections [here](https://na
                 
         <li class="pystac-row">
             <span class="pystac-k">credential</span>
-            <span class="pystac-v">"st=2026-11-18T02%3A14%3A42Z&amp;se=2026-11-19T02%3A59%3A42Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-19T02%3A14%3A40Z&amp;ske=2026-11-26T02%3A14%3A40Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=DFMeYqVEnjrzdUVSIpiUwHZQty/YNxKAjglqE8hdo2I%3D"</span>
+            <span class="pystac-v">"st=2026-11-18T19%3A16%3A20Z&amp;se=2026-11-19T20%3A01%3A20Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-19T13%3A20%3A13Z&amp;ske=2026-11-26T13%3A20%3A13Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=ExKMWDZ3he%2BcGv/6t1JrRhBBux/HuBNcSBrmXHdUtpA%3D"</span>
         </li>
     
             
@@ -2494,12 +2502,12 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 <li>a list <code>[xmin, ymin, xmax, ymax]</code> with the coordinate values defining the four corners of the bounding box.</li>
 </ul>
 <p>In this lesson we will look for all the NAIP scenes over Santa Barbara available up to November 16, 2026. The <code>..</code> at the start of the time range leaves the start date open, so the search returns every scene up to the end date. We’ll use the GeoJSON method to define the area of interest:</p>
-<div id="0e3108df" class="cell" data-execution_count="7">
+<div id="7d509136" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temporal range of interest</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"../2026-11-16"</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NCEAS bounding box (as a GeoJSON)</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>bbox <span class="op">=</span> {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NCEAS bounding box (as a GeoJSON, CRS=EPSG:4326)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>aoi <span class="op">=</span> {</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"type"</span>: <span class="st">"Polygon"</span>,</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"coordinates"</span>:[</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        [</span>
@@ -2515,15 +2523,15 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Catalog search</span></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> catalog.search(</span>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    collections <span class="op">=</span> [<span class="st">'naip'</span>],</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    intersects <span class="op">=</span> bbox,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    intersects <span class="op">=</span> aoi,</span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    datetime <span class="op">=</span> time_range)</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>&lt;pystac_client.item_search.ItemSearch at 0x14b4c94d0&gt;</code></pre>
+<pre><code>&lt;pystac_client.item_search.ItemSearch at 0x700666e450&gt;</code></pre>
 </div>
 </div>
 <p>To get the items found in the search (or check if there were any matches in the search) we use the <code>item_collection()</code> method:</p>
-<div id="b0414af0" class="cell" data-execution_count="8">
+<div id="b30b3f5b" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve search items</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> search.item_collection()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2532,7 +2540,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 </div>
 </div>
 <p>This output tells us there were seven items in the catalog that matched our search!</p>
-<div id="5134454b" class="cell" data-execution_count="9">
+<div id="6a53df43" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 
@@ -2576,7 +2584,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 </style>
 <div>
 <div class="pystac-text-repr-fallback">
-    &lt;pystac.item_collection.ItemCollection object at 0x14cc2b590&gt;
+    &lt;pystac.item_collection.ItemCollection object at 0x7005e0bf90&gt;
 </div>
 <div class="jp-RenderedJSON jp-mod-trusted jp-OutputArea-output pystac-wrap" style="display:none">
     <div class="container" style="line-height: normal;">
@@ -3519,7 +3527,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -3725,7 +3733,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -4782,7 +4790,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2022/ca_060cm_2022/34119/m_3411935_sw_11_060_20220513.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2022/ca_060cm_2022/34119/m_3411935_sw_11_060_20220513.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -5046,7 +5054,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2022/ca_060cm_2022/34119/m_3411935_sw_11_060_20220513.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2022/ca_060cm_2022/34119/m_3411935_sw_11_060_20220513.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -6055,7 +6063,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2020/ca_060cm_2020/34119/m_3411935_sw_11_060_20200521.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2020/ca_060cm_2020/34119/m_3411935_sw_11_060_20200521.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -6319,7 +6327,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2020/ca_060cm_2020/34119/m_3411935_sw_11_060_20200521.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2020/ca_060cm_2020/34119/m_3411935_sw_11_060_20200521.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -7328,7 +7336,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_060cm_2018/34119/m_3411935_sw_11_060_20180724_20190209.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_060cm_2018/34119/m_3411935_sw_11_060_20180724_20190209.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -7534,7 +7542,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_fgdc_2018/34119/m_3411935_sw_11_060_20180724.txt?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_fgdc_2018/34119/m_3411935_sw_11_060_20180724.txt?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -7650,7 +7658,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_060cm_2018/34119/m_3411935_sw_11_060_20180724_20190209.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2018/ca_060cm_2018/34119/m_3411935_sw_11_060_20180724_20190209.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -8659,7 +8667,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_060cm_2016/34119/m_3411935_sw_11_h_20160713.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_060cm_2016/34119/m_3411935_sw_11_h_20160713.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -8865,7 +8873,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_fgdc_2016/34119/m_3411935_sw_11_h_20160713.txt?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_fgdc_2016/34119/m_3411935_sw_11_h_20160713.txt?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -8981,7 +8989,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_060cm_2016/34119/m_3411935_sw_11_h_20160713.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2016/ca_060cm_2016/34119/m_3411935_sw_11_h_20160713.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -9990,7 +9998,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_100cm_2014/34119/m_3411935_sw_11_1_20140601.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_100cm_2014/34119/m_3411935_sw_11_1_20140601.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -10196,7 +10204,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_fgdc_2014/34119/m_3411935_sw_11_1_20140601.txt?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_fgdc_2014/34119/m_3411935_sw_11_1_20140601.txt?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -10312,7 +10320,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_100cm_2014/34119/m_3411935_sw_11_1_20140601.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2014/ca_100cm_2014/34119/m_3411935_sw_11_1_20140601.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -11321,7 +11329,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_100cm_2012/34119/m_3411935_sw_11_1_20120505.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_100cm_2012/34119/m_3411935_sw_11_1_20120505.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -11527,7 +11535,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_fgdc_2012/34119/m_3411935_sw_11_1_20120505.txt?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_fgdc_2012/34119/m_3411935_sw_11_1_20120505.txt?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -11643,7 +11651,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
                 
         <li class="pystac-row">
             <span class="pystac-k">href</span>
-            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_100cm_2012/34119/m_3411935_sw_11_1_20120505.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D"</span>
+            <span class="pystac-v">"https://naipeuwest.blob.core.windows.net/naip/v002/ca/2012/ca_100cm_2012/34119/m_3411935_sw_11_1_20120505.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D"</span>
         </li>
     
             
@@ -11820,7 +11828,7 @@ or 2024 (most recent, same pixel size). Weak pick: 2012 or 2014 (coarser pixels)
 Key point: items[0] is just the order the API returns, not a choice anyone made.
 -->
 <p>In our search the items are listed from newest to oldest, so <code>items[0]</code> is the most recent scene. We’ll work with this one for the rest of the lesson:</p>
-<div id="722c8928" class="cell" data-execution_count="10">
+<div id="5a1668e1" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get first (most recent) item in the catalog search</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> items[<span class="dv">0</span>]</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(item)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -11829,7 +11837,7 @@ Key point: items[0] is just the order the API returns, not a choice anyone made.
 </div>
 </div>
 <p>Remember the <a href="https://pystac.readthedocs.io/en/stable/api/pystac.html#pystac.Item">STAC item</a> is the core object in a STAC catalog. The item does not contain the data itself, but rather metadata and assets. The assets contain links to access the actual data. Some of the metadata:</p>
-<div id="69316a69" class="cell" data-execution_count="11">
+<div id="ab9a2c7c" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print item ID and properties</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ID:'</span> , item.<span class="bu">id</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>item.properties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -11868,52 +11876,84 @@ Check-in
 Answer (2024 item): datetime 2024-06-25, gsd 0.6 m, CRS EPSG:26911 (NAD83 / UTM zone 11N).
 The time is a placeholder: all NAIP items show T00:00 or T16:00, so only the date is meaningful.
 -->
-<p>Just as the item properties, the item assets are given in a dictionary, with each value being a <a href="https://pystac.readthedocs.io/en/stable/api/asset.html"><code>pystac.Asset</code></a>. Let’s check the assets in the <code>item</code>:</p>
-<div id="dc00cb04" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>item.assets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="footprint" class="level3">
+<h3 class="anchored" data-anchor-id="footprint">Footprint</h3>
+<p>The <strong>footprint</strong> of the item is the area on the ground its data covers. We can access it with the <code>geometry</code> attribute:</p>
+<div id="e028f7ec" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>item.geometry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>{'image': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.tif?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D&gt;,
- 'thumbnail': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D&gt;}</code></pre>
+<pre><code>{'type': 'Polygon',
+ 'coordinates': [[[-119.683292, 34.373269],
+   [-119.685448, 34.440724],
+   [-119.754272, 34.439192],
+   [-119.752061, 34.371741],
+   [-119.683292, 34.373269]]]}</code></pre>
 </div>
 </div>
-<div id="944b6827" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> item.assets.keys():</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key, <span class="st">'--'</span>, item.assets[key].title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Before loading the data we want to see how the item intersects with our <code>aoi</code> around NCEAS. To do this, we create a <code>gpd.GeoDataFrame</code> for each of the geometries. The new piece is the <code>shape()</code> function from the <code>shapely</code> package, which turns a GeoJSON-type dictionary into a geometry. Both our <code>aoi</code> and the item’s geometry are GeoJSON-type dictionaries, and STAC geometries always use longitude and latitude coordinates (EPSG:4326).</p>
+<div id="c99a4a22" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn the AOI and the item's footprint into geodataframes</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[shape(aoi)], crs<span class="op">=</span><span class="st">'EPSG:4326'</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>footprint <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[shape(item.geometry)], crs<span class="op">=</span><span class="st">'EPSG:4326'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code below plots the item’s footprint together with our area of interest. <!-- Read it before running it: most of it uses tools you already know from `geopandas`. --></p>
+<div id="d0fcbc76" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the footprint outline and the AOI on the same axis</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>footprint.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'NAIP item footprint (black) and our area of interest (red)'</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lesson-16-STAC_files/figure-html/cell-15-output-1.png" width="470" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our area of interest is a small part of the item. When we search with <code>intersects</code>, the catalog returns every <em>whole</em> item that touches our area of interest. It doesn’t clip the data to it.</p>
+<!--
+Answer: the footprint is about 6.5 km × 7.7 km, around 85 times the area of the AOI.
+Extra: the footprint looks slightly tilted because the image is a rectangle in its own CRS
+(UTM zone 11N), not in longitude and latitude.
+-->
+</section>
+<section id="assets" class="level3">
+<h3 class="anchored" data-anchor-id="assets">Assets</h3>
+<p>Just as the item properties, the item assets are given in a dictionary, with each value being a <a href="https://pystac.readthedocs.io/en/stable/api/asset.html"><code>pystac.Asset</code></a>. Let’s check the assets in the <code>item</code>:</p>
+<div id="6fa30469" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>item.assets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>{'image': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D&gt;,
+ 'thumbnail': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D&gt;}</code></pre>
+</div>
+</div>
+<div id="bea0c8a2" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> item.assets.keys():</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key, <span class="st">'--'</span>, item.assets[key].title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>image -- RGBIR COG tile
 thumbnail -- Thumbnail</code></pre>
 </div>
 </div>
-<!--
-
-** TO DO: plot about how the item intersects our bounding box **
-:::{.callout-tip}
-## Check-in
-Our `bbox` is a box of about 0.85 km × 0.65 km around NCEAS.
-Before we look at the image, predict: will it cover just that box?
-Then check `item.bbox` and explain what you see.
-:::
-
-
-Answer: item.bbox is about [-119.754, 34.372, -119.683, 34.441], roughly 6.5 km × 7.7 km.
-A search with intersects returns every whole item that touches the area of interest; it doesn't clip the data to it.
--->
 <p>Notice each asset has an <code>href</code>, which is a link to the data. For example, we can use the URL for the <code>'thumbnail'</code> asset to plot a small preview of the scene:</p>
-<div id="a922726f" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot thumbnail preview</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'thumbnail'</span>].href, width<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<img src="https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T02%3A15%3A43Z&amp;se=2026-11-19T03%3A00%3A43Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T00%3A02%3A52Z&amp;ske=2026-11-22T00%3A02%3A52Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=MTSqTTkrUZahK7JdLlLe1s/0DbSH0xqdqQQF25EkHWU%3D" width="300">
+<div id="21d3f500" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot thumbnail preview</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'thumbnail'</span>].href, width<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<img src="https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D" width="300">
 </div>
 </div>
+</section>
 </section>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <p>The raster data in our current <code>item</code> is in the <code>image</code> asset. Again, we access this data via its URL. This time, we open it using <code>rioxr.open_rasterio()</code> directly:</p>
-<div id="07b0071e" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sb <span class="op">=</span> rioxr.open_rasterio(item.assets[<span class="st">'image'</span>].href)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>sb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div id="55d65f86" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sb <span class="op">=</span> rioxr.open_rasterio(item.assets[<span class="st">'image'</span>].href)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>sb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
 <symbol id="icon-database" viewbox="0 0 32 32">
@@ -12296,7 +12336,7 @@ Attributes:
     TIFFTAG_RESOLUTIONUNIT:  1 (unitless)
     AREA_OR_POINT:           Area
     scale_factor:            1.0
-    add_offset:              0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 4</li><li><span class="xr-has-index">y</span>: 12480</li><li><span class="xr-has-index">x</span>: 10550</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-b000d1fa-3fa5-4752-b8e8-b5f324f6d34a" class="xr-array-in" type="checkbox" checked=""><label for="section-b000d1fa-3fa5-4752-b8e8-b5f324f6d34a" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[526656000 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-434f67ea-4387-4dd7-bf7f-ae233d735ffb" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-434f67ea-4387-4dd7-bf7f-ae233d735ffb" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4</div><input id="attrs-339725ff-3793-4493-9ca5-70bec08ad430" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-339725ff-3793-4493-9ca5-70bec08ad430" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6c70a3ea-19a4-4a59-8225-4df1237c0a50" class="xr-var-data-in" type="checkbox"><label for="data-6c70a3ea-19a4-4a59-8225-4df1237c0a50" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2, 3, 4])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.469e+05 2.469e+05 ... 2.533e+05</div><input id="attrs-46d71b39-929d-4e4e-8c6d-435c5e2ac04c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-46d71b39-929d-4e4e-8c6d-435c5e2ac04c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ef34f967-1951-407f-928f-a3fae385fa96" class="xr-var-data-in" type="checkbox"><label for="data-ef34f967-1951-407f-928f-a3fae385fa96" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([246930.3, 246930.9, 246931.5, ..., 253258.5, 253259.1, 253259.7])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.814e+06 3.814e+06 ... 3.807e+06</div><input id="attrs-033b7574-f67a-44a2-ab08-81514667092a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-033b7574-f67a-44a2-ab08-81514667092a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2ecc9400-1406-4253-82b6-7acf9f313cb9" class="xr-var-data-in" type="checkbox"><label for="data-2ecc9400-1406-4253-82b6-7acf9f313cb9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3814295.7, 3814295.1, 3814294.5, ..., 3806809.5, 3806808.9, 3806808.3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-b7e5244e-a06f-43a8-b661-ed020a4a1040" class="xr-var-attrs-in" type="checkbox"><label for="attrs-b7e5244e-a06f-43a8-b661-ed020a4a1040" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-284dd75c-3990-4bf3-a470-7b074ea29ef8" class="xr-var-data-in" type="checkbox"><label for="data-284dd75c-3990-4bf3-a470-7b074ea29ef8" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>246930.0 0.6 0.0 3814296.0 0.0 -0.6</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-e14ad710-4ed0-48a8-a17e-afcf6edd149f" class="xr-section-summary-in" type="checkbox"><label for="section-e14ad710-4ed0-48a8-a17e-afcf6edd149f" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-708d1e49-3574-4c36-a152-051342b12ad6" class="xr-index-data-in" type="checkbox"><label for="index-708d1e49-3574-4c36-a152-051342b12ad6" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3, 4], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-36401a98-7411-4111-bce3-27733b243abf" class="xr-index-data-in" type="checkbox"><label for="index-36401a98-7411-4111-bce3-27733b243abf" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([          246930.3,           246930.9,           246931.5,
+    add_offset:              0.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name"></div><ul class="xr-dim-list"><li><span class="xr-has-index">band</span>: 4</li><li><span class="xr-has-index">y</span>: 12480</li><li><span class="xr-has-index">x</span>: 10550</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-ec2123d5-9056-4873-8c98-029c0835563e" class="xr-array-in" type="checkbox" checked=""><label for="section-ec2123d5-9056-4873-8c98-029c0835563e" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[526656000 values with dtype=uint8]</pre></div></div></li><li class="xr-section-item"><input id="section-da1ab4a1-70ae-4979-aad6-9d695189f17b" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-da1ab4a1-70ae-4979-aad6-9d695189f17b" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">band</span></div><div class="xr-var-dims">(band)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4</div><input id="attrs-ec283b2d-e43d-4e68-9983-eb16d7ed1b98" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ec283b2d-e43d-4e68-9983-eb16d7ed1b98" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-444785a1-d404-4678-a4ca-f7422b1dbe97" class="xr-var-data-in" type="checkbox"><label for="data-444785a1-d404-4678-a4ca-f7422b1dbe97" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2, 3, 4])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">2.469e+05 2.469e+05 ... 2.533e+05</div><input id="attrs-bd2cb20c-9e37-4569-803c-86673e42d504" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-bd2cb20c-9e37-4569-803c-86673e42d504" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-581c6655-0276-4c30-9fb1-d10c87581539" class="xr-var-data-in" type="checkbox"><label for="data-581c6655-0276-4c30-9fb1-d10c87581539" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([246930.3, 246930.9, 246931.5, ..., 253258.5, 253259.1, 253259.7])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.814e+06 3.814e+06 ... 3.807e+06</div><input id="attrs-f5f88569-b886-4bec-bbb9-0d24cb1aa9fe" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f5f88569-b886-4bec-bbb9-0d24cb1aa9fe" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b078c217-7cbe-4c3f-add8-f70e4fc814f1" class="xr-var-data-in" type="checkbox"><label for="data-b078c217-7cbe-4c3f-add8-f70e4fc814f1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([3814295.7, 3814295.1, 3814294.5, ..., 3806809.5, 3806808.9, 3806808.3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0</div><input id="attrs-e8adb6b6-0631-4803-adbc-423a521eabe6" class="xr-var-attrs-in" type="checkbox"><label for="attrs-e8adb6b6-0631-4803-adbc-423a521eabe6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fa9d2507-db3c-4fc7-ab77-867d4a19f30a" class="xr-var-data-in" type="checkbox"><label for="data-fa9d2507-db3c-4fc7-ab77-867d4a19f30a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314140356</dd><dt><span>inverse_flattening :</span></dt><dd>298.257222101</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>GRS 1980</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>NAD83</dd><dt><span>horizontal_datum_name :</span></dt><dd>North American Datum 1983</dd><dt><span>projected_crs_name :</span></dt><dd>NAD83 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["NAD83 / UTM zone 11N",GEOGCS["NAD83",DATUM["North_American_Datum_1983",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6269"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4269"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","26911"]]</dd><dt><span>GeoTransform :</span></dt><dd>246930.0 0.6 0.0 3814296.0 0.0 -0.6</dd></dl></div><div class="xr-var-data"><pre>array(0)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-8e206adc-68e7-48f7-8dc8-107148c67a77" class="xr-section-summary-in" type="checkbox"><label for="section-8e206adc-68e7-48f7-8dc8-107148c67a77" class="xr-section-summary">Indexes: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>band</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-cf2155da-f77c-47c3-ab61-78b3f0ec72cd" class="xr-index-data-in" type="checkbox"><label for="index-cf2155da-f77c-47c3-ab61-78b3f0ec72cd" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3, 4], dtype='int64', name='band'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-bf12404f-cbf0-44eb-a622-00ec5a9d831f" class="xr-index-data-in" type="checkbox"><label for="index-bf12404f-cbf0-44eb-a622-00ec5a9d831f" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([          246930.3,           246930.9,           246931.5,
        246932.09999999998, 246932.69999999998,           246933.3,
                  246933.9,           246934.5, 246935.09999999998,
        246935.69999999998,
@@ -12305,7 +12345,7 @@ Attributes:
        253256.09999999998, 253256.69999999998,           253257.3,
                  253257.9,           253258.5, 253259.09999999998,
        253259.69999999998],
-      dtype='float64', name='x', length=10550))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-7c929ced-0590-45ed-b41e-2d4f4d3cafdb" class="xr-index-data-in" type="checkbox"><label for="index-7c929ced-0590-45ed-b41e-2d4f4d3cafdb" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3814295.7,          3814295.1,          3814294.5,
+      dtype='float64', name='x', length=10550))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-8527f1da-938c-477a-9af3-f47c07cd9ba4" class="xr-index-data-in" type="checkbox"><label for="index-8527f1da-938c-477a-9af3-f47c07cd9ba4" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([         3814295.7,          3814295.1,          3814294.5,
        3814293.9000000004, 3814293.3000000003,          3814292.7,
                 3814292.1,          3814291.5, 3814290.9000000004,
        3814290.3000000003,
@@ -12314,101 +12354,160 @@ Attributes:
        3806811.9000000004, 3806811.3000000003,          3806810.7,
                 3806810.1,          3806809.5, 3806808.9000000004,
        3806808.3000000003],
-      dtype='float64', name='y', length=12480))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-18f6d2a1-4016-4c79-a95d-3d12051a052d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-18f6d2a1-4016-4c79-a95d-3d12051a052d" class="xr-section-summary">Attributes: <span>(6)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
+      dtype='float64', name='y', length=12480))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-463ef3f6-568f-49b2-aae8-3468c521f061" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-463ef3f6-568f-49b2-aae8-3468c521f061" class="xr-section-summary">Attributes: <span>(6)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>TIFFTAG_XRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_YRESOLUTION :</span></dt><dd>1</dd><dt><span>TIFFTAG_RESOLUTIONUNIT :</span></dt><dd>1 (unitless)</dd><dt><span>AREA_OR_POINT :</span></dt><dd>Area</dd><dt><span>scale_factor :</span></dt><dd>1.0</dd><dt><span>add_offset :</span></dt><dd>0.0</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>Notice the output doesn’t show any data values, only <code>[526656000 values with dtype=uint8]</code>. That’s because <code>open_rasterio()</code> only read the file’s metadata: its dimensions, coordinates and CRS. The data itself (about 500 MB) stays in the cloud until we use it, for example to plot it or to compute a statistic. This is the same lazy behavior we saw with generators. The NAIP files are stored as <strong>Cloud-Optimized GeoTIFFs (COGs)</strong>, a format designed so we can read just the part of a file we need instead of downloading all of it.</p>
 <p>Notice this raster has four bands (red, green, blue, nir), so we cannot plot it directly: <code>.plot.imshow()</code> would read the fourth band (NIR) as transparency. Thus we need to select the bands we want to plot (RGB) before plotting:</p>
-<div id="0631f8e0" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot raster with correct ratio</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">6</span>  </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>aspect <span class="op">=</span> sb.rio.width <span class="op">/</span> sb.rio.height </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select R,G,B bands and plot</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>sb.sel(band<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]).plot.imshow(size<span class="op">=</span>size, aspect<span class="op">=</span>aspect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b373c6cb" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot raster with correct ratio</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">6</span>  </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>aspect <span class="op">=</span> sb.rio.width <span class="op">/</span> sb.rio.height </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select R,G,B bands and plot</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>sb.sel(band<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]).plot.imshow(size<span class="op">=</span>size, aspect<span class="op">=</span>aspect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="../../book/images/lesson-16/sb-from-stac-item.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<p>The <a href="https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem">Copernicus Digital Elevation Model (DEM)</a> collection contains elevation data at 90 m spatial resolution <span class="citation" data-cites="esa_copernicus_dem_glo90"><a href="#ref-esa_copernicus_dem_glo90" role="doc-biblioref">[2]</a></span>. The collection ID in the MPC catalog is <code>'cop-dem-glo-90'</code>.</p>
+<p>Suppose you want to know how high above sea level the area around NCEAS is, for example to start thinking about its flood or sea-level-rise risk.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Part A: Access the data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>TO DO: fix DEM exercise</strong></p>
-<section id="exercise" class="level2">
-<h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
-<p>The <a href="https://planetarycomputer.microsoft.com/dataset/group/copernicus-dem">Copernicus Digital Elevation Model (DEM)</a> collection contains elevation data at 90 m spatial resolution <span class="citation" data-cites="esa_copernicus_dem_glo90"><a href="#ref-esa_copernicus_dem_glo90" role="doc-biblioref">[2]</a></span>. The collection ID in the MPC catalog is <code>'cop-dem-glo-90'</code>.</p>
 <ol type="1">
-<li>Reuse the <code>bbox</code> for Santa Barbara to look for items in this collection.</li>
-<li>Get the first item in the search and examine its properties and assets.</li>
-<li>Check the item’s rendered preview asset by clicking on its URL.</li>
-<li>Open and plot the item’s data using <code>rioxarray</code>, save it into a variable named <code>dem</code>.</li>
-<li>Obtain the maximum and minimum elevation on the scene as <em>numbers</em>.</li>
-<li>Print the maximum and minimum elevation <a href="https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string">rounded to two decimal places using f-strings</a>. For vertical units, consult the <a href="https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf">data’s handbook</a>.</li>
+<li>Explore the dataset’s <a href="https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-90">landing page in the MPC catalog</a>. Who produced this data, how was it made and what is its spatial resolution?</li>
+<li>Search the catalog for items in this collection that intersect our <code>aoi</code>. How many items did you get?</li>
+<li>Get the first item in the search and look at its properties. What is its <code>gsd</code>? What is its <code>datetime</code>?</li>
+<li>Before plotting, predict: will this item’s footprint be larger or smaller than the NAIP item’s? Then create a geodataframe with the DEM item’s footprint and plot it together with the NAIP <code>footprint</code> and <code>aoi_gdf</code>.</li>
+<li>Open the item’s <code>'data'</code> asset using <code>rioxarray</code> and save it into a variable named <code>dem</code>. Check its CRS, resolution and nodata value, and plot it.</li>
 </ol>
-</section>
 </div>
 </div>
 <!--
+Solution
 
-::: {#eafdc8c4 .cell execution_count=17}
-``` {.python .cell-code}
-# Open DEM item over SB
-search = catalog.search(
-    collections=["cop-dem-glo-90"],
-    intersects = bbox,
-)
-items = search.item_collection()
+1. Produced from TanDEM-X radar data (DLR and Airbus, distributed through the European Space Agency's Copernicus programme).
+   It is a digital surface model (includes buildings and vegetation), at about 90 m resolution.
 
-dem = rioxr.open_rasterio(items[0].assets['data'].href)
-```
-:::
+```python
+# 2. Search
+dem_search = catalog.search(
+    collections=['cop-dem-glo-90'],
+    intersects=aoi)
+dem_items = dem_search.item_collection()
+len(dem_items)  # 1 item
 
+# 3. Item properties
+dem_item = dem_items[0]
+dem_item.properties  # gsd: 90, datetime: 2021-04-22 (a release date, not when the radar data was acquired)
 
--->
-<!--
-## Exercise
-Recreate the following image, where the red rectangle shows the bounding box used to do the catalog search. 
-HINT: `bbox` as it is now is a dictionary. How can you get the vertices list out of it to first create a `shapely` `Polygon`?
+# 4. Footprints: the DEM item is a 1° x 1° tile, about 92 km x 111 km
+dem_footprint = gpd.GeoDataFrame(geometry=[shape(dem_item.geometry)], crs='EPSG:4326')
 
-![](/book/images/lesson-16/sb-and-aoi-mpc.png)
-
-::: {#3f3e6ca9 .cell execution_count=18}
-``` {.python .cell-code}
-aoi = gpd.GeoDataFrame(geometry=[Polygon(bbox['coordinates'][0])],
-                crs='epsg:4326')
-aoi.plot()
-```
-:::
-
-
-::: {#09122a1d .cell execution_count=19}
-``` {.python .cell-code}
-# reproject aoi to rgb crs
-aoi = aoi.to_crs(sb.rio.crs)
-print('matched crs?',  aoi.crs == sb.rio.crs)
-aoi.crs
-```
-:::
-
-
-::: {#f2ccace9 .cell execution_count=20}
-``` {.python .cell-code}
 fig, ax = plt.subplots()
+dem_footprint.plot(ax=ax, color='none', edgecolor='blue')
+footprint.plot(ax=ax, color='none', edgecolor='black')
+aoi_gdf.plot(ax=ax, color='red')
+ax.set_title('DEM item (blue), NAIP item (black) and AOI (red)')
+plt.show()
 
-size = 6 # plot height in inches
-aspect = sb.rio.width / sb.rio.height # ratio of width/height
-fig.set_size_inches((size, size*aspect)) # reuse size and aspect
-
-sb.sel(band=[1,2,3]).plot.imshow(ax=ax)
-aoi.plot(ax=ax, color='red', alpha=0.6)
+# 5. Open and inspect
+dem = rioxr.open_rasterio(dem_item.assets['data'].href)
+print('CRS:', dem.rio.crs)                 # EPSG:4326
+print('Resolution:', dem.rio.resolution())  # 0.000833 degrees (about 76 m E-W x 92 m N-S here)
+print('Nodata:', dem.rio.nodata)           # None: the ocean is stored as 0, not as missing
+dem.plot()
 ```
-:::
+-->
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Part B: Is this the data we want?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol start="6" type="1">
+<li>Obtain the maximum and minimum elevation in <code>dem</code> as <em>numbers</em>, and print them rounded to two decimal places using <a href="https://stackoverflow.com/questions/46062105/rounding-floats-with-f-string">f-strings</a>. For vertical units, consult the <a href="https://object.cloud.sdsc.edu/v1/AUTH_opentopography/www/metadata/Copernicus_metadata.pdf">data’s handbook</a>.</li>
+<li>Read the collection’s description (<code>catalog.get_collection('cop-dem-glo-90').description</code>). What kind of elevation model is this? Over the NCEAS building, what would it measure?</li>
+<li>Look at your plots from steps 4 and 5. Are the maximum and minimum from step 6 the highest and lowest points in Santa Barbara? Where do you think they are?</li>
+<li>Count how many pixels in <code>dem</code> are exactly 0 using <code>(dem == 0).sum()</code>. What fraction of the raster is that, and what do you think these pixels are? Compare <code>dem.mean()</code> with <code>dem.where(dem != 0).mean()</code>. Which one would you report as the average elevation of this area, and why?</li>
+<li>Clip <code>dem</code> to the NAIP <code>footprint</code> using <code>dem.rio.clip_box(*footprint.total_bounds)</code>. Plot it and recompute the maximum, minimum and the number of 0 pixels.</li>
+<li><strong>Your call:</strong> would you use this dataset to estimate the ground elevation at NCEAS for a sea-level-rise question? Write two or three sentences justifying your answer. Consider what the data measures, its pixel size and when it was made.</li>
+</ol>
+</div>
+</div>
+<!--
+Solution
 
+```python
+# 6. Maximum and minimum (meters, relative to the EGM2008 geoid: check the handbook)
+max_elev = dem.max().item()
+min_elev = dem.min().item()
+print(f"Maximum elevation: {max_elev:.2f} m")  # 2689.83 m
+print(f"Minimum elevation: {min_elev:.2f} m")  # -1.50 m
 
+# 7. Description
+print(catalog.get_collection('cop-dem-glo-90').description)
+```
+
+7. It is a digital surface model (DSM): it includes buildings, infrastructure and vegetation.
+   Over NCEAS it measures the top of whatever covers each ~90 m pixel (roofs, trees), not the ground.
+
+8. No, the tile reaches far beyond Santa Barbara.
+   The maximum (~2,690 m) is around Mt Pinos (34.81°N, 119.15°W), about 60 km from NCEAS.
+   The minimum (-1.5 m) is a coastal pixel near Oxnard (34.13°N, 119.17°W).
+   Optional code to locate them:
+
+```python
+dem_max = dem.where(dem == dem.max(), drop=True)
+dem_min = dem.where(dem == dem.min(), drop=True)
+print('Max at:', dem_max.x.values, dem_max.y.values)
+print('Min at:', dem_min.x.values, dem_min.y.values)
+
+# 9. Pixels equal to 0
+n_zero = (dem == 0).sum().item()
+print('Pixels equal to 0:', n_zero)                     # 429651
+print(f'Fraction of the raster: {n_zero / dem.size:.1%}')  # 29.8%
+print(f"Mean with 0s: {dem.mean().item():.2f} m")                  # 629.56 m
+print(f"Mean without 0s: {dem.where(dem != 0).mean().item():.2f} m")  # 897.28 m
+```
+
+9. The 0s are the ocean: the DEM stores water as 0, and since nodata is None nothing tells xarray to skip them.
+   For a question about land, report the mean without the 0s.
+   Good answers notice that dropping every 0 could also drop real land at sea level,
+   and that the handbook's water mask would be a cleaner way to separate water from land.
+
+```python
+# 10. Clip to the NAIP footprint
+dem_clip = dem.rio.clip_box(*footprint.total_bounds)
+dem_clip.plot()
+print(f"Maximum elevation: {dem_clip.max().item():.2f} m")  # 240.10 m
+print(f"Minimum elevation: {dem_clip.min().item():.2f} m")  # 0.00 m
+n_zero_clip = (dem_clip == 0).sum().item()
+print(f"Pixels equal to 0: {n_zero_clip} ({n_zero_clip / dem_clip.size:.1%})")  # 3079 (42.6%)
+```
+
+10. The clipped raster is only ~84 x 86 pixels. Clipping makes the numbers describe Santa Barbara,
+    but it does not remove the ocean.
+
+11. No single right answer. Strong answers mention:
+    - it is a surface model: values around NCEAS include buildings and trees, while sea-level rise needs the ground (a terrain model);
+    - one ~90 m pixel is larger than the NCEAS building; the whole AOI is only about 9 x 7 pixels;
+    - the elevation reflects the radar acquisition years, not 2021;
+    - a few meters of vertical error matter a lot for sea-level rise (check the handbook's accuracy).
+    A defensible "yes": fine for a coarse first look at which parts of the coast are low,
+    but not for decisions about a specific building. A better source: a lidar-based terrain model such as USGS 3DEP.
 -->
 </section>
 <section id="further-reading" class="level2">
@@ -12428,7 +12527,7 @@ https://planetarycomputer.microsoft.com/dataset/io-biodiversity#Example-Notebook
 -->
 <!--
 
-::: {#5497c89f .cell execution_count=21}
+::: {#bb4bf26c .cell execution_count=20}
 ``` {.python .cell-code}
 from shapely import Polygon
 import matplotlib.pyplot as plt
@@ -12446,7 +12545,7 @@ An easy way to obtain coordinates for such a region:
 5. one option is to copy-paste this geoJSON into an empty text file and save such file with the .json extension, we could then read it in using `geopandas`
 6. instead, we will create our region of interest by just *copy-pasting the list of points* and storing it as a variable:
 
-::: {#cb0690b2 .cell execution_count=22}
+::: {#bdd9ec5f .cell execution_count=21}
 ``` {.python .cell-code}
 # vertices of our aoi box
 points = [[-119.70608227128903, 34.426300194372274],
@@ -12460,7 +12559,7 @@ points = [[-119.70608227128903, 34.426300194372274],
 
 We can then create a new `geopandas.GeoDataFrame`:
 
-::: {#bea168b9 .cell execution_count=23}
+::: {#1020e33f .cell execution_count=22}
 ``` {.python .cell-code}
 # create geodataframe with aoi 
 aoi = gpd.GeoDataFrame(geometry=[Polygon(points)],
