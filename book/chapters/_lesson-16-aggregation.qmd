@@ -1,0 +1,59 @@
+<!--
+Aggregation section moved out of lesson-16-STAC.qmd on 2026-11-16.
+The leading underscore keeps Quarto from rendering this file.
+The code assumes `dem`, the Copernicus DEM tile over Santa Barbara loaded in the STAC lesson:
+
+    dem = rioxr.open_rasterio(items[0].assets['data'].href)   # collection 'cop-dem-glo-90'
+-->
+
+## Aggregation
+
+Let's take a look at our elevation raster over Santa Barbara:
+
+```{python}
+dem.plot()
+```
+
+Rasters with high spatial resolution can offer great insight into fine-scale patterns, but can also be challenging to process due to their size.
+
+We can use **aggregation methods** to **spatially downsample** a raster into a coarser resolution. 
+
+A simple way to spatially downsample an `xarray.DataArray` is:
+
+```python
+xdataarray.coarsen(x=x_window, y=y_window).aggr()
+```
+where:
+
+- `xdataarray` is an `xarray.DataArray` with dimensions `x` and `y` (it can have other dimensions too, like `band`). 
+- `x` and `y` are the names of the dimensions of the `xarray.DataArray` (these could have other names like `lon`/`lat`)
+- `x_window` and `y_window` are the dimensions of the window used to make the aggregation (each must be an integer). 
+- `aggr()` is an aggregator function: the function that will be applied to each window. Examples are `min()`, `max()`, `sum()` and `mean()`.
+
+
+### Example: coarsening the DEM to 60x60 pixels {.unlisted}
+
+Suppose we want to coarsen our DEM elevation raster from 1200x1200 pixels to a raster of 60x60 pixels by calculating the maximum at each window. Remember the windows are non-overlapping, so we will obtain one pixel per window. A quick division tells us that to go from 1200x1200 to 60x60 we will need to use a 20x20 window. The aggregator function on each of these windows will be `max()`.
+
+Our call looks like this:
+
+```{python}
+# Coarsen to a 60x60 raster calculating the maximum value in each window
+dem_coarse = dem.coarsen(x=20,y=20).max()
+dem_coarse
+```
+
+```{python}
+# Inspect old and coarsened resolution
+print(f"old resolution: {dem.rio.width}x{dem.rio.height}")
+print(f"coarse resolution: {dem_coarse.rio.width}x{dem_coarse.rio.height}")
+dem_coarse.plot()
+```
+
+
+:::{.callout-tip}
+## Exercise
+1. Downsample the elevation raster into a 240x240 raster by taking the average over windows of the appropriate size. Plot the resulting raster.
+2. Use an f-string to check whether the spatial bounds of the rasters have changed.
+3. If you are curious about the different colormaps, check out the [`xarray` documentation](https://docs.xarray.dev/en/latest/user-guide/plotting.html#colormaps).
+:::
