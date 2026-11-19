@@ -43,6 +43,15 @@ The EJI ranks every census tract in the United States on 36 environmental, socia
 
 The 2024 release also includes a separate climate burden module with indicators for extreme heat, wildfire and other extreme events. You can interactively explore this dataset through the [EJI explorer](https://www.atsdr.cdc.gov/place-health/php/eji/eji-explorer.html).
 
+The EJI download includes a data dictionary describing every variable. The first letters of each column name tell you what kind of value it holds:
+
+- `E_`: estimates. For example, `E_NOINT` is the percentage of persons without internet in the census tract.
+- `EPL_`: percentile ranks of those estimates, from 0 to 1. For example, `EPL_NOINT` is the tract's percentile rank for `E_NOINT`.
+- `SPL_`: summed ranks for domains, modules or the overall score. For example, `SPL_EJI` is the sum of the percentile ranks of the environmental burden, health vulnerability and social vulnerability modules (`RPL_EBM`, `RPL_HVM` and `RPL_SVM`).
+- `RPL_`: percentile ranks for domains, modules or the overall score, from 0 to 1.
+
+Values of -999 represent "no data". The census tract boundaries come from the 2020 TIGER/Line Files.
+
 The **fire perimeters** are polygons outlining the area burned by each fire. Different agencies publish perimeters for the Eaton and Palisades fires, and they may differ in how and when they were mapped. Read the metadata of the dataset you select so you know where its perimeters come from and how current they are.
 :::
 
@@ -74,11 +83,13 @@ Discuss how big the Eaton fire perimeter is in relation to the census tracts int
 
 a. Clip the census tracts to the Palisades fire perimeter using [`geopandas.clip()`](https://geopandas.org/en/stable/docs/reference/api/geopandas.clip.html). 
 b. Do the same for the Eaton fire perimeter. 
-c. Quickly visualize your data. 
+c. Visualize your data. 
 
 :::{.callout-tip appearance="minimal"}
 Discuss with your group the difference between a spatial join (step 2) and clipping (step 3). 
-Make sure you understand the difference and what your goal is when transforming geospatial data!
+When transforming geospatial data, make sure you understand the difference and what your goal is!
+
+When a census tract is clipped to the fire perimeter, only part of the tract is left. Do the EJI values of a clipped tract describe the people living inside the fire perimeter, or the whole tract? How does this affect what you can conclude from each method?
 :::
 
 ## 4. Visualize fire perimeters with a basemap
