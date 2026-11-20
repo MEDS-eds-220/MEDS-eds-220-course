@@ -15,8 +15,13 @@ follow them exactly, and ask only if something in them is ambiguous.
 
 - Lesson (source of truth): `MEDS-eds-220-course/book/chapters/<lesson>/<lesson>.qmd`
   (or `book/chapters/<lesson>.qmd` for single-file lessons)
-- Instructor notebook (output): `instructor-materials/instructor-notebooks/<lesson>-INSTRUCTOR.ipynb`
-- Student notebook (where students start): `student-notebooks/<lesson>-STUDENT(S).ipynb`
+- Instructor notebook (output): `instructor-materials/instructor-notebooks/<lesson>-INSTRUCTOR.ipynb`,
+  unless the instructor asks for it somewhere else (e.g. `MEDS-eds-220-course/_planning/`
+  for a draft). Then write it there and leave the one in `instructor-materials/` alone.
+- Student notebook (where students start): `student-notebooks/`. Names vary: either
+  `<lesson>-STUDENT(S).ipynb` or `week-N-<TOPIC>-STUDENTS.ipynb` (e.g. `week-8-STAC-STUDENTS.ipynb`).
+  A copy may also sit in `_planning/`; if the instructor points to it, use that one and
+  check whether it matches the `student-notebooks/` copy.
 - Build scripts: `MEDS-eds-220-course/_planning/build-<lesson>-instructor-nb.py` (gitignored).
   Earlier ones (L10, L11, L13, L14, L18) are examples of the pattern.
 - Assignments: `MEDS-eds-220-course/assignments/` and `_planning/hwk-repos/`
@@ -71,9 +76,11 @@ follow them exactly, and ask only if something in them is ambiguous.
 ## Run and report
 
 5. **Run it** with `/opt/anaconda3/envs/test-eds220-env/bin/python`, from the course repo
-   root, with a run folder in the scratchpad (create it first) or the lesson folder if it
-   needs local `data/`. Pass the run folder as an argument. Confirm every code cell has
-   outputs and no errors.
+   root, with a run folder inside the repo: `_planning/<lesson>-run/` (gitignored; create it
+   first), or the lesson folder if it needs local `data/`. Never use the scratchpad or any
+   folder outside the repo. Pass the run folder as an argument. Confirm there are no errors
+   and that every code cell that should display something has outputs (cells that only
+   assign variables or import packages have none, and that's fine).
 6. **Report:** what's in the notebook section by section, what was dropped or only
    mentioned, how it ran, any differences between the student notebook's pre-filled code
    and the instructor notebook (don't fix them here: that's the student notebook skill),

@@ -6,8 +6,6 @@ image: images/palisades-fire.jpg
 sidebar: false
 ---
 
----
-
 In January 2025, the Eaton and Palisades fires burned thousands of homes in Los Angeles County. A wildfire's impact depends not only on where it burns but also on who lives there: communities differ in their resources to evacuate, recover and rebuild. Here we will combine fire perimeters with the Environmental Justice Index to look at the social dimensions of these two fires. In this discussion section, you will:
 
 - explore the EJI metadata and choose variables that could influence a community's response to a wildfire
@@ -57,8 +55,31 @@ The **fire perimeters** are polygons outlining the area burned by each fire. Dif
 
 ## 1. Metadata exploration
 
-a. Review the CSV with the metadata information for the EJI data.
-b. Look at the variables and with your team **select a few variables** that, in your opinion, could influence a community's response to a wildfire. You'll be working with some of them in the following exercises. 
+a. Open the data dictionary that came with your EJI download. Update the path to match your `data` directory:
+
+```python
+eji_dictionary = pd.read_csv('data/EJI_2024_California/EJI_DATADICTIONARY_2024.csv',
+                             skiprows=1,
+                             encoding='cp1252')
+```
+
+The `skiprows=1` parameter skips the first row of the file, which is a note about the dataset rather than the column names. The `encoding='cp1252'` parameter tells `pandas` that the file uses Windows text encoding. Without it, `pandas` assumes UTF-8 encoding and raises a `UnicodeDecodeError` when it reaches characters like curly apostrophes.
+
+b. Take a first look at `eji_dictionary` on its own. What are its columns? What does each row describe?
+
+c. In the `MODULE` column, `SVM` stands for the social vulnerability module. Run the code below. Then:
+
+    1. Have one person explain to the group what the code is doing.
+    2. Add comments explaining what each line does.
+
+```python
+eji_dictionary['2024 VARIABLE NAME'] = eji_dictionary['2024 VARIABLE NAME'].str.strip()
+
+pd.set_option('display.max_colwidth', 120)
+eji_dictionary.loc[eji_dictionary['MODULE'] == 'SVM', ['2024 VARIABLE NAME', '2024 VARIABLE DESCRIPTION', 'DOMAIN']]
+```
+
+d. With your team, **select a few variables** that, in your opinion, could influence a community's response to a wildfire. You'll be working with some of them in the following exercises. The [EJI technical documentation](https://www.atsdr.cdc.gov/place-health/media/pdfs/2024/10/EJI_2024_Technical_Documentation.pdf) describes each indicator: pages 40–41 list all the indicators, and pages 43–60 have a page for each indicator in the social vulnerability module, with its definition, data source and why it matters.
 
 ## 2. Polygon intersection
 
@@ -103,12 +124,14 @@ b. Use and update the code below to plot the fire perimeters adding a basemap:
 ```python
 fig, ax = plt.subplots(1, 1, figsize=(14, 12))
 
-# Add basemap using contextily
-ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik)
-
 # ADD FIRE PERIMETERS: UPDATE FILL TRANSPARENCY AND COLOR
 
 # ADD LEGEND OR ANNOTATION TO IDENTIFY EACH FIRE
+
+# Add basemap using contextily
+# Call it after plotting the perimeters so it covers their extent,
+# and pass the CRS of your perimeters so the tiles line up with them
+ctx.add_basemap(ax, crs=UPDATE.crs, source=ctx.providers.Esri.WorldStreetMap)
 
 # ADD TITLE
 
@@ -119,7 +142,10 @@ plt.show()
 ```
 
 ## 5. Visualize EJI data
-a. Use and update the code below to plot one of the variables you and your team explored in step 1 as being relevant to a community's response to a wildfire.
+
+a. Decide whether you will use the census tracts from the spatial join (step 2) or from the clipping (step 3) for this map. Assign them to `palisades_tracts` and `eaton_tracts`, and write one sentence justifying your choice.
+
+b. Use and update the code below to plot one of the variables you and your team explored in step 1 as being relevant to a community's response to a wildfire.
 
 ```{python}
 #| code-fold: true
@@ -131,11 +157,11 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
 eji_variable = ''
 
 # Find common min/max for legend range
-vmin = min(census_within_palisades[eji_variable].min(), census_within_eaton[eji_variable].min())
-vmax = max(census_within_palisades[eji_variable].max(), census_within_eaton[eji_variable].max())
+vmin = min(palisades_tracts[eji_variable].min(), eaton_tracts[eji_variable].min())
+vmax = max(palisades_tracts[eji_variable].max(), eaton_tracts[eji_variable].max())
 
-# Plot census tracts within Palisades perimeter
-census_within_palisades.plot(
+# Plot Palisades census tracts
+palisades_tracts.plot(
     column=eji_variable,
     vmin=vmin, vmax=vmax,
     legend=False,
@@ -144,8 +170,8 @@ census_within_palisades.plot(
 ax1.set_title('UPDATE TITLE')
 ax1.axis('off')
 
-# Plot census tracts within Eaton perimeter
-census_within_eaton.plot(
+# Plot Eaton census tracts
+eaton_tracts.plot(
     column=eji_variable,
     vmin=vmin, vmax=vmax,
     legend=False,
@@ -168,6 +194,15 @@ plt.show()
 
 :::{.callout-tip appearance="minimal"}
 With your team, write a paragraph discussing how or whether this variable is distributed differently across the two fire perimeters. What kind of implications could this have in terms of wildfire relief?
+
+Then, list at least two things this data *cannot* tell you about the people affected by the fires. Think about the area each value describes, when the data was collected and what your variable measures.
 :::
+
+<!-- FUTURE NOTES (ideas for a future version of this discussion section):
+
+1. Step 2b: add a hint about duplicated tracts. Fire perimeter files can have many polygons per fire (e.g., the Jan 21, 2025 perimeters have 20-21 per fire), so `sjoin` repeats a tract once per polygon it touches (36 rows for 15 Palisades tracts). Maps look fine, but counts and sums in step 5 would be wrong. Possible wording: "Check whether any tract appears more than once. If it does, why, and how could you fix it?" (Fix: dissolve the perimeter before joining.)
+
+2. Step 5: ask for a number, not only a visual comparison of the maps. For example, the median of the variable for each fire, or a population-weighted value using `E_TOTPOP`. The Eaton map is dominated by one large mountain tract (about 1,500 km2, about 1,200 residents), so comparing by map area is misleading.
+-->
 
 ## References
