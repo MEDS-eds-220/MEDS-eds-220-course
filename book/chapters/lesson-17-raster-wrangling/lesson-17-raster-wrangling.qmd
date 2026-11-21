@@ -149,11 +149,11 @@ lulc = rioxr.open_rasterio(item.assets['data'].href)
 lulc
 ```
 
-Notice that `band` is a dimension of length 1. We can go ahead and "squeeze" the raster to simplify it. We'll also check the raster's data type and CRS:
+Notice that `band` is a dimension of length 1. `rioxarray` always adds a `band` dimension, even when the raster has a single band. Removing it leaves a two-dimensional array with only `y` and `x`, which matches what the data is and makes it simpler to index and to pass to other functions. We'll also check the raster's data type and CRS:
 
 ```{python}
-# Remove length 1 dimension (band)
-lulc = lulc.squeeze().drop_vars('band')
+# Remove length 1 dimension (band) and its coordinate
+lulc = lulc.squeeze('band', drop=True)
 print("Sizes of dimensions:", dict(lulc.sizes))
 print("Data type:", lulc.dtype)
 print("CRS:", lulc.rio.crs)
@@ -276,9 +276,10 @@ Only calculate areas in a projected CRS that preserves areas in your region, suc
 
 ## Categorical or continuous?
 
-### Check-in {.unlisted}
-
+:::{.callout-tip}
+## Check-in
 Look at the colorbar in the plot of `lulc_clip` we made after clipping. Is land cover *categorical* data (each number is a label for a category) or *continuous* data (each number is a measurement)? What would a pixel with a value of 6 mean?
+:::
 
 In a categorical raster the numbers are just codes: there is no order and nothing in between two classes. A continuous colormap like the default one suggests both, so a better choice is a **categorical colormap**, with one distinct color per class.
 
@@ -323,7 +324,7 @@ plt.show()
 In the rest of this lesson we will calculate land cover statistics within the Eaton Fire perimeter. The following exercises will guide you through this process:
 
 :::{.callout-tip}
-## Exercises
+## Exercise 1
 
 1. Use the `numpy` function `np.unique()` to get the number of pixels per class in `lulc_clip`. HINT: check [the `np.unique()` documentation](https://numpy.org/doc/stable/reference/generated/numpy.unique.html) to see what the `return_counts` parameter does.
 
@@ -434,7 +435,12 @@ classes_pal['percentage'] = classes_pal['n_pixels']/classes_pal['n_pixels'].sum(
 classes_pal.sort_values(by='percentage', ascending=False)
 ```
 
-10. Interpret the results. The numbers are only the start: discuss these questions with a partner.
+:::
+
+:::{.callout-tip}
+## Exercise 2
+
+Interpret the results. The numbers are only the start: discuss these questions with a partner.
 
     1. Almost a quarter of the Eaton Fire perimeter was built area. What does this tell you about where this fire burned?
     2. The land cover map is from 2023 and the fires burned in January 2025. Is the map close enough to describe what was on the ground before the fires? What could have changed in between?
@@ -494,10 +500,11 @@ pet_names = [pet['name'] for pet in pets]
 pet_names
 ```
 
-#### Check-in {.unlisted}
-
+:::{.callout-tip}
+## Check-in
 1. Print Momo's age.
 2. Use list comprehension to make a list with the ages of the pets.
+:::
 
 <!--
 ```python
@@ -519,8 +526,8 @@ class_values
 
 `class_values` is a list of dictionaries, one per class, like `{'values': [0], 'summary': 'No Data'}`. We want two lists out of it: all the codes and all the names. This is a job for a list comprehension!
 
-#### Exercise {.unlisted}
-
+:::{.callout-tip}
+## Exercise
 First, predict the output of each line. Then run it to check your prediction.
 
 1. `class_values[0]`
@@ -532,6 +539,7 @@ Now write your own:
 
 5. Write a `for` loop that collects the `summary` value of each element of `class_values` into a list.
 6. Rewrite your loop from 5 as a list comprehension.
+:::
 
 <!--
 ```python

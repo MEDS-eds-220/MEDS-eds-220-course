@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>lesson-16-stac – EDS 220 - Working with Environmental Datasets</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,10 +94,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -441,7 +444,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../book/chapters/lesson-17-raster-wrangling/lesson-17-raster-wrangling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">16 Land cover statistics</span></a>
+ <span class="menu-text">19 Land cover statistics</span></a>
   </div>
 </li>
       </ul>
@@ -563,7 +566,7 @@ div.csl-indent {
 <!--https://github.com/NCEAS/msai4earth-esa/blob/main/examples/naip_example/access_naip.ipynb-->
 <p>First, load the necessary packages:</p>
 <div id="c0f7af9d" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rioxarray <span class="im">as</span> rioxr</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -572,17 +575,17 @@ div.csl-indent {
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pystac_client <span class="im">import</span> Client  <span class="co"># To access STAC catalogs</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> planetary_computer  <span class="co"># To sign items from the MPC STAC catalog </span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image  <span class="co"># To nicely display images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image  <span class="co"># To nicely display images</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="access" class="level3">
 <h3 class="anchored" data-anchor-id="access">Access</h3>
 <p>We use the <code>open()</code> method of the <code>Client</code> class from the <code>pystac_client</code> package to access the catalog:</p>
 <div id="09620b8e" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access MPC catalog</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access MPC catalog</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> Client.<span class="bu">open</span>(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://planetarycomputer.microsoft.com/api/stac/v1"</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    modifier<span class="op">=</span>planetary_computer.sign_inplace,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>modifier</code> parameter is needed to access the data in the MPC catalog.</p>
 </section>
@@ -590,9 +593,9 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="catalog-exploration">Catalog exploration</h3>
 <p>Let’s check out some of the catalog’s metadata:</p>
 <div id="2650d7f6" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore catalog metadata</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore catalog metadata</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Title:'</span>, catalog.title)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Description:'</span>, catalog.description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Description:'</span>, catalog.description)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Title: Microsoft Planetary Computer STAC API
 Description: Searchable spatiotemporal metadata describing Earth science datasets hosted by the Microsoft Planetary Computer</code></pre>
@@ -600,7 +603,7 @@ Description: Searchable spatiotemporal metadata describing Earth science dataset
 </div>
 <p>We can access its collections by using the <code>get_collections()</code> method:</p>
 <div id="bd254b03" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>catalog.get_collections()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>catalog.get_collections()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>&lt;generator object Client.get_collections at 0x70055cf340&gt;</code></pre>
 </div>
@@ -608,14 +611,14 @@ Description: Searchable spatiotemporal metadata describing Earth science dataset
 <p>Notice the output of <code>get_collections()</code> is a <strong>generator</strong>. This is a special kind of <strong>lazy object</strong> in Python that you can loop over like a list. Unlike a list, the items in a generator do not exist in memory until you explicitly iterate over them or convert them to a list. This can allow for more efficient memory allocation. Once the generator is exhausted (i.e.&nbsp;iterated over completely), it cannot be reused unless it is recreated.</p>
 <p>Let’s try getting the collections from the catalog again:</p>
 <div id="d7e5e65b" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get collections and print their names</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get collections and print their names</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>collections <span class="op">=</span> <span class="bu">list</span>(catalog.get_collections())  <span class="co"># Turn generator into list</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of collections:'</span>, <span class="bu">len</span>(collections))</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Collection IDs (first 10):"</span>)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'-'</span>, collections[i].<span class="bu">id</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'-'</span>, collections[i].<span class="bu">id</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of collections: 139
 Collection IDs (first 10):
@@ -637,8 +640,8 @@ Collection IDs (first 10):
 <h2 class="anchored" data-anchor-id="collection">Collection</h2>
 <p>The NAIP collection’s ID is <code>'naip'</code>. We can select a single collection for exploration using the <code>get_collection()</code> method for the catalog and the collection ID as the parameter:</p>
 <div id="65d49d1c" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>naip_collection <span class="op">=</span> catalog.get_collection(<span class="st">'naip'</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>naip_collection</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>naip_collection <span class="op">=</span> catalog.get_collection(<span class="st">'naip'</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>naip_collection</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 
 
@@ -2503,7 +2506,7 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 </ul>
 <p>In this lesson we will look for all the NAIP scenes over Santa Barbara available up to November 16, 2026. The <code>..</code> at the start of the time range leaves the start date open, so the search returns every scene up to the end date. We’ll use the GeoJSON method to define the area of interest:</p>
 <div id="7d509136" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temporal range of interest</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temporal range of interest</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"../2026-11-16"</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NCEAS bounding box (as a GeoJSON, CRS=EPSG:4326)</span></span>
@@ -2525,23 +2528,23 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    collections <span class="op">=</span> [<span class="st">'naip'</span>],</span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    intersects <span class="op">=</span> aoi,</span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    datetime <span class="op">=</span> time_range)</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>search</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>search</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>&lt;pystac_client.item_search.ItemSearch at 0x700666e450&gt;</code></pre>
 </div>
 </div>
 <p>To get the items found in the search (or check if there were any matches in the search) we use the <code>item_collection()</code> method:</p>
 <div id="b30b3f5b" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve search items</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve search items</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> search.item_collection()</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(items)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>7</code></pre>
 </div>
 </div>
 <p>This output tells us there were seven items in the catalog that matched our search!</p>
 <div id="6a53df43" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>items</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 
 
@@ -11806,13 +11809,13 @@ https://pystac.readthedocs.io/en/stable/api/item_collection.html#pystac-item-col
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Our search returned several items. Run the code below to see what distinguishes them.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scene <span class="kw">in</span> items:</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scene.<span class="bu">id</span>, scene.properties[<span class="st">'datetime'</span>], scene.properties[<span class="st">'gsd'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scene <span class="kw">in</span> items:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scene.<span class="bu">id</span>, scene.properties[<span class="st">'datetime'</span>], scene.properties[<span class="st">'gsd'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Here <code>gsd</code> stands for <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument">ground sample distance at the sensor</a>, in meters (m). This is the pixel size of the raster.</p>
 <ol type="1">
 <li>What differs between the items besides the year?</li>
@@ -11829,18 +11832,18 @@ Key point: items[0] is just the order the API returns, not a choice anyone made.
 -->
 <p>In our search the items are listed from newest to oldest, so <code>items[0]</code> is the most recent scene. We’ll work with this one for the rest of the lesson:</p>
 <div id="5a1668e1" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get first (most recent) item in the catalog search</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get first (most recent) item in the catalog search</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> items[<span class="dv">0</span>]</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(item)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(item)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>pystac.item.Item</code></pre>
 </div>
 </div>
 <p>Remember the <a href="https://pystac.readthedocs.io/en/stable/api/pystac.html#pystac.Item">STAC item</a> is the core object in a STAC catalog. The item does not contain the data itself, but rather metadata and assets. The assets contain links to access the actual data. Some of the metadata:</p>
 <div id="ab9a2c7c" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print item ID and properties</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print item ID and properties</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'ID:'</span> , item.<span class="bu">id</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>item.properties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>item.properties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ID: ca_m_3411935_sw_11_060_20240625</code></pre>
 </div>
@@ -11865,7 +11868,7 @@ Key point: items[0] is just the order the API returns, not a choice anyone made.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Check-in
+<span class="screen-reader-only">Tip</span>Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -11880,7 +11883,7 @@ The time is a placeholder: all NAIP items show T00:00 or T16:00, so only the dat
 <h3 class="anchored" data-anchor-id="footprint">Footprint</h3>
 <p>The <strong>footprint</strong> of the item is the area on the ground its data covers. We can access it with the <code>geometry</code> attribute:</p>
 <div id="e028f7ec" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>item.geometry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>item.geometry</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>{'type': 'Polygon',
  'coordinates': [[[-119.683292, 34.373269],
@@ -11892,18 +11895,18 @@ The time is a placeholder: all NAIP items show T00:00 or T16:00, so only the dat
 </div>
 <p>Before loading the data we want to see how the item intersects with our <code>aoi</code> around NCEAS. To do this, we create a <code>gpd.GeoDataFrame</code> for each of the geometries. The new piece is the <code>shape()</code> function from the <code>shapely</code> package, which turns a GeoJSON-type dictionary into a geometry. Both our <code>aoi</code> and the item’s geometry are GeoJSON-type dictionaries, and STAC geometries always use longitude and latitude coordinates (EPSG:4326).</p>
 <div id="c99a4a22" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn the AOI and the item's footprint into geodataframes</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn the AOI and the item's footprint into geodataframes</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>aoi_gdf <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[shape(aoi)], crs<span class="op">=</span><span class="st">'EPSG:4326'</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>footprint <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[shape(item.geometry)], crs<span class="op">=</span><span class="st">'EPSG:4326'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>footprint <span class="op">=</span> gpd.GeoDataFrame(geometry<span class="op">=</span>[shape(item.geometry)], crs<span class="op">=</span><span class="st">'EPSG:4326'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The code below plots the item’s footprint together with our area of interest. <!-- Read it before running it: most of it uses tools you already know from `geopandas`. --></p>
 <div id="d0fcbc76" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the footprint outline and the AOI on the same axis</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the footprint outline and the AOI on the same axis</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>footprint.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>aoi_gdf.plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'red'</span>)</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'NAIP item footprint (black) and our area of interest (red)'</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -11923,15 +11926,15 @@ Extra: the footprint looks slightly tilted because the image is a rectangle in i
 <h3 class="anchored" data-anchor-id="assets">Assets</h3>
 <p>Just as the item properties, the item assets are given in a dictionary, with each value being a <a href="https://pystac.readthedocs.io/en/stable/api/asset.html"><code>pystac.Asset</code></a>. Let’s check the assets in the <code>item</code>:</p>
 <div id="6fa30469" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>item.assets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>item.assets</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>{'image': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.tif?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D&gt;,
  'thumbnail': &lt;Asset href=https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D&gt;}</code></pre>
 </div>
 </div>
 <div id="bea0c8a2" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> item.assets.keys():</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key, <span class="st">'--'</span>, item.assets[key].title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key <span class="kw">in</span> item.assets.keys():</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key, <span class="st">'--'</span>, item.assets[key].title)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>image -- RGBIR COG tile
 thumbnail -- Thumbnail</code></pre>
@@ -11939,8 +11942,8 @@ thumbnail -- Thumbnail</code></pre>
 </div>
 <p>Notice each asset has an <code>href</code>, which is a link to the data. For example, we can use the URL for the <code>'thumbnail'</code> asset to plot a small preview of the scene:</p>
 <div id="21d3f500" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot thumbnail preview</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'thumbnail'</span>].href, width<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot thumbnail preview</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'thumbnail'</span>].href, width<span class="op">=</span><span class="dv">300</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <img src="https://naipeuwest.blob.core.windows.net/naip/v002/ca/2024/ca_060cm_2024/34119/m_3411935_sw_11_060_20240625.200.jpg?st=2026-11-18T19%3A17%3A23Z&amp;se=2026-11-19T20%3A02%3A23Z&amp;sp=rl&amp;sv=2025-07-05&amp;sr=c&amp;skoid=9c8ff44a-6a2c-4dfb-b298-1c9212f64d9a&amp;sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&amp;skt=2026-11-15T01%3A08%3A54Z&amp;ske=2026-11-22T01%3A08%3A54Z&amp;sks=b&amp;skv=2025-07-05&amp;sig=AXVjdMs3A8O1iDVo8i8nV20KsOuUuOJzQPupzmv7bE4%3D" width="300">
 </div>
@@ -11951,8 +11954,8 @@ thumbnail -- Thumbnail</code></pre>
 <h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <p>The raster data in our current <code>item</code> is in the <code>image</code> asset. Again, we access this data via its URL. This time, we open it using <code>rioxr.open_rasterio()</code> directly:</p>
 <div id="55d65f86" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sb <span class="op">=</span> rioxr.open_rasterio(item.assets[<span class="st">'image'</span>].href)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>sb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sb <span class="op">=</span> rioxr.open_rasterio(item.assets[<span class="st">'image'</span>].href)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>sb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
@@ -12360,11 +12363,11 @@ Attributes:
 <p>Notice the output doesn’t show any data values, only <code>[526656000 values with dtype=uint8]</code>. That’s because <code>open_rasterio()</code> only read the file’s metadata: its dimensions, coordinates and CRS. The data itself (about 500 MB) stays in the cloud until we use it, for example to plot it or to compute a statistic. This is the same lazy behavior we saw with generators. The NAIP files are stored as <strong>Cloud-Optimized GeoTIFFs (COGs)</strong>, a format designed so we can read just the part of a file we need instead of downloading all of it.</p>
 <p>Notice this raster has four bands (red, green, blue, nir), so we cannot plot it directly: <code>.plot.imshow()</code> would read the fourth band (NIR) as transparency. Thus we need to select the bands we want to plot (RGB) before plotting:</p>
 <div id="b373c6cb" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot raster with correct ratio</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot raster with correct ratio</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">6</span>  </span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>aspect <span class="op">=</span> sb.rio.width <span class="op">/</span> sb.rio.height </span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select R,G,B bands and plot</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>sb.sel(band<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]).plot.imshow(size<span class="op">=</span>size, aspect<span class="op">=</span>aspect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>sb.sel(band<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]).plot.imshow(size<span class="op">=</span>size, aspect<span class="op">=</span>aspect)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><img src="../../book/images/lesson-16/sb-from-stac-item.png" class="img-fluid" style="width:70.0%"></p>
 </section>
@@ -12378,7 +12381,7 @@ Attributes:
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Part A: Access the data
+<span class="screen-reader-only">Tip</span>Part A: Access the data
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -12433,7 +12436,7 @@ dem.plot()
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Part B: Is this the data we want?
+<span class="screen-reader-only">Tip</span>Part B: Is this the data we want?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -12639,13 +12642,14 @@ Let's break this down a bit:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
