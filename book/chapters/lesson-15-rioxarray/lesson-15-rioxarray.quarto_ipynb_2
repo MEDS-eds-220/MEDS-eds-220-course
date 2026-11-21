@@ -1,0 +1,642 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"17 `rioxarray`\"\n",
+        "toc-title: In this lesson\n",
+        "---\n",
+        "\n",
+        "In this lesson we will introduce [`rioxarray`](https://vylor.github.io/rioxarray/stable/), a Python extension for `xarray` to manipulate `xarray.DataArray`s as rasters. \n",
+        "The name `rioxarray` stands for *raster input/output + xarray*. \n",
+        "\n",
+        "We will use `rioxarray`'s `rio` accessor to obtain raster information from an `xarray.DataArray` and do some raster manipulations (calculate NDVI).\n",
+        "\n",
+        "By the end of this lesson, students will be able to:\n",
+        "\n",
+        "- open a GeoTIFF file as an `xarray.DataArray` using `rioxarray`\n",
+        "- remove a dimension of length 1 and its coordinate from an `xarray.DataArray`\n",
+        "- use the `.rio` accessor to examine a raster's number of bands, height, width, bounding box and CRS\n",
+        "- plot a three-band raster as an RGB image\n",
+        "- clip a raster to the bounding box of an area of interest after matching their CRSs\n",
+        "- calculate NDVI using raster math and explain how the data type of a raster can silently give wrong results\n",
+        "\n",
+        "## About the data\n",
+        "The raster files we will use today come from the [US National Agriculture Imagery Program (NAIP)](https://naip-usdaonline.hub.arcgis.com). \n",
+        "NAIP images are high-resolution aerial images with four spectral bands: red (R), green (G), blue (B) and near-infrared (NIR). \n",
+        "The rasters we'll use today were flown on July 24, 2018.\n",
+        "\n",
+        "The data used in this lesson was pre-processed from a complete NAIP scene to separate the RGB bands from the NIR band and reduce the spatial extent. \n",
+        "The data was accessed through [Microsoft's Planetary Computer NAIP data repository](https://planetarycomputer.microsoft.com/dataset/naip#overview) @usda_naip_2018. \n",
+        "The original scene is [`ca_m_3411935_sw_11_060_20180724_20190209`](https://planetarycomputer.microsoft.com/api/stac/v1/collections/naip/items/ca_m_3411935_sw_11_060_20180724_20190209).\n",
+        "\n",
+        "## Import a TIF file\n",
+        "\n",
+        "Let's start by loading the libraries we will use: "
+      ],
+      "id": "9827a4da"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import os\n",
+        "\n",
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "import geopandas as gpd\n",
+        "\n",
+        "import rioxarray as rioxr"
+      ],
+      "id": "c60bc490",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "There are [multiple ways of opening a TIF file using `xarray` or `rioxarray`](https://vylor.github.io/rioxarray/html/getting_started/getting_started.html). \n",
+        "Using the `rioxarray.open_rasterio()` function to open the TIF file is a simple way to import the raster file as an `xarray.DataArray` and make sure all our geospatial data gets loaded correctly:"
+      ],
+      "id": "0233ef43"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Import NIR TIF file\n",
+        "fp = os.path.join('data','NAIP_SB_nir.tif')\n",
+        "nir = rioxr.open_rasterio(fp)\n",
+        "nir"
+      ],
+      "id": "9f5bd7c7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice we see all the components of an `xarray.DataArray`: its dimensions (band, y, x), the coordinates for each dimension, and some attributes. We can also directly access some of these attributes:"
+      ],
+      "id": "bfa07c6c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print('Shape: ', nir.shape)\n",
+        "print('Data type: ', nir.dtype, '\\n')"
+      ],
+      "id": "031ca2a6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Using the `.values` attribute we can retrieve the underlying `numpy.ndarray` holding the values of the variable:"
+      ],
+      "id": "c0060c8f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(type(nir.values))\n",
+        "nir.values"
+      ],
+      "id": "53bfe947",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can also plot our data:"
+      ],
+      "id": "710e4676"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "nir.plot()"
+      ],
+      "id": "dbbd2726",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice the coordinates on the x and y axes.\n",
+        "\n",
+        "This map shows the light captured in the near-infrared spectrum by a sensor on a plane. \n",
+        "**Can you guess where this is?** \n",
+        "If you guessed Santa Barbara downtown, you guessed right! \n",
+        "\n",
+        "## Drop a dimension\n",
+        "\n",
+        "Notice that our raster has an unnecessary extra dimension: band."
+      ],
+      "id": "a094d820"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(\"Sizes of dimensions:\", dict(nir.sizes))"
+      ],
+      "id": "7351f367",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "This is making this `xarray.DataArray` three-dimensional when it is not needed. \n",
+        "We can \"squeeze this dimension\" of length 1 using the [`squeeze()` method](https://docs.xarray.dev/en/stable/generated/xarray.DataArray.squeeze.html).\n",
+        "We pass it the name of the dimension we want to remove, in this case 'band', and `drop=True` to also get rid of the coordinate associated with this dimension.\n",
+        "\n",
+        "Let's do this:"
+      ],
+      "id": "803954d9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Original dimensions and coordinates\n",
+        "print(nir.dims, nir.coords,'\\n')\n",
+        "\n",
+        "# Remove length 1 dimension (band) and its coordinate\n",
+        "nir = nir.squeeze('band', drop=True)\n",
+        "print(nir.dims, nir.coords)"
+      ],
+      "id": "1905d00b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## `rio` accessor\n",
+        "\n",
+        "Remember an **accessor** in Python lets us access a different set of properties of an object. We have previously used accessors like `.str` and `.dt` in `pandas` to work with strings and dates. In this lesson, we will use the `.rio` accessor for an `xarray.DataArray` to access its raster properties. \n",
+        "For example, we can access the number of bands, height, width, spatial bounding box, and CRS:"
+      ],
+      "id": "9272781a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Examine raster attributes using rio accessor\n",
+        "print('Number of bands: ', nir.rio.count)\n",
+        "print('Height: ', nir.rio.height)\n",
+        "print('Width: ', nir.rio.width, '\\n')\n",
+        "\n",
+        "print('Spatial bounding box: ')\n",
+        "print(nir.rio.bounds(), '\\n')\n",
+        "\n",
+        "print('CRS: ', nir.rio.crs)"
+      ],
+      "id": "2fb10885",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Multi-band raster\n",
+        "\n",
+        "Let's now import the RGB raster:"
+      ],
+      "id": "b6f382e2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Import RGB raster\n",
+        "fp = os.path.join('data','NAIP_SB_rgb.tif')\n",
+        "rgb = rioxr.open_rasterio(fp)\n",
+        "rgb"
+      ],
+      "id": "49e45742",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice this raster has three bands, instead of one. \n",
+        "This makes sense because we know these bands correspond to the red, green and blue bands of the image. \n",
+        "\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "Obtain the following information about the RGB raster: shape, number of bands, data type of its values and CRS.\n",
+        "\n",
+        "<!--\n",
+        "```python\n",
+        "print('rgb shape: ', rgb.shape)\n",
+        "print('data type: ', rgb.dtype)\n",
+        "print('# bands: ', rgb.rio.count)\n",
+        "print('CRS: ', rgb.rio.crs)\n",
+        "```\n",
+        "-->\n",
+        ":::\n",
+        "\n",
+        "Finally, let's plot this raster.\n",
+        "Since it has three bands, we can plot it as an image using the `.plot.imshow()` method, which will interpret the three bands of the object as RGB."
+      ],
+      "id": "08606aad"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Plot three bands as RGB image\n",
+        "rgb_aspect_ratio = rgb.rio.width / rgb.rio.height  # Raster's aspect ratio\n",
+        "rgb.plot.imshow(figsize=(8*rgb_aspect_ratio,8))  # (width, height) in inches"
+      ],
+      "id": "8e86be5e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Clip a raster\n",
+        "\n",
+        "Our area of interest (AOI) for this lesson is a smaller region that includes only a few blocks around the NCEAS building. \n",
+        "This is outlined in a GeoJSON file:"
+      ],
+      "id": "161b563c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fp = os.path.join('data', 'SB_aoi.geojson')\n",
+        "aoi = gpd.read_file(fp)\n",
+        "aoi.plot()"
+      ],
+      "id": "c42000fd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Remember: **if two geospatial datasets will interact they need to be in the same CRS**. In our case, the AOI `geopandas.GeoDataFrame` does not have the same CRS as the rasters:"
+      ],
+      "id": "07c9b80a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Examine CRSs\n",
+        "print('aoi CRS: ', aoi.crs)\n",
+        "print('nir CRS: ', nir.rio.crs)\n",
+        "print('rgb CRS: ', rgb.rio.crs)"
+      ],
+      "id": "721b5f8a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "So let's reproject:"
+      ],
+      "id": "ffbb5a7c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Reproject AOI to RGB CRS\n",
+        "aoi = aoi.to_crs(rgb.rio.crs)\n",
+        "assert aoi.crs == rgb.rio.crs"
+      ],
+      "id": "4c91c8dd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "And plot them together:"
+      ],
+      "id": "8e57271f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Plot of RGB raster with AOI overlay\n",
+        "fig, ax = plt.subplots(figsize=(8 * rgb_aspect_ratio, 8))\n",
+        "rgb.plot.imshow(ax=ax)\n",
+        "aoi.plot(ax=ax, alpha=0.6)\n",
+        "plt.show()"
+      ],
+      "id": "22d6160a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To clip the raster to the AOI's bounding box we use the `.rio.clip_box()` method:"
+      ],
+      "id": "f6d9132e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Clip rasters to AOI\n",
+        "rgb_small = rgb.rio.clip_box(*aoi.total_bounds)\n",
+        "nir_small = nir.rio.clip_box(*aoi.total_bounds)"
+      ],
+      "id": "9003a7a5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Notice a few things:\n",
+        "\n",
+        "- we had to use the `.rio` accessor to access the `clip_box()` method \n",
+        "- [`.rio.clip_box()` usual parameters](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) are `minx`, `miny`, `maxx`, `maxy`, the same four values the `total_bounds` attribute gave us when we [clipped with a bounding box using `gpd.clip()`](/book/chapters/lesson-13-clipping/lesson-13-clipping.qmd#clipping-with-a-bounding-box). We are using the `*` asterisk as an unpacking operator to get these from the array `aoi.total_bounds`.\n",
+        "- `.rio.clip_box()` keeps everything inside the AOI's bounding box, not only the AOI itself. To clip a raster to the exact outline of the AOI we can use [`.rio.clip()`](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip) with the AOI's geometry: `nir.rio.clip(aoi.geometry)`.\n",
+        "\n",
+        "Let's check our clipped data:\n"
+      ],
+      "id": "2cd38530"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Examine clipped data \n",
+        "print('Original shape: ', nir.shape)\n",
+        "print('Clipped shape: ', nir_small.shape)\n",
+        "\n",
+        "nir_small.plot()"
+      ],
+      "id": "e258bf88",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "Examine the same updates for the RGB data.\n",
+        "<!--\n",
+        "```python\n",
+        "# Examine shape updates\n",
+        "print('Original shape: ', rgb.shape)\n",
+        "print('Clipped shape: ', rgb_small.shape)\n",
+        "\n",
+        "# plot with correct sizes\n",
+        "ratio = rgb_small.rio.width / rgb_small.rio.height  # Raster's aspect ratio\n",
+        "rgb_small.plot.imshow(figsize=(4*ratio,4))\n",
+        "```\n",
+        "-->\n",
+        ":::\n",
+        "\n",
+        "## Raster math\n",
+        "\n",
+        "We often want to perform calculations on rasters to create a new output raster, commonly known as \"raster math\". \n",
+        "<!--TODO: add diagrams-->\n",
+        "\n",
+        "In our case, we are interested in computing the Normalized Difference Vegetation Index (NDVI) over our AOI. \n",
+        "The NDVI is an index commonly used to check if an area has live green vegetation or not.\n",
+        "\n",
+        "According to [NASA's Earth Observatory](https://science.nasa.gov/earth/earth-observatory/measuring-vegetation-ndvi-evi/) @weier_measuring_2000, NDVI values always range from -1 to 1, and areas with no green leaves give values close to zero.\n",
+        "Typical values for different surfaces are:\n",
+        "\n",
+        "> Very low values of NDVI (0.1 and below) correspond to barren areas of rock, sand, or snow. Moderate values represent shrub and grassland (0.2 to 0.3), while high values indicate temperate and tropical rainforests (0.6 to 0.8).\n",
+        "\n",
+        "Water and many artificial surfaces, like roofs and pavement, often have NDVI values close to zero or negative.\n",
+        "\n",
+        "The NDVI is calculated using the NIR and red bands. \n",
+        "The formula is\n",
+        "\n",
+        "$NDVI = \\frac{NIR - Red}{NIR + Red}.$\n",
+        "\n",
+        "First, let's select the red band:"
+      ],
+      "id": "31c3cc99"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Select dimension by name and coordinate by label\n",
+        "red_small = rgb_small.sel(band=1)\n",
+        "red_small"
+      ],
+      "id": "60610d4f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can perform raster calculations using the same arithmetic we use for `numpy.ndarray`s (because, underneath it all, that's what they are). \n",
+        "\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "Before we calculate the NDVI, make a prediction. \n",
+        "Our area of interest is downtown Santa Barbara. \n",
+        "About what share of the area do you expect to have positive NDVI values? \n",
+        "What values do you expect for roofs and streets?\n",
+        "<!--\n",
+        "Expected: mostly buildings and pavement, so most cells should be close to zero or negative \n",
+        "(with int16: 71% of cells are negative, median -0.05; about 16% are above 0.2).\n",
+        "Roofs and streets: near zero or negative.\n",
+        "-->\n",
+        ":::\n",
+        "\n",
+        "So our NDVI calculation is as follows:"
+      ],
+      "id": "128c68f9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ndvi = (nir_small - red_small)/(nir_small + red_small)\n",
+        "ndvi.plot()"
+      ],
+      "id": "25c76779",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Do these results look as expected?\n",
+        "Remember that NDVI values must be between -1 and 1. Let's check the range of our results:"
+      ],
+      "id": "e0d51f6d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print('Minimum NDVI:', ndvi.min().values)\n",
+        "print('Maximum NDVI:', ndvi.max().values)"
+      ],
+      "id": "33921885",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "None of the values are negative and some are infinite, so something went wrong.\n",
+        "\n",
+        "### Data type issues\n",
+        "The `uint8` (8-bit unsigned integer) is a very small data type that only holds integers from 0 up to 255. \n",
+        "In particular, calculations don't return what we are used to when working with integers ([they're done modulo 256](https://en.wikipedia.org/wiki/Modular_arithmetic)):"
+      ],
+      "id": "b2a05ac0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "np.uint8(150) + np.uint8(150)"
+      ],
+      "id": "76cc727d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In the NDVI formula we have to subtract and add the NIR and red values, and both operations can go outside the `uint8` range:\n",
+        "\n",
+        "- when NIR + Red is greater than 255, the sum wraps around to a small number;\n",
+        "- when Red is greater than NIR, NIR - Red should be negative, but `uint8` cannot hold negative numbers, so the result wraps around to a large positive number.\n",
+        "\n",
+        ":::{.callout-warning}\n",
+        "## Avoid silent failures: ALWAYS verify your results!\n",
+        "Notice that when we performed the NDVI calculation we did not get any warning, although the computation wrapped around on many cells.\n",
+        "This is an example of what is referred to as a *silent failure* in programming, where we don't get any warnings about the errors or unexpected behavior in our computation. \n",
+        "**That's why it's so important to double-check our results!**\n",
+        ":::\n",
+        "\n",
+        "### Updating data types\n",
+        "\n",
+        "To be able to perform the calculation successfully, we will need to update the data type of our rasters to `int16`, which will be big enough to hold all the numbers that appear in the calculations:"
+      ],
+      "id": "43c1f63d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Update data type to int16 to perform NDVI calculation\n",
+        "red16 = red_small.astype('int16')\n",
+        "nir16 = nir_small.astype('int16')\n",
+        "\n",
+        "print('RED: original dtype:', rgb_small.dtype, '.... converted dtype:', red16.dtype)\n",
+        "print('NIR: original dtype:', nir.dtype, '.... converted dtype:', nir16.dtype)\n",
+        "\n",
+        "# Calculate NDVI\n",
+        "ndvi = (nir16 - red16)/(nir16+red16)\n",
+        "\n",
+        "# Plot\n",
+        "fig, ax = plt.subplots()  # Create figure and axes\n",
+        "ndvi.plot(\n",
+        "    ax=ax,\n",
+        "    cmap=\"RdYlGn\",  # Colormap for NDVI\n",
+        "    vmin=-1,  # Minimum value\n",
+        "    vmax=1,   # Maximum value\n",
+        "    cbar_kwargs={\"label\": \"NDVI\"}  # Label for color bar\n",
+        ")\n",
+        "ax.set_title(\"Normalized Difference Vegetation Index\\nnear Santa Barbara Courthouse\")  # Add title\n",
+        "\n",
+        "# Remove axes ticks\n",
+        "ax.set_xticks([])  \n",
+        "ax.set_yticks([])  \n",
+        "\n",
+        "# Remove axes labels\n",
+        "ax.set_xlabel(\"\")  \n",
+        "ax.set_ylabel(\"\")  \n",
+        "\n",
+        "plt.show()"
+      ],
+      "id": "1f693b28",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In this image, vegetation shows up as the highest NDVI values, roughly between 0.25 and 0.6. Can you spot the Santa Barbara Courthouse?\n",
+        "\n",
+        ":::{.callout-tip}\n",
+        "## Check-in\n",
+        "A city planner wants to use this NDVI map to find blocks that need more street trees. \n",
+        "Write two or three sentences on what this map can and can't tell them.\n",
+        "<!--\n",
+        "Reasonable points:\n",
+        "- it's a single date (July 24, 2018, dry season), so it may be outdated and season matters;\n",
+        "- the values are 8-bit digital numbers, not reflectance, so NDVI values can't be compared directly with other flights or sensors;\n",
+        "- NDVI doesn't distinguish trees from lawns or shrubs;\n",
+        "- building shadows and the 0.6 m pixels affect what is detected;\n",
+        "- the area is the AOI's bounding box, not the AOI itself.\n",
+        "-->\n",
+        ":::\n",
+        "\n",
+        "\n",
+        "Converting the rasters to `int16` fixed the calculation, but the final map still has limits:…it shows a single summer day in 2018, and its values are 8-bit brightness values from a camera, not physical measurements of reflected light.\n",
+        "A result that looks right is not the same as a result that is right, so always check your outputs against what you know about the data!"
+      ],
+      "id": "70f3bc26"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

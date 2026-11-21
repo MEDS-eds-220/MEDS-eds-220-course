@@ -3,29 +3,37 @@ title: 19 Land cover statistics
 toc-title: In this lesson
 ---
 
-<!---
-This needs context about what we are doing and why.
--->
+In January 2025, the Eaton and Palisades fires burned through Los Angeles County, where wildlands meet neighborhoods. What was on the ground before the fires? How much of the burned area was trees, shrubs and grasses, and how much was buildings and roads? In this lesson we answer these questions by combining the fire perimeters with a land cover map from the Microsoft Planetary Computer. Along the way, we'll see why we need to check a dataset's CRS before calculating any area.
+
+By the end of this lesson, students will be able to:
+
+- search a STAC catalog by bounding box and date, and check that the item they selected is the right one,
+- clip a large raster to a polygon efficiently,
+- tell categorical from continuous rasters, and plot a categorical raster with one color per class and a legend,
+- check a dataset's CRS from the data itself and decide whether it is suitable for calculating areas, and
+- calculate the area and percentage covered by each land cover class within a polygon.
 
 ## About the data
 
 In this lesson we will use three datasets.
 
-The first one is [GAP/LANDFIRE National Terrestrial Ecosystems data for 2011 @davidson_gaplandfire_2016](https://www.sciencebase.gov/catalog/item/573cc51be4b0dae0d5e4b0c5), from the [US Geological Survey (USGS)](https://www.usgs.gov). This is a categorical raster with a 30 m x 30 m pixel resolution representing a highly thematically detailed land cover map of the U.S. We will access this data through the [Microsoft Planetary Computer (MPC) data catalog](https://planetarycomputer.microsoft.com/dataset/gap). The class names and corresponding codes have been saved to a separate CSV to simplify access in this lesson. Further information on how to access the classes directly from the data is available in the [MPC catalog](https://planetarycomputer.microsoft.com/dataset/gap#Example-Notebook).
+The first one is the [10 m Annual Land Use Land Cover (9-class) V2 maps](https://planetarycomputer.microsoft.com/dataset/io-lulc-annual-v02) produced by Impact Observatory, Microsoft and Esri from Sentinel-2 imagery @impact_observatory_io_lulc_2023. This is a categorical raster with a 10 m x 10 m pixel resolution and one map per year from 2017 to 2023. We will access this data through the [Microsoft Planetary Computer (MPC) data catalog](https://planetarycomputer.microsoft.com/dataset/io-lulc-annual-v02).
 
+The second dataset is the perimeters of the Eaton and Palisades fires, which burned in Los Angeles County in January 2025. <!-- TODO: add source and citation -->
 
-The second dataset is a shapefile with the perimeters for 2017 California fires. This data was extracted from CAL FIRE's [Historical Wildland Fire Perimeters](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all/about) @CALFIRE_FirePerimeters_All.
+The third dataset is a shapefile with the California state boundary, from the US Census Bureau's 2016 TIGER/Line shapefiles @us_census_bureau_tiger_2016. We will only use it to see where the land cover raster sits relative to the fire perimeters.
 
-The third dataset is a shapefile with the California state boundary, which we will only use to see where the land cover raster sits relative to the fire perimeter.
+We will also use a CSV file with the code, name and official color of each land cover class. We made it from the raster's metadata and the MPC's class map. The [last section of this lesson](#class-labels-from-the-items-metadata) shows how to get this information from the data itself.
 
 :::{.callout-tip appearance="minimal"}
 Download the following from the [course's Google Drive]({{< var shared-data-folder >}}) and add them to a `data` directory next to your notebook:
 
-- the `California_Fire_Perimeters_2017` folder,
-- the `ca_state_boundary` folder, and
-- the `GAP_National_Terrestrial_Ecosystems.csv` file with the class names and codes.
+- `Eaton_Perimeter_20250121`,
+- `Palisades_Perimeter_20250121`,
+- `ca_state_boundary`, and
+- `io-lulc-9-class-labels.csv`.
 
-The land cover raster itself is accessed through the MPC catalog, so there's nothing to download for it.
+The land cover raster is accessed through the MPC catalog, so there's nothing to download for it.
 :::
 
 ## Fire perimeter preparation
@@ -38,6 +46,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 import geopandas as gpd
 import rioxarray as rioxr
@@ -46,38 +55,48 @@ from shapely import box
 import pystac_client
 import planetary_computer
 
-from IPython.display import Image 
+from IPython.display import Image
 ```
 
-Then import and select the Thomas Fire within the fire perimeters data:
+Then import the Eaton Fire perimeter:
 
 ```{python}
-fire_perimeters = gpd.read_file(os.path.join('data',
-                                             'California_Fire_Perimeters_2017',
-                                             'California_Fire_Perimeters_2017.shp')
-                                             )
-thomas_fire = fire_perimeters[fire_perimeters['FIRE_NAME']=='THOMAS']
+eaton = gpd.read_file(os.path.join('data',
+                                   'Eaton_Perimeter_20250121',
+                                   'Eaton_Perimeter_20250121.shp')
+                                   )
 
 # Examine fire perimeter data
-print(thomas_fire.crs)
-thomas_fire.plot()
+print(eaton.crs)
+print(eaton.shape)
+eaton.plot()
+```
+
+Notice the perimeter is not a single polygon: it is made of several "Heat Perimeter" polygons. That's fine for what we'll do, since we'll use all of them together.
+
+We'll also import the CSV with the land cover class codes, names and colors. We'll use it later in the lesson:
+
+```{python}
+labels = pd.read_csv(os.path.join('data', 'io-lulc-9-class-labels.csv'))
 ```
 
 ## Catalog search
 
-Our goal is to retrieve the National Terrestrial Ecosystems data over the fire perimeter. In the [last lesson](/book/chapters/lesson-16-STAC.qmd) we used a GeoJSON-type dictionary to do the catalog search. Here we will use a list `[xmin, ymin, xmax, ymax]` with the coordinate values defining the edges of the region we want to search data over. Just as with the GeoJSON, these coordinates have to be in the EPSG:4326 CRS. 
+Our goal is to retrieve the land cover data over the fire perimeter. In the [last lesson](/book/chapters/lesson-16-STAC.qmd) we used a GeoJSON-type dictionary to do the catalog search. Here we will use a list `[xmin, ymin, xmax, ymax]` with the coordinate values defining the edges of the region we want to search data over. Just as with the GeoJSON, these coordinates have to be in the EPSG:4326 CRS.
 
-Our bounding box will come from the Thomas Fire perimeter. Notice we use method chaining to reproject and extract the bounds.
+Our bounding box will come from the Eaton Fire perimeter. Notice we use method chaining to reproject and extract the bounds.
 
 ```{python}
 # Create list of bounding box coords for search in 4326 CRS
-thomas_fire_bbox = list(thomas_fire.to_crs('epsg:4326') 
-                                   .total_bounds
-                                    )
-thomas_fire_bbox
+eaton_bbox = list(eaton.to_crs('epsg:4326')
+                       .total_bounds
+                       )
+eaton_bbox
 ```
 
-Next, we connect to the Microsoft Planetary Computer data catalog and perform the search. The collection ID for the National Terrestrial Ecosystems data is `gap`:
+Next, we connect to the Microsoft Planetary Computer data catalog and perform the search. The collection ID for this land cover data is `io-lulc-annual-v02`.
+
+This collection has one map per year, so we also need to choose a year. The fires happened in January 2025 and the most recent map is for 2023, so we'll search for 2023:
 
 ```{python}
 # Open MPC data catalog
@@ -86,9 +105,10 @@ catalog = pystac_client.Client.open(
     modifier=planetary_computer.sign_inplace,
 )
 
-# Search MPC catalog 
-search = catalog.search(collections=['gap'], 
-                        bbox=thomas_fire_bbox)
+# Search MPC catalog
+search = catalog.search(collections=['io-lulc-annual-v02'],
+                        bbox=eaton_bbox,
+                        datetime='2023')
 
 # Retrieve search items
 items = search.item_collection()
@@ -96,28 +116,28 @@ print(f"Returned {len(items)} Items")
 items
 ```
 
-There is a single item in the search, so let's go ahead and select it and view its pre-rendered image:
+We asked for 2023 but got two items. Let's look at the time range each one covers:
 
 ```{python}
-# Select unique search item
-item = items[0]  
+for item in items:
+    print(item.id, item.properties['start_datetime'], item.properties['end_datetime'])
+```
+
+Each map covers a full year, from January 1 to January 1 of the next year. The 2022 map ends on January 1, 2023, so it also matches our search for 2023.
+
+Let's select the 2023 map and view its pre-rendered image:
+
+```{python}
+# Select the 2023 map (the first item) and check it is the right one
+item = items[0]
+assert item.properties['start_datetime'].startswith('2023')
+print(item.id)
 
 # Display pre-rendered image
 Image(url=item.assets['rendered_preview'].href, width=600)
 ```
 
-We can see this is a big raster! 
-
-At this point, we can also import the CSV file with the class labels:
-
-```{python}
-labels = pd.read_csv(os.path.join('data',
-                                  'GAP_National_Terrestrial_Ecosystems.csv')
-                                  )
-labels.head()
-```
-
-Notice that 0 is used as the no-data value for this raster. This will be relevant in a moment.
+We can see this is a big raster!
 
 ## Explore raster
 
@@ -129,16 +149,17 @@ lulc = rioxr.open_rasterio(item.assets['data'].href)
 lulc
 ```
 
-Notice that `band` is a dimension of length 1. We can go ahead and "squeeze" the raster to simplify it. We'll also check the raster's data type:
+Notice that `band` is a dimension of length 1. We can go ahead and "squeeze" the raster to simplify it. We'll also check the raster's data type and CRS:
 
 ```{python}
 # Remove length 1 dimension (band)
 lulc = lulc.squeeze().drop_vars('band')
 print("Sizes of dimensions:", dict(lulc.sizes))
 print("Data type:", lulc.dtype)
+print("CRS:", lulc.rio.crs)
 ```
 
-Next, let's look at how the raster is located with respect to the Thomas Fire perimeter and the CA state boundary:
+Next, let's look at how the raster is located with respect to the Eaton Fire perimeter and the CA state boundary:
 
 ```{python}
 # Create GeoDataFrame from raster bounding box
@@ -146,7 +167,7 @@ lulc_bbox = gpd.GeoDataFrame(geometry = [box(*lulc.rio.bounds())],
                              crs = lulc.rio.crs)
 
 ca = gpd.read_file(os.path.join('data',
-                                'ca_state_boundary',   
+                                'ca_state_boundary',
                                 'ca_state_boundary.shp'))
 
 # ------------------------------------------------------------------
@@ -155,29 +176,39 @@ fig, ax = plt.subplots()
 ca.plot(ax=ax, color='white', edgecolor ='black')
 
 # Reproject lulc_bbox and fire perimeter to match CA crs
-lulc_bbox.to_crs(ca.crs).plot(ax=ax, alpha=0.3)  
-thomas_fire.to_crs(ca.crs).plot(ax=ax, color='red')
+lulc_bbox.to_crs(ca.crs).plot(ax=ax, alpha=0.3)
+eaton.to_crs(ca.crs).plot(ax=ax, color='red')
 
 plt.show()
 ```
 
-We can see the raster covers a big area relative to the fire perimeter. Since we want to calculate the land cover statistics within the fire perimeter, we will have to clip the raster to this area. 
+We can see the raster covers a big area relative to the fire perimeter. Since we want to calculate the land cover statistics within the fire perimeter, we will have to clip the raster to this area.
 
 ## Clip raster to geometry
+
+Before clipping, let's check the raster's no-data value, since `rio.clip()` will use it to fill the pixels outside the fire perimeter:
+
+```{python}
+print('No-data value: ', lulc.rio.nodata)
+```
+
+The raster already has a no-data value, 0, so we don't need to set one ourselves. We'll look at what each code means in a moment.
 
 In our [first lesson about rasters](/book/chapters/lesson-15-rioxarray/lesson-15-rioxarray.qmd) we saw how to clip a raster to a rectangular region. In our case, we want to clip the raster exactly to the fire perimeter. Clipping can be a costly operation for such a big raster relative to a detailed geometry. So we will perform the clipping in two steps:
 
 1. Clip the raster to the fire perimeter bounding box using [`rio.clip_box()`](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip_box) and then
-2. Clip the simplified raster to the fire perimeter using [`rio.clip()`](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip). 
+2. Clip the simplified raster to the fire perimeter using [`rio.clip()`](https://vylor.github.io/rioxarray/stable/rioxarray.html#rioxarray.raster_array.RasterArray.clip).
+
+Why bother? To clip to a polygon, `rio.clip()` builds a mask with one true/false value per pixel of the raster it receives. Our raster has almost 90,000 x 57,000 pixels, about 5 billion values! Clipping to the bounding box first is fast, because it only selects rows and columns, and it shrinks the raster to about a million pixels before `rio.clip()` builds its mask.
 
 ```{python}
 # Match CRSs and verify update
-thomas_fire_match = thomas_fire.to_crs(lulc.rio.crs)
-assert thomas_fire_match.crs == lulc.rio.crs
+eaton_match = eaton.to_crs(lulc.rio.crs)
+assert eaton_match.crs == lulc.rio.crs
 
 # Clip large raster to detailed geometry in two steps
-lulc_step1 = lulc.rio.clip_box(*thomas_fire_match.total_bounds)
-lulc_step2 = lulc_step1.rio.clip(thomas_fire_match.geometry)  # Produces RuntimeWarning
+lulc_step1 = lulc.rio.clip_box(*eaton_match.total_bounds)
+lulc_step2 = lulc_step1.rio.clip(eaton_match.geometry)
 
 # ------------------------------------------------------
 fig, ax = plt.subplots(1, 2, figsize=(8, 4))
@@ -195,57 +226,106 @@ ax[1].axis("off")
 plt.show()
 ```
 
-## Raster no-data values
-
-Notice a warning appeared when we clipped the raster. After some investigation, we will find that this `RuntimeWarning` occurs because the `rio.clip()` function tries to replace values outside the fire perimeter geometry with `np.nan`. However, as we previously saw, our raster's data type is `uint16` (16-bit unsigned integer). The cast issue appears since `np.nan` is a float (decimal number) and it cannot be cast as a `uint16`. To make sure the clipping function fills in any pixels with the adequate no-data value, let's manually set it:
+We can also do both steps at once using method chaining:
 
 ```{python}
-print('Original no-data value: ', lulc.rio.nodata)
-
-# Update raster's no-data value
-lulc = lulc.rio.write_nodata(0)
-print('Updated no-data value: ', lulc.rio.nodata)
-```
-
-This way, the `rio.clip()` function will know what values to assign to pixels outside the fire perimeter. Let's try clipping again, this time using method chaining:
-
-```{python}
-lulc_clip = (lulc.rio.clip_box(*thomas_fire_match.total_bounds)
-                 .rio.clip(thomas_fire_match.geometry)
+lulc_clip = (lulc.rio.clip_box(*eaton_match.total_bounds)
+                 .rio.clip(eaton_match.geometry)
                  )
 
 # Examine results
-lulc_clip.plot()                                  
+lulc_clip.plot()
 ```
 
-Notice no warning came up during the clipping!
+## Areas and CRSs
 
-:::{.callout-warning}
-## Always pay attention to warnings!
+Some of the next exercises ask for areas. Before calculating any area, we need to check that our data is in a CRS where areas make sense:
 
-Warnings are your program's way of saying, "Something might go wrong here, take a look!" They may indicate silent failures, package compatibility issues, or potential bugs, among other issues. Do not ignore warnings! **Addressing warnings is part of writing clean, maintainable code and reflects a professional approach.**
+1. The CRS must be **projected**, so the coordinates are in units of length such as meters, not in degrees.
+2. The projection must not distort areas in our region. **Equal-area** projections preserve areas everywhere. Others, like UTM, distort them very little within their zone.
 
-These are some steps to handling warnings effectively:
+Let's start by looking at the raster's CRS:
 
-- **Read and understand them**: Don’t dismiss warnings without understanding their cause.
-- **Fix or address them**: Modify your code to resolve the warning if possible.
-- **Suppress only when necessary**: Use tools to suppress warnings only when you're sure they are irrelevant or benign.
+```{python}
+print('CRS:', lulc.rio.crs)
+print('Projected:', lulc.rio.crs.is_projected)
+print('Units:', lulc.rio.crs.linear_units)
+print('Resolution:', lulc.rio.resolution())
+```
+
+The raster is in UTM zone 11N (EPSG:32611), a projected CRS in meters, with 10 m x 10 m pixels. Each pixel covers 10 x 10 = 100 m² on the ground, so we can get areas by counting pixels. UTM is not an equal-area projection, but within its zone the area error is well below 1%: the scale factor goes from 0.9996 at the zone's central meridian to about 1.001 at its edges, and areas change with the square of the scale factor, so they are off by at most about 0.2% @snyder_map_1987.
+
+Now the fire perimeter. A `GeoDataFrame`'s CRS:
+
+```{python}
+eaton.crs
+```
+
+The Eaton perimeter is in EPSG:3857, *WGS 84 / Pseudo-Mercator*, also called Web Mercator. It is projected and its units are meters, so `.area` will happily return an answer in m². But Web Mercator, the projection used by web maps, preserves shapes and stretches areas more and more the farther we are from the equator. Let's compare the area of the perimeter in its original CRS and in the raster's CRS:
+
+```{python}
+print(f"Area in {eaton.crs.name}: {eaton.area.sum() / 1000**2:.1f} km²")
+print(f"Area in {eaton_match.crs.name}: {eaton_match.area.sum() / 1000**2:.1f} km²")
+```
+
+At the latitude of Los Angeles, Web Mercator makes areas almost 50% larger! And nothing warned us.
+
+:::{.callout-important}
+Only calculate areas in a projected CRS that preserves areas in your region, such as an equal-area projection or the right UTM zone. Check the CRS in the data itself (`gdf.crs`, `raster.rio.crs`) before trusting an area.
 :::
 
-<!--
-## Save raster
+## Categorical or continuous?
 
-This would be a natural point where we'd like to save our raster for future use. That way, we wouldn't need to perform 
--->
+### Check-in {.unlisted}
+
+Look at the colorbar in the plot of `lulc_clip` we made after clipping. Is land cover *categorical* data (each number is a label for a category) or *continuous* data (each number is a measurement)? What would a pixel with a value of 6 mean?
+
+In a categorical raster the numbers are just codes: there is no order and nothing in between two classes. A continuous colormap like the default one suggests both, so a better choice is a **categorical colormap**, with one distinct color per class.
+
+The MPC uses an official color for each class of this land cover product, listed in its [class map for `io-lulc-9-class`](https://planetarycomputer.microsoft.com/api/data/v1/legend/classmap/io-lulc-9-class). The `labels` data frame we imported at the beginning has, for each class, its code, its name and its official color as a hex code. No Data is fully transparent in the official map, so it gets white:
+
+```{python}
+labels
+```
+
+Notice 0 means "No Data". This is the raster's no-data value we checked before clipping, so in `lulc_clip` the pixels outside the fire perimeter have code 0.
+
+To use these colors, we give `.plot()` two lists:
+
+- `levels`: the edges between classes. Each class goes from its own code up to the next one (Trees from 2 to 4, Flooded vegetation from 4 to 5, ...), and we add 12 as the last edge.
+- `colors`: one color per class.
+
+Since the colors are now categories, a legend works better than a colorbar. We'll make one entry per class present in the clipped raster:
+
+```{python}
+# Classes present in the clipped raster (without No Data)
+present = labels[labels['code'].isin(np.unique(lulc_clip)) & (labels['code'] != 0)]
+
+# One legend entry per class
+# zip() pairs up the colors and names: ('#419bdf', 'Water'), ('#397d49', 'Trees'), ...
+legend_entries = []
+for color, name in zip(present['color'], present['class_label']):
+    legend_entries.append(mpatches.Patch(color=color, label=name))
+
+fig, ax = plt.subplots(figsize=(8, 5))
+lulc_clip.plot(ax=ax,
+               levels=list(labels['code']) + [12],
+               colors=list(labels['color']),
+               add_colorbar=False)
+ax.legend(handles=legend_entries, loc='upper left', bbox_to_anchor=(1, 1))
+ax.set_title('Land cover within the Eaton Fire perimeter (2023)')
+ax.axis('off')
+plt.show()
+```
 
 ## Land cover statistics
 
-In the rest of this lesson we will calculate land cover statistics within the Thomas Fire perimeter. The following exercises will guide you through this process:
+In the rest of this lesson we will calculate land cover statistics within the Eaton Fire perimeter. The following exercises will guide you through this process:
 
 :::{.callout-tip}
 ## Exercises
 
-1. Use the `numpy` function `np.unique()` to get the number of pixels per class in `lulc_clip`. HINT: check [the `np.unique()` documentation](https://numpy.org/doc/stable/reference/generated/numpy.unique.html) to see what the `return_counts` parameter does and read the last example. 
+1. Use the `numpy` function `np.unique()` to get the number of pixels per class in `lulc_clip`. HINT: check [the `np.unique()` documentation](https://numpy.org/doc/stable/reference/generated/numpy.unique.html) to see what the `return_counts` parameter does.
 
 2. Create a data frame `pix_counts` with two columns: column one must be the code numbers for the pixels in `lulc_clip` and column two must be the number of pixels corresponding to each code. HINT: [check our class notes on `pandas.DataFrame`s](/book/chapters/lesson-2-series-dataframes.qmd)
 
@@ -253,29 +333,29 @@ In the rest of this lesson we will calculate land cover statistics within the Th
 #| include: false
 unique_counts = np.unique(lulc_clip, return_counts=True)
 
-pix_counts = pd.DataFrame({'code':unique_counts[0], 
+pix_counts = pd.DataFrame({'code':unique_counts[0],
                            'n_pixels':unique_counts[1]})
 
 pix_counts = pix_counts[pix_counts['code']!=0]  # Remove no-data pixels
 ```
 
-3. Use the `labels` data frame to add the class names to the codes in the `pix_counts` data frame. Store the resulting data frame as `classes`. 
+3. Use the `labels` data frame to add the class names to the codes in the `pix_counts` data frame. Store the resulting data frame as `classes`.
 
 ```{python}
 #| include: false
-classes = pd.merge(left=labels, 
-                   right=pix_counts, 
+classes = pd.merge(left=labels,
+                   right=pix_counts,
                    on='code')
 ```
 
-4. What *area* within the fire perimeter (in km²) was estimated to be developed? HINT: what is the raster's resolution? 
+4. What *area* within the fire perimeter (in km²) was classified as built area? HINT: how much area does each pixel cover?
 
-<!--
-```python
-area_per_pixel = 30**2  # In meters^2
-classes.iloc[43:47].n_pixels.sum() * area_per_pixel / 1000**2
+```{python}
+#| include: false
+area_per_pixel = 10**2  # In meters^2
+built = classes[classes['class_label']=='Built area']
+built['n_pixels'].sum() * area_per_pixel / 1000**2
 ```
--->
 
 5. Store the total number of pixels within the fire perimeter as a variable `total_pixels`.
 
@@ -283,73 +363,219 @@ classes.iloc[43:47].n_pixels.sum() * area_per_pixel / 1000**2
 
 ```{python}
 #| include: false
-total_pixels = classes.n_pixels.sum()
+total_pixels = classes['n_pixels'].sum()
 
-classes['percentage'] = classes.n_pixels/total_pixels * 100
+classes['percentage'] = classes['n_pixels']/total_pixels * 100
 classes = classes.sort_values(by='percentage', ascending=False)
 ```
 
-7. Create a horizontal bar plot showing the classes with more than 1% land cover in decreasing order. For example:
-
-<!--
-```python
-classes[classes['percentage']>1].set_index('class_label').percentage.plot(kind='barh')
-```
--->
+7. Create a horizontal bar plot showing the classes with more than 1% land cover, with the largest class at the top. For example:
 
 ```{python}
 #| echo: false
+# Keep classes above 1% and sort so the largest class ends up at the top
+plot_data = (classes[classes['percentage'] > 1]
+                    .set_index('class_label')
+                    .sort_values(by='percentage')
+                    )
 
-# Filter and set index
-filtered_classes = classes[classes['percentage']>1].set_index('class_label').sort_values(by='percentage', ascending=True)
+fig, ax = plt.subplots(figsize=(6, 3))
 
-# Create the horizontal bar plot
-fig, ax = plt.subplots(figsize=(6, 4))  # Adjusted figure size for better proportions
+plot_data['percentage'].plot(kind='barh',
+                             ax=ax,
+                             color='darkseagreen')
 
-# Plot with improved style
-filtered_classes.percentage.plot(
-    kind='barh',
-    ax=ax,
-    color='skyblue',
-    edgecolor='black'
-)
+# Add the percentage at the end of each bar
+for i, value in enumerate(plot_data['percentage']):
+    ax.text(value + 0.5, i, f"{value:.1f}%", va='center')
 
-# Add an improved title and center it relative to the entire figure
-fig.suptitle(
-    'Distribution of Land Cover Within the Thomas Fire Perimeter\n(Classes > 1% from 2011 USGS National Terrestrial Ecosystems Data)',
-    fontsize=11,
-    y=0.98  # Adjust position slightly for spacing
-)
-
-# Add axis labels
-ax.set_xlabel('Percentage (%)', fontsize=10)
-ax.set_ylabel('')  # No label for y-axis
-
-# Add gridlines for easier interpretation
-ax.grid(axis='x', linestyle='--', alpha=0.7)
-
-# Add percentage values to the bars
-for i, v in enumerate(filtered_classes.percentage):
-    ax.text(v + 0.5, i, f"{v:.1f}%", va='center', fontsize=10)
+ax.set_title('Land cover within the Eaton Fire perimeter\n(2023, classes above 1%)')
+ax.set_xlabel('Percentage of area (%)')
+ax.set_ylabel('')
 
 # Remove top and right edges of the plot
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-# Make the axis box wider relative to the figure area
-fig.subplots_adjust(left=0.25, right=0.95, top=0.85)  # Adjust spacing for the centered title
-
-# Show the plot
 plt.show()
 ```
 
+8. Check: the total area of the land cover pixels should be close to the area of the fire perimeter. Calculate both in km² and compare them.
+
+```{python}
+#| include: false
+pixel_area = total_pixels * area_per_pixel / 1000**2
+perimeter_area = eaton_match.area.sum() / 1000**2
+print(f"From pixels: {pixel_area:.1f} km²")
+print(f"From perimeter: {perimeter_area:.1f} km²")
+```
+
+9. Repeat the analysis for the Palisades Fire and compare the land cover within the two fire perimeters. Does the same raster cover both fires?
+
+```{python}
+#| include: false
+palisades = gpd.read_file(os.path.join('data',
+                                       'Palisades_Perimeter_20250121',
+                                       'Palisades_Perimeter_20250121.shp')
+                                       )
+palisades_match = palisades.to_crs(lulc.rio.crs)
+
+lulc_clip_pal = (lulc.rio.clip_box(*palisades_match.total_bounds)
+                     .rio.clip(palisades_match.geometry)
+                     )
+
+unique_counts = np.unique(lulc_clip_pal, return_counts=True)
+pix_counts_pal = pd.DataFrame({'code':unique_counts[0],
+                               'n_pixels':unique_counts[1]})
+pix_counts_pal = pix_counts_pal[pix_counts_pal['code']!=0]
+
+classes_pal = pd.merge(left=labels, right=pix_counts_pal, on='code')
+classes_pal['percentage'] = classes_pal['n_pixels']/classes_pal['n_pixels'].sum() * 100
+classes_pal.sort_values(by='percentage', ascending=False)
+```
+
+10. Interpret the results. The numbers are only the start: discuss these questions with a partner.
+
+    1. Almost a quarter of the Eaton Fire perimeter was built area. What does this tell you about where this fire burned?
+    2. The land cover map is from 2023 and the fires burned in January 2025. Is the map close enough to describe what was on the ground before the fires? What could have changed in between?
+    3. *Rangeland* covers about half of both perimeters. Read its description in the [dataset's documentation](https://planetarycomputer.microsoft.com/dataset/io-lulc-annual-v02). What kinds of vegetation does it group together? Why could this matter when we talk about fire?
+    4. Land cover within the perimeter tells us what was there, not what burned or how badly. What other data would you need to know how many buildings were destroyed, or how severely the vegetation burned?
 :::
 
+## Class labels from the item's metadata
 
-:::{.callout-tip}
-## Bonus exercise
+In this lesson we read the class labels and colors from a CSV. In this last section we'll see how to get the class labels from the file itself instead: they are stored in the STAC item's metadata. To extract them, we'll first learn a Python shortcut.
 
-In this lesson we used a CSV with the class labels for the GAP/LANDFIRE National Terrestrial Ecosystems data. However, this information is stored in the `properties` for the STAC `item` we worked with. 
+### List comprehensions
 
-Access the labels for the item and use them to recreate the `labels` `pandas.DataFrame` we imported from the CSV. 
-:::
+A **list comprehension** is a short way of writing a `for` loop that builds a new list.
+
+#### Example: doubling numbers {.unlisted}
+
+Here is a `for` loop that creates a new list by doubling each number in a given list:
+
+```{python}
+numbers = [1, 2, 3, 4]
+
+doubled = []
+for n in numbers:
+    doubled.append(n * 2)
+
+doubled
+```
+
+And here is the same thing as a list comprehension:
+
+```{python}
+doubled = [n * 2 for n in numbers]
+doubled
+```
+
+Read it from the inside out: "`n * 2` **for** each `n` **in** `numbers`". The square brackets tell Python to collect the results in a new list. Notice everything from the loop is still there (the loop variable `n`, the list `numbers`, and what we do with each element), just in one line.
+
+#### Example: one value from each dictionary {.unlisted}
+
+Quick recap: a **dictionary** stores *key-value pairs*, written as `{key: value}`. We get a value by putting its key in square brackets. For example, if
+
+```python
+pet = {'name': 'Tuna', 'age': 5}
+```
+
+then `pet['name']` is `'Tuna'` and `pet['age']` is `5`.
+
+The following is closer to what we will need in a moment. We have a list of dictionaries and want one value from each:
+
+```{python}
+pets = [{'name': 'Tuna', 'age': 5},
+        {'name': 'Bowie', 'age': 12},
+        {'name': 'Momo', 'age': 17}]
+
+pet_names = [pet['name'] for pet in pets]
+pet_names
+```
+
+#### Check-in {.unlisted}
+
+1. Print Momo's age.
+2. Use list comprehension to make a list with the ages of the pets.
+
+<!--
+```python
+print(pets[2]['age'])
+pet_ages = [pet['age'] for pet in pets]
+print(pet_ages)
+```
+-->
+
+### Class codes and names
+
+Back to our land cover item. The class codes and names are stored in the metadata of the item's `data` asset:
+
+```{python}
+# Class codes and names from the item's metadata
+class_values = item.assets['data'].extra_fields['file:values']
+class_values
+```
+
+`class_values` is a list of dictionaries, one per class, like `{'values': [0], 'summary': 'No Data'}`. We want two lists out of it: all the codes and all the names. This is a job for a list comprehension!
+
+#### Exercise {.unlisted}
+
+First, predict the output of each line. Then run it to check your prediction.
+
+1. `class_values[0]`
+2. `class_values[0]['values']`
+3. `class_values[0]['values'][0]`
+4. `[c['values'][0] for c in class_values]`
+
+Now write your own:
+
+5. Write a `for` loop that collects the `summary` value of each element of `class_values` into a list.
+6. Rewrite your loop from 5 as a list comprehension.
+
+<!--
+```python
+# 5. For loop
+names = []
+for c in class_values:
+    names.append(c['summary'])
+print(names)
+
+# 6. List comprehension
+names = [c['summary'] for c in class_values]
+print(names)
+```
+-->
+
+Now let's put both list comprehensions to work: one gets the codes and the other gets the class names, and together they make a data frame with one row per class. We'll call it `labels_from_item`, so we don't overwrite the `labels` we read from the CSV:
+
+```{python}
+labels_from_item = pd.DataFrame({'code': [c['values'][0] for c in class_values],
+                                 'class_label': [c['summary'] for c in class_values]})
+labels_from_item
+```
+
+### Class colors
+
+The colors are not in the item's metadata. The MPC lists them in its [class map for `io-lulc-9-class`](https://planetarycomputer.microsoft.com/api/data/v1/legend/classmap/io-lulc-9-class) as RGBA values (red, green, blue, transparency). Let's add them as hex codes, in the same order as the codes. No Data is fully transparent in the official map, so we'll use white for it:
+
+```{python}
+# Official colors from the MPC class map, as hex codes
+labels_from_item['color'] = ['#ffffff',  # No Data
+                             '#419bdf',  # Water
+                             '#397d49',  # Trees
+                             '#7a87c6',  # Flooded vegetation
+                             '#e49635',  # Crops
+                             '#c4281b',  # Built area
+                             '#a59b8f',  # Bare ground
+                             '#a8ebff',  # Snow/ice
+                             '#616161',  # Clouds
+                             '#e3e2c3']  # Rangeland
+labels_from_item
+```
+
+This is exactly what's in the CSV we read at the beginning of the lesson:
+
+```{python}
+labels_from_item.equals(labels)
+```
