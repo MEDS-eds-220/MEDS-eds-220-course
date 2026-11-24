@@ -205,6 +205,138 @@ Scope rules that come with it:
 Option B is a richer student exercise ("hotter than its own city?") but adds a loop over 9 cities and a rule for unincorporated areas, which goes against keeping it simple.
 """)
 
+
+# ---------------------------------------------------------------- cross-reference
+md("""
+# Cross-reference with Wikipedia: permanent LA-area facilities only
+
+Source: [Venues of the 2028 Summer Olympics and Paralympics](https://en.wikipedia.org/wiki/Venues_of_the_2028_Summer_Olympics_and_Paralympics), wikitext downloaded 2026-11-23. Wikipedia gives each venue a **status**: *Existing*, *Existing with temporary stands*, *Existing, expanded* or *Temporary*.
+
+Rules used here:
+
+1. **Keep** *Existing*, *Existing with temporary stands* and *Existing, expanded*: the facility (and its surface) is there today, which is what Landsat sees.
+2. **Drop** *Temporary* venues: Landsat can't see something that isn't built yet, and most temporary venues are on parks, beaches or parking lots.
+3. **LA area only**: drop Trestles (San Clemente, another Landsat scene) and everything outside Southern California. Honda Center (Anaheim, Orange County) is kept as part of Greater LA; it's inside the Census urban area.
+4. One row per **facility**, not per LA28 venue name: the three Convention Center halls are one facility.
+""")
+
+code("""
+# LA28 venue name -> (Wikipedia facility name, Wikipedia status, keep?, note)
+crossref = {
+ 'Carson Stadium':  ('Dignity Health Sports Park, Main Stadium', 'Existing', True, ''),
+ 'Carson Courts':   ('Dignity Health Sports Park, Tennis Stadium', 'Existing', True, 'Shares a point with Carson Stadium (same complex)'),
+ 'Carson Velodrome':('Velo Sports Center', 'Existing', True, ''),
+ 'Carson Field':    ('Dignity Health Sports Park, Track and Field Facility', 'Temporary', False, ''),
+ 'DTLA Arena':      ('Crypto.com Arena', 'Existing', True, ''),
+ 'Dodger Stadium':  ('Dodger Stadium', 'Existing', True, ''),
+ 'LA Convention Center Hall 1': ('Los Angeles Convention Center', 'Existing with temporary stands', True, 'Halls 1-3 are one facility. Wikipedia: use depends on a $2.6B expansion'),
+ 'LA Convention Center Hall 2': ('Los Angeles Convention Center', 'Existing with temporary stands', False, 'Same facility as Hall 1'),
+ 'LA Convention Center Hall 3': ('Los Angeles Convention Center', 'Existing with temporary stands', False, 'Same facility as Hall 1'),
+ 'Peacock Theater': ('Peacock Theater', 'Existing', True, ''),
+ 'Exposition Park Stadium': ('BMO Stadium', 'Existing', True, ''),
+ 'Galen Center':    ('Galen Center', 'Existing', True, ''),
+ 'LA Memorial Coliseum': ('Los Angeles Memorial Coliseum', 'Existing', True, ''),
+ '2028 Stadium':    ('SoFi Stadium', 'Existing (swimming: with temporary stands)', True, ''),
+ 'Intuit Dome':     ('Intuit Dome', 'Existing', True, ''),
+ 'Long Beach Arena':('Long Beach Arena', 'Existing', True, ''),
+ 'Long Beach Target Shooting Hall': ('Long Beach Convention Center', 'Temporary', False, 'Inside an existing building, but Wikipedia lists the venue as temporary'),
+ 'Long Beach Aquatics Center':  ('Long Beach Convention Center Lot', 'Temporary', False, ''),
+ 'Long Beach Climbing Theater': ('Long Beach Convention Center Lot', 'Temporary', False, ''),
+ 'Allianz Beach Arena': ('Alamitos Beach', 'Temporary', False, ''),
+ 'Belmont Shore':   ('Belmont Veterans Memorial Pier / Long Beach Waterfront', 'Existing with temporary stands (pier) / Temporary (waterfront)', True,
+                     'LA28 groups three events; Wikipedia splits them. Kept as the pier (kite and windfoil sailing). Water venue'),
+ 'Marine Stadium':  ('Long Beach Marine Stadium', 'Existing with temporary stands', True, 'Water venue (rowing, canoe sprint)'),
+ 'Port of Los Angeles': ('Port of Los Angeles', 'Existing with temporary stands', True, 'Water venue (sailing in the harbor)'),
+ 'Valley Complex 1': ('Sepulveda Basin Recreation Area', 'Temporary', False, ''),
+ 'Valley Complex 2': ('Sepulveda Basin Recreation Area', 'Temporary', False, ''),
+ 'Valley Complex 3': ('Sepulveda Basin Recreation Area', 'Temporary', False, ''),
+ 'Valley Complex 4': ('Sepulveda Basin Recreation Area', 'Temporary', False, ''),
+ 'Fairgrounds Cricket Stadium': ('Knight Riders Cricket Ground (Fairplex)', 'Existing, expanded', True,
+                     'LA28 calls it "purpose-built"; Wikipedia says an existing ground, expanded'),
+ 'Griffith Observatory': ('Griffith Observatory', 'Temporary', False, 'Road cycling finish'),
+ 'LA Zoo':          ('Los Angeles Zoo', 'Temporary', False, 'Road cycling start/finish'),
+ 'Honda Center':    ('Honda Center', 'Existing', True, 'Anaheim, Orange County'),
+ 'Industry Hills MTB Course': ('Industry Hills Mountain Bike Course', 'Temporary', False, ''),
+ 'Whittier Narrows Clay Shooting Center': ('LA Clays Shooting Sports Park', 'Existing', True, 'Point is approximate (recreation area); OSM has no match for LA Clays'),
+ 'Riviera Country Club': ('Riviera Country Club', 'Existing', True, ''),
+ 'Rose Bowl Stadium': ('Rose Bowl', 'Existing', True, ''),
+ 'Rose Bowl Aquatics Center': ('Rose Bowl Aquatics Center', 'Existing with temporary stands', True, ''),
+ 'Santa Anita Park': ('Santa Anita Park', 'Existing with temporary stands', True, ''),
+ 'Trestles State Beach': ('Trestles', 'Temporary', False, 'Also outside the LA area (San Clemente)'),
+ 'Comcast Squash Center at Universal Studios': ('Universal Studios Lot', 'Existing with temporary stands', False,
+                     'CONFLICT: LA28 says "temporary, purpose-built" squash center; Wikipedia says existing. Dropped, following LA28'),
+ 'Venice Beach':    ('Venice Beach', 'Temporary', False, ''),
+ 'Venice Beach Boardwalk': ('Venice Beach', 'Temporary', False, ''),
+}
+
+# Every Southern California LA28 venue is matched
+assert set(crossref) == set(socal['name'])
+
+xref = pd.DataFrame.from_dict(crossref, orient='index',
+                              columns=['wiki_name', 'wiki_status', 'keep', 'note'])
+socal = socal.join(xref, on='name')
+socal[['name', 'wiki_name', 'wiki_status', 'keep', 'note']]
+""")
+
+md("""
+### On Wikipedia but not on the LA28 venue list
+
+These are not on the LA28 venues page, so they weren't scraped. None is a competition venue except Grand Park, which Wikipedia marks "citation needed" and as temporary.
+
+| Wikipedia facility | Use | Status |
+|---|---|---|
+| Grand Park (DTLA) | Race walking | Temporary, *citation needed* |
+| NFL Los Angeles at Hollywood Park (Inglewood) | Main Press Center | Existing |
+| UCLA student housing (Westwood) | Olympic Village | Existing |
+| Warner Bros. Ranch (Burbank) | International Broadcast Centre | Existing |
+
+The Olympic Village could be worth adding: athletes live there for weeks, so heat matters as much as at venues.
+""")
+
+md("## Permanent LA-area facilities")
+code("""
+# Better point for Belmont: the pier itself (OpenStreetMap)
+socal.loc[socal['name'] == 'Belmont Shore', 'geometry'] = gpd.points_from_xy([-118.14850], [33.75665], crs='epsg:4326')
+
+facilities = socal[socal['keep']].copy()
+facilities['water_venue'] = facilities['note'].str.contains('Water venue')
+
+print('Permanent LA-area facilities:', len(facilities))
+print('Water venues among them:', facilities['water_venue'].sum())
+facilities[['wiki_name', 'sports', 'city', 'wiki_status', 'water_venue']]
+""")
+
+code("""
+facilities['in_urban_area'] = facilities.within(urban.geometry.iloc[0])
+print('Inside the Census urban area:', facilities['in_urban_area'].sum(), 'of', len(facilities))
+facilities.loc[~facilities['in_urban_area'], ['wiki_name', 'city']]
+""")
+
+code("""
+fig, ax = plt.subplots(figsize=(10, 8))
+urban.to_crs(3857).plot(ax=ax, color='tab:purple', alpha=0.25, edgecolor='tab:purple')
+land = facilities[~facilities['water_venue']].to_crs(3857)
+water = facilities[facilities['water_venue']].to_crs(3857)
+land.plot(ax=ax, color='red', markersize=25, zorder=3, label='Permanent facility')
+water.plot(ax=ax, color='tab:blue', markersize=25, zorder=3, label='Permanent, water venue')
+socal[~socal['keep']].to_crs(3857).plot(ax=ax, color='gray', marker='x', markersize=25, zorder=2, label='Dropped')
+
+xmin, ymin, xmax, ymax = facilities.to_crs(3857).total_bounds
+ax.set_xlim(xmin - 15000, xmax + 15000)
+ax.set_ylim(ymin - 10000, ymax + 10000)
+ctx.add_basemap(ax, crs='epsg:3857', source=ctx.providers.Esri.WorldStreetMap, attribution_size=6)
+ax.legend(loc='lower left')
+ax.set_title('Permanent LA28 facilities in the LA area\\nCensus urban area in purple')
+ax.set_axis_off()
+plt.show()
+""")
+
+code("""
+# Save for the heat notebook
+(facilities[['name', 'wiki_name', 'sports', 'city', 'county', 'wiki_status', 'water_venue', 'note', 'geometry']]
+ .to_file('data/la28-permanent-facilities.geojson', driver='GeoJSON'))
+""")
+
 nb = nbf.v4.new_notebook(cells=cells)
 nb.metadata['kernelspec'] = {'name': 'python3', 'display_name': 'Python 3 (ipykernel)', 'language': 'python'}
 nbf.write(nb, HERE / 'la28-venues-polygons.ipynb')
