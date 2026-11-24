@@ -160,7 +160,7 @@ The heat task compares the surface temperature around venues to a reference area
 | A. City of Los Angeles only | 1 | 19 of 41 | Simplest; matches the current scratch notebook | Leaves out more than half the venues; TIGER boundary includes ocean |
 | B. Each venue's host city | 9 cities + unincorporated areas | 38 of 41 (no polygon for the 3 unincorporated) | "Is this venue hotter than its own city?" is a fair local comparison | 9+ polygons and a loop; small cities give noisy averages; unincorporated venues need another rule |
 | C. LA County | 1 | 39 of 41 (not Anaheim or Trestles) | One polygon | Includes mountains, Mojave Desert, and Catalina and San Clemente islands: not a fair comparison for urban venues; only 88% of it is in the Landsat scene |
-| D. Census urban area "Los Angeles–Long Beach–Anaheim" | 1 | 38 of 41 | One polygon; the Census defines it as built-up land, which is exactly what we want to compare to; includes Anaheim; 99% inside one Landsat scene | Excludes Griffith Park (so Griffith Observatory and the LA Zoo fall outside) and Trestles; a less familiar dataset for students |
+| D. Census urban area "Los Angeles–Long Beach–Anaheim" | 1 | 38 of 41 | One polygon; the Census defines urban areas as densely developed territory, which is what we want to compare to; includes Anaheim; 99% inside one Landsat scene | Excludes Griffith Park (so Griffith Observatory and the LA Zoo fall outside) and Trestles; a less familiar dataset for students |
 """)
 
 code("""
@@ -194,7 +194,7 @@ md("""
 
 **Option D, the Census urban area**, with this justification for students:
 
-> *We want to know whether the ground around venues is hotter than the urban region the Games take place in. The Census urban area is the official boundary of continuously built-up land, so its average temperature represents "the city" as people experience it, without mountains, desert or ocean pulling the average down.*
+> *We want to know whether the ground around venues is hotter than the urban region the Games take place in. The Census defines urban areas as densely developed territory, so the urban area's average temperature represents "the city" as people experience it, without mountains, desert or ocean pulling the average down.*
 
 Scope rules that come with it:
 
