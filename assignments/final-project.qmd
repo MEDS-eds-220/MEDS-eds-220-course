@@ -274,7 +274,7 @@ Then pick a scene to use for your analysis and, in a markdown cell, justify your
 4. **Access the raster.** Retrieve the item byou selected and open its surface temperature asset (`lwir11`) as an `xarray.DataArray`. Plot the raster together with the facilities and the urban area polygon.
 
 ::: {.callout-note collapse="true"}
-## HINT (mask no data values)
+## HINT: mask no data values
 - The surface temperature file uses 0 to mark pixels with no data. Open the raster with `rioxr.open_rasterio(..., masked=True)` so these pixels become `NaN` when the file is loaded and don't sneak into your calculations.
 :::
 
@@ -293,7 +293,7 @@ Clip the raster to the Los Angeles urban area and convert its values to degrees 
 6. **Facilities vs. the urban area.** Calculate each facility's average surface temperature within 500 m of it, and its difference from the average surface temperature over the whole urban area. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
 
 ::: {.callout-note collapse="true"}
-## HINT (use `buffer()` and break down the problem)
+## HINT: use `buffer()` and make one calculation
 
 - The `buffer()` method of a `geopandas.GeoDataFrame` turns each point into a circle of a given radius, measured in the units of the geo-data frame's CRS.
 - Do it for one facility first, then iterate. 
