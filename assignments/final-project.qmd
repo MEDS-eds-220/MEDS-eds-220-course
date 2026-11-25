@@ -180,31 +180,50 @@ Your post should include (at least) the following:
 - **Final visualizations:**
   -  Showcase your main visualizations with clear captions. Follow each visualization with a description explaining takeaways and relevance.
 
-## Task 2: Biodiversity Intactness Index change in Phoenix, AZ
+## Task 2: Urban heat around LA28 Olympic facilities
 
-In 2021, Maricopa County —home to the Phoenix metropolitan area— was identified as the U.S. county with the most significant increase in developed land since 2001 @levitt_where_2021. This rapid urban sprawl has profound implications for biodiversity and the health of surrounding natural ecosystems.
+Los Angeles will host the 2028 Summer Olympic and Paralympic Games (LA28) in July and August, the hottest part of the year. Many events will take place in existing stadiums, arenas and parks spread across the Los Angeles area, and heat is a major concern for athletes, workers and spectators. NASA JPL's ECOSTRESS team is working with the LA28 organizers to inform heat mitigation strategies for sports venues, transportation corridors and high-traffic pedestrian areas ahead of the Games.
 
-In this assignment, you will investigate the impacts of urban expansion by analyzing a dataset that captures values for the Biodiversity Intactness Index (BII) @gassert_global_2022. Your task is to examine changes in BII in the Phoenix county subdivision area between 2017 and 2020, shedding light on how urban growth affects biodiversity over time.
+In this task, you will do a similar (simpler) analysis using Landsat surface temperature data: on a clear summer day, which LA28 facilities sit in areas hotter or cooler than the Los Angeles urban area as a whole, and by how much? You will answer this question in **relative** terms: how many degrees above or below the urban area's average each facility is, *on the same date*.
 
 ### About the data
 
-You will work with two datasets for this task:
+You will work with three datasets for this task:
 
-1. **Biodiversity Intactness Index (BII) Time Series**
-Access the `io-biodiversity` collection from the [Microsoft Planetary Computer STAC catalog](https://planetarycomputer.microsoft.com/dataset/io-biodiversity). Use the 2017 and 2020 rasters covering the Phoenix subdivision. For the bounding box, use the following coordinates:
-```default
-[-112.826843, 32.974108, -111.184387, 33.863574]
-```
+1. **Landsat Collection 2 Level-2 surface temperature**
+Access the `landsat-c2-l2` collection from the [Microsoft Planetary Computer STAC catalog](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) @usgs_landsat_c2_l2_mpc. You will use the surface temperature asset (`lwir11`). Pixels are 30 m, resampled from the thermal sensor's native 100 m resolution.
 
-2. **Phoenix Subdivision Shapefile**
-Download the Phoenix subdivision polygon from the Census County Subdivision shapefiles for Arizona.
+2. **Los Angeles urban area**
+Download the *Los Angeles--Long Beach--Anaheim, CA* urban area polygon from the Census Bureau's 2025 TIGER/Line shapefiles for 2020 Census urban areas @us_census_bureau_tiger_2025_uac. The Census defines urban areas as densely developed territory, so the average temperature over this polygon represents the city people live in, without the mountains, desert or ocean that a county or city boundary would include. This is the reference area you will compare each facility to.
 
-To enhance your data exploration, you may use additional shapefiles or rasters to create a map situating the Phoenix subdivision within its broader geographic context.
+3. **LA28 facilities**
+A CSV file with the 19 permanent, on-land LA28 competition facilities in the Los Angeles area, with their approximate coordinates. The list comes from the official LA28 venue list @la28_venues_2026, cross-referenced with the venue statuses on Wikipedia @wikipedia_la28_venues_2026. It includes stadiums and arenas (e.g. SoFi Stadium, Crypto.com Arena, the Rose Bowl, Dodger Stadium) and other permanent sites such as Riviera Country Club, Santa Anita Park and the Fairplex. It leaves out:
+
+    - temporary venues (e.g. Venice Beach, Sepulveda Basin), since Landsat can only see what is built today;
+    - water venues (e.g. the Port of Los Angeles, Long Beach Marine Stadium), since over water Landsat measures the water surface;
+    - venues outside the Los Angeles area (e.g. Trestles, Oklahoma City, and the football stadiums in other cities).
+
+    All 19 facilities are inside the Los Angeles urban area. You can find the CSV file at this path within workbench-1:
+
+    ```default
+    /courses/EDS220/data/la28-facilities.csv
+    ```
+
+:::{.callout-note appearance="minimal"}
+**Surface temperature is not air temperature.** Landsat measures the thermal radiation coming off the top millimeter of whatever it sees from above: roofs, pavement, treetops, grass, water. Dark pavement and roofs in full sun often reach 50 to 70 °C, while the air a few feet above them is much cooler. Air temperature (what a weather station reports) is measured in the shade, about 2 m above the ground, and changes much more slowly across a city. Keep in mind that:
+
+- the satellite sees the top of a roof or a tree canopy, not the shaded sidewalk where people stand;
+- converting radiation to temperature requires assuming how efficiently each surface emits heat (its *emissivity*); this is hard for urban materials such as metal roofs and is a major source of uncertainty, along with the correction for the atmosphere;
+- dry grass and bare soil get almost as hot as pavement by late summer, while irrigated grass stays cool;
+- surface temperature is a good indicator of where the built environment stores heat (and where shade or vegetation would help), but it is not a direct measure of how hot people feel.
+
+Absolute surface temperatures also change a lot from one day to the next. This is why we compare each facility to the urban average on the same date.
+:::
 
 ### Setup
 
 :::{.callout-tip appearance="minimal"}
-1. Read all the instructions and the rubric for this task. 
+1. Read all the instructions and the rubric for this task.
 
 2. Create a new GitHub repository to house task 2 work. Choose an adequate, informative title for your repository (not `EDS220-final-project`). Your repository should have the following structure:
 
@@ -215,7 +234,7 @@ repo-name
 |   .gitignore
 │
 └── data  # If needed
-    │   data-files  
+    │   data-files
 ```
 
 In particular, there should be no `.DS_Store` or `.ipynb_checkpoints` files in your repository.
@@ -229,70 +248,140 @@ In particular, there should be no `.DS_Store` or `.ipynb_checkpoints` files in y
 
 #### 1. Data analysis
 
-1. Explore the data and write a brief summary of the information you obtained from the preliminary exploration. 
+1. **Los Angeles urban area.** Load the Los Angeles urban area polygon and explore it. Write a brief summary of what you find.
 
-2. Create a map showing the Phoenix subdivision within its broader geographic context. You may use any vector or raster datasets to create your map. Be sure to include citations or descriptions for these datasets at the top of your notebook too. You may also want to check out the `contextily` package to add a base map.
+2. **LA28 facilities.** Load the LA28 facilities CSV as a `geopandas.GeoDataFrame`. Make a map showing the facilities and the Los Angeles urban area polygon.
 
-3. Calculate the *percentage* of area of the Phoenix subdivision with a BII of at least 0.75 in 2017. Obtain the same calculation for 2020. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
-
-::: {.callout-note collapse="true"}
-## HINTS (useful or not depending on your workflow)
-
-- Let `x` be an `xarray.DataArray`. We can select all the values greater than `n` by simply doing `x>n`. 
-- Make sure you are calculating the percentage over the Phoenix area, and not the complete raster extent.
-:::
-
-4. Create a visualization showing the area with BII>=0.75 in 2017 that was lost by 2020. Here’s an example:
-
-<p align="center">
-![](/assignments/images/bii_phoenix.png){width="60%"}
-</p>
+3. **STAC search.** Use the Los Angeles urban area to search the Microsoft Planetary Computer STAC catalog for Landsat Collection 2 Level-2 scenes from June 1 to September 30, 2026.
 
 ::: {.callout-note collapse="true"}
 ## HINTS (useful or not depending on your workflow)
 
-- To find which pixels changed value from 2017 to 2020 think about the following example. Which values in R3 represent areas that had BII>=0.75 in 2017 but not in 2020?
+- Clouds hide the ground from the thermal sensor, so we only want nearly cloud-free scenes. The `query` parameter of `catalog.search()` filters items by any property in their metadata. Here we use `eo:cloud_cover` (a percentage) to keep only scenes with less than 10% cloud cover. Complete the rest of the parameters:
 
-<p align="center">
-![](/assignments/images/bii_raster_math.png){width="70%"}
-</p>
+```python
+search = catalog.search(
+    collections=___,
+    bbox=___,
+    datetime=___,
+    query={'eo:cloud_cover': {'lt': 10}},
+)
+items = search.item_collection()
+```
 
-- You can plot multiple rasters in the same figure. NaN values will be transparent.
+- The `bbox` parameter expects coordinates in latitude and longitude (EPSG:4326).
 :::
 
-5. Under your BII visualization write a brief description of the results you obtained in this task. 
+4. **Pick a scene.** Landsat scenes are tiles, and the Los Angeles urban area sits near the corner of one, so not every scene covers all the facilities. Run the following code (`facilities` is your geo-data frame with the facilities) and explain in a markdown cell what it does and what its output shows:
+
+```python
+from shapely.geometry import shape
+
+facilities_4326 = facilities.to_crs('epsg:4326')
+
+for item in items:
+    footprint = shape(item.geometry)
+    print(item.id,
+          item.properties['eo:cloud_cover'],
+          'covers all facilities:', facilities_4326.within(footprint).all())
+```
+
+Then pick a scene to use for your analysis and justify your choice. Retrieve the item and open its surface temperature asset (`lwir11`) as an `xarray.DataArray`. Plot the raster together with the facilities and the urban area polygon.
+
+::: {.callout-note collapse="true"}
+## HINTS (useful or not depending on your workflow)
+
+- Two simple ways to get your item out of `items`:
+    - by its position: `items[i]` gives you the item in position `i` of the list printed above (Python counts from 0). Print its id to check you got the right one.
+    - by its id: loop over `items` and keep the item whose `id` is the one you want.
+- The surface temperature file uses 0 to mark pixels with no data. Open the raster with `rioxr.open_rasterio(..., masked=True)` so these pixels become `NaN` when the file is loaded and don't sneak into your calculations.
+- The time of the scene is in UTC. Los Angeles is 7 hours behind UTC in the summer.
+:::
+
+5. **Convert to degrees Celsius.** The values in the surface temperature raster are not temperatures. To save space, Landsat stores each temperature as an integer that needs to be converted back with
+
+$$\text{temperature (K)} = \text{value} \times \text{scale} + \text{offset}.$$
+
+The file itself doesn't record the scale and offset (if you check the raster's attributes you will see rioxarray's defaults, a scale of 1 and an offset of 0). The real scale and offset are in the STAC metadata for the asset:
+
+```python
+item.assets['lwir11'].extra_fields['raster:bands']
+```
+
+Clip the raster to the Los Angeles urban area and convert its values to degrees Celsius. Plot the result together with the facilities and the urban area polygon. Check that the values make sense: what are the minimum, maximum and average surface temperatures over the urban area?
+
+6. **Facilities vs. the urban area.** Calculate each facility's average surface temperature within 500 m of it, and its difference from the average surface temperature over the whole urban area. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
+
+::: {.callout-note collapse="true"}
+## HINTS (useful or not depending on your workflow)
+
+- The `buffer()` method of a `geopandas.GeoDataFrame` turns each point into a circle of a given radius, measured in the units of the geo-data frame's CRS.
+- Do it for one facility first, then put the same steps in a `for` loop over all facilities. For example, for the first facility (`lst_urban` is the surface temperature raster clipped to the urban area, in °C, and `urban_mean` its average):
+
+```python
+geom = facilities.geometry.iloc[0]
+facility_lst = lst_urban.rio.clip([geom])   # clip() expects a list of geometries
+
+print(facilities['facility'].iloc[0])
+print(float(facility_lst.mean()) - urban_mean)
+```
+:::
+
+7. **Difference plot.** Make a bar plot showing each facility's difference from the urban average. You can adapt this code to your results (`results` is a data frame with columns `facility` and `diff_from_urban_c`):
+
+```python
+plot_data = results.set_index('facility').sort_values('diff_from_urban_c')
+colors = ['tab:red' if d > 0 else 'tab:blue' for d in plot_data['diff_from_urban_c']]
+
+ax = plot_data['diff_from_urban_c'].plot.barh(figsize=(7, 7), color=colors)
+ax.axvline(0, color='black', linewidth=0.8)
+ax.set_xlabel(f'Mean surface temperature within 500 m minus urban average ({urban_mean:.1f} °C)')
+ax.set_ylabel('')
+ax.set_title('Surface temperature around LA28 facilities\nDATE, TIME')
+plt.show()
+```
+
+8. **Final map.** Create a map of the facilities colored by their difference from the urban average, over a base map. You may want to use the `contextily` package for the base map.
+
+9. **Discussion.** In markdown cells, answer the following questions:
+
+    1. Which scene (date) did you use? Which facilities have the minimum and maximum difference from the urban average, and what are these values?
+    2. Explain two limitations of the data.
+    3. Explain two limitations of the methods.
+    4. Discuss your results in relation to the facilities' locations and the type of facility (and any other characteristics you think matter).
+    5. LA28 is planning heat mitigation for the Games. Based on your map, which venue would you prioritize for heat mitigation, and what would you need to know beyond this analysis to make that recommendation?
 
 #### 2. Clean notebook
 
-The target audience for your notebook is a fellow EDS 220 student who is just learning geospatial wrangling using Python. 
+The target audience for your notebook is a fellow EDS 220 student who is just learning geospatial wrangling using Python.
 
 - Add enough and appropriate comments to explain your code.
-- First cell in the notebook must be a markdown cell including: 
+- First cell in the notebook must be a markdown cell including:
   - [ ] Title
   - [ ] Author
   - [ ] Link to GitHub repository containing the notebook (for grading purposes)
-- At the top of the notebook, include an "About" section with the following subsections: 
+- At the top of the notebook, include an "About" section with the following subsections:
     - [ ] Purpose: what is this notebook about?
     - [ ] Highlights: List of highlights of analysis (3 or 4 highlights). What do you consider to be the most important aspects of this coding exercise?
     - [ ] About the data: Datasets description
     - [ ] References: Formal references to datasets. You can use the APA style as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
 - The rest of your notebook should have:
     - [ ] Logical subsections (indicated through markdown headers) for the data exploration, analysis, and visualization you are performing. The subsections should easily guide the reader through the analysis.
-    - [ ] Enough and appropriate **markdown cells to explain the procedures you are using and their output**. Copy-pasting the instructions in markdown cells is not appropriate. If your code comment is getting too long, you should probably move it to a markdown cell as text. 
+    - [ ] Enough and appropriate **markdown cells to explain the procedures you are using and their output**. Copy-pasting the instructions in markdown cells is not appropriate. If your code comment is getting too long, you should probably move it to a markdown cell as text.
 
-#### 3. Clean repository 
+#### 3. Clean repository
 
 Same as the instructions for Homework 4. Update your repository's README with (at least) the following (based on [EDS 296](https://ucsb-meds.github.io/README-guidelines/)):
 
 - [ ] **Title.** Short, but descriptive title.
 - [ ] **"About" section.** A brief explanation of the repository’s purpose.
-  Paragraphs or a bulleted list are both acceptable options. 
+  Paragraphs or a bulleted list are both acceptable options.
   You may include an image or logo that represents the project.
 - [ ] **"Repository Structure" section.** A concise description of what’s housed in the repository.
   This includes information about the repository structure or file organization.
-- [ ] **"Data" section.** Details regarding data access. Any necessary information on where data lives (e.g. is it housed in the repo, on a server, in a library / package etc.) and how to access it in order to run the code. 
+- [ ] **"Data" section.** Details regarding data access. Any necessary information on where data lives (e.g. is it housed in the repo, on a server, in a library / package etc.) and how to access it in order to run the code.
 - [ ] **"References" section.** In an appropriate, consistent format, including links, provide a reference to the course and any other sources that supported the development of the repository. **Include formal references to the datasets.** You can use the APA style to cite data sources as outlined [here](https://library.cumc.columbia.edu/insight/citing-data-sources).
 
 :::{.callout-warning appearance="minimal"}
-Ready to submit your answers? Make sure your submission follows the checklist at the top of the assignment! 
+Ready to submit your answers? Make sure your submission follows the checklist at the top of the assignment!
 :::
