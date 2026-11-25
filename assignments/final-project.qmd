@@ -130,7 +130,7 @@ In addition to the blog post, in this task you will expand the GitHub repository
 ```default
 repo-name  # Consider renaming, e.g., "eaton-palisades-fires-analysis"
 │   README.md
-|   notebooks  # One per analysis, clean and streamlined
+|   notebooks  # As needed per analysis, clean and streamlined
 |   .gitignore
 │
 └── data  # If needed
@@ -182,9 +182,9 @@ Your post should include (at least) the following:
 
 ## Task 2: Urban heat around LA28 Olympic facilities
 
-Los Angeles will host the 2028 Summer Olympic and Paralympic Games (LA28) in July and August, the hottest part of the year. Many events will take place in existing stadiums, arenas and parks spread across the Los Angeles area, and heat is a major concern for athletes, workers and spectators. NASA JPL's ECOSTRESS team is working with the LA28 organizers to inform heat mitigation strategies for sports venues, transportation corridors and high-traffic pedestrian areas ahead of the Games.
+Los Angeles will host the 2028 Summer Olympic and Paralympic Games (LA28) in July and August, the hottest part of the year. Many events will take place in existing stadiums, arenas and parks spread across the Los Angeles area, and heat is a major concern for athletes, workers and spectators. Heat mitigation strategies for sports venues, transportation corridors and high-traffic pedestrian areas ahead of the Games are underway
 
-In this task, you will do a similar (simpler) analysis using Landsat surface temperature data: on a clear summer day, which LA28 facilities sit in areas hotter or cooler than the Los Angeles urban area as a whole, and by how much? You will answer this question in **relative** terms: how many degrees above or below the urban area's average each facility is, *on the same date*.
+In this task, you will do an analysis using Landsat surface temperature data: on a clear summer day, which LA28 facilities sit in areas hotter or cooler than the Los Angeles urban area as a whole, and by how much? You will answer this question in **relative** terms: how many degrees above or below the urban area's average each facility is, *on the same date*.
 
 ### About the data
 
@@ -194,7 +194,7 @@ You will work with three datasets for this task:
 Access the `landsat-c2-l2` collection from the [Microsoft Planetary Computer STAC catalog](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) @usgs_landsat_c2_l2_mpc. You will use the surface temperature asset (`lwir11`). Pixels are 30 m, resampled from the thermal sensor's native 100 m resolution.
 
 2. **Los Angeles urban area**
-Download the *Los Angeles--Long Beach--Anaheim, CA* urban area polygon from the Census Bureau's 2025 TIGER/Line shapefiles for 2020 Census urban areas @us_census_bureau_tiger_2025_uac. The Census defines urban areas as densely developed territory, so the average temperature over this polygon represents the city people live in, without the mountains, desert or ocean that a county or city boundary would include. This is the reference area you will compare each facility to.
+The [urban area polygons from the Census Bureau's 2026 TIGER/Line shapefiles](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341) @us_census_bureau_tiger_2026_uac. The Census defines urban areas as densely developed territory, so the average temperature over this polygon represents the city people live in, without the mountains, desert or ocean that a county or city boundary would include. This is the reference area you will compare each facility to. The name for the LA area is *Los Angeles--Long Beach--Anaheim, CA*. 
 
 3. **LA28 facilities**
 A CSV file with the 19 permanent, on-land LA28 competition facilities in the Los Angeles area, with their approximate coordinates. The list comes from the official LA28 venue list @la28_venues_2026, cross-referenced with the venue statuses on Wikipedia @wikipedia_la28_venues_2026. It includes stadiums and arenas (e.g. SoFi Stadium, Crypto.com Arena, the Rose Bowl, Dodger Stadium) and other permanent sites such as Riviera Country Club, Santa Anita Park and the Fairplex. It leaves out:
@@ -203,29 +203,20 @@ A CSV file with the 19 permanent, on-land LA28 competition facilities in the Los
     - water venues (e.g. the Port of Los Angeles, Long Beach Marine Stadium), since over water Landsat measures the water surface;
     - venues outside the Los Angeles area (e.g. Trestles, Oklahoma City, and the football stadiums in other cities).
 
-    All 19 facilities are inside the Los Angeles urban area. You can find the CSV file at this path within workbench-1:
-
-    ```default
-    /courses/EDS220/data/la28-facilities.csv
-    ```
+    All 19 facilities are inside the Los Angeles urban area. You can find the CSV file `la28-facilities.csv` in the [course data directory]({{< var shared-data-folder >}}).
 
 :::{.callout-note appearance="minimal"}
-**Surface temperature is not air temperature.** Landsat measures the thermal radiation coming off the top millimeter of whatever it sees from above: roofs, pavement, treetops, grass, water. Dark pavement and roofs in full sun often reach 50 to 70 °C, while the air a few feet above them is much cooler. Air temperature (what a weather station reports) is measured in the shade, about 2 m above the ground, and changes much more slowly across a city. Keep in mind that:
+**Surface temperature is not air temperature.** Landsat measures the thermal radiation coming off the top millimeter of whatever it sees from above: roofs, pavement, treetops, grass, water. Dark pavement and roofs in full sun often reach 50 to 70 °C, while the air a few feet above them is much cooler. Air temperature (what a weather station reports) is measured in the shade, about 2 m above the ground, and changes much more slowly across a city. Keep in mind that surface temperature is a good indicator of where the built environment stores heat (and where shade or vegetation would help), but it is not a direct measure of how hot people feel. 
 
-- the satellite sees the top of a roof or a tree canopy, not the shaded sidewalk where people stand;
-- converting radiation to temperature requires assuming how efficiently each surface emits heat (its *emissivity*); this is hard for urban materials such as metal roofs and is a major source of uncertainty, along with the correction for the atmosphere;
-- dry grass and bare soil get almost as hot as pavement by late summer, while irrigated grass stays cool;
-- surface temperature is a good indicator of where the built environment stores heat (and where shade or vegetation would help), but it is not a direct measure of how hot people feel.
-
-Absolute surface temperatures also change a lot from one day to the next. This is why we compare each facility to the urban average on the same date.
+<!-- Absolute surface temperatures also change a lot from one day to the next. This is why we compare each facility to the urban average on the same date. -->
 :::
 
 ### Setup
 
 :::{.callout-tip appearance="minimal"}
-1. Read all the instructions and the rubric for this task.
+1. Read all the instructions and the r[ubric for this task]({{< var final-project-rubric >}}).
 
-2. Create a new GitHub repository to house task 2 work. Choose an adequate, informative title for your repository (not `EDS220-final-project`). Your repository should have the following structure:
+2. Create a new GitHub repository to house task 2 work. Choose an adequate, informative title for your repository (not `EDS220-final-project`). Your repository should have the a structure similar to this one:
 
 ```default
 repo-name
@@ -248,16 +239,9 @@ In particular, there should be no `.DS_Store` or `.ipynb_checkpoints` files in y
 
 #### 1. Data analysis
 
-1. **Los Angeles urban area.** Load the Los Angeles urban area polygon and explore it. Write a brief summary of what you find.
+1. **Explore the vector data.** Explore the data and write a summary of the information you obtained from the preliminary exploration. 
 
-2. **LA28 facilities.** Load the LA28 facilities CSV as a `geopandas.GeoDataFrame`. Make a map showing the facilities and the Los Angeles urban area polygon.
-
-3. **STAC search.** Use the Los Angeles urban area to search the Microsoft Planetary Computer STAC catalog for Landsat Collection 2 Level-2 scenes from June 1 to September 30, 2026.
-
-::: {.callout-note collapse="true"}
-## HINTS (useful or not depending on your workflow)
-
-- Clouds hide the ground from the thermal sensor, so we only want nearly cloud-free scenes. The `query` parameter of `catalog.search()` filters items by any property in their metadata. Here we use `eo:cloud_cover` (a percentage) to keep only scenes with less than 10% cloud cover. Complete the rest of the parameters:
+2. **STAC search.** Use the Los Angeles urban area to search the Microsoft Planetary Computer STAC catalog for Landsat Collection 2 Level-2 scenes from June 1 to September 30, 2026. Your search should look similar to this:
 
 ```python
 search = catalog.search(
@@ -268,14 +252,13 @@ search = catalog.search(
 )
 items = search.item_collection()
 ```
+The `query` parameter of `catalog.search()` filters items by any property in their metadata. Here we use `eo:cloud_cover` (a percentage) to keep only scenes with less than 10% cloud cover. Clouds hide the ground from the thermal sensor, so we only want nearly cloud-free scenes.
 
-- The `bbox` parameter expects coordinates in latitude and longitude (EPSG:4326).
-:::
 
-4. **Pick a scene.** Landsat scenes are tiles, and the Los Angeles urban area sits near the corner of one, so not every scene covers all the facilities. Run the following code (`facilities` is your geo-data frame with the facilities) and explain in a markdown cell what it does and what its output shows:
+3. **Pick a scene.** Landsat scenes are tiles, and the Los Angeles urban area sits near the corner of one, so not every scene covers all the facilities. Adapt the following code so you can run it, and explain in a markdown cell what it does and what its output shows:
 
 ```python
-from shapely.geometry import shape
+from shapely.geometry import shape   # Move import to an adequate place
 
 facilities_4326 = facilities.to_crs('epsg:4326')
 
@@ -286,16 +269,13 @@ for item in items:
           'covers all facilities:', facilities_4326.within(footprint).all())
 ```
 
-Then pick a scene to use for your analysis and justify your choice. Retrieve the item and open its surface temperature asset (`lwir11`) as an `xarray.DataArray`. Plot the raster together with the facilities and the urban area polygon.
+Then pick a scene to use for your analysis and, in a markdown cell, justify your choice. 
+
+4. **Access the raster.** Retrieve the item byou selected and open its surface temperature asset (`lwir11`) as an `xarray.DataArray`. Plot the raster together with the facilities and the urban area polygon.
 
 ::: {.callout-note collapse="true"}
-## HINTS (useful or not depending on your workflow)
-
-- Two simple ways to get your item out of `items`:
-    - by its position: `items[i]` gives you the item in position `i` of the list printed above (Python counts from 0). Print its id to check you got the right one.
-    - by its id: loop over `items` and keep the item whose `id` is the one you want.
+## HINT (mask no data values)
 - The surface temperature file uses 0 to mark pixels with no data. Open the raster with `rioxr.open_rasterio(..., masked=True)` so these pixels become `NaN` when the file is loaded and don't sneak into your calculations.
-- The time of the scene is in UTC. Los Angeles is 7 hours behind UTC in the summer.
 :::
 
 5. **Convert to degrees Celsius.** The values in the surface temperature raster are not temperatures. To save space, Landsat stores each temperature as an integer that needs to be converted back with
@@ -308,23 +288,15 @@ The file itself doesn't record the scale and offset (if you check the raster's a
 item.assets['lwir11'].extra_fields['raster:bands']
 ```
 
-Clip the raster to the Los Angeles urban area and convert its values to degrees Celsius. Plot the result together with the facilities and the urban area polygon. Check that the values make sense: what are the minimum, maximum and average surface temperatures over the urban area?
+Clip the raster to the Los Angeles urban area and convert its values to degrees Celsius. Review your results.
 
 6. **Facilities vs. the urban area.** Calculate each facility's average surface temperature within 500 m of it, and its difference from the average surface temperature over the whole urban area. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don't need to include these in your notebook, but you should have a plan before starting your code.
 
 ::: {.callout-note collapse="true"}
-## HINTS (useful or not depending on your workflow)
+## HINT (use `buffer()` and break down the problem)
 
 - The `buffer()` method of a `geopandas.GeoDataFrame` turns each point into a circle of a given radius, measured in the units of the geo-data frame's CRS.
-- Do it for one facility first, then put the same steps in a `for` loop over all facilities. For example, for the first facility (`lst_urban` is the surface temperature raster clipped to the urban area, in °C, and `urban_mean` its average):
-
-```python
-geom = facilities.geometry.iloc[0]
-facility_lst = lst_urban.rio.clip([geom])   # clip() expects a list of geometries
-
-print(facilities['facility'].iloc[0])
-print(float(facility_lst.mean()) - urban_mean)
-```
+- Do it for one facility first, then iterate. 
 :::
 
 7. **Difference plot.** Make a bar plot showing each facility's difference from the urban average. You can adapt this code to your results (`results` is a data frame with columns `facility` and `diff_from_urban_c`):
@@ -341,15 +313,19 @@ ax.set_title('Surface temperature around LA28 facilities\nDATE, TIME')
 plt.show()
 ```
 
-8. **Final map.** Create a map of the facilities colored by their difference from the urban average, over a base map. You may want to use the `contextily` package for the base map.
+8. **Final map.** Create a map of the facilities colored by their difference from the urban average, over a base map. Use the `contextily` package for the base map. Here's an example:
 
-9. **Discussion.** In markdown cells, answer the following questions:
+::: {.column-body-outset}
+![](/assignments/images/la28-heat-map.png){width="100%" fig-alt="Satellite basemap of the Los Angeles area with the LA28 facilities as small circles colored from blue (cooler than the urban average) to red (hotter than the urban average)."}
+:::
+
+9. **Discussion.** In markdown cells, answer the following questions (short answers):
 
     1. Which scene (date) did you use? Which facilities have the minimum and maximum difference from the urban average, and what are these values?
     2. Explain two limitations of the data.
     3. Explain two limitations of the methods.
     4. Discuss your results in relation to the facilities' locations and the type of facility (and any other characteristics you think matter).
-    5. LA28 is planning heat mitigation for the Games. Based on your map, which venue would you prioritize for heat mitigation, and what would you need to know beyond this analysis to make that recommendation?
+    5. LA28 is planning heat mitigation for the Games. Based on your map, which venue would you prioritize for heat mitigation and why? What would you need to know beyond this analysis to make that recommendation?
 
 #### 2. Clean notebook
 
