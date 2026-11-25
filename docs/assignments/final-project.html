@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>final-project – EDS 220 - Working with Environmental Datasets</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -94,10 +91,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -126,6 +123,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -235,6 +261,10 @@ div.csl-indent {
     <a class="dropdown-item" href="../assignments/assignment4-palisades-eaton-fires.html">
  <span class="dropdown-text">assignment 4</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../assignments/final-project.html">
+ <span class="dropdown-text">final project</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -276,34 +306,29 @@ div.csl-indent {
   <li><a href="#final-project" id="toc-final-project" class="nav-link active" data-scroll-target="#final-project">Final project</a>
   <ul class="collapse">
   <li><a href="#submission-instructions" id="toc-submission-instructions" class="nav-link" data-scroll-target="#submission-instructions">Submission instructions</a></li>
-  <li><a href="#task-1-eaton-and-palisades-fires-analysis-blog-post-and-accompanying-analyses" id="toc-task-1-eaton-and-palisades-fires-analysis-blog-post-and-accompanying-analyses" class="nav-link" data-scroll-target="#task-1-eaton-and-palisades-fires-analysis-blog-post-and-accompanying-analyses">Task 1: Eaton and Palisades Fires analysis blog post and accompanying analyses</a>
+  <li><a href="#task-1-eaton-and-palisades-fires-analysis-blog-post" id="toc-task-1-eaton-and-palisades-fires-analysis-blog-post" class="nav-link" data-scroll-target="#task-1-eaton-and-palisades-fires-analysis-blog-post">Task 1: Eaton and Palisades Fires analysis blog post</a>
   <ul class="collapse">
   <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose">Purpose</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#guidelines" id="toc-guidelines" class="nav-link" data-scroll-target="#guidelines">Guidelines</a></li>
   </ul></li>
-  <li><a href="#task-2-biodiversity-intactness-index-change-in-phoenix-az" id="toc-task-2-biodiversity-intactness-index-change-in-phoenix-az" class="nav-link" data-scroll-target="#task-2-biodiversity-intactness-index-change-in-phoenix-az">Task 2: Biodiversity Intactness Index change in Phoenix, AZ</a>
+  <li><a href="#task-2-urban-heat-around-la28-olympic-facilities" id="toc-task-2-urban-heat-around-la28-olympic-facilities" class="nav-link" data-scroll-target="#task-2-urban-heat-around-la28-olympic-facilities">Task 2: Urban heat around LA28 Olympic facilities</a>
   <ul class="collapse">
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data">About the data</a></li>
   <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">Setup</a></li>
-  </ul></li>
-  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a>
-  <ul class="collapse">
-  <li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis">1. Data analysis</a></li>
-  <li><a href="#clean-notebook" id="toc-clean-notebook" class="nav-link" data-scroll-target="#clean-notebook">2. Clean notebook</a></li>
-  <li><a href="#clean-repository" id="toc-clean-repository" class="nav-link" data-scroll-target="#clean-repository">3. Clean repository</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a></li>
   </ul></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
 
-<section id="final-project" class="level1">
+<section id="final-project" class="level1 page-columns page-full">
 <h1>Final project</h1>
 <p>The project consists of two tasks:</p>
 <ul>
@@ -323,7 +348,7 @@ div.csl-indent {
 <li><p>Task 1 (blog post) is due by 11:59 pm on Wednesday, December 2.</p></li>
 <li><p>Task 2 (GitHub repo) is due by 11:59 pm on Saturday, December 5.</p></li>
 </ul>
-<p>Feedback for both tasks will be given to students by Tuesday, December 8 and the final resubmission for both tasks is due by 5 pm on Friday, December 11 (last day of the quarter). <strong>Both a submission and a revised submission addressing all the feedback from the first revision will be needed to get a final grade for these two tasks.</strong> <em>An assignment without a resubmission will get a 0 grade.</em></p>
+<p>Feedback for both tasks will be given to students by Tuesday, December 8 and the final resubmission for both tasks is due by 5 pm on Friday, December 11 (last day of the quarter). <strong>Both a submission and a revised submission addressing all the feedback from the first submission will be needed to get a final grade for these two tasks.</strong> <em>An assignment without a resubmission will get a 0 grade.</em></p>
 <p>All tasks for this assignment should be submitted via Gradescope.</p>
 <p>File formatting and uploading:</p>
 <ul class="task-list">
@@ -336,12 +361,12 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout callout-style-simple callout-warning no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Converting your notebook to PDF
+Converting your notebook to PDF
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -349,36 +374,37 @@ div.csl-indent {
 <div class="callout-body-container callout-body">
 <p>To convert your notebook to PDF, we will first convert your notebook to HTML, and then save as PDF.</p>
 <ol type="1">
-<li><p>Open your notebook in VS code.</p></li>
+<li><p>Open your notebook in VS Code.</p></li>
 <li><p>Select the three dots at the top of your notebook.</p></li>
 </ol>
 <p><img src="images/export_instructions.png" class="img-fluid"></p>
 <ol start="3" type="1">
-<li>Select Export &gt; HTML (<strong>not pdf</strong>)</li>
+<li>Select Export &gt; HTML (<strong>not PDF</strong>)</li>
 </ol>
 <p><img src="images/export_bar.png" class="img-fluid" style="width:70.0%"></p>
 <ol start="4" type="1">
 <li><p>Choose where you want to save this HTML to your computer</p></li>
-<li><p>Open up the html and go to File &gt; Print &gt; Save as PDF</p></li>
+<li><p>Open up the HTML and go to File &gt; Print &gt; Save as PDF</p></li>
 <li><p>Save your PDF and submit to Gradescope.</p></li>
 </ol>
 </div>
 </div>
 </div>
 </section>
-<section id="task-1-eaton-and-palisades-fires-analysis-blog-post-and-accompanying-analyses" class="level2">
-<h2 class="anchored" data-anchor-id="task-1-eaton-and-palisades-fires-analysis-blog-post-and-accompanying-analyses">Task 1: Eaton and Palisades Fires analysis blog post and accompanying analyses</h2>
+<section id="task-1-eaton-and-palisades-fires-analysis-blog-post" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-eaton-and-palisades-fires-analysis-blog-post">Task 1: Eaton and Palisades Fires analysis blog post</h2>
 <p>In this task, you will transform your presentation-ready repository from Homework 4 into a polished blog post for your personal website and compile and streamline all its supporting notebooks.</p>
 <section id="purpose" class="level3">
 <h3 class="anchored" data-anchor-id="purpose">Purpose</h3>
-<p>Your blog post should showcase the two data analysis exercises we did related to the Eaton and Palisades Fires:</p>
+<p>Your blog post should showcase <strong>two out of the three</strong> data analysis exercises we did related to the Eaton and Palisades Fires:</p>
 <ul>
-<li>False color image analysis (Hwk 4 - Task 2)</li>
-<li>Social dimensions analysis with the EJI dataset (Friday, November 20 - discussion section exercises)</li>
+<li>False color image analysis (<a href="../assignments/assignment4-palisades-eaton-fires.html">Hwk 4 - Task 2</a>)</li>
+<li>Social dimensions analysis with the EJI dataset (<a href="../discussion-sections/ds8-eji-eaton-palisades.html">week 8 discussion section exercises</a>)</li>
+<li>Land cover statistics (<a href="../book/chapters/lesson-17-raster-wrangling/lesson-17-raster-wrangling.html">exercises from the land cover statistics lesson</a>)</li>
 </ul>
 <!--
 :::{.callout-warning appearance="minimal"} 
-If you decide to include the land cover statistics (greatly encouraged!), you should start you analysis from the terrestrial ecosystems data clipper over the Thomas Fire perimeter. You can find this ready-to-use raster and the terrestrial ecosystem labels at this directory within workbench-1:
+If you decide to include the land cover statistics (greatly encouraged!), you should start your analysis from the terrestrial ecosystems data clipped over the Thomas Fire perimeter. You can find this ready-to-use raster and the terrestrial ecosystem labels at this directory within workbench-1:
 ```default
 /courses/EDS220/data/USGS_National_Terrestrial_Ecosystems_Over_Thomas_Fire_Perimeter/
 ```
@@ -387,7 +413,7 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 <p>Your audience is a fellow Python programmer with beginner-to-intermediate geospatial wrangling experience. This is an opportunity to highlight your skills and communicate your analysis in a clear and engaging way!</p>
 <p>To help you understand the desired format and text-to-code ratio, review these examples:</p>
 <ul>
-<li><a href="https://julietcohen.github.io/posts/2021-12-24-sstsicpython/">https://julietcohen.github.io/posts/2021-12-24-sstsicpython/</a></li>
+<li><a href="https://haylee360.github.io/posts/2024-12-01-thomas-fire/thomas-fire-analysis.html">https://haylee360.github.io/posts/2024-12-01-thomas-fire/thomas-fire-analysis.html</a></li>
 </ul>
 <!-- - [https://aoverbye.github.io/blog_posts/2024-12-2-thomas-fire-post/thomas_fire_blog_edit.html](https://aoverbye.github.io/blog_posts/2024-12-2-thomas-fire-post/thomas_fire_blog_edit.html) -->
 <ul>
@@ -399,12 +425,12 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Setting up your website
+Setting up your website
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -422,18 +448,18 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Adding a blog post to your website
+Adding a blog post to your website
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>To create a blog posts listing in your personal website you can follow this tutorial:</p>
+<p>To create a blog post listing in your personal website you can follow this tutorial:</p>
 <ul>
 <li><a href="https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/">Adding a blog to your existing Quarto website</a></li>
 </ul>
@@ -446,34 +472,34 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </ul>
 <p>or</p>
 <ol start="2" type="1">
-<li>If you want all your blog posts to be <code>.qmd</code> files, converting a Jupyter notebook into a Quarto file and viceversa can be done using the <a href="https://quarto.org/docs/tools/jupyter-lab.html#converting-notebooks"><code>quarto convert</code></a> command. The Quarto documentation has more information about <a href="https://quarto.org/docs/tools/jupyter-lab.html#converting-notebooks">rendering Jupyter notebooks using Quarto</a>.</li>
+<li>If you want all your blog posts to be <code>.qmd</code> files, converting a Jupyter notebook into a Quarto file and vice versa can be done using the <a href="https://quarto.org/docs/tools/jupyter-lab.html#converting-notebooks"><code>quarto convert</code></a> command.</li>
 </ol>
 </div>
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>GitHub repository structure
+GitHub repository structure
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In addition to the blog post, in this task you will expand the GitHub repository you created for homework 4 by including the notebook with the other fire data analysis into it. Follow the repository structure below:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repo-name  # Consider renaming, e.g., "eaton-palisades-fires-analysis"</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repo-name  # Consider renaming, e.g., "eaton-palisades-fires-analysis"</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>│   README.md</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>|   notebooks  # One per analysis, clean and streamlined</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>|   notebooks  # As needed per analysis, clean and streamlined</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>|   .gitignore</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>│</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>└── data  # If needed</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    │   data-files  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    │   data-files  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Important notes:</strong></p>
 <ul>
-<li><p>Make sure no <code>DS_Store</code> or <code>.ipynb_checkpoints</code> files are present in your repository.</p></li>
+<li><p>Make sure no <code>.DS_Store</code> or <code>.ipynb_checkpoints</code> files are present in your repository.</p></li>
 <li><p>All notebooks should be streamlined and will be checked using the “notebooks organization” rubric!</p></li>
 </ul>
 </div>
@@ -532,26 +558,46 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </ul></li>
 <li><strong>Final visualizations:</strong>
 <ul>
-<li>Showcase your main visualizations with clear captions. Follow each visualization with a short description explaining its insights and relevance.</li>
+<li>Showcase your main visualizations with clear captions. Follow each visualization with a description explaining takeaways and relevance.</li>
 </ul></li>
 </ul>
 </section>
 </section>
-<section id="task-2-biodiversity-intactness-index-change-in-phoenix-az" class="level2">
-<h2 class="anchored" data-anchor-id="task-2-biodiversity-intactness-index-change-in-phoenix-az">Task 2: Biodiversity Intactness Index change in Phoenix, AZ</h2>
-<p>In 2021, Maricopa County —home to the Phoenix metropolitan area— was identified as the U.S. county with the most significant increase in developed land since 2001 <span class="citation" data-cites="levitt_where_2021"><a href="#ref-levitt_where_2021" role="doc-biblioref">[1]</a></span>. This rapid urban sprawl has profound implications for biodiversity and the health of surrounding natural ecosystems.</p>
-<p>In this assignment, you will investigate the impacts of urban expansion by analyzing a dataset that captures values for the Biodiversity Intactness Index (BII) <span class="citation" data-cites="gassert_global_2022"><a href="#ref-gassert_global_2022" role="doc-biblioref">[2]</a></span>. Your task is to examine changes in BII in the Phoenix county subdivision area between 2017 and 2020, shedding light on how urban growth affects biodiversity over time.</p>
+<section id="task-2-urban-heat-around-la28-olympic-facilities" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="task-2-urban-heat-around-la28-olympic-facilities">Task 2: Urban heat around LA28 Olympic facilities</h2>
+<p>Los Angeles will host the 2028 Summer Olympic and Paralympic Games (LA28) in July and August, during peak summer heat. Many events will take place in existing stadiums, arenas and parks spread across the Los Angeles area, and heat is a major concern for athletes, workers and spectators. LA28 has pledged to include shade planning and heat mitigation in its preparations for the Games, and regional efforts such as ShadeLA aim to add shade around Olympic venues and in the city’s most heat-vulnerable neighborhoods <span class="citation" data-cites="ucla_shadela_2025"><a href="#ref-ucla_shadela_2025" role="doc-biblioref">[1]</a></span>.</p>
+<p>In this task, you will do an analysis using Landsat surface temperature data: on a clear summer day, which LA28 facilities sit in areas hotter or cooler than the Los Angeles urban area as a whole, and by how much? You will answer this question in <strong>relative</strong> terms: how many degrees above or below the urban area’s average each facility is, <em>on the same date</em>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/LA-memorial-colliseum.jpg" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption>Los Angeles Memorial Coliseum - MikeJiroch, CC BY-SA 3.0, via Wikimedia Commons</figcaption>
+</figure>
+</div>
 <section id="about-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="about-the-data">About the data</h3>
-<p>You will work with two datasets for this task:</p>
+<p>You will work with three datasets for this task:</p>
 <ol type="1">
-<li><strong>Biodiversity Intactness Index (BII) Time Series</strong> Access the <code>io-biodiversity</code> collection from the <a href="https://planetarycomputer.microsoft.com/dataset/io-biodiversity">Microsoft Planetary Computer STAC catalog</a>. Use the 2017 and 2020 rasters covering the Phoenix subdivision. For the bounding box, use the following coordinates:</li>
+<li><p><strong>Landsat Collection 2 Level-2 surface temperature</strong> Access the <code>landsat-c2-l2</code> collection from the <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">Microsoft Planetary Computer STAC catalog</a> <span class="citation" data-cites="usgs_landsat_c2_l2_mpc"><a href="#ref-usgs_landsat_c2_l2_mpc" role="doc-biblioref">[2]</a></span>. You will use the surface temperature asset (<code>lwir11</code>). Pixels are 30 m, resampled from the thermal sensor’s native 100 m resolution.</p></li>
+<li><p><strong>Los Angeles urban area</strong> The <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html#form-dropdown-790442341">urban area polygons from the Census Bureau’s 2026 TIGER/Line shapefiles</a> <span class="citation" data-cites="us_census_bureau_tiger_2026_uac"><a href="#ref-us_census_bureau_tiger_2026_uac" role="doc-biblioref">[3]</a></span>. The Census defines urban areas as densely developed territory, so the average temperature over this polygon represents the city people live in, without the mountains, desert or ocean that a county or city boundary would include. This is the reference area you will compare each facility to. The name for the LA area is <em>Los Angeles–Long Beach–Anaheim, CA</em>.</p></li>
+<li><p><strong>LA28 facilities</strong> A CSV file with the 19 permanent, on-land LA28 competition facilities in the Los Angeles area, with their approximate coordinates. The list comes from the official LA28 venue list <span class="citation" data-cites="la28_venues_2026"><a href="#ref-la28_venues_2026" role="doc-biblioref">[4]</a></span>, cross-referenced with the venue statuses on Wikipedia <span class="citation" data-cites="wikipedia_la28_venues_2026"><a href="#ref-wikipedia_la28_venues_2026" role="doc-biblioref">[5]</a></span>. It includes stadiums and arenas (e.g.&nbsp;SoFi Stadium, Crypto.com Arena, the Rose Bowl, Dodger Stadium) and other permanent sites such as Riviera Country Club, Santa Anita Park and the Fairplex. It leaves out:</p>
+<ul>
+<li>temporary venues (e.g.&nbsp;Venice Beach, Sepulveda Basin), since Landsat can only see what is built today;</li>
+<li>water venues (e.g.&nbsp;the Port of Los Angeles, Long Beach Marine Stadium), since over water Landsat measures the water surface;</li>
+<li>venues outside the Los Angeles area (e.g.&nbsp;Trestles, Oklahoma City, and the football stadiums in other cities).</li>
+</ul>
+<p>All 19 facilities are inside the Los Angeles urban area. You can find the CSV file <code>la28-facilities.csv</code> in the <a href="https://drive.google.com/drive/folders/1USqhiMLyN8GE05B8WJmHabviJGnmAsLP?usp=sharing">course data directory</a>.</p></li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[-112.826843, 32.974108, -111.184387, 33.863574]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="2" type="1">
-<li><strong>Phoenix Subdivision Shapefile</strong> Download the Phoenix subdivision polygon from the Census County Subdivision shapefiles for Arizona.</li>
-</ol>
-<p>To enhance your data exploration, you may use additional shapefiles or rasters to create a map situating the Phoenix subdivision within its broader geographic context.</p>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Surface temperature is not air temperature.</strong> Landsat measures the thermal radiation coming off the top millimeter of whatever it sees from above: roofs, pavement, treetops, grass, water. Dark pavement and roofs in full sun often reach 50 to 70 °C, while the air a few feet above them is much cooler. Air temperature (what a weather station reports) is measured in the shade, about 2 m above the ground, and changes much more slowly across a city. Keep in mind that surface temperature is a good indicator of where the built environment stores heat (and where shade or vegetation would help), but it is not a direct measure of how hot people feel.</p>
+<!-- Absolute surface temperatures also change a lot from one day to the next. This is why we compare each facility to the urban average on the same date. -->
+</div>
+</div>
+</div>
 </section>
 <section id="setup-1" class="level3">
 <h3 class="anchored" data-anchor-id="setup-1">Setup</h3>
@@ -562,16 +608,16 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </div>
 <div class="callout-body-container">
 <ol type="1">
-<li><p>Read all the instructions and the rubric for this task.</p></li>
-<li><p>Create a new GitHub repository to house task 2 work. Choose an adequate, informative title for your repository (not <code>EDS220-final-project</code>). Your repository should have the following structure:</p></li>
+<li><p>Read all the instructions and the r<a href="https://docs.google.com/document/d/14_F9ez858bV0EFGoqDwd2_wfj8hwyxuz_cRoms73_M4/edit?usp=sharing">ubric for this task</a>.</p></li>
+<li><p>Create a new GitHub repository to house task 2 work. Choose an adequate, informative title for your repository (not <code>EDS220-final-project</code>). Your repository should have the a structure similar to this one:</p></li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>repo-name</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>│   README.md</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>|   notebooks</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>|   .gitignore</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>│</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>└── data  # If needed</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    │   data-files  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>repo-name</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>│   README.md</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>|   notebooks</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>|   .gitignore</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>└── data  # If needed</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    │   data-files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In particular, there should be no <code>.DS_Store</code> or <code>.ipynb_checkpoints</code> files in your repository.</p>
 </div>
 </div>
@@ -587,71 +633,116 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </div>
 </div>
 </section>
-</section>
-<section id="instructions" class="level2">
-<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
-<section id="data-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="data-analysis">1. Data analysis</h3>
+<section id="instructions" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="instructions">Instructions</h3>
+<section id="data-analysis" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="data-analysis">1. Data analysis</h4>
 <ol type="1">
-<li><p>Explore the data and write a brief summary of the information you obtained from the preliminary information.</p></li>
-<li><p>Create a map showing the Phoenix subdivision within its broader geographic context. You may use any vector or raster datasets to create your map. Be sure to include citations or descriptions for these datasets at the top of your notebook too. You may also want to check out the <code>contextily</code> package to add a base map.</p></li>
-<li><p>Calculate the <em>percentage</em> of area of the Phoenix subdivision with a BII of at least 0.75 in 2017. Obtain the same calculation for 2020. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don’t need to include these in your notebook, but you should have a plan before starting your code.</p></li>
+<li><p><strong>Explore the vector data.</strong> Explore the data and write a summary of the information you obtained from the preliminary exploration.</p></li>
+<li><p><strong>STAC search.</strong> Use the Los Angeles urban area to search the Microsoft Planetary Computer STAC catalog for Landsat Collection 2 Level-2 scenes from June 1 to September 30, 2026. Your search should look similar to this:</p></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> catalog.search(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span>___,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>___,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span>___,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    query<span class="op">=</span>{<span class="st">'eo:cloud_cover'</span>: {<span class="st">'lt'</span>: <span class="dv">10</span>}},</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>query</code> parameter of <code>catalog.search()</code> filters items by any property in their metadata. Here we use <code>eo:cloud_cover</code> (a percentage) to keep only scenes with less than 10% cloud cover. Clouds hide the ground from the thermal sensor, so we only want nearly cloud-free scenes.</p>
+<ol start="3" type="1">
+<li><strong>Pick a scene.</strong> Landsat scenes are tiles, and the Los Angeles urban area sits near the corner of one, so not every scene covers all the facilities. Adapt the following code so you can run it, and explain in a markdown cell what it does and what its output shows:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely.geometry <span class="im">import</span> shape   <span class="co"># Move import to an adequate place</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>facilities_4326 <span class="op">=</span> facilities.to_crs(<span class="st">'epsg:4326'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    footprint <span class="op">=</span> shape(item.geometry)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.<span class="bu">id</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>          item.properties[<span class="st">'eo:cloud_cover'</span>],</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>          <span class="st">'covers all facilities:'</span>, facilities_4326.within(footprint).<span class="bu">all</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then pick a scene to use for your analysis and, in a markdown cell, justify your choice.</p>
+<ol start="4" type="1">
+<li><strong>Access the raster.</strong> Retrieve the item byou selected and open its surface temperature asset (<code>lwir11</code>) as an <code>xarray.DataArray</code>. Plot the raster together with the facilities and the urban area polygon.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>HINTS (useful or not depending on your workflow)
+HINT: mask no data values
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
-<li>Let <code>x</code> be an <code>xarray.DataArray</code>. We can select all the values greater than <code>n</code> by simply doing <code>x&gt;n</code>.</li>
-<li>Make sure you are calculating the percentage over the Phoenix area, and not the complete raster extent.</li>
+<li>The surface temperature file uses 0 to mark pixels with no data. Open the raster with <code>rioxr.open_rasterio(..., masked=True)</code> so these pixels become <code>NaN</code> when the file is loaded and don’t sneak into your calculations.</li>
 </ul>
 </div>
 </div>
 </div>
-<ol start="4" type="1">
-<li>Create a visualization showing the area with BII&gt;=0.75 in 2017 that was lost by 2020. Here’s an example:</li>
+<ol start="5" type="1">
+<li><strong>Convert to degrees Celsius.</strong> The values in the surface temperature raster are not temperatures. To save space, Landsat stores each temperature as an integer that needs to be converted back with</li>
 </ol>
-<p align="center">
-<img src="../assignments/images/bii_phoenix.png" class="img-fluid" style="width:60.0%">
-</p>
+<p><span class="math display">\[\text{temperature (K)} = \text{value} \times \text{scale} + \text{offset}.\]</span></p>
+<p>The file itself doesn’t record the scale and offset (if you check the raster’s attributes you will see rioxarray’s defaults, a scale of 1 and an offset of 0). The real scale and offset are in the STAC metadata for the asset:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>item.assets[<span class="st">'lwir11'</span>].extra_fields[<span class="st">'raster:bands'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Clip the raster to the Los Angeles urban area and convert its values to degrees Celsius. Review your results.</p>
+<ol start="6" type="1">
+<li><strong>Facilities vs.&nbsp;the urban area.</strong> Calculate each facility’s average surface temperature within 500 m of it, and its difference from the average surface temperature over the whole urban area. Before you start coding, take a moment to write step-by-step instructions for yourself about how to get this result. You don’t need to include these in your notebook, but you should have a plan before starting your code.</li>
+</ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>HINTS (useful or not depending on your workflow)
+HINT: use <code>buffer()</code> and make one calculation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
-<li>To find which pixels changed value from 2017 to 2020 think about the following example. Which values in R3 represent areas that had BII&gt;=0.75 in 2017 but not in 2020?</li>
-</ul>
-<p align="center">
-<img src="../assignments/images/bii_raster_math.png" class="img-fluid" style="width:70.0%">
-</p>
-<ul>
-<li>You can plot multiple rasters in the same figure. NaN values will be transparent.</li>
+<li>The <code>buffer()</code> method of a <code>geopandas.GeoDataFrame</code> turns each point into a circle of a given radius, measured in the units of the geo-data frame’s CRS.</li>
+<li>Do it for one facility first, then iterate.</li>
 </ul>
 </div>
 </div>
 </div>
-<ol start="5" type="1">
-<li>Under your BII visualization write a brief description of the results you obtianed in this task.</li>
+<ol start="7" type="1">
+<li><strong>Difference plot.</strong> Make a bar plot showing each facility’s difference from the urban average. You can adapt this code to your results (<code>results</code> is a data frame with columns <code>facility</code> and <code>diff_from_urban_c</code>):</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="op">=</span> results.set_index(<span class="st">'facility'</span>).sort_values(<span class="st">'diff_from_urban_c'</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'tab:red'</span> <span class="cf">if</span> d <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">'tab:blue'</span> <span class="cf">for</span> d <span class="kw">in</span> plot_data[<span class="st">'diff_from_urban_c'</span>]]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plot_data[<span class="st">'diff_from_urban_c'</span>].plot.barh(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">7</span>), color<span class="op">=</span>colors)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="ss">f'Mean surface temperature within 500 m minus urban average (</span><span class="sc">{</span>urban_mean<span class="sc">:.1f}</span><span class="ss"> °C)'</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">''</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Surface temperature around LA28 facilities</span><span class="ch">\n</span><span class="st">DATE, TIME'</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="8" type="1">
+<li><strong>Final map.</strong> Create a map of the facilities colored by their difference from the urban average, over a base map. Use the <code>contextily</code> package for the base map. Here’s an example:</li>
+</ol>
+<div class="column-body-outset">
+<p><img src="../assignments/images/la28-heat-map.png" class="img-fluid" style="width:100.0%" alt="Satellite basemap of the Los Angeles area with the LA28 facilities as small circles colored from blue (cooler than the urban average) to red (hotter than the urban average)."></p>
+</div>
+<ol start="9" type="1">
+<li><p><strong>Discussion.</strong> In markdown cells, answer the following questions (short answers):</p>
+<ol type="1">
+<li>Which scene (date) did you use? Which facilities have the minimum and maximum difference from the urban average, and what are these values?</li>
+<li>Explain two limitations of the data.</li>
+<li>Explain two limitations of the methods.</li>
+<li>Discuss your results in relation to the facilities’ locations and the type of facility (and any other characteristics you think matter).</li>
+<li>LA28 is planning heat mitigation for the Games. Based on your map, which venue would you prioritize for heat mitigation and why? What would you need to know beyond this analysis to make that recommendation?</li>
+</ol></li>
 </ol>
 </section>
-<section id="clean-notebook" class="level3">
-<h3 class="anchored" data-anchor-id="clean-notebook">2. Clean notebook</h3>
+<section id="clean-notebook" class="level4">
+<h4 class="anchored" data-anchor-id="clean-notebook">2. Clean notebook</h4>
 <p>The target audience for your notebook is a fellow EDS 220 student who is just learning geospatial wrangling using Python.</p>
 <ul>
 <li>Add enough and appropriate comments to explain your code.</li>
@@ -671,13 +762,13 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 <li>The rest of your notebook should have:
 <ul class="task-list">
 <li><label><input type="checkbox">Logical subsections (indicated through markdown headers) for the data exploration, analysis, and visualization you are performing. The subsections should easily guide the reader through the analysis.</label></li>
-<li><label><input type="checkbox">Enough and appropriate <strong>markdown cells to explain the procedures you are using and their output</strong>. Copy-pasting the instructions in markdown cells is not appropriate. If your code comment is getting too long, you should probably move it to markdown cell as text.</label></li>
+<li><label><input type="checkbox">Enough and appropriate <strong>markdown cells to explain the procedures you are using and their output</strong>. Copy-pasting the instructions in markdown cells is not appropriate. If your code comment is getting too long, you should probably move it to a markdown cell as text.</label></li>
 </ul></li>
 </ul>
 </section>
-<section id="clean-repository" class="level3">
-<h3 class="anchored" data-anchor-id="clean-repository">3. Clean repository</h3>
-<p>Same as the instructions for assignment 4. Update your repository’s README with (at least) the following (based on <a href="https://ucsb-meds.github.io/README-guidelines/">EDS 296</a>):</p>
+<section id="clean-repository" class="level4">
+<h4 class="anchored" data-anchor-id="clean-repository">3. Clean repository</h4>
+<p>Same as the instructions for Homework 4. Update your repository’s README with (at least) the following (based on <a href="https://ucsb-meds.github.io/README-guidelines/">EDS 296</a>):</p>
 <ul class="task-list">
 <li><label><input type="checkbox"><strong>Title.</strong> Short, but descriptive title.</label></li>
 <li><label><input type="checkbox"><strong>“About” section.</strong> A brief explanation of the repository’s purpose. Paragraphs or a bulleted list are both acceptable options. You may include an image or logo that represents the project.</label></li>
@@ -701,13 +792,23 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
 </section>
 </section>
 </section>
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-levitt_where_2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">Z. Levitt and J. Eng, <span>“Where <span>America</span>’s developed areas are growing: <span>‘<span>Way</span> off into the horizon’</span>,”</span> <em>The Washington Post</em>, Aug. 2021, Available: <a href="https://www.washingtonpost.com/nation/interactive/2021/land-development-urban-growth-maps/">https://www.washingtonpost.com/nation/interactive/2021/land-development-urban-growth-maps/</a>. [Accessed: Nov. 22, 2024]</div>
+<div id="ref-ucla_shadela_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">UCLA Luskin Center for Innovation, <span>“UCLA teams up with USC and civic partners to cool the los angeles region.”</span> UCLA Newsroom, Jul. 16, 2025. Available: <a href="https://newsroom.ucla.edu/releases/ucla-usc-civic-partners-shade-los-angeles">https://newsroom.ucla.edu/releases/ucla-usc-civic-partners-shade-los-angeles</a></div>
 </div>
-<div id="ref-gassert_global_2022" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">F. Gassert, J. Mazzarello, and S. Hyde, <span>“Global 100m <span>Projections</span> of <span>Biodiversity</span> <span>Intactness</span> for the years 2017-2020 [<span>Technical</span> <span>Whitepaper</span>].”</span> Aug. 2022. Available: <a href="https://ai4edatasetspublicassets.blob.core.windows.net/assets/pdfs/io-biodiversity/Biodiversity_Intactness_whitepaper.pdf">https://ai4edatasetspublicassets.blob.core.windows.net/assets/pdfs/io-biodiversity/Biodiversity_Intactness_whitepaper.pdf</a></div>
+<div id="ref-usgs_landsat_c2_l2_mpc" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">U.S. Geological Survey, <span>“Landsat <span>Collection</span> 2 <span>Level-2</span>,”</span> <em>Microsoft Planetary Computer</em>. 2026. doi: <a href="https://doi.org/10.5066/P9OGBGM6">10.5066/P9OGBGM6</a>. Available: <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2</a>. [Accessed: Nov. 24, 2026]</div>
+</div>
+<div id="ref-us_census_bureau_tiger_2026_uac" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">U.S. Census Bureau, <span>“<span>TIGER</span>/<span>Line</span> <span>Shapefiles</span>: 2020 <span>Census</span> <span>Urban</span> <span>Areas</span> (2026).”</span> U.S. Census Bureau, 2026. Available: <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html">https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2026.html</a>. [Accessed: Nov. 24, 2026]</div>
+</div>
+<div id="ref-la28_venues_2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">LA28, <span>“Venues,”</span> <em>LA28</em>. 2026. Available: <a href="https://la28.org/en/games-plan/venues.html">https://la28.org/en/games-plan/venues.html</a>. [Accessed: Nov. 24, 2026]</div>
+</div>
+<div id="ref-wikipedia_la28_venues_2026" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Wikipedia contributors, <span>“Venues of the 2028 <span>Summer</span> <span>Olympics</span> and <span>Paralympics</span>,”</span> <em>Wikipedia</em>. 2026. Available: <a href="https://en.wikipedia.org/wiki/Venues_of_the_2028_Summer_Olympics_and_Paralympics">https://en.wikipedia.org/wiki/Venues_of_the_2028_Summer_Olympics_and_Paralympics</a>. [Accessed: Nov. 24, 2026]</div>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -761,14 +862,13 @@ If you decide to include the land cover statistics (greatly encouraged!), you sh
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

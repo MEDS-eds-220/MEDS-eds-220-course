@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>19 Land cover statistics – EDS 220 - Working with Environmental Datasets</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -94,10 +91,10 @@ div.csl-indent {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -237,6 +234,10 @@ div.csl-indent {
         <li>
     <a class="dropdown-item" href="../../../assignments/assignment4-palisades-eaton-fires.html">
  <span class="dropdown-text">assignment 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/final-project.html">
+ <span class="dropdown-text">final project</span></a>
   </li>  
     </ul>
   </li>
@@ -569,7 +570,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="fire-perimeter-preparation">Fire perimeter preparation</h2>
 <p>Let’s start by importing the necessary libraries:</p>
 <div id="8044fe06" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -583,11 +584,11 @@ div.csl-indent {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pystac_client</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> planetary_computer</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then import the Eaton Fire perimeter:</p>
 <div id="c7920f18" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eaton <span class="op">=</span> gpd.read_file(os.path.join(<span class="st">'data'</span>,</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>eaton <span class="op">=</span> gpd.read_file(os.path.join(<span class="st">'data'</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'Eaton_Perimeter_20250121'</span>,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">'Eaton_Perimeter_20250121.shp'</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                   )</span>
@@ -595,7 +596,7 @@ div.csl-indent {
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine fire perimeter data</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(eaton.crs)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(eaton.shape)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>eaton.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>eaton.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>EPSG:3857
 (20, 5)</code></pre>
@@ -611,7 +612,7 @@ div.csl-indent {
 <p>Notice the perimeter is not a single polygon: it is made of several “Heat Perimeter” polygons. That’s fine for what we’ll do, since we’ll use all of them together.</p>
 <p>We’ll also import the CSV with the land cover class codes, names and colors. We’ll use it later in the lesson:</p>
 <div id="2b0c7c76" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>, <span class="st">'io-lulc-9-class-labels.csv'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'data'</span>, <span class="st">'io-lulc-9-class-labels.csv'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="catalog-search" class="level2">
@@ -619,11 +620,11 @@ div.csl-indent {
 <p>Our goal is to retrieve the land cover data over the fire perimeter. In the <a href="../../../book/chapters/lesson-16-STAC.html">last lesson</a> we used a GeoJSON-type dictionary to do the catalog search. Here we will use a list <code>[xmin, ymin, xmax, ymax]</code> with the coordinate values defining the edges of the region we want to search data over. Just as with the GeoJSON, these coordinates have to be in the EPSG:4326 CRS.</p>
 <p>Our bounding box will come from the Eaton Fire perimeter. Notice we use method chaining to reproject and extract the bounds.</p>
 <div id="3cc63353" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of bounding box coords for search in 4326 CRS</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create list of bounding box coords for search in 4326 CRS</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eaton_bbox <span class="op">=</span> <span class="bu">list</span>(eaton.to_crs(<span class="st">'epsg:4326'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                       .total_bounds</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                       )</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>eaton_bbox</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>eaton_bbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="100">
 <pre><code>[-118.16206999988188,
  34.16189200012067,
@@ -634,7 +635,7 @@ div.csl-indent {
 <p>Next, we connect to the Microsoft Planetary Computer data catalog and perform the search. The collection ID for this land cover data is <code>io-lulc-annual-v02</code>.</p>
 <p>This collection has one map per year, so we also need to choose a year. The fires happened in January 2025 and the most recent map is for 2023, so we’ll search for 2023:</p>
 <div id="9711785c" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Open MPC data catalog</span></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Open MPC data catalog</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://planetarycomputer.microsoft.com/api/stac/v1"</span>,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    modifier<span class="op">=</span>planetary_computer.sign_inplace,</span>
@@ -648,7 +649,7 @@ div.csl-indent {
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve search items</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> search.item_collection()</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Returned </span><span class="sc">{</span><span class="bu">len</span>(items)<span class="sc">}</span><span class="ss"> Items"</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>items</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Returned 2 Items</code></pre>
 </div>
@@ -9754,8 +9755,8 @@ div.csl-indent {
 </div>
 <p>We asked for 2023 but got two items. Let’s look at the time range each one covers:</p>
 <div id="e5edf9a7" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items:</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.<span class="bu">id</span>, item.properties[<span class="st">'start_datetime'</span>], item.properties[<span class="st">'end_datetime'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.<span class="bu">id</span>, item.properties[<span class="st">'start_datetime'</span>], item.properties[<span class="st">'end_datetime'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>11S-2023 2023-01-01T00:00:00.000000Z 2024-01-01T00:00:00.000000Z
 11S-2022 2022-01-01T00:00:00.000000Z 2023-01-01T00:00:00.000000Z</code></pre>
@@ -9764,13 +9765,13 @@ div.csl-indent {
 <p>Each map covers a full year, from January 1 to January 1 of the next year. The 2022 map ends on January 1, 2023, so it also matches our search for 2023.</p>
 <p>Let’s select the 2023 map and view its pre-rendered image:</p>
 <div id="66946036" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the 2023 map (the first item) and check it is the right one</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the 2023 map (the first item) and check it is the right one</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> items[<span class="dv">0</span>]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> item.properties[<span class="st">'start_datetime'</span>].startswith(<span class="st">'2023'</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(item.<span class="bu">id</span>)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display pre-rendered image</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'rendered_preview'</span>].href, width<span class="op">=</span><span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>Image(url<span class="op">=</span>item.assets[<span class="st">'rendered_preview'</span>].href, width<span class="op">=</span><span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>11S-2023</code></pre>
 </div>
@@ -9784,9 +9785,9 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="explore-raster">Explore raster</h2>
 <p>Next, we can go ahead and open the raster:</p>
 <div id="d8810ae4" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access raster data from item</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Access raster data from item</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lulc <span class="op">=</span> rioxr.open_rasterio(item.assets[<span class="st">'data'</span>].href)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lulc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lulc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="104">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
 <defs>
@@ -10183,11 +10184,11 @@ Attributes:
 </div>
 <p>Notice that <code>band</code> is a dimension of length 1. <code>rioxarray</code> always adds a <code>band</code> dimension, even when the raster has a single band. Removing it leaves a two-dimensional array with only <code>y</code> and <code>x</code>, which matches what the data is and makes it simpler to index and to pass to other functions. We’ll also check the raster’s data type and CRS:</p>
 <div id="52bc236c" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove length 1 dimension (band) and its coordinate</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove length 1 dimension (band) and its coordinate</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lulc <span class="op">=</span> lulc.squeeze(<span class="st">'band'</span>, drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sizes of dimensions:"</span>, <span class="bu">dict</span>(lulc.sizes))</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Data type:"</span>, lulc.dtype)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS:"</span>, lulc.rio.crs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CRS:"</span>, lulc.rio.crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Sizes of dimensions: {'y': 89162, 'x': 56684}
 Data type: uint8
@@ -10196,7 +10197,7 @@ CRS: EPSG:32611</code></pre>
 </div>
 <p>Next, let’s look at how the raster is located with respect to the Eaton Fire perimeter and the CA state boundary:</p>
 <div id="5198f9c6" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create GeoDataFrame from raster bounding box</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create GeoDataFrame from raster bounding box</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>lulc_bbox <span class="op">=</span> gpd.GeoDataFrame(geometry <span class="op">=</span> [box(<span class="op">*</span>lulc.rio.bounds())],</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                             crs <span class="op">=</span> lulc.rio.crs)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -10213,7 +10214,7 @@ CRS: EPSG:32611</code></pre>
 <span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>lulc_bbox.to_crs(ca.crs).plot(ax<span class="op">=</span>ax, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>eaton.to_crs(ca.crs).plot(ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'red'</span>)</span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -10228,7 +10229,7 @@ CRS: EPSG:32611</code></pre>
 <h2 class="anchored" data-anchor-id="clip-raster-to-geometry">Clip raster to geometry</h2>
 <p>Before clipping, let’s check the raster’s no-data value, since <code>rio.clip()</code> will use it to fill the pixels outside the fire perimeter:</p>
 <div id="f40aadbe" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'No-data value: '</span>, lulc.rio.nodata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'No-data value: '</span>, lulc.rio.nodata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>No-data value:  0</code></pre>
 </div>
@@ -10241,7 +10242,7 @@ CRS: EPSG:32611</code></pre>
 </ol>
 <p>Why bother? To clip to a polygon, <code>rio.clip()</code> builds a mask with one true/false value per pixel of the raster it receives. Our raster has almost 90,000 x 57,000 pixels, about 5 billion values! Clipping to the bounding box first is fast, because it only selects rows and columns, and it shrinks the raster to about a million pixels before <code>rio.clip()</code> builds its mask.</p>
 <div id="61c9fe89" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Match CRSs and verify update</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Match CRSs and verify update</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>eaton_match <span class="op">=</span> eaton.to_crs(lulc.rio.crs)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> eaton_match.crs <span class="op">==</span> lulc.rio.crs</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -10262,7 +10263,7 @@ CRS: EPSG:32611</code></pre>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">"Step 2: Clip to Detailed Geometry"</span>)</span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].axis(<span class="st">"off"</span>)</span>
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -10273,12 +10274,12 @@ CRS: EPSG:32611</code></pre>
 </div>
 <p>We can also do both steps at once using method chaining:</p>
 <div id="1c4af0c0" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lulc_clip <span class="op">=</span> (lulc.rio.clip_box(<span class="op">*</span>eaton_match.total_bounds)</span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lulc_clip <span class="op">=</span> (lulc.rio.clip_box(<span class="op">*</span>eaton_match.total_bounds)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                 .rio.clip(eaton_match.geometry)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                 )</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine results</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>lulc_clip.plot()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>lulc_clip.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -10297,10 +10298,10 @@ CRS: EPSG:32611</code></pre>
 </ol>
 <p>Let’s start by looking at the raster’s CRS:</p>
 <div id="bf978af8" class="cell" data-execution_count="14">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'CRS:'</span>, lulc.rio.crs)</span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'CRS:'</span>, lulc.rio.crs)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Projected:'</span>, lulc.rio.crs.is_projected)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Units:'</span>, lulc.rio.crs.linear_units)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Resolution:'</span>, lulc.rio.resolution())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Resolution:'</span>, lulc.rio.resolution())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CRS: EPSG:32611
 Projected: True
@@ -10311,7 +10312,7 @@ Resolution: (10.0, -10.0)</code></pre>
 <p>The raster is in UTM zone 11N (EPSG:32611), a projected CRS in meters, with 10 m x 10 m pixels. Each pixel covers 10 x 10 = 100 m² on the ground, so we can get areas by counting pixels. UTM is not an equal-area projection, but within its zone the area error is well below 1%: the scale factor goes from 0.9996 at the zone’s central meridian to about 1.001 at its edges, and areas change with the square of the scale factor, so they are off by at most about 0.2% <span class="citation" data-cites="snyder_map_1987"><a href="#ref-snyder_map_1987" role="doc-biblioref">[3]</a></span>.</p>
 <p>Now the fire perimeter. A <code>GeoDataFrame</code>’s CRS:</p>
 <div id="99926122" class="cell" data-execution_count="15">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>eaton.crs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>eaton.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="111">
 <pre><code>&lt;Projected CRS: EPSG:3857&gt;
 Name: WGS 84 / Pseudo-Mercator
@@ -10331,8 +10332,8 @@ Datum: World Geodetic System 1984 ensemble
 </div>
 <p>The Eaton perimeter is in EPSG:3857, <em>WGS 84 / Pseudo-Mercator</em>, also called Web Mercator. It is projected and its units are meters, so <code>.area</code> will happily return an answer in m². But Web Mercator, the projection used by web maps, preserves shapes and stretches areas more and more the farther we are from the equator. Let’s compare the area of the perimeter in its original CRS and in the raster’s CRS:</p>
 <div id="a1f34c79" class="cell" data-execution_count="16">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area in </span><span class="sc">{</span>eaton<span class="sc">.</span>crs<span class="sc">.</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>eaton<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="dv">1000</span><span class="op">**</span><span class="dv">2</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area in </span><span class="sc">{</span>eaton_match<span class="sc">.</span>crs<span class="sc">.</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>eaton_match<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="dv">1000</span><span class="op">**</span><span class="dv">2</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area in </span><span class="sc">{</span>eaton<span class="sc">.</span>crs<span class="sc">.</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>eaton<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="dv">1000</span><span class="op">**</span><span class="dv">2</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area in </span><span class="sc">{</span>eaton_match<span class="sc">.</span>crs<span class="sc">.</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>eaton_match<span class="sc">.</span>area<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> <span class="dv">1000</span><span class="op">**</span><span class="dv">2</span><span class="sc">:.1f}</span><span class="ss"> km²"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Area in WGS 84 / Pseudo-Mercator: 83.4 km²
 Area in WGS 84 / UTM zone 11N: 56.9 km²</code></pre>
@@ -10361,7 +10362,7 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Check-in
+Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -10371,12 +10372,12 @@ Important
 <p>In a categorical raster the numbers are just codes: there is no order and nothing in between two classes. A continuous colormap like the default one suggests both, so a better choice is a <strong>categorical colormap</strong>, with one distinct color per class.</p>
 <p>The MPC uses an official color for each class of this land cover product, listed in its <a href="https://planetarycomputer.microsoft.com/api/data/v1/legend/classmap/io-lulc-9-class">class map for <code>io-lulc-9-class</code></a>. The <code>labels</code> data frame we imported at the beginning has, for each class, its code, its name and its official color as a hex code. No Data is fully transparent in the official map, so it gets white:</p>
 <div id="55111c0e" class="cell" data-execution_count="17">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>labels</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>labels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="113">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10387,61 +10388,61 @@ Important
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
+<td data-quarto-table-cell-role="th">0</td>
 <td>0</td>
 <td>No Data</td>
 <td>#ffffff</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
+<td data-quarto-table-cell-role="th">1</td>
 <td>1</td>
 <td>Water</td>
 <td>#419bdf</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
+<td data-quarto-table-cell-role="th">2</td>
 <td>2</td>
 <td>Trees</td>
 <td>#397d49</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
+<td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
 <td>Flooded vegetation</td>
 <td>#7a87c6</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
 <td>Crops</td>
 <td>#e49635</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
+<td data-quarto-table-cell-role="th">5</td>
 <td>7</td>
 <td>Built area</td>
 <td>#c4281b</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
+<td data-quarto-table-cell-role="th">6</td>
 <td>8</td>
 <td>Bare ground</td>
 <td>#a59b8f</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
+<td data-quarto-table-cell-role="th">7</td>
 <td>9</td>
 <td>Snow/ice</td>
 <td>#a8ebff</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">8</th>
+<td data-quarto-table-cell-role="th">8</td>
 <td>10</td>
 <td>Clouds</td>
 <td>#616161</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">9</th>
+<td data-quarto-table-cell-role="th">9</td>
 <td>11</td>
 <td>Rangeland</td>
 <td>#e3e2c3</td>
@@ -10460,7 +10461,7 @@ Important
 </ul>
 <p>Since the colors are now categories, a legend works better than a colorbar. We’ll make one entry per class present in the clipped raster:</p>
 <div id="3337d88a" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classes present in the clipped raster (without No Data)</span></span>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classes present in the clipped raster (without No Data)</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>present <span class="op">=</span> labels[labels[<span class="st">'code'</span>].isin(np.unique(lulc_clip)) <span class="op">&amp;</span> (labels[<span class="st">'code'</span>] <span class="op">!=</span> <span class="dv">0</span>)]</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># One legend entry per class</span></span>
@@ -10477,7 +10478,7 @@ Important
 <span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>ax.legend(handles<span class="op">=</span>legend_entries, loc<span class="op">=</span><span class="st">'upper left'</span>, bbox_to_anchor<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
 <span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Land cover within the Eaton Fire perimeter (2023)'</span>)</span>
 <span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -10496,7 +10497,7 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Exercise 1
+Exercise 1
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -10530,7 +10531,7 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Exercise 2
+Exercise 2
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -10552,21 +10553,21 @@ Important
 <h4 class="unlisted anchored" data-anchor-id="example-doubling-numbers">Example: doubling numbers</h4>
 <p>Here is a <code>for</code> loop that creates a new list by doubling each number in a given list:</p>
 <div id="03305035" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>doubled <span class="op">=</span> []</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> numbers:</span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    doubled.append(n <span class="op">*</span> <span class="dv">2</span>)</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>doubled</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>doubled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="122">
 <pre><code>[2, 4, 6, 8]</code></pre>
 </div>
 </div>
 <p>And here is the same thing as a list comprehension:</p>
 <div id="11b06cba" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>doubled <span class="op">=</span> [n <span class="op">*</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers]</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>doubled</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>doubled <span class="op">=</span> [n <span class="op">*</span> <span class="dv">2</span> <span class="cf">for</span> n <span class="kw">in</span> numbers]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>doubled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="123">
 <pre><code>[2, 4, 6, 8]</code></pre>
 </div>
@@ -10576,16 +10577,16 @@ Important
 <section id="example-one-value-from-each-dictionary" class="level4 unlisted">
 <h4 class="unlisted anchored" data-anchor-id="example-one-value-from-each-dictionary">Example: one value from each dictionary</h4>
 <p>Quick recap: a <strong>dictionary</strong> stores <em>key-value pairs</em>, written as <code>{key: value}</code>. We get a value by putting its key in square brackets. For example, if</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Tuna'</span>, <span class="st">'age'</span>: <span class="dv">5</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pet <span class="op">=</span> {<span class="st">'name'</span>: <span class="st">'Tuna'</span>, <span class="st">'age'</span>: <span class="dv">5</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>then <code>pet['name']</code> is <code>'Tuna'</code> and <code>pet['age']</code> is <code>5</code>.</p>
 <p>The following is closer to what we will need in a moment. We have a list of dictionaries and want one value from each:</p>
 <div id="b4978b59" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pets <span class="op">=</span> [{<span class="st">'name'</span>: <span class="st">'Tuna'</span>, <span class="st">'age'</span>: <span class="dv">5</span>},</span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pets <span class="op">=</span> [{<span class="st">'name'</span>: <span class="st">'Tuna'</span>, <span class="st">'age'</span>: <span class="dv">5</span>},</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>        {<span class="st">'name'</span>: <span class="st">'Bowie'</span>, <span class="st">'age'</span>: <span class="dv">12</span>},</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>        {<span class="st">'name'</span>: <span class="st">'Momo'</span>, <span class="st">'age'</span>: <span class="dv">17</span>}]</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>pet_names <span class="op">=</span> [pet[<span class="st">'name'</span>] <span class="cf">for</span> pet <span class="kw">in</span> pets]</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>pet_names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>pet_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="124">
 <pre><code>['Tuna', 'Bowie', 'Momo']</code></pre>
 </div>
@@ -10596,7 +10597,7 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Check-in
+Check-in
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -10619,9 +10620,9 @@ print(pet_ages)
 <h3 class="anchored" data-anchor-id="class-codes-and-names">Class codes and names</h3>
 <p>Back to our land cover item. The class codes and names are stored in the metadata of the item’s <code>data</code> asset:</p>
 <div id="2ad5b213" class="cell" data-execution_count="29">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Class codes and names from the item's metadata</span></span>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Class codes and names from the item's metadata</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>class_values <span class="op">=</span> item.assets[<span class="st">'data'</span>].extra_fields[<span class="st">'file:values'</span>]</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>class_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>class_values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="125">
 <pre><code>[{'values': [0], 'summary': 'No Data'},
  {'values': [1], 'summary': 'Water'},
@@ -10642,7 +10643,7 @@ print(pet_ages)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Exercise
+Exercise
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -10675,14 +10676,14 @@ print(names)
 -->
 <p>Now let’s put both list comprehensions to work: one gets the codes and the other gets the class names, and together they make a data frame with one row per class. We’ll call it <code>labels_from_item</code>, so we don’t overwrite the <code>labels</code> we read from the CSV:</p>
 <div id="5a8af6c8" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>labels_from_item <span class="op">=</span> pd.DataFrame({<span class="st">'code'</span>: [c[<span class="st">'values'</span>][<span class="dv">0</span>] <span class="cf">for</span> c <span class="kw">in</span> class_values],</span>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>labels_from_item <span class="op">=</span> pd.DataFrame({<span class="st">'code'</span>: [c[<span class="st">'values'</span>][<span class="dv">0</span>] <span class="cf">for</span> c <span class="kw">in</span> class_values],</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'class_label'</span>: [c[<span class="st">'summary'</span>] <span class="cf">for</span> c <span class="kw">in</span> class_values]})</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>labels_from_item</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>labels_from_item</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="126">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10692,52 +10693,52 @@ print(names)
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
+<td data-quarto-table-cell-role="th">0</td>
 <td>0</td>
 <td>No Data</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
+<td data-quarto-table-cell-role="th">1</td>
 <td>1</td>
 <td>Water</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
+<td data-quarto-table-cell-role="th">2</td>
 <td>2</td>
 <td>Trees</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
+<td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
 <td>Flooded vegetation</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
 <td>Crops</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
+<td data-quarto-table-cell-role="th">5</td>
 <td>7</td>
 <td>Built area</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
+<td data-quarto-table-cell-role="th">6</td>
 <td>8</td>
 <td>Bare ground</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
+<td data-quarto-table-cell-role="th">7</td>
 <td>9</td>
 <td>Snow/ice</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">8</th>
+<td data-quarto-table-cell-role="th">8</td>
 <td>10</td>
 <td>Clouds</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">9</th>
+<td data-quarto-table-cell-role="th">9</td>
 <td>11</td>
 <td>Rangeland</td>
 </tr>
@@ -10752,7 +10753,7 @@ print(names)
 <h3 class="anchored" data-anchor-id="class-colors">Class colors</h3>
 <p>The colors are not in the item’s metadata. The MPC lists them in its <a href="https://planetarycomputer.microsoft.com/api/data/v1/legend/classmap/io-lulc-9-class">class map for <code>io-lulc-9-class</code></a> as RGBA values (red, green, blue, transparency). Let’s add them as hex codes, in the same order as the codes. No Data is fully transparent in the official map, so we’ll use white for it:</p>
 <div id="7a796572" class="cell" data-execution_count="31">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Official colors from the MPC class map, as hex codes</span></span>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Official colors from the MPC class map, as hex codes</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>labels_from_item[<span class="st">'color'</span>] <span class="op">=</span> [<span class="st">'#ffffff'</span>,  <span class="co"># No Data</span></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'#419bdf'</span>,  <span class="co"># Water</span></span>
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'#397d49'</span>,  <span class="co"># Trees</span></span>
@@ -10763,12 +10764,12 @@ print(names)
 <span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'#a8ebff'</span>,  <span class="co"># Snow/ice</span></span>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'#616161'</span>,  <span class="co"># Clouds</span></span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'#e3e2c3'</span>]  <span class="co"># Rangeland</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>labels_from_item</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>labels_from_item</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="127">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10779,61 +10780,61 @@ print(names)
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
+<td data-quarto-table-cell-role="th">0</td>
 <td>0</td>
 <td>No Data</td>
 <td>#ffffff</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
+<td data-quarto-table-cell-role="th">1</td>
 <td>1</td>
 <td>Water</td>
 <td>#419bdf</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
+<td data-quarto-table-cell-role="th">2</td>
 <td>2</td>
 <td>Trees</td>
 <td>#397d49</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
+<td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
 <td>Flooded vegetation</td>
 <td>#7a87c6</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
 <td>Crops</td>
 <td>#e49635</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
+<td data-quarto-table-cell-role="th">5</td>
 <td>7</td>
 <td>Built area</td>
 <td>#c4281b</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
+<td data-quarto-table-cell-role="th">6</td>
 <td>8</td>
 <td>Bare ground</td>
 <td>#a59b8f</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
+<td data-quarto-table-cell-role="th">7</td>
 <td>9</td>
 <td>Snow/ice</td>
 <td>#a8ebff</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">8</th>
+<td data-quarto-table-cell-role="th">8</td>
 <td>10</td>
 <td>Clouds</td>
 <td>#616161</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">9</th>
+<td data-quarto-table-cell-role="th">9</td>
 <td>11</td>
 <td>Rangeland</td>
 <td>#e3e2c3</td>
@@ -10846,7 +10847,7 @@ print(names)
 </div>
 <p>This is exactly what’s in the CSV we read at the beginning of the lesson:</p>
 <div id="5e588df4" class="cell" data-execution_count="32">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>labels_from_item.equals(labels)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>labels_from_item.equals(labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="128">
 <pre><code>True</code></pre>
 </div>
@@ -10919,14 +10920,13 @@ print(names)
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
